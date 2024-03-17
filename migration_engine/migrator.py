@@ -1,8 +1,11 @@
-from typing import Literal
+from dataclasses import dataclass
+import inspect
+from typing import Literal, TypedDict
 
 
 class Migrator:
     _instance = None
+
     def __init__(self):
         self.metadata = {}
 
@@ -30,6 +33,7 @@ class Migrator:
     def create_table(self, data):
         pass
 
+
 # class SQLiteAdapter:
 #     def __init__(self):
 #         pass
@@ -49,7 +53,6 @@ class Migrator:
 
 #     def b(self, data):
 #         pass
-
 
 
 # class Table(Migrator):
@@ -78,12 +81,6 @@ migrator.get_data()
 print(migrator.metadata)
 
 
-
-
-
-
-
-
 class SingletonMeta(type):
     """
     The Singleton class can be implemented in different ways in Python. Some
@@ -104,16 +101,15 @@ class SingletonMeta(type):
         return cls._instances[cls]
 
 
-
-
 class Adapter:
-    # data_types = ''
-    # constraints = ''
+    data_types: str
+    constraints: str
     pass
 
+
 class SQLiteAdapter(Adapter):
-    data_types: Literal['TEXT', 'INTEGER', 'REAL', 'BLOB', 'NULL']
-    constraints: Literal['PRIMARY KEY', 'UNIQUE', 'NOT NULL', 'DEFAULT']
+    data_types: Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]
+    constraints: Literal["PRIMARY KEY", "UNIQUE", "NOT NULL", "DEFAULT"]
 
     def __init__(self):
         pass
@@ -124,9 +120,10 @@ class SQLiteAdapter(Adapter):
     def b(self):
         pass
 
+
 class PGAdapter(Adapter):
-    data_types: Literal['VARCHAR', 'INTEGER', 'REAL', 'BLOB', 'NULL']
-    constraints: Literal['PRIMARY KEY', 'UNIQUE', 'NOT NULL', 'DEFAULT']
+    data_types: Literal["VARCHAR", "INTEGER", "REAL", "BLOB", "NULL"]
+    constraints: Literal["PRIMARY KEY", "UNIQUE", "NOT NULL", "DEFAULT"]
 
     def __init__(self):
         pass
@@ -137,28 +134,48 @@ class PGAdapter(Adapter):
     def d(self):
         pass
 
-class MigratorSingleton[TAdapter](metaclass=SingletonMeta):
 
-    def __init__(self, adapter: TAdapter):
-        print('init')
+class ColumnCreator[T]:
+
+    def __init__(self, adapter: T):
         self.adapter = adapter
 
-    def some_business_logic(self):
-        """
-        Finally, any singleton should define some business logic, which can be
-        executed on its instance.
-        """
+    def create_column(self, name: str, data_type: T, constraints: T):
+        pass
 
-        # ...
+
+class MigratorSingleton[T](metaclass=SingletonMeta):
+    def __init__(self, adapter: T):
+        print("init")
+        self.adapter = adapter
+
+    def set_column(self, name: str, data_type: T, constraints: T):
+        # self.adapter.
+        pass
+
 
 class Table(MigratorSingleton):
     def __init__(self):
-        self.migrator = MigratorSingleton(PGAdapter()).adapter.constraints == ''
-        t = Table.__subclasses__()
+        self.migrator = MigratorSingleton(PGAdapter())
+        self.column = ColumnCreator(PGAdapter())
 
-        for cls in t:
-            print(cls.__dict__)
-            Migrator.get_instance().create_relation(cls.__dict__)
+        # self.migrator.create_table(
+        #     "testTable",
+        #     [
+        #         {
+        #             "name": "id",
+        #             "constraints": "PRIMARY KEY",
+        #         }
+        #     ],
+        # )
+        # t = Table.__subclasses__()
+
+        # for cls in t:
+        #     print(cls.__dict__)
+        #     Migrator.get_instance().create_relation(cls.__dict__)
+
+    def create_table(self, table_name: str, columns):
+        pass
 
 
 class User(Table):
@@ -169,11 +186,9 @@ class Post(Table):
     title = "chuj"
 
 
-
 if __name__ == "__main__":
     pass
     # The client code.
-
 
     # if id(s1) == id(s2):
     #     print("Singleton works, both variables contain the same instance.")
