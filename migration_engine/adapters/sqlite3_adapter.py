@@ -1,6 +1,6 @@
 from typing import Literal
 
-from migration_engine.base_adapter import BaseAdapter
+from base_adapter import BaseAdapter
 
 
 class SQLite3Adapter(BaseAdapter):
@@ -15,3 +15,4 @@ class SQLite3Adapter(BaseAdapter):
 
 
 SQLite3Adapter()
+print("x")
