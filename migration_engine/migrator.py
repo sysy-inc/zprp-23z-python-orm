@@ -153,21 +153,24 @@ class MigratorSingleton[T](metaclass=SingletonMeta):
         # self.adapter.
         pass
 
+    def create_table(self, table_name: str, columns):
+        pass
+
 
 class Table(MigratorSingleton):
     def __init__(self):
         self.migrator = MigratorSingleton(PGAdapter())
         self.column = ColumnCreator(PGAdapter())
 
-        # self.migrator.create_table(
-        #     "testTable",
-        #     [
-        #         {
-        #             "name": "id",
-        #             "constraints": "PRIMARY KEY",
-        #         }
-        #     ],
-        # )
+        self.migrator.create_table(
+            "testTable",
+            [
+                {
+                    "name": "id",
+                    "constraints": "PRIMARY KEY",
+                }
+            ],
+        )
         # t = Table.__subclasses__()
 
         # for cls in t:
