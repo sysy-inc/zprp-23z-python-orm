@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import Literal
+from typing import Literal, TypedDict
 
 
 class BaseAdapter(ABC):
-    type data_types = Literal[""]
-    type constraints = Literal[""]
+    type DataTypes = Literal[""]
+    type Constraints = Literal[""]
+    Column = TypedDict(
+        "Column", {"name": str, "data_type": DataTypes, "constraints": Constraints}
+    )
 
     @abstractmethod
     def create_table(self, table_name: str, columns):
