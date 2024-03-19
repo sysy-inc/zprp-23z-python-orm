@@ -15,3 +15,8 @@ class BaseAdapter(ABC):
     def create_table(self, table_name: str, columns):
         """Create a table in the database"""
         pass
+
+    @abstractmethod
+    def execute_migration(self):
+        """Execute the migration"""
+        pass

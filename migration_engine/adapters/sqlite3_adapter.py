@@ -17,3 +17,8 @@ class SQLite3Adapter(BaseAdapter):
 
     def create_table(self, table_name: str, columns: list[Column]):
         self.tables.append({"name": table_name, "columns": columns})
+
+    def execute_migration(self):
+        print(self.tables)
+        print("Migration executed")
+        pass
