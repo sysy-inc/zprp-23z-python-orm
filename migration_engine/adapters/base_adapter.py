@@ -8,6 +8,8 @@ class BaseAdapter(ABC):
     Column = TypedDict(
         "Column", {"name": str, "data_type": DataTypes, "constraints": Constraints}
     )
+    Table = TypedDict("Table", {"name": str, "columns": list[Column]})
+    tables: list[Table] = []
 
     @abstractmethod
     def create_table(self, table_name: str, columns):
