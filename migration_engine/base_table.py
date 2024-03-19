@@ -11,7 +11,3 @@ class BaseTable:
             print(cls.__name__, cls.__dict__)
             table_instance = cls()
             table_instance.adapter.execute_migration()
-
-
-if __name__ == "__main__":
-    BaseTable.migrate()
