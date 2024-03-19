@@ -1,13 +1,17 @@
 from adapters.sqlite3_adapter import SQLite3Adapter
+from adapters.base_adapter import BaseAdapter
 
 
 class BaseTable:
+    adapter: BaseAdapter
+
     @classmethod
     def migrate(cls):
         table = BaseTable.__subclasses__()
         for cls in table:
             print(cls.__name__, cls.__dict__)
-            cls()
+            table_instance = cls()
+            table_instance.adapter.execute_migration()
 
 
 class Table(BaseTable):
