@@ -1,7 +1,7 @@
 # Example of how Table class and classes modeling DB schema can be implemented
 from adapters.base_adapter import BaseAdapter
 from adapters.sqlite3_adapter import SQLite3Adapter
-from migrator import BaseTable
+from base_table import BaseTable
 
 
 class Table(BaseTable):
@@ -23,6 +23,16 @@ class Table(BaseTable):
             # get some info from class inheriting from Table (cls.__dict__, cls(), ...)
             # self.adapter.create_table(name, type_safe_data)
             print(cls.__name__, cls.__dict__)
+            self.adapter.create_table(
+                cls.__name__,
+                [
+                    {
+                        "name": "dummy_id",
+                        "data_type": "INTEGER",
+                        "constraints": "PRIMARY KEY",
+                    }
+                ],
+            )
 
 
 class User(Table):
