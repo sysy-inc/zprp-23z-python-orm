@@ -1,28 +1,26 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Literal, TypedDict
+from dataclasses import dataclass, field
+from typing import Literal
 
 type DataTypes = Literal[""]
 type Constraints = Literal[""]
 
 
-
 class BaseAdapter(ABC):
     type DataTypes = Literal[""]
     type Constraints = Literal[""]
-    
+
     @dataclass
     class Column:
         name: str
         data_type: DataTypes
-        constraints: list[Constraints]
-
+        constraints: list[Constraints] = field(default_factory=list)
 
     @dataclass
     class Table:
         name: str
-        columns: list[BaseAdapter.Column]
+        columns: list[BaseAdapter.Column] = field(default_factory=list)
 
     tables: list[Table] = []
 
