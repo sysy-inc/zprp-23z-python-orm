@@ -1,6 +1,6 @@
 from typing import Literal, TypedDict
 
-from base_adapter import BaseAdapter
+from adapters.base_adapter import BaseAdapter
 
 
 class SQLite3Adapter(BaseAdapter):
@@ -9,9 +9,11 @@ class SQLite3Adapter(BaseAdapter):
     Column = TypedDict(
         "Column", {"name": str, "data_type": DataTypes, "constraints": Constraints}
     )
+    Table = TypedDict("Table", {"name": str, "columns": list[Column]})
+    tables: list[Table] = []
 
     def __init__(self):
         pass
 
     def create_table(self, table_name: str, columns: list[Column]):
-        pass
+        self.tables.append({"name": table_name, "columns": columns})
