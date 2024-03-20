@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Literal
 from dataclasses import dataclass, field
-from zprp_23z_python_orm.migration_engine.adapters.base_adapter import BaseAdapter
+from adapters.base_adapter import BaseAdapter
 
 
 type DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]
