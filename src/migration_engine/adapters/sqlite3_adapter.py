@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Literal
 from dataclasses import dataclass, field
-from adapters.base_adapter import BaseAdapter
+from .base_adapter import BaseAdapter
 
 
 type DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]
@@ -44,3 +44,8 @@ class SQLite3Adapter(BaseAdapter):
                 print(
                     f"\t Creating column {column.name} with type {column.data_type} and constraints {column.constraints}"
                 )
+
+
+adapter = SQLite3Adapter()
+
+col = adapter.Column("id", "dupa", ["PRIMARY KEY"])
