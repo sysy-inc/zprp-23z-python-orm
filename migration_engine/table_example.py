@@ -21,39 +21,45 @@ class Table(MigrationElement):
         models = Table.__subclasses__()
 
         # Creator of Table class can implement how to map their own class structure to fit the adapter
-        for cls in models:
 
-            table: SQLite3Adapter.Table
-            data_type: DataTypes
-            columns: list[SQLite3Adapter.Column] = []
-            constraints: list[Constraints] = []
+        # This will only populate the adapter in inside migration scripts, as Table will never be instantiated
+        if self.__class__ == Table:
+            for cls in models:
+                table: SQLite3Adapter.Table
+                data_type: DataTypes
+                columns: list[SQLite3Adapter.Column] = []
+                constraints: list[Constraints] = []
 
-            if cls.__dict__["data_type"] == "my_definition_of_data_type":
-                data_type = "INTEGER"
-            elif cls.__dict__["data_type"] == "my_other_definition":
-                data_type = "TEXT"
-            elif cls.__dict__["data_type"] == "and_other":
-                data_type = "BLOB"
+                if cls.__dict__["data_type"] == "my_definition_of_data_type":
+                    data_type = "INTEGER"
+                elif cls.__dict__["data_type"] == "my_other_definition":
+                    data_type = "TEXT"
+                elif cls.__dict__["data_type"] == "and_other":
+                    data_type = "BLOB"
 
-            constraints.append(cls.__dict__["constraints"])
+                constraints.append(cls.__dict__["constraints"])
 
-            columns.append(
-                SQLite3Adapter.Column(
-                    name=cls.__dict__["name"],
-                    data_type=data_type,
-                    constraints=constraints,
+                columns.append(
+                    SQLite3Adapter.Column(
+                        name=cls.__dict__["name"],
+                        data_type=data_type,
+                        constraints=constraints,
+                    )
                 )
-            )
-            table = SQLite3Adapter.Table(name=cls.__name__, columns=columns)
+                table = SQLite3Adapter.Table(name=cls.__name__, columns=columns)
 
-            # Table, for each instance should properly inform the adapter about being created
-            self.adapter.create_table(table)
+                # Table, for each instance should properly inform the adapter about being created
+                self.adapter.create_table(table)
 
 
 class User(Table):
     name = "test_name"
     data_type = "my_definition_of_data_type"
     constraints = None
+    data = []
+
+    def insert_data(self, name, title):
+        self.data.append((name, title))
 
 
 class Post(Table):
@@ -66,7 +72,3 @@ class Comment(Table):
     name = "test_content"
     data_type = "and_other"
     constraints = None
-
-
-if __name__ == "__main__":
-    MigrationElement.migrate()
