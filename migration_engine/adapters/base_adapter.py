@@ -8,8 +8,6 @@ type Constraints = Literal[""]
 
 
 class BaseAdapter(ABC):
-    type DataTypes = Literal[""]
-    type Constraints = Literal[""]
 
     @dataclass
     class Column:
