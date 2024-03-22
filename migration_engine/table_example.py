@@ -1,6 +1,6 @@
 # Example of how Table class and classes modeling DB schema can be implemented
 from adapters.base_adapter import BaseAdapter
-from adapters.sqlite3_adapter import SQLite3Adapter, DataTypes, Constraints
+from adapters.sqlite3_adapter import SQLite3Adapter
 from migration_element import MigrationElement
 
 
@@ -26,9 +26,9 @@ class Table(MigrationElement):
         if self.__class__ == Table:
             for cls in models:
                 table: SQLite3Adapter.Table
-                data_type: DataTypes
+                data_type: SQLite3Adapter.DataTypes
                 columns: list[SQLite3Adapter.Column] = []
-                constraints: list[Constraints] = []
+                constraints: list[SQLite3Adapter.Constraints] = []
 
                 if cls.__dict__["data_type"] == "my_definition_of_data_type":
                     data_type = "INTEGER"

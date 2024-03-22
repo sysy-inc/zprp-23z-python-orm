@@ -1,29 +1,14 @@
 from __future__ import annotations
 from typing import Literal
-from dataclasses import dataclass, field
-from adapters.base_adapter import BaseAdapter
-
-
-type DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]
-type Constraints = Literal["PRIMARY KEY", "UNIQUE", "NOT NULL", "DEFAULT"]
+from adapters.base_adapter import BaseAdapter, BaseColumn, BaseTable
 
 
 class SQLite3Adapter(BaseAdapter):
 
-    @dataclass
-    class Column:
-        """Column dataclass for SQLite3Adapter"""
-
-        name: str
-        data_type: DataTypes
-        constraints: list[Constraints] = field(default_factory=list)
-
-    @dataclass
-    class Table:
-        """Table dataclass for SQLite3Adapter"""
-
-        name: str
-        columns: list[SQLite3Adapter.Column] = field(default_factory=list)
+    DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]
+    Constraints = Literal["PRIMARY KEY", "UNIQUE", "NOT NULL", "DEFAULT"]
+    Column = BaseColumn[DataTypes, Constraints]
+    Table = BaseTable[Column]
 
     tables: list[Table] = []
 
