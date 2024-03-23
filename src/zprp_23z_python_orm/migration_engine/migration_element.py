@@ -1,4 +1,4 @@
-from adapters.base_adapter import BaseAdapter
+from zprp_23z_python_orm.migration_engine.adapters.base_adapter import BaseAdapter
 
 
 # All classes need to inherit from this class if they participate in a migration
