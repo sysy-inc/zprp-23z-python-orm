@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "Python ORM"
 authors = [
     {name = "xDepcio", email = "olek.drwal@gmail.com"},
+    {name = "jedrzej-grabski", email = "jedrzej@grabski.pl"},
+    {name = "mbienkowski", email = "bienkowski.maksym@gmail.com"}
 ]
 dependencies = []
 requires-python = ">=3.12"
