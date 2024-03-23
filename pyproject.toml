@@ -1,5 +1,5 @@
 [project]
-name = "zprp-23z-python-orm"
+name = "SkiBiDi-ORM"
 version = "0.1.0"
 description = "Python ORM"
 authors = [

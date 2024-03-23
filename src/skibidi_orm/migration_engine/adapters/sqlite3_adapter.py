@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Literal
-from zprp_23z_python_orm.migration_engine.adapters.base_adapter import (
+from skibidi_orm.migration_engine.adapters.base_adapter import (
     BaseAdapter,
     BaseColumn,
     BaseTable,
