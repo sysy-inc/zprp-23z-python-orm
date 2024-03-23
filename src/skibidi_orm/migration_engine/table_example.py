@@ -1,7 +1,7 @@
 # Example of how Table class and classes modeling DB schema can be implemented
-from zprp_23z_python_orm.migration_engine.adapters.base_adapter import BaseAdapter
-from zprp_23z_python_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
-from zprp_23z_python_orm.migration_engine.migration_element import MigrationElement
+from skibidi_orm.migration_engine.adapters.base_adapter import BaseAdapter
+from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
+from skibidi_orm.migration_engine.migration_element import MigrationElement
 
 
 class Table(MigrationElement):
