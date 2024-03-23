@@ -1,6 +1,10 @@
 from __future__ import annotations
 from typing import Literal
-from adapters.base_adapter import BaseAdapter, BaseColumn, BaseTable
+from zprp_23z_python_orm.migration_engine.adapters.base_adapter import (
+    BaseAdapter,
+    BaseColumn,
+    BaseTable,
+)
 
 
 class SQLite3Adapter(BaseAdapter):
