@@ -24,6 +24,17 @@ class BaseAdapter(ABC):
         pass
 
     @abstractmethod
+    def create_relation(
+        self,
+        origin_table: str,
+        origin_column: str,
+        referenced_table: str,
+        referenced_column: str,
+    ):
+        """Create a relation in the database"""
+        pass
+
+    @abstractmethod
     def execute_migration(self):
         """Execute the migration"""
         pass

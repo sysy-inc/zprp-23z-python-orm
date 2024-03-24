@@ -24,6 +24,19 @@ class SQLite3Adapter(BaseAdapter):
 
         self.tables.append(table)
 
+    def create_relation(
+        self,
+        origin_table: str,
+        origin_column: str,
+        referenced_table: str,
+        referenced_column: str,
+    ):
+        """Informs the adapter about a relation creation."""
+
+        print(
+            f"Creating relation from {origin_table}.{origin_column} to {referenced_table}.{referenced_column}"
+        )
+
     def execute_migration(self):
         """Execute the migration process on a full adapter."""
 
