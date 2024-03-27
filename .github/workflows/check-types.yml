@@ -25,5 +25,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyright
 
+    - name: Setup pdm
+      run: |
+        pip install pdm 
+        pdm venv create
+
     - name: Check types using pyright
       run: pyright src
