@@ -1,6 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
@@ -19,7 +20,7 @@ class BaseTable[TCol]:
 class BaseAdapter(ABC):
 
     @abstractmethod
-    def create_table(self, table: BaseTable):
+    def create_table(self, table: BaseTable[BaseColumn[Any, Any]]):
         """Create a table in the database"""
         pass
 

@@ -14,7 +14,7 @@ class Table(MigrationElement):
 
     adapter: BaseAdapter
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.adapter = SQLite3Adapter()
 
         # This will iterate over all classes that inherit from Table and create a table in the database
@@ -36,6 +36,8 @@ class Table(MigrationElement):
                     data_type = "TEXT"
                 elif cls.__dict__["data_type"] == "and_other":
                     data_type = "BLOB"
+                else:
+                    data_type = "NULL"
 
                 constraints.append(cls.__dict__["constraints"])
 
@@ -56,9 +58,9 @@ class User(Table):
     name = "test_name"
     data_type = "my_definition_of_data_type"
     constraints = None
-    data = []
+    data: list[tuple[str, str]] = []
 
-    def insert_data(self, name, title):
+    def insert_data(self, name: str, title: str):
         self.data.append((name, title))
 
 
