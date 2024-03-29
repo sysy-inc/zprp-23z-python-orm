@@ -8,7 +8,7 @@ on:
     branches: ["**"]
 
 
-jobs: 
+jobs:
   check-types:
     runs-on: ubuntu-latest
 
@@ -19,16 +19,12 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: "3.12"
-    
-    - name: Install pyright
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyright
 
     - name: Setup pdm
       run: |
-        pip install pdm 
-        pdm venv create
+        pip install pdm
+        pdm add --dev pyright
+        pdm install
 
     - name: Check types using pyright
-      run: pyright src
+      run: pdm run pyright src
