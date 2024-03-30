@@ -6,5 +6,6 @@ class OperationType(enum.Enum):
 
     CREATE = enum.auto()
     DELETE = enum.auto()
-    ALTER = enum.auto()
     RENAME = enum.auto()
+    DTYPE_CHANGE = enum.auto()
+    CONSTRAINT_CHANGE = enum.auto()

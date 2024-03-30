@@ -14,7 +14,7 @@ class ColumnOperation(ABC):
 
 
 @dataclass(frozen=True)
-class AddColumn(ColumnOperation):
+class AddColumnOperation(ColumnOperation):
     """Class for adding a column"""
 
     operation_type = OperationType.CREATE
@@ -22,7 +22,7 @@ class AddColumn(ColumnOperation):
 
 
 @dataclass(frozen=True)
-class DeleteColumn(ColumnOperation):
+class DeleteColumnOperation(ColumnOperation):
     """Class for deleting a column"""
 
     operation_type = OperationType.DELETE
@@ -30,7 +30,7 @@ class DeleteColumn(ColumnOperation):
 
 
 @dataclass(frozen=True)
-class RenameColumn(ColumnOperation):
+class RenameColumnOperation(ColumnOperation):
     """Class for renaming a column"""
 
     operation_type = OperationType.RENAME
@@ -40,7 +40,7 @@ class RenameColumn(ColumnOperation):
 
 
 @dataclass(frozen=True)
-class AddConstraint(ColumnOperation):
+class AddConstraintOperation(ColumnOperation):
     """Class for adding a constraint on a column"""
 
     operation_type = OperationType.CONSTRAINT_CHANGE
@@ -50,7 +50,7 @@ class AddConstraint(ColumnOperation):
 
 
 @dataclass(frozen=True)
-class DeleteConstraint(ColumnOperation):
+class DeleteConstraintOperation(ColumnOperation):
     """Class for deleting a constraint on a column"""
 
     operation_type = OperationType.CONSTRAINT_CHANGE
@@ -60,7 +60,7 @@ class DeleteConstraint(ColumnOperation):
 
 
 @dataclass(frozen=True)
-class ChangeConstraint(ColumnOperation):
+class ChangeConstraintOperation(ColumnOperation):
     """Class for changing a constraint on a column"""
 
     operation_type = OperationType.CONSTRAINT_CHANGE
@@ -71,7 +71,7 @@ class ChangeConstraint(ColumnOperation):
 
 
 @dataclass(frozen=True)
-class ChangeDataType(ColumnOperation):
+class ChangeDataTypeOperation(ColumnOperation):
     """Class for changing the data type of a column"""
 
     operation_type = OperationType.DTYPE_CHANGE
