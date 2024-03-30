@@ -14,12 +14,12 @@ class ConstraintType(enum.Enum):
     DEFAULT = enum.auto()
 
 
-@dataclass(frozen=True)
 class Constraint(ABC):
     """Base class for all constraints"""
 
     constraint_type: ConstraintType = field(init=False)
-    related_column: str
+    table_name: str
+    column_name: str
 
 
 @dataclass(frozen=True)
@@ -48,7 +48,7 @@ class ForeignKeyConstraint(Constraint):
     """Class for the FOREIGN KEY constraint"""
 
     constraint_type = ConstraintType.FOREIGN_KEY
-    table: str
+    referenced_table: str
 
 
 @dataclass(frozen=True)
@@ -56,11 +56,14 @@ class CheckConstraint(Constraint):
     """Class for the CHECK constraint"""
 
     constraint_type = ConstraintType.CHECK
+    type Placeholder = str
+    # TODO: how to store the condition?
+    condition: Placeholder
 
 
+@dataclass(frozen=True)
 class DefaultConstraint(Constraint):
     """Class for the DEFAULT constraint"""
 
     constraint_type = ConstraintType.DEFAULT
-    # TODO: think type over
     value: str
