@@ -26,8 +26,17 @@ class DbConfig:
 
 
 class SQLite3Config(DbConfig, metaclass=SingletonMeta):
+    """
+    Configuration class for SQLite3 database.
+    Instantiating it means choosing SQLite3 as the database.
+    """
+
     def __init__(self, db_path: str):
-        self.db_path = db_path
+        self.__db_path = db_path
+
+    @property
+    def db_path(self):
+        return self.__db_path
 
 
 class PostgresConfig(DbConfig, metaclass=SingletonMeta):
