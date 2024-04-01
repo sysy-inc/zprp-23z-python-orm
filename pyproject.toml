@@ -22,5 +22,9 @@ build-backend = "pdm.backend"
 [tool.pdm]
 distribution = true
 
+[tool.pdm.dev-dependencies]
+dev = [
+    "pytest>=8.1.1",
+]
 [project.entry-points."console_scripts"]
 skibidi-orm = "skibidi_orm.cli.run:main"
