@@ -8,7 +8,7 @@ class DbConfig:
     @classmethod
     def instance(cls):
         if not SingletonMeta.instance_exists(cls):
-            raise ValueError("Instance does not exist")
+            raise ReferenceError("Instance does not exist")
         return cls()
 
     def __init_subclass__(cls) -> None:
@@ -18,7 +18,7 @@ class DbConfig:
     def __modify_init(init_func: Callable[[Any], Any]):
         def wrapper(*args: Any, **kwargs: Any):
             if DbConfig.__instances_count > 0:
-                raise ValueError("Only one instance of this class is allowed")
+                raise RuntimeError("Only one instance of this class is allowed")
             DbConfig.__instances_count += 1
             init_func(*args, **kwargs)
 

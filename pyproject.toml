@@ -23,7 +23,7 @@ build-backend = "pdm.backend"
 distribution = true
 
 [tool.pdm.dev-dependencies]
-test = [
+dev = [
     "pytest>=8.1.1",
 ]
 [project.entry-points."console_scripts"]
