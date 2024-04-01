@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any
+import sqlite3
 
 from skibidi_orm.migration_engine.adapters.base_adapter import (
     BaseColumn,
@@ -29,12 +30,16 @@ class SqliteInspector(DbInspector):
     ) -> list[
         BaseTable[BaseColumn[SQLite3Adapter.DataTypes, SQLite3Adapter.Constraints]]
     ]:
-        x = SQLite3Adapter.Table(
-            name="das",
-            columns=[
-                SQLite3Adapter.Column(
-                    name="asd", constraints=["NOT NULL"], data_type="INTEGER"
-                )
-            ],
-        )
-        return [x]
+        tables_names = self.get_tables_names()
+
+        return [BaseTable(name=table[0]) for table in tables_names]
+
+    def get_tables_names(self) -> list[str]:
+        db_path = self.config.db_path
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return [table[0] for table in tables]
