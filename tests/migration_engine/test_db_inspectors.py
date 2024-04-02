@@ -109,3 +109,28 @@ def test_get_table_columns2():
     assert columns[0].name == "id"
     assert columns[0].data_type == "INTEGER"
     assert columns[0].constraints == ["PRIMARY KEY", "NOT NULL"]
+
+
+@pytest.mark.parametrize("make_database", [[sql_table1, sql_table2]], indirect=True)
+@pytest.mark.usefixtures("make_database")
+def test_get_tables():
+    SQLite3Config(db_path=temp_db_file)
+    inspector = SqliteInspector()
+    tables = inspector.get_tables()
+    assert len(tables) == 2
+    assert tables[0].name == "table1"
+    assert tables[1].name == "table2"
+    assert len(tables[0].columns) == 2
+    assert len(tables[1].columns) == 2
+    assert tables[0].columns[0].name == "id"
+    assert tables[0].columns[0].data_type == "INTEGER"
+    assert tables[0].columns[0].constraints == ["PRIMARY KEY"]
+    assert tables[0].columns[1].name == "name"
+    assert tables[0].columns[1].data_type == "TEXT"
+    assert tables[0].columns[1].constraints == ["NOT NULL"]
+    assert tables[1].columns[0].name == "id"
+    assert tables[1].columns[0].data_type == "INTEGER"
+    assert tables[1].columns[0].constraints == ["PRIMARY KEY"]
+    assert tables[1].columns[1].name == "name"
+    assert tables[1].columns[1].data_type == "TEXT"
+    assert tables[1].columns[1].constraints == ["NOT NULL"]
