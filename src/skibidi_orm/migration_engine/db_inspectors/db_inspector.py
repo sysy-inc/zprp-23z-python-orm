@@ -1,25 +1,16 @@
-from abc import ABC, abstractmethod
 from typing import Any, Literal, cast
 import sqlite3
-
-from skibidi_orm.migration_engine.adapters.base_adapter import (
-    BaseColumn,
-    BaseTable,
-)
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.config import SQLite3Config
+from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
 
 
-class DbInspector(ABC):
-    @abstractmethod
-    def get_tables(self) -> list[BaseTable[BaseColumn[Any, Any]]]:
-        pass
+type SQLite3PragmaTableInfo = list[
+    tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]]
+]
 
 
-type PragmaTableInfo = list[tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]]]
-
-
-class SqliteInspector(DbInspector):
+class SqliteInspector(BaseDbInspector):
     """
     Used to get data from live SQLite3 database.
     Should only be instantiated when SQLite3 is choosen as the database.
@@ -46,7 +37,7 @@ class SqliteInspector(DbInspector):
         return [table[0] for table in tables]
 
     def get_table_columns(self, table_name: str) -> list[SQLite3Adapter.Column]:
-        columns: PragmaTableInfo = self._sqlite_execute(
+        columns: SQLite3PragmaTableInfo = self._sqlite_execute(
             f"PRAGMA table_info({table_name});"
         )
         adapter_columns: list[SQLite3Adapter.Column] = []
