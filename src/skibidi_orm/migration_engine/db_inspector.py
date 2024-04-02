@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Literal, cast
 import sqlite3
 
 from skibidi_orm.migration_engine.adapters.base_adapter import (
@@ -14,6 +14,9 @@ class DbInspector(ABC):
     @abstractmethod
     def get_tables(self) -> list[BaseTable[BaseColumn[Any, Any]]]:
         pass
+
+
+type PragmaTableInfo = list[tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]]]
 
 
 class SqliteInspector(DbInspector):
@@ -35,11 +38,41 @@ class SqliteInspector(DbInspector):
         return [BaseTable(name=table[0]) for table in tables_names]
 
     def get_tables_names(self) -> list[str]:
+        tables = self._sqlite_execute(
+            "SELECT name FROM sqlite_master WHERE type='table';"
+        )
+        return [table[0] for table in tables]
+
+    def get_table_columns(self, table_name: str) -> list[SQLite3Adapter.Column]:
+        columns: PragmaTableInfo = self._sqlite_execute(
+            f"PRAGMA table_info({table_name});"
+        )
+        adapter_columns: list[SQLite3Adapter.Column] = []
+
+        for _, name, data_type, notnull, _, pk in columns:
+            constraints: list[SQLite3Adapter.Constraints] = []
+            if pk:
+                constraints.append("PRIMARY KEY")
+            if notnull:
+                constraints.append("NOT NULL")
+
+            adapter_columns.append(
+                SQLite3Adapter.Column(
+                    name=name,
+                    data_type=cast(SQLite3Adapter.DataTypes, data_type),
+                    constraints=constraints,
+                )
+            )
+
+        return adapter_columns
+
+    def _sqlite_execute(self, query: str):
         db_path = self.config.db_path
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        tables = cursor.fetchall()
+        cursor.execute(query)
+        conn.commit()
+        data = cursor.fetchall()
         cursor.close()
         conn.close()
-        return [table[0] for table in tables]
+        return data
