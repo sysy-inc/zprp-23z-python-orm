@@ -7,7 +7,6 @@ from skibidi_orm.migration_engine.db_inspector import SqliteInspector
 import sqlite3
 
 
-# class TestSQLite3Inspector:
 temp_dir = "./tmp"
 temp_db_file = "./tmp/test_db_inspectors.db"
 sql_table1 = """
@@ -102,7 +101,7 @@ def test_get_table_columns():
     "make_database", [[sql_table_primary_key_not_null]], indirect=True
 )
 @pytest.mark.usefixtures("make_database")
-def test_get_table_columns2():
+def test_get_table_columns__primaryk_notnull():
     SQLite3Config(db_path=temp_db_file)
     inspector = SqliteInspector()
     columns = inspector.get_table_columns("table_primary_key_not_null")
