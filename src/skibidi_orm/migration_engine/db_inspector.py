@@ -30,12 +30,14 @@ class SqliteInspector(DbInspector):
 
     def get_tables(
         self,
-    ) -> list[
-        BaseTable[BaseColumn[SQLite3Adapter.DataTypes, SQLite3Adapter.Constraints]]
-    ]:
+    ) -> list[SQLite3Adapter.Table]:
+        tables: list[SQLite3Adapter.Table] = []
         tables_names = self.get_tables_names()
+        for table_name in tables_names:
+            table_columns = self.get_table_columns(table_name)
+            tables.append(SQLite3Adapter.Table(name=table_name, columns=table_columns))
 
-        return [BaseTable(name=table[0]) for table in tables_names]
+        return tables
 
     def get_tables_names(self) -> list[str]:
         tables = self._sqlite_execute(
