@@ -22,6 +22,11 @@ sql_table2 = """
         name TEXT NOT NULL
     );
 """
+sql_table_primary_key_not_null = """
+    CREATE TABLE table_primary_key_not_null (
+        id INTEGER PRIMARY KEY NOT NULL
+    );
+"""
 
 
 def create_temp_db_file(temp_dir: str, db_file: str):
@@ -93,8 +98,14 @@ def test_get_table_columns():
     assert len(columns) == 2
 
 
-@pytest.mark.parametrize("make_database", [[sql_table1, sql_table2]], indirect=True)
+@pytest.mark.parametrize(
+    "make_database", [[sql_table_primary_key_not_null]], indirect=True
+)
 @pytest.mark.usefixtures("make_database")
 def test_get_table_columns2():
     SQLite3Config(db_path=temp_db_file)
-    SqliteInspector()
+    inspector = SqliteInspector()
+    columns = inspector.get_table_columns("table_primary_key_not_null")
+    assert columns[0].name == "id"
+    assert columns[0].data_type == "INTEGER"
+    assert columns[0].constraints == ["PRIMARY KEY", "NOT NULL"]
