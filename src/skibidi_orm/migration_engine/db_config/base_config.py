@@ -15,7 +15,7 @@ class ConfigSingleton(type):
         return class_name in ConfigSingleton._instances
 
 
-class DbConfig:
+class BaseDbConfig:
     __instances_count = 0
 
     @classmethod
@@ -25,14 +25,14 @@ class DbConfig:
         return cls()
 
     def __init_subclass__(cls) -> None:
-        cls.__init__ = DbConfig.__modify_init(cls.__init__)
+        cls.__init__ = BaseDbConfig.__modify_init(cls.__init__)
 
     @staticmethod
     def __modify_init(init_func: Callable[[Any], Any]):
         def wrapper(*args: Any, **kwargs: Any):
-            if DbConfig.__instances_count > 0:
+            if BaseDbConfig.__instances_count > 0:
                 raise RuntimeError("Only one instance of this class is allowed")
-            DbConfig.__instances_count += 1
+            BaseDbConfig.__instances_count += 1
             init_func(*args, **kwargs)
 
         return wrapper
