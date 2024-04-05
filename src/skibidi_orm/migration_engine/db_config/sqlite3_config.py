@@ -1,7 +1,10 @@
-from skibidi_orm.migration_engine.config import ConfigSingleton, DbConfig
+from skibidi_orm.migration_engine.db_config.base_config import (
+    BaseDbConfig,
+    ConfigSingleton,
+)
 
 
-class SQLite3Config(DbConfig, metaclass=ConfigSingleton):
+class SQLite3Config(BaseDbConfig, metaclass=ConfigSingleton):
     """
     Configuration class for SQLite3 database.
     Instantiating it means choosing SQLite3 as the database.
@@ -13,8 +16,3 @@ class SQLite3Config(DbConfig, metaclass=ConfigSingleton):
     @property
     def db_path(self):
         return self.__db_path
-
-
-class PostgresConfig(DbConfig, metaclass=ConfigSingleton):
-    def __init__(self, db_path: str):
-        self.db_path = db_path

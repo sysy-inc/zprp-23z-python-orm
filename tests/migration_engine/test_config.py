@@ -1,5 +1,7 @@
 import pytest
-from skibidi_orm.migration_engine.config import PostgresConfig, SQLite3Config
+
+from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
+from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 
 
 def test_should_only_create_one_instance_of_each_config():
