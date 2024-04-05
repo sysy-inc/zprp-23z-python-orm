@@ -1,5 +1,18 @@
 from typing import Any, Callable
-from skibidi_orm.migration_engine.utils import SingletonMeta
+
+
+class ConfigSingleton(type):
+    _instances: dict[Any, Any] = {}
+
+    def __call__(cls, *args: Any, **kwargs: Any) -> Any:
+        if cls not in cls._instances:
+            instance = super().__call__(*args, **kwargs)
+            cls._instances[cls] = instance
+        return cls._instances[cls]
+
+    @staticmethod
+    def instance_exists(class_name: Any) -> bool:
+        return class_name in ConfigSingleton._instances
 
 
 class DbConfig:
@@ -7,7 +20,7 @@ class DbConfig:
 
     @classmethod
     def instance(cls):
-        if not SingletonMeta.instance_exists(cls):
+        if not ConfigSingleton.instance_exists(cls):
             raise ReferenceError("Instance does not exist")
         return cls()
 
@@ -25,7 +38,7 @@ class DbConfig:
         return wrapper
 
 
-class SQLite3Config(DbConfig, metaclass=SingletonMeta):
+class SQLite3Config(DbConfig, metaclass=ConfigSingleton):
     """
     Configuration class for SQLite3 database.
     Instantiating it means choosing SQLite3 as the database.
@@ -39,6 +52,6 @@ class SQLite3Config(DbConfig, metaclass=SingletonMeta):
         return self.__db_path
 
 
-class PostgresConfig(DbConfig, metaclass=SingletonMeta):
+class PostgresConfig(DbConfig, metaclass=ConfigSingleton):
     def __init__(self, db_path: str):
         self.db_path = db_path
