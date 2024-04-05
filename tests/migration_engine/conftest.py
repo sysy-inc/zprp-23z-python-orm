@@ -1,9 +1,12 @@
 import pytest
 
-from skibidi_orm.migration_engine.config import ConfigSingleton, DbConfig
+from skibidi_orm.migration_engine.db_config.base_config import (
+    BaseDbConfig,
+    ConfigSingleton,
+)
 
 
 @pytest.fixture(autouse=True)
 def reset_config_singleton(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(ConfigSingleton, "_instances", {})
-    monkeypatch.setattr(DbConfig, "_DbConfig__instances_count", 0)
+    monkeypatch.setattr(BaseDbConfig, "_BaseDbConfig__instances_count", 0)
