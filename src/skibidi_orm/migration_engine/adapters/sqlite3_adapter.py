@@ -3,7 +3,7 @@ from typing import Literal
 from skibidi_orm.migration_engine.adapters.base_adapter import (
     BaseAdapter,
     BaseColumn,
-    BaseRelation,
+    Relation,
     BaseTable,
 )
 
@@ -14,7 +14,6 @@ class SQLite3Adapter(BaseAdapter):
     Constraints = Literal["PRIMARY KEY", "UNIQUE", "NOT NULL", "DEFAULT"]
     Column = BaseColumn[DataTypes, Constraints]
     Table = BaseTable[Column]
-    Relation = BaseRelation
 
     tables: list[Table] = []
     relations: list[Relation] = []
