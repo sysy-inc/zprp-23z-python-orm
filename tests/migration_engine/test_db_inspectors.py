@@ -27,6 +27,39 @@ sql_table_primary_key_not_null = """
     );
 """
 
+sql_schema_with_fks = [
+    """
+    CREATE TABLE users (
+        user_id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL UNIQUE,
+        email TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+""",
+    """
+    CREATE TABLE posts (
+        post_id INTEGER PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    );
+""",
+    """
+    CREATE TABLE comments (
+        comment_id INTEGER PRIMARY KEY,
+        user_idd INTEGER NOT NULL,
+        post_id INTEGER NOT NULL,
+        comment_text TEXT NOT NULL,
+        comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_idd) REFERENCES users(user_id),
+        FOREIGN KEY (post_id) REFERENCES posts(post_id)
+    );
+""",
+]
+
 
 def create_temp_db_file(temp_dir: str, db_file: str):
     if os.path.exists(temp_dir):
@@ -133,3 +166,39 @@ def test_get_tables():
     assert tables[1].columns[1].name == "name"
     assert tables[1].columns[1].data_type == "TEXT"
     assert tables[1].columns[1].constraints == ["NOT NULL"]
+
+
+@pytest.mark.parametrize("make_database", [[*sql_schema_with_fks]], indirect=True)
+@pytest.mark.usefixtures("make_database")
+def test_get_relations():
+    SQLite3Config(db_path=temp_db_file)
+    inspector = SqliteInspector()
+    relations = inspector.get_relations()
+    assert len(relations) == 3
+    posts_relation = list(filter(lambda rel: rel.origin_table == "posts", relations))[0]
+    assert posts_relation.origin_table == "posts"
+    assert posts_relation.origin_column == "user_id"
+    assert posts_relation.referenced_table == "users"
+    assert posts_relation.referenced_column == "user_id"
+    comments_relation_user = list(
+        filter(
+            lambda rel: rel.origin_table == "comments"
+            and rel.origin_column == "user_idd",
+            relations,
+        )
+    )[0]
+    assert comments_relation_user.origin_table == "comments"
+    assert comments_relation_user.origin_column == "user_idd"
+    assert comments_relation_user.referenced_table == "users"
+    assert comments_relation_user.referenced_column == "user_id"
+    comments_relation_post = list(
+        filter(
+            lambda rel: rel.origin_table == "comments"
+            and rel.origin_column == "post_id",
+            relations,
+        )
+    )[0]
+    assert comments_relation_post.origin_table == "comments"
+    assert comments_relation_post.origin_column == "post_id"
+    assert comments_relation_post.referenced_table == "posts"
+    assert comments_relation_post.referenced_column == "post_id"
