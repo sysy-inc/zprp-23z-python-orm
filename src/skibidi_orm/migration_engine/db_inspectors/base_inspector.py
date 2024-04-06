@@ -22,5 +22,5 @@ class BaseDbInspector(ABC):
         pass
 
     @abstractmethod
-    def get_relations(self) -> Relation:
+    def get_relations(self) -> list[Relation]:
         pass

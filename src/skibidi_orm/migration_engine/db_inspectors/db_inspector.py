@@ -1,6 +1,5 @@
 from typing import Any, Literal, cast
 import sqlite3
-from skibidi_orm.migration_engine.adapters.base_adapter import Relation
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
@@ -8,6 +7,24 @@ from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInsp
 
 type SQLite3PragmaTableInfo = list[
     tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]]
+]
+
+type SQLite3PragmaForeignKeyListEntry = tuple[
+    int,
+    int,
+    str,
+    str,
+    str,
+    Literal["NO ACTION", "RESTRICT", "SET NULL", "SET DEFAULT", "CASCADE"],
+    Literal["NO ACTION", "RESTRICT", "SET NULL", "SET DEFAULT", "CASCADE"],
+    str,
+]
+
+type SQLite3PragmaForeignKeyList = list[SQLite3PragmaForeignKeyListEntry]
+
+type SQLite3PragmaForeignKeyListWithTableName = tuple[
+    SQLite3PragmaForeignKeyList,
+    str,
 ]
 
 
@@ -37,8 +54,43 @@ class SqliteInspector(BaseDbInspector):
         )
         return [table[0] for table in tables]
 
-    def get_relations(self) -> Relation:
-        return super().get_relations()
+    def get_relations(self) -> list[SQLite3Adapter.Relation]:
+        tables_names = self.get_tables_names()
+        foreign_keys: list[SQLite3PragmaForeignKeyListWithTableName] = list(
+            filter(
+                lambda x: x[0],
+                [
+                    (self._sqlite_execute(f"PRAGMA foreign_key_list({table})"), table)
+                    for table in tables_names
+                ],
+            )
+        )
+
+        relations: list[SQLite3Adapter.Relation] = []
+        for (
+            relation_list,
+            origin_table_name,
+        ) in foreign_keys:
+            for (
+                _,
+                _,
+                referenced_table,
+                origin_table_col_name,
+                referenced_table_col_name,
+                _,
+                _,
+                _,
+            ) in relation_list:
+                relations.append(
+                    SQLite3Adapter.Relation(
+                        origin_column=origin_table_col_name,
+                        origin_table=origin_table_name,
+                        referenced_column=referenced_table_col_name,
+                        referenced_table=referenced_table,
+                    )
+                )
+
+        return relations
 
     def get_table_columns(self, table_name: str) -> list[SQLite3Adapter.Column]:
         columns: SQLite3PragmaTableInfo = self._sqlite_execute(

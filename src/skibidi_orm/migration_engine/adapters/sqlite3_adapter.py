@@ -14,9 +14,9 @@ class SQLite3Adapter(BaseAdapter):
     Constraints = Literal["PRIMARY KEY", "UNIQUE", "NOT NULL", "DEFAULT"]
     Column = BaseColumn[DataTypes, Constraints]
     Table = BaseTable[Column]
-
+    Relation = Relation
     tables: list[Table] = []
-    relations: list[Relation] = []
+    relations: list[SQLite3Adapter.Relation] = []
 
     def __init__(self):
         pass
