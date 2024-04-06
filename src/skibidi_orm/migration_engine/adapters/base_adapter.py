@@ -18,7 +18,7 @@ class BaseTable[TCol]:
 
 
 @dataclass
-class BaseRelation:
+class Relation:
     origin_table: str
     origin_column: str
     referenced_table: str
@@ -33,7 +33,7 @@ class BaseAdapter(ABC):
         pass
 
     @abstractmethod
-    def create_relation(self, relation: BaseRelation):
+    def create_relation(self, relation: Relation):
         """Create a relation in the database"""
         pass
 
