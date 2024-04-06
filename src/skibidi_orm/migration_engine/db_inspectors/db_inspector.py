@@ -1,5 +1,6 @@
 from typing import Any, Literal, cast
 import sqlite3
+from skibidi_orm.migration_engine.adapters.base_adapter import Relation
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
@@ -35,6 +36,9 @@ class SqliteInspector(BaseDbInspector):
             "SELECT name FROM sqlite_master WHERE type='table';"
         )
         return [table[0] for table in tables]
+
+    def get_relations(self) -> Relation:
+        return super().get_relations()
 
     def get_table_columns(self, table_name: str) -> list[SQLite3Adapter.Column]:
         columns: SQLite3PragmaTableInfo = self._sqlite_execute(
