@@ -16,6 +16,11 @@ class ConfigSingleton(type):
 
 
 class BaseDbConfig:
+    """
+    Base class for all database configurations.
+    Ensures that only one instance of all subclasses of this class can be created.
+    """
+
     __instances_count = 0
 
     @classmethod
@@ -25,6 +30,9 @@ class BaseDbConfig:
         return cls()
 
     def __init_subclass__(cls) -> None:
+        """
+        Ensures that only one instance of all subclasses of this class can be created.
+        """
         cls.__init__ = BaseDbConfig.__modify_init(cls.__init__)
 
     @staticmethod
