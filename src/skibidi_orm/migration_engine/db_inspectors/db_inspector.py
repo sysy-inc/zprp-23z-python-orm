@@ -35,7 +35,7 @@ class SqliteInspector(BaseDbInspector):
     """
 
     def __init__(self) -> None:
-        self.config = SQLite3Config.instance()
+        self.config = SQLite3Config.get_instance()
 
     def get_tables(
         self,
