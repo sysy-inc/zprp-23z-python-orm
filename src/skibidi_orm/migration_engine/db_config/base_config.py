@@ -24,7 +24,7 @@ class BaseDbConfig:
     __instances_count = 0
 
     @classmethod
-    def instance(cls):
+    def get_instance(cls):
         if not ConfigSingleton.instance_exists(cls):
             raise ReferenceError("Instance does not exist")
         return cls()

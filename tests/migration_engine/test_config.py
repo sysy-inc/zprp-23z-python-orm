@@ -30,5 +30,5 @@ def test_accessing_through_instance_method_should_throw_error_when_instance_does
     Should raise error when trying to access instance method when instance does not exist
     """
     with pytest.raises(ReferenceError) as exc_info:
-        SQLite3Config.instance()
+        SQLite3Config.get_instance()
     assert str(exc_info.value) == "Instance does not exist"
