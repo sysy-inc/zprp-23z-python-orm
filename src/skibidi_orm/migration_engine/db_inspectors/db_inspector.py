@@ -116,6 +116,10 @@ class SqliteInspector(BaseDbInspector):
         return adapter_columns
 
     def _sqlite_execute(self, query: str):
+        """
+        Execute a query in the SQLite3 database, rutrns its result.
+        """
+
         db_path = self.config.db_path
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
