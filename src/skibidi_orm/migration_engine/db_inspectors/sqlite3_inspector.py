@@ -121,11 +121,10 @@ class SqliteInspector(BaseDbInspector):
         """
 
         db_path = self.config.db_path
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute(query)
-        conn.commit()
-        data = cursor.fetchall()
-        cursor.close()
-        conn.close()
+        with sqlite3.connect(db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(query)
+            conn.commit()
+            data = cursor.fetchall()
+            cursor.close()
         return data

@@ -3,7 +3,7 @@ from pathlib import Path
 import shutil
 import pytest
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
-from skibidi_orm.migration_engine.db_inspectors.db_inspector import SqliteInspector
+from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
 import sqlite3
 
 
@@ -70,13 +70,12 @@ def create_temp_db_file(temp_dir: str, db_file: str):
 
 
 def execute_sqlite3_commands(db_path: str, commands: list[str]):
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    for command in commands:
-        cursor.execute(command)
-    conn.commit()
-    cursor.close()
-    conn.close()
+    with sqlite3.connect(db_path) as conn:
+        cursor = conn.cursor()
+        for command in commands:
+            cursor.execute(command)
+        conn.commit()
+        cursor.close()
 
 
 def delete_temp_db_file(temp_dir: str):
