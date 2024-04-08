@@ -56,9 +56,7 @@ class CheckConstraint(Constraint):
     """Class for the CHECK constraint"""
 
     constraint_type = ConstraintType.CHECK
-    type Placeholder = str
-    # TODO: how to store the condition?
-    condition: Placeholder
+    condition: str
 
 
 @dataclass(frozen=True)
