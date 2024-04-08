@@ -1,10 +1,9 @@
 from skibidi_orm.migration_engine.db_config.base_config import (
     BaseDbConfig,
-    ConfigSingleton,
 )
 
 
-class SQLite3Config(BaseDbConfig, metaclass=ConfigSingleton):
+class SQLite3Config(BaseDbConfig):
     """
     Configuration class for SQLite3 database.
     Instantiating it means choosing SQLite3 as the database.
@@ -14,5 +13,16 @@ class SQLite3Config(BaseDbConfig, metaclass=ConfigSingleton):
         self.__db_path = db_path
 
     @property
-    def db_path(self):
+    def db_path(self) -> str:
         return self.__db_path
+
+
+x = SQLite3Config(db_path=":memory:")
+y = x.db_path
+
+
+def dd(x: str):
+    pass
+
+
+dd(y)
