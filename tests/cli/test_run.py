@@ -1,14 +1,29 @@
 from typer.testing import CliRunner
-
+import typer
+import pytest
 from skibidi_orm.cli.run import app
 
 runner = CliRunner()
+
+
+@pytest.fixture
+def mock_input_id(monkeypatch: pytest.MonkeyPatch):
+    def mock_input(prompt: pytest.MonkeyPatch):
+        return "1"
+
+    monkeypatch.setattr(typer, "prompt", mock_input)
 
 
 def test_migration():
     result = runner.invoke(app, ["migrate", "-m", "test message"])
     assert result.exit_code == 0
     assert "Running migration with message: test message" in result.stdout
+
+
+def test_migration_no_message():
+    result = runner.invoke(app, ["migrate"])
+    assert result.exit_code == 0
+    assert "Running migration with message: None" in result.stdout
 
 
 def test_list_migrations():
@@ -23,13 +38,7 @@ def test_go():
     assert "Going to migration with ID: 1" in result.stdout
 
 
-def test_migrate_no_message():
-    result = runner.invoke(app, ["migrate"])
-    assert result.exit_code == 0
-    assert "Please enter a message for the migration:" in result.stdout
-
-
-def test_go_no_migration_id():
+def test_go_no_migration_id(mock_input_id: pytest.MonkeyPatch):
     result = runner.invoke(app, ["go"])
     assert result.exit_code == 0
-    assert "Please enter the migration ID:" in result.stdout
+    assert "Going to migration with ID: 1" in result.stdout
