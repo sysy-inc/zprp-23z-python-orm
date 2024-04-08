@@ -20,6 +20,10 @@ def migrate(
     """
     Used to run migration for current schema file. Can accept an optional message as a description of the migration.
     """
+
+    if not message:
+        message = typer.prompt("Please enter a message for the migration:")
+
     print(f"Running migration with message: {message}")
     pass
 
@@ -38,6 +42,10 @@ def go(migration_id: str = typer.Argument(..., help="Migration ID")):
     """
     Go back (and forward) to specific migration.
     """
+
+    if not migration_id:
+        migration_id = typer.prompt("Please enter the migration ID:")
+
     print(f"Going to migration with ID: {migration_id}")
     pass
 
