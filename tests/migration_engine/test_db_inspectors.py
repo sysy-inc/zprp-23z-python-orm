@@ -1,14 +1,10 @@
-import os
 from pathlib import Path
-import shutil
 import pytest
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
 import sqlite3
 
 
-temp_dir = "./tmp"
-temp_db_file = "./tmp/test_db_inspectors.db"
 sql_table1 = """
     CREATE TABLE table1 (
         id INTEGER PRIMARY KEY,
@@ -61,15 +57,8 @@ sql_schema_with_fks = [
 ]
 
 
-def create_temp_db_file(temp_dir: str, db_file: str):
-    if os.path.exists(temp_dir):
-        shutil.rmtree(temp_dir)
-
-    os.mkdir(temp_dir)
-    Path(db_file).touch()
-
-
 def execute_sqlite3_commands(db_path: str, commands: list[str]):
+    """Executes the given commands in a SQLite DB living under db_path"""
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
         for command in commands:
@@ -78,35 +67,30 @@ def execute_sqlite3_commands(db_path: str, commands: list[str]):
         cursor.close()
 
 
-def delete_temp_db_file(temp_dir: str):
-    if os.path.exists(temp_dir):
-        shutil.rmtree(temp_dir)
-
-
 @pytest.fixture
-def make_database(request: pytest.FixtureRequest):
+def tmp_database(request: pytest.FixtureRequest, tmp_path: Path):
+    """Fixture for creating a temporary database and executing sqlite3 code. Yields the
+    path of the db file."""
     sql_commands = request.param
-    create_temp_db_file(temp_dir, temp_db_file)
+    (tmp_file := tmp_path.joinpath("tmp_db.db")).touch()
     execute_sqlite3_commands(
-        temp_db_file,
+        str(tmp_file),
         sql_commands,
     )
-    yield
-    delete_temp_db_file(temp_dir)
+    yield str(tmp_file)
 
 
-@pytest.mark.parametrize("make_database", [[sql_table1, sql_table2]], indirect=True)
-@pytest.mark.usefixtures("make_database")
+@pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
+@pytest.mark.usefixtures("tmp_database")
 def test_can_only_be_instantiated_with_sqlite3config_instantiated_earlier():
     with pytest.raises(ReferenceError) as exc_info:
         SqliteInspector()
     assert str(exc_info.value) == "Instance does not exist"
 
 
-@pytest.mark.parametrize("make_database", [[sql_table1, sql_table2]], indirect=True)
-@pytest.mark.usefixtures("make_database")
-def test_get_tables_names():
-    SQLite3Config(db_path=temp_db_file)
+@pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
+def test_get_tables_names(tmp_database: str):
+    SQLite3Config(tmp_database)
     inspector = SqliteInspector()
     tables = inspector.get_tables_names()
     assert len(tables) == 2
@@ -114,10 +98,9 @@ def test_get_tables_names():
     assert tables[1] == "table2"
 
 
-@pytest.mark.parametrize("make_database", [[sql_table1, sql_table2]], indirect=True)
-@pytest.mark.usefixtures("make_database")
-def test_get_table_columns():
-    SQLite3Config(db_path=temp_db_file)
+@pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
+def test_get_table_columns(tmp_database: str):
+    SQLite3Config(db_path=tmp_database)
     inspector = SqliteInspector()
     columns = inspector.get_table_columns("table1")
     assert columns[0].name == "id"
@@ -130,11 +113,10 @@ def test_get_table_columns():
 
 
 @pytest.mark.parametrize(
-    "make_database", [[sql_table_primary_key_not_null]], indirect=True
+    "tmp_database", [[sql_table_primary_key_not_null]], indirect=True
 )
-@pytest.mark.usefixtures("make_database")
-def test_get_table_columns__primaryk_notnull():
-    SQLite3Config(db_path=temp_db_file)
+def test_get_table_columns__primaryk_notnull(tmp_database: str):
+    SQLite3Config(db_path=tmp_database)
     inspector = SqliteInspector()
     columns = inspector.get_table_columns("table_primary_key_not_null")
     assert columns[0].name == "id"
@@ -142,10 +124,9 @@ def test_get_table_columns__primaryk_notnull():
     assert columns[0].constraints == ["PRIMARY KEY", "NOT NULL"]
 
 
-@pytest.mark.parametrize("make_database", [[sql_table1, sql_table2]], indirect=True)
-@pytest.mark.usefixtures("make_database")
-def test_get_tables():
-    SQLite3Config(db_path=temp_db_file)
+@pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
+def test_get_tables(tmp_database: str):
+    SQLite3Config(db_path=tmp_database)
     inspector = SqliteInspector()
     tables = inspector.get_tables()
     assert len(tables) == 2
@@ -167,10 +148,9 @@ def test_get_tables():
     assert tables[1].columns[1].constraints == ["NOT NULL"]
 
 
-@pytest.mark.parametrize("make_database", [[*sql_schema_with_fks]], indirect=True)
-@pytest.mark.usefixtures("make_database")
-def test_get_relations():
-    SQLite3Config(db_path=temp_db_file)
+@pytest.mark.parametrize("tmp_database", [[*sql_schema_with_fks]], indirect=True)
+def test_get_relations(tmp_database: str):
+    SQLite3Config(db_path=tmp_database)
     inspector = SqliteInspector()
     relations = inspector.get_relations()
     assert len(relations) == 3
