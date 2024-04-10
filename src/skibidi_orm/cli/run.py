@@ -5,6 +5,7 @@
 
 
 import typer
+from typing import Union
 
 app = typer.Typer(
     help="CLI tool for managing schema creations and migrations in Skibidi ORM."
@@ -35,7 +36,7 @@ def migrate_list():
 
 
 @app.command()
-def go(migration_id: str | None = typer.Argument(None, help="Migration ID")):
+def go(migration_id: Union[str, None] = typer.Argument(None, help="Migration ID")):
     """
     Go back (and forward) to specific migration.
     """
