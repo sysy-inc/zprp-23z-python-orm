@@ -26,28 +26,32 @@ class Constraint(ABC):
 class NotNullConstraint(Constraint):
     """Class for the NOT NULL constraint"""
 
-    constraint_type = ConstraintType.NOT_NULL
+    constraint_type: ConstraintType = field(init=False, default=ConstraintType.NOT_NULL)
 
 
 @dataclass(frozen=True)
 class UniqueConstraint(Constraint):
     """Class for the UNIQUE constraint"""
 
-    constraint_type = ConstraintType.UNIQUE
+    constraint_type: ConstraintType = field(init=False, default=ConstraintType.UNIQUE)
 
 
 @dataclass(frozen=True)
 class PrimaryKeyConstraint(Constraint):
     """Class for the PRIMARY KEY constraint"""
 
-    constraint_type = ConstraintType.PRIMARY_KEY
+    constraint_type: ConstraintType = field(
+        init=False, default=ConstraintType.PRIMARY_KEY
+    )
 
 
 @dataclass(frozen=True)
 class ForeignKeyConstraint(Constraint):
     """Class for the FOREIGN KEY constraint"""
 
-    constraint_type = ConstraintType.FOREIGN_KEY
+    constraint_type: ConstraintType = field(
+        init=False, default=ConstraintType.FOREIGN_KEY
+    )
     referenced_table: str
 
 
@@ -55,7 +59,7 @@ class ForeignKeyConstraint(Constraint):
 class CheckConstraint(Constraint):
     """Class for the CHECK constraint"""
 
-    constraint_type = ConstraintType.CHECK
+    constraint_type: ConstraintType = field(init=False, default=ConstraintType.CHECK)
     condition: str
 
 
@@ -63,5 +67,5 @@ class CheckConstraint(Constraint):
 class DefaultConstraint(Constraint):
     """Class for the DEFAULT constraint"""
 
-    constraint_type = ConstraintType.DEFAULT
+    constraint_type: ConstraintType = field(init=False, default=ConstraintType.DEFAULT)
     value: str
