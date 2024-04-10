@@ -7,7 +7,7 @@ from dataclasses import dataclass
 class ColumnOperation(ABC):
     """Base class for column operations"""
 
-    isReversible: bool
+    is_reversible: bool
     operation_type: OperationType
     table_name: str
     column_name: str
@@ -18,7 +18,7 @@ class AddColumnOperation(ColumnOperation):
     """Class for adding a column"""
 
     operation_type = OperationType.CREATE
-    isReversible = True
+    is_reversible = True
 
 
 @dataclass(frozen=True)
@@ -26,7 +26,7 @@ class DeleteColumnOperation(ColumnOperation):
     """Class for deleting a column"""
 
     operation_type = OperationType.DELETE
-    isReversible = False
+    is_reversible = False
 
 
 @dataclass(frozen=True)
@@ -34,7 +34,7 @@ class RenameColumnOperation(ColumnOperation):
     """Class for renaming a column"""
 
     operation_type = OperationType.RENAME
-    isReversible = True
+    is_reversible = True
 
     new_name: str
 
@@ -44,7 +44,7 @@ class AddConstraintOperation(ColumnOperation):
     """Class for adding a constraint on a column"""
 
     operation_type = OperationType.CONSTRAINT_CHANGE
-    isReversible = True
+    is_reversible = True
 
     constraint: Constraint
 
@@ -54,7 +54,7 @@ class DeleteConstraintOperation(ColumnOperation):
     """Class for deleting a constraint on a column"""
 
     operation_type = OperationType.CONSTRAINT_CHANGE
-    isReversible = True
+    is_reversible = True
 
     constraint: Constraint
 
@@ -64,7 +64,7 @@ class ChangeConstraintOperation(ColumnOperation):
     """Class for changing a constraint on a column"""
 
     operation_type = OperationType.CONSTRAINT_CHANGE
-    isReversible = True
+    is_reversible = True
 
     old_constraint: Constraint
     new_constraint: Constraint
@@ -75,5 +75,5 @@ class ChangeDataTypeOperation(ColumnOperation):
     """Class for changing the data type of a column"""
 
     operation_type = OperationType.DTYPE_CHANGE
-    isReversible = False
+    is_reversible = False
     new_dtype: str
