@@ -49,3 +49,7 @@ class RenameTableOperation(TableOperation):
 
     operation_type: OperationType = field(init=False, default=OperationType.RENAME)
     is_reversible: bool = field(init=False, default=True)
+    new_name: str
+
+    def reverse(self) -> TableOperation:
+        return RenameTableOperation(table_name=self.new_name, new_name=self.table_name)
