@@ -1,5 +1,4 @@
 import pytest
-<<<<<<< HEAD
 
 from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
