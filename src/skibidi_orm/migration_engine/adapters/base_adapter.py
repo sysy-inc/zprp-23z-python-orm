@@ -17,6 +17,14 @@ class BaseTable[TCol]:
     columns: list[TCol] = field(default_factory=list)
 
 
+@dataclass
+class Relation:
+    origin_table: str
+    origin_column: str
+    referenced_table: str
+    referenced_column: str
+
+
 class BaseAdapter(ABC):
 
     @abstractmethod
@@ -25,13 +33,7 @@ class BaseAdapter(ABC):
         pass
 
     @abstractmethod
-    def create_relation(
-        self,
-        origin_table: str,
-        origin_column: str,
-        referenced_table: str,
-        referenced_column: str,
-    ):
+    def create_relation(self, relation: Relation):
         """Create a relation in the database"""
         pass
 
