@@ -16,6 +16,7 @@ def reset_config_singleton(monkeypatch: pytest.MonkeyPatch):
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item: Any) -> Any:
+    """Print tests' docstring when running the test."""
     outcome: Any = yield
     report = outcome.get_result()
     test_fn = item.obj
