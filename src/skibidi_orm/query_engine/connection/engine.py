@@ -56,3 +56,10 @@ class Engine:
         Upon deletion of this object close connection if it is still open
         """
         self.close()
+
+    @property
+    def connected(self) -> bool:
+        """
+        Return whether there is open connection or not
+        """
+        return self._is_connected
