@@ -3,17 +3,20 @@ from abc import ABC, abstractmethod
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
 from skibidi_orm.migration_engine.operations.constraints import Constraint
 from skibidi_orm.exceptions.irreversible_operation import IrreversibleOperationError
+from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable, BaseColumn
+from typing import Any
 from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
-class ColumnOperation(ABC):
+class ColumnOperation[DType, CType](ABC):
     """Base class for column operations"""
 
     is_reversible: bool = field(init=False)
     operation_type: OperationType = field(init=False)
-    table_name: str
-    column_name: str
+    table: BaseTable[BaseColumn[DType, CType]]
+    column: BaseColumn[DType, CType]
+    # todo: generic
 
     @abstractmethod
     def reverse(self) -> ColumnOperation:
@@ -29,9 +32,7 @@ class AddColumnOperation(ColumnOperation):
     is_reversible: bool = field(init=False, default=True)
 
     def reverse(self) -> ColumnOperation:
-        return DeleteColumnOperation(
-            table_name=self.table_name, column_name=self.column_name
-        )
+        return DeleteColumnOperation(table=self.table, column=self.column)
 
 
 @dataclass(frozen=True)
@@ -58,9 +59,9 @@ class RenameColumnOperation(ColumnOperation):
 
     def reverse(self) -> ColumnOperation:
         return RenameColumnOperation(
-            table_name=self.table_name,
-            column_name=self.new_name,
-            new_name=self.column_name,
+            table=self.table,
+            column=self.column,
+            new_name=self.column.name,
         )
 
 
@@ -77,8 +78,8 @@ class AddConstraintOperation(ColumnOperation):
 
     def reverse(self) -> ColumnOperation:
         return DeleteConstraintOperation(
-            table_name=self.table_name,
-            column_name=self.column_name,
+            table=self.table,
+            column=self.column,
             constraint=self.constraint,
         )
 
@@ -96,8 +97,8 @@ class DeleteConstraintOperation(ColumnOperation):
 
     def reverse(self) -> ColumnOperation:
         return AddConstraintOperation(
-            table_name=self.table_name,
-            column_name=self.column_name,
+            table=self.table,
+            column=self.column,
             constraint=self.constraint,
         )
 
@@ -110,13 +111,11 @@ class ChangeDataTypeOperation(ColumnOperation):
         init=False, default=OperationType.DTYPE_CHANGE
     )
     is_reversible: bool = field(init=False, default=True)
-    old_dtype: str
     new_dtype: str
 
     def reverse(self) -> ColumnOperation:
         return ChangeDataTypeOperation(
-            table_name=self.table_name,
-            column_name=self.column_name,
-            old_dtype=self.new_dtype,
-            new_dtype=self.old_dtype,
+            table=self.table,
+            column=self.column,
+            new_dtype=self.column.data_type,
         )
