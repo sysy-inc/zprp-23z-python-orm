@@ -9,14 +9,13 @@ from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
-class ColumnOperation[DType, CType](ABC):
+class ColumnOperation(ABC):
     """Base class for column operations"""
 
     is_reversible: bool = field(init=False)
     operation_type: OperationType = field(init=False)
-    table: BaseTable[BaseColumn[DType, CType]]
-    column: BaseColumn[DType, CType]
-    # todo: generic
+    table: BaseTable[BaseColumn[Any, Any]]
+    column: BaseColumn[Any, Any]
 
     @abstractmethod
     def reverse(self) -> ColumnOperation:
