@@ -73,3 +73,10 @@ class Session:
         if self._connection:
             self.rollback()
             self._connection = None
+
+    @property
+    def connection(self):
+        """
+        Return stored connection to database
+        """
+        return self._connection
