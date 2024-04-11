@@ -12,6 +12,17 @@ simple_table = SQLite3Adapter.Table(
 )
 
 
+complex_table = SQLite3Adapter.Table(
+    "users",
+    columns=[
+        SQLite3Adapter.Column("name", "TEXT"),
+        SQLite3Adapter.Column("age", "INTEGER"),
+        SQLite3Adapter.Column("email", "TEXT"),
+        SQLite3Adapter.Column("active", "BLOB"),
+    ],
+)
+
+
 def test_add_column_conversion_simple():
     """Create a simple table"""
     operation = CreateTableOperation(simple_table)
@@ -21,7 +32,16 @@ def test_add_column_conversion_simple():
     )
 
 
-def test_delete_table_conversion_simple():
+def test_add_column_conversion_complex():
+    """Create a complex table"""
+    operation = CreateTableOperation(complex_table)
+    assert (
+        SQLite3Converter.convert_table_operation_to_SQL(operation)
+        == "CREATE TABLE users (name TEXT, age INTEGER, email TEXT, active BLOB);"
+    )
+
+
+def test_delete_table_conversion():
     """Delete a simple table"""
     operation = DeleteTableOperation(simple_table)
     assert (
