@@ -25,7 +25,7 @@ class Adapter(ABC):
         pass
 
     @abstractmethod
-    def make_connection(self, **kwargs: dict[str, Any]):
+    def make_connection(self, **kwargs: dict[str, Any]) -> object:
         """
         Creates connection with given parameters and returns it
         :param kwargs: keyword arguments for configuring the database connection
