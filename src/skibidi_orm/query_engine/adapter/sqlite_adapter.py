@@ -2,7 +2,6 @@
 Adapter for SQLite database
 """
 
-from typing import Any
 from skibidi_orm.query_engine.adapter.base_adapter import Adapter
 
 
@@ -18,7 +17,7 @@ class SQLiteAdapter(Adapter):
         import sqlite3
         self._connector = sqlite3
 
-    def make_connection(self, **kwargs: dict[str, Any]):
+    def make_connection(self, **kwargs: str):
         """
         Creates connection to SQLite database
         :param kwargs: keyword arguments for configuring the database connection
