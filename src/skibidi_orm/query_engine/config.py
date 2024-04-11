@@ -4,6 +4,7 @@ Module handles configuration data (needed to open connection) for different data
 from abc import ABC, abstractmethod
 from typing import Any
 from skibidi_orm.query_engine.adapter.sqlite_adapter import SQLiteAdapter
+from skibidi_orm.query_engine.adapter.base_adapter import Adapter
 
 
 class Config(ABC):
@@ -15,14 +16,21 @@ class Config(ABC):
     """
     @abstractmethod
     def __init__(self, **kwargs: dict[str, Any]) -> None:
-        self._adapter = None
+        self._adapter: Adapter = NotImplemented
 
     @property
-    def adapter(self):
+    def adapter(self) -> Adapter:
         """
         Return correct adapter for this database
         """
         return self._adapter
+
+    @abstractmethod
+    def connection_data(self) -> dict[str, Any]:
+        """
+        Prepare and return data needed for opening connection
+        """
+        pass
 
 
 class SQLiteConfig(Config):
@@ -41,3 +49,6 @@ class SQLiteConfig(Config):
         super().__init__(**kwargs)
         self._database_path = kwargs.get('path', '')
         self._adapter = SQLiteAdapter()
+
+    def connection_data(self):
+        return {'path': self._database_path}
