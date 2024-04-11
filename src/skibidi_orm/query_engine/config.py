@@ -15,7 +15,7 @@ class Config(ABC):
     Subclasses must implement the __init__()
     """
     @abstractmethod
-    def __init__(self, **kwargs: dict[str, Any]) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         self._adapter: Adapter = NotImplemented
 
     @property
@@ -37,14 +37,14 @@ class SQLiteConfig(Config):
     """
     Configuration class for database sqlite
     """
-    def __init__(self, **kwargs: dict[str, Any]) -> None:
+    def __init__(self, **kwargs: str) -> None:
         """
         Create instance of SQLiteConfig
         :param kwargs: keyword arguments to specify database configuration
             - path(str): path to sqlite database
 
         Example
-        SQLiteConfig(path='database.db)
+        SQLiteConfig(path='database.db')
         """
         super().__init__(**kwargs)
         self._database_path = kwargs.get('path', '')
