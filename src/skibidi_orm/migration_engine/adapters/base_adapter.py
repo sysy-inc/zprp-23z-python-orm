@@ -2,13 +2,14 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
+from skibidi_orm.migration_engine.operations.constraints import Constraint
 
 
 @dataclass
-class BaseColumn[TDataTypes, TConstraints]:
+class BaseColumn[TDataTypes]:
     name: str
     data_type: TDataTypes
-    constraints: list[TConstraints] = field(default_factory=list)
+    constraints: list[Constraint] = field(default_factory=list)
 
 
 @dataclass
@@ -28,7 +29,7 @@ class Relation:
 class BaseAdapter(ABC):
 
     @abstractmethod
-    def create_table(self, table: BaseTable[BaseColumn[Any, Any]]):
+    def create_table(self, table: BaseTable[BaseColumn[Any]]):
         """Create a table in the database"""
         pass
 

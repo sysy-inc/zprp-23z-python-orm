@@ -15,14 +15,3 @@ class SQLite3Config(BaseDbConfig):
     @property
     def db_path(self) -> str:
         return self.__db_path
-
-
-x = SQLite3Config(db_path=":memory:")
-y = x.db_path
-
-
-def dd(x: str):
-    pass
-
-
-dd(y)

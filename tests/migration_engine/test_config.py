@@ -38,5 +38,5 @@ def test_check_argument_saving():
     Shoud raise error when arugments are not saved
     """
     config = SQLite3Config(db_path="first_path")
-
+    
     assert config.db_path == "first_path"
