@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
-from skibidi_orm.exceptions.irreversible_operation import IrreversibleOperationError
+from skibidi_orm.exceptions.operations import IrreversibleOperationError
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable, BaseColumn
 from typing import Any
 from dataclasses import dataclass, field

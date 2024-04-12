@@ -1,7 +1,13 @@
-from skibidi_orm.migration_engine.adapters.sql_converter import SQLConverter
+from skibidi_orm.exceptions.constraints import UnsupportedConstraintError
+from skibidi_orm.migration_engine.converters.sql_converter import SQLConverter
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
-from skibidi_orm.migration_engine.operations.constraints import Constraint
+from skibidi_orm.migration_engine.operations.constraints import (
+    CheckConstraint,
+    Constraint,
+    ConstraintType,
+    ForeignKeyConstraint,
+)
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
 from skibidi_orm.migration_engine.operations.table_operations import (
     DeleteTableOperation,
@@ -41,7 +47,22 @@ class SQLite3Converter(SQLConverter):
     @classmethod
     def _convert_constraint_to_SQL(cls, constraint: Constraint) -> str:
         """Convert a given constraint to a SQLite3 SQL string"""
-        return ""
+        if constraint.constraint_type == ConstraintType.PRIMARY_KEY:
+            return "PRIMARY KEY"
+        elif constraint.constraint_type == ConstraintType.UNIQUE:
+            return "UNIQUE"
+        elif constraint.constraint_type == ConstraintType.FOREIGN_KEY:
+            constraint = cast(ForeignKeyConstraint, constraint)
+            return (
+                f"FOREIGN KEY {tuple(constraint.column_mapping.keys())} REFERENCES"
+                f" {constraint.referenced_table} {tuple(constraint.column_mapping.values())}"
+            )
+        elif constraint.constraint_type == ConstraintType.CHECK:
+            return f"CHECK ({cast(CheckConstraint, constraint).condition})"
+        else:
+            raise UnsupportedConstraintError(
+                f"Constraints of type {constraint.constraint_type} are not supported by SQLite3"
+            )
 
     @classmethod
     def _convert_create_table_operation_to_SQL(

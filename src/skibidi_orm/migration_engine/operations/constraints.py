@@ -14,6 +14,7 @@ class ConstraintType(enum.Enum):
     DEFAULT = enum.auto()
 
 
+@dataclass(frozen=True)
 class Constraint(ABC):
     """Base class for all constraints"""
 
