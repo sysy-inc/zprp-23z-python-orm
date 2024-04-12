@@ -6,13 +6,14 @@ from skibidi_orm.migration_engine.adapters.base_adapter import (
     Relation,
     BaseTable,
 )
+from skibidi_orm.migration_engine.operations.constraints import Constraint
 
 
 class SQLite3Adapter(BaseAdapter):
 
     DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]
-    Constraints = Literal["PRIMARY KEY", "UNIQUE", "NOT NULL", "DEFAULT"]
-    Column = BaseColumn[DataTypes, Constraints]
+    Constraints = Constraint
+    Column = BaseColumn[DataTypes]
     Table = BaseTable[Column]
     Relation = Relation
     tables: list[Table] = []

@@ -14,8 +14,8 @@ class ColumnOperation(ABC):
 
     is_reversible: bool = field(init=False)
     operation_type: OperationType = field(init=False)
-    table: BaseTable[BaseColumn[Any, Any]]
-    column: BaseColumn[Any, Any]
+    table: BaseTable[BaseColumn[Any]]
+    column: BaseColumn[Any]
 
     @abstractmethod
     def reverse(self) -> ColumnOperation:
