@@ -90,12 +90,14 @@ def test_add_constraint_operation_init_reverse():
     operation = AddConstraintOperation(
         table=mock_table_1,
         column=mock_column_1,
-        constraint=PrimaryKeyConstraint(),
+        constraint=PrimaryKeyConstraint(mock_table_1.name, mock_column_1.name),
     )
     assert operation.operation_type == OperationType.CONSTRAINT_CHANGE
     assert operation.table == mock_table_1
     assert operation.column == mock_column_1
-    assert operation.constraint == PrimaryKeyConstraint()
+    assert operation.constraint == PrimaryKeyConstraint(
+        mock_table_1.name, mock_column_1.name
+    )
     assert operation.is_reversible is True
 
     reverse_operation = operation.reverse()
@@ -110,12 +112,14 @@ def test_delete_constraint_operation_init_reverse():
     operation = DeleteConstraintOperation(
         table=mock_table_1,
         column=mock_column_1,
-        constraint=PrimaryKeyConstraint(),
+        constraint=PrimaryKeyConstraint(mock_table_1.name, mock_column_1.name),
     )
     assert operation.operation_type == OperationType.CONSTRAINT_CHANGE
     assert operation.table == mock_table_1
     assert operation.column == mock_column_1
-    assert operation.constraint == PrimaryKeyConstraint()
+    assert operation.constraint == PrimaryKeyConstraint(
+        mock_table_1.name, mock_column_1.name
+    )
     assert operation.is_reversible is True
     reverse_operation = operation.reverse()
     assert reverse_operation == AddConstraintOperation(
