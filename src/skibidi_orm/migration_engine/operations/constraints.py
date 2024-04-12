@@ -53,6 +53,9 @@ class ForeignKeyConstraint(Constraint):
         init=False, default=ConstraintType.FOREIGN_KEY
     )
     referenced_table: str
+    column_mapping: dict[
+        str, str
+    ]  # maps the names of corresponding columns from both tables (in case of composite foreign keys)
 
 
 @dataclass(frozen=True)
