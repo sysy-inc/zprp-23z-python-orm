@@ -10,7 +10,7 @@ from skibidi_orm.migration_engine.adapters.base_adapter import (
 
 class BaseDbInspector(ABC):
     @abstractmethod
-    def get_tables(self) -> list[BaseTable[BaseColumn[Any, Any]]]:
+    def get_tables(self) -> list[BaseTable[BaseColumn[Any]]]:
         """
         Get all tables from the database.
         """
@@ -24,7 +24,7 @@ class BaseDbInspector(ABC):
         pass
 
     @abstractmethod
-    def get_table_columns(self, table_name: str) -> list[BaseColumn[Any, Any]]:
+    def get_table_columns(self, table_name: str) -> list[BaseColumn[Any]]:
         """
         Get all columns from a table.
         """

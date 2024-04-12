@@ -7,10 +7,10 @@ from typing import Literal
 from pytest import raises
 
 DataType = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]
-mock_table_1 = BaseTable[BaseColumn[DataType, Constraint]]("table")
-mock_table_2 = BaseTable[BaseColumn[DataType, Constraint]]("table_2")
-mock_column_1 = BaseColumn[DataType, Constraint]("column", "INTEGER")
-mock_column_2 = BaseColumn[DataType, Constraint]("column_2", "TEXT")
+mock_table_1 = BaseTable[BaseColumn[DataType]]("table")
+mock_table_2 = BaseTable[BaseColumn[DataType]]("table_2")
+mock_column_1 = BaseColumn[DataType]("column", "INTEGER")
+mock_column_2 = BaseColumn[DataType]("column_2", "TEXT")
 
 
 def test_create_table_operation_init_reverse():

@@ -12,7 +12,7 @@ class TableOperation(ABC):
     """Base class for table operations"""
 
     operation_type: OperationType
-    table: BaseTable[BaseColumn[Any, Any]]
+    table: BaseTable[BaseColumn[Any]]
     is_reversible: bool
 
     @abstractmethod
