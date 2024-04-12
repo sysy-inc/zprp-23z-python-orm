@@ -1,8 +1,20 @@
-from skibidi_orm.migration_engine.operations.table_operations import *
-from skibidi_orm.migration_engine.operations.column_operations import *
+from skibidi_orm.migration_engine.operations.table_operations import (
+    CreateTableOperation,
+    DeleteTableOperation,
+    RenameTableOperation,
+)
+from skibidi_orm.migration_engine.operations.column_operations import (
+    AddColumnOperation,
+    DeleteColumnOperation,
+    RenameColumnOperation,
+    ChangeDataTypeOperation,
+    AddConstraintOperation,
+    DeleteConstraintOperation,
+)
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
-from skibidi_orm.migration_engine.operations.constraints import *
+from skibidi_orm.migration_engine.operations.constraints import PrimaryKeyConstraint
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable, BaseColumn
+from skibidi_orm.exceptions.irreversible_operation import IrreversibleOperationError
 from typing import Literal
 from pytest import raises
 
