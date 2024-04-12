@@ -9,6 +9,7 @@ authors = [
 ]
 dependencies = [
     "typer>=0.11.0",
+    "pydantic>=2.7.0",
 ]
 requires-python = ">=3.12"
 readme = "README.md"
@@ -25,6 +26,9 @@ distribution = true
 [tool.pdm.dev-dependencies]
 test = [
     "pytest>=8.1.1",
+]
+dev = [
+    "pyright>=1.1.358",
 ]
 [project.entry-points."console_scripts"]
 skibidi-orm = "skibidi_orm.cli.run:main"
