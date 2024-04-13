@@ -52,3 +52,25 @@ class SQLiteConfig(Config):
 
     def connection_data(self):
         return {'path': self._database_path}
+
+
+def get_configuration() -> Config:
+    """
+    Checks if configuration file exists in working directory
+    and reads configuration data in it (imports object Config)
+
+    Expected configuration file: configuration.py
+    And in it:
+    config_data(Config): variable that stores object of subclass of Config,
+    that represents chosen by user database
+
+    Raises:
+        Exception if there is no configuration file
+    """
+    try:
+        from configuration import config_data  # type: ignore
+        return config_data  # type: ignore
+
+    except ImportError:
+        # TODO add some custome exception
+        raise Exception("There is no configuration.py file. Please create one")
