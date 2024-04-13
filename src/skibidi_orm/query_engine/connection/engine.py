@@ -2,7 +2,7 @@
 Module handles connections to database: open connection, store it and close
 """
 
-from skibidi_orm.query_engine.config import get_configuration
+from skibidi_orm.query_engine import config
 from typing import Any
 
 
@@ -19,7 +19,7 @@ class Engine:
     _adapter(Adapter): adapter for database given in config
     """
     def __init__(self) -> None:
-        self._config = get_configuration()  # TODO handle exception no configuration.py
+        self._config = config.get_configuration()   # TODO handle exception no configuration.py
         self._connection: Any = None
         self._is_connected: bool = False
         self._adapter = self._config.adapter
