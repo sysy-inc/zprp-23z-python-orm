@@ -54,6 +54,8 @@ class MetaModel(ModelMetaclass):
     def __new__(cls, name: str, bases: Tuple[Any], attrs: Dict[str, Any]) -> Any:
         super_new: Any = super().__new__ # type: ignore
 
+        # TODO subclass is final
+
         # Also ensure initialization is only performed for subclasses of Model
         # (excluding Model class itself).
         parents = [ b for b in bases if isinstance(b, MetaModel) ]
@@ -99,4 +101,17 @@ class MetaModel(ModelMetaclass):
 class Model(BaseModel):
     """ A class to create your own database table """
     # TODO add information about inheritance
-    pass
+    def __init__(self, *args: Any, **kwargs: Any):
+        opts: MetaOptions = self._meta # type: ignore
+        if len(args) > len(opts.local_field): # type: ignore
+            # Daft, but matches old exception sans the err msg.
+            raise IndexError("Number of args exceeds number of fields")
+
+        fields_iter = iter(opts.local_field)    # type: ignore
+        for val, field in zip(args, fields_iter):
+            setattr(self, field.attname, val)
+        for field in fields_iter:
+            val = kwargs.pop(field.name, None)
+            if not val:
+                val = field.get_default()       # TODO add error
+            setattr(self, field.attname, val)
