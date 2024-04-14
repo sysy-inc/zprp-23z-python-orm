@@ -2,9 +2,9 @@
 
 from pydantic import BaseModel
 from pydantic.main import ModelMetaclass
-from typing import Any, Tuple, Dict, List
+from typing import Any
 import inspect
-import bisect
+from skibidi_orm.query_engine.model.meta_options import MetaOptions
 
 def convert_name_to_table(name: str) -> str:
     return name
@@ -16,42 +16,10 @@ def _is_field(value: Any):
     # Only call contribute_to_class() if it's bound.
     return not inspect.isclass(value) and hasattr(value, "contribute_to_class")
 
-class MetaOptions:
-    """ A subsidiary to storage additional information"""
-    def __init__(self, meta: Dict[str, Any]):
-        self.fields = []
-        self.db_table = meta['db_table']
-        self.primary_key = None
-        self.local_field: List[Any] = []
-
-    def contribute_to_class(self, cls: Any, obj_name: str):
-        """ Adds atrributes to classes """
-        cls._meta = self
-        self.model = cls
-
-    def add_field(self, field: Any):
-        """ Adds database column """
-        bisect.insort(self.local_fields, field) # type: ignore
-        self.setup_pk(field)
-
-    def setup_pk(self, field: Any):
-        """ Setup the primary key """
-        if self.pk and field.primary_key:
-            # TODO raise error
-            pass
-        elif not self.pk and field.primary_key:
-            self.pk = field
-
-    def _prepare(self, model: Any):
-        # TODO check if attrs' names are correct
-        # TODO check if is primary key
-        # TODO check if atrr db_column is unique
-        pass
-
 
 class MetaModel(ModelMetaclass):
     """ A metaclass for model """
-    def __new__(cls, name: str, bases: Tuple[Any], attrs: Dict[str, Any]) -> Any:
+    def __new__(cls, name: str, bases: tuple[Any], attrs: dict[str, Any]) -> Any:
         super_new: Any = super().__new__ # type: ignore
 
         # TODO subclass is final
@@ -64,8 +32,8 @@ class MetaModel(ModelMetaclass):
 
         # TODO add database config
 
-        metadata: Dict[str, Any] = {}
-        new_attrs: Dict[str, Any] = {}
+        metadata: dict[str, Any] = {}
+        new_attrs: dict[str, Any] = {}
 
         # TODO improve convert db table name and check if name is correct
         db_table_name = attrs.pop("db_table", None)
@@ -95,9 +63,6 @@ class MetaModel(ModelMetaclass):
         obj.contribute_to_class(cls, obj_name)
 
 
-
-
-
 class Model(BaseModel):
     """ A class to create your own database table """
     # TODO add information about inheritance
@@ -107,7 +72,7 @@ class Model(BaseModel):
             # Daft, but matches old exception sans the err msg.
             raise IndexError("Number of args exceeds number of fields")
 
-        fields_iter = iter(opts.local_field)    # type: ignore
+        fields_iter = iter(opts.local_fields)    # type: ignore
         for val, field in zip(args, fields_iter):
             setattr(self, field.attname, val)
         for field in fields_iter:
