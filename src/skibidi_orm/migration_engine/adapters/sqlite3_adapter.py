@@ -17,12 +17,17 @@ class SQLite3Adapter(BaseAdapter):
     Column = SQLite3Typing.Column
     Table = SQLite3Typing.Table
     Relation = SQLite3Typing.Relation
-    Relation = Relation
     tables: list[Table] = []
     relations: list[Relation] = []
 
     def __init__(self):
-        pass
+        self.operations: list[TableOperation | ColumnOperation] = []
+
+    @property
+    def operation_list(self) -> list[TableOperation | ColumnOperation]:
+        """Return the operation list"""
+
+        return self.operations
 
     def create_table(self, table: Table):
         """Informs the adapter about Table creation."""
