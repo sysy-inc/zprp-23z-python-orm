@@ -5,11 +5,11 @@ from typing import Any
 from skibidi_orm.migration_engine.operations.constraints import Constraint
 
 
-@dataclass
+@dataclass(unsafe_hash=True)
 class BaseColumn[TDataTypes]:
     name: str
     data_type: TDataTypes
-    constraints: list[Constraint] = field(default_factory=list)
+    constraints: list[Constraint] = field(default_factory=list, hash=False)
 
 
 @dataclass
