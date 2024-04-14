@@ -15,6 +15,7 @@ from skibidi_orm.migration_engine.operations.table_operations import (
     TableOperation,
     CreateTableOperation,
 )
+from skibidi_orm.exceptions.operations import UnsupportedOperationError
 from typing import cast
 
 
@@ -37,7 +38,10 @@ class SQLite3Converter(SQLConverter):
             return cls._convert_rename_table_operation_to_SQL(
                 cast(RenameTableOperation, operation)
             )
-        return ""
+        else:
+            raise UnsupportedOperationError(
+                "The given operation is not supported in SQLite3."
+            )
 
     @classmethod
     def convert_column_operation_to_SQL(cls, operation: ColumnOperation) -> str:
@@ -45,7 +49,7 @@ class SQLite3Converter(SQLConverter):
         return ""
 
     @classmethod
-    def _convert_constraint_to_SQL(cls, constraint: Constraint) -> str:
+    def convert_constraint_to_SQL(cls, constraint: Constraint) -> str:
         """Convert a given constraint to a SQLite3 SQL string"""
         if constraint.constraint_type == ConstraintType.PRIMARY_KEY:
             return "PRIMARY KEY"
@@ -54,11 +58,11 @@ class SQLite3Converter(SQLConverter):
         elif constraint.constraint_type == ConstraintType.FOREIGN_KEY:
             constraint = cast(ForeignKeyConstraint, constraint)
             return (
-                f"FOREIGN KEY {tuple(constraint.column_mapping.keys())} REFERENCES"
-                f" {constraint.referenced_table} {tuple(constraint.column_mapping.values())}"
+                f"FOREIGN KEY ({', '.join(constraint.column_mapping.keys())}) REFERENCES"
+                f" {constraint.referenced_table} ({', '.join(constraint.column_mapping.values())})"
             )
         elif constraint.constraint_type == ConstraintType.CHECK:
-            return f"CHECK ({cast(CheckConstraint, constraint).condition})"
+            return f"CHECK ({cast(CheckConstraint, constraint).column_name} {cast(CheckConstraint, constraint).condition})"
         else:
             raise UnsupportedConstraintError(
                 f"Constraints of type {constraint.constraint_type} are not supported by SQLite3"
