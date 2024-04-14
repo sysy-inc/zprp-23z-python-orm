@@ -76,15 +76,12 @@ class SQLite3Converter(SQLConverter):
         definition_string = f"CREATE TABLE {operation.table.name}"
         column_listing = (
             # (name1 datatype1, name2 datatype2, ...)
-            "("
-            + "".join(
-                f", {column.name} {column.data_type}"
+            ", ".join(
+                f"{column.name} {column.data_type}"
                 for column in operation.table.columns
-            )[2:]
-            # [2:] removes the first comma and space
-            + ");"
+            )
         )
-        return " ".join((definition_string, column_listing))
+        return f"{definition_string} ({column_listing});"
 
     @classmethod
     def _convert_drop_table_operation_to_SQL(
