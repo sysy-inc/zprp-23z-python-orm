@@ -1,7 +1,7 @@
 """ A model class for mapping database table """
 
 from pydantic import BaseModel
-from pydantic.main import ModelMetaclass
+from pydantic._internal._model_construction import ModelMetaclass
 from typing import Any
 import inspect
 from skibidi_orm.query_engine.model.meta_options import MetaOptions
@@ -63,20 +63,24 @@ class MetaModel(ModelMetaclass):
         obj.contribute_to_class(cls, obj_name)
 
 
-class Model(BaseModel):
+class Model(BaseModel, metaclass=MetaModel):
     """ A class to create your own database table """
+    class Config:
+        arbitrary_types_allowed = True
     # TODO add information about inheritance
     def __init__(self, *args: Any, **kwargs: Any):
+        print(args, kwargs)
         opts: MetaOptions = self._meta # type: ignore
-        if len(args) > len(opts.local_field): # type: ignore
+        if len(args) > len(opts.local_fields): # type: ignore
             # Daft, but matches old exception sans the err msg.
             raise IndexError("Number of args exceeds number of fields")
 
         fields_iter = iter(opts.local_fields)    # type: ignore
         for val, field in zip(args, fields_iter):
-            setattr(self, field.attname, val)
+            kwargs[field.name] = val
         for field in fields_iter:
-            val = kwargs.pop(field.name, None)
-            if not val:
-                val = field.get_default()       # TODO add error
-            setattr(self, field.attname, val)
+            if field.name not in kwargs:
+                kwargs[field.name] = field.default       # TODO add error
+        args = ()
+        super().__init__(*args, **kwargs)
+
