@@ -61,3 +61,5 @@ class SQLite3Adapter(BaseAdapter):
         )
 
         self.operations = state_manager.get_operations()
+        ops = self.operation_list
+        print(ops)

@@ -154,7 +154,7 @@ def test_no_operation_needed(tmp_database: str, capfd: pytest.CaptureFixture[str
     m = Table()
     m.migrate()
 
-    assert len(MigrationElement.operations) == 0
+    assert len(m.operations) == 0
 
 
 @pytest.mark.parametrize(
@@ -164,72 +164,15 @@ def test_create_table_operation_needed(
     tmp_database: str, capfd: pytest.CaptureFixture[str]
 ):
 
-    class Table(MigrationElement):
-
-        def __init__(self) -> None:
-            self.adapter = SQLite3Adapter()
-
-            models = Table.__subclasses__()
-            if self.__class__ == Table:
-                for cls in models:
-                    self.adapter.create_table(cls.__dict__["table"])
-
-    class User(Table):  # type: ignore
-        columns = [
-            SQLite3Adapter.Column(
-                name="user_id",
-                data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
-            ),
-            SQLite3Adapter.Column(
-                name="user_name",
-                data_type="TEXT",
-                constraints=[C.NotNullConstraint("User", "user_name")],
-            ),
-        ]
-
-        table = SQLite3Adapter.Table(name="User", columns=columns)
-
-    class Post(Table):  # type: ignore
-        columns = [
-            SQLite3Adapter.Column(
-                name="post_id",
-                data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
-            ),
-            SQLite3Adapter.Column(
-                name="post_name",
-                data_type="TEXT",
-                constraints=[C.NotNullConstraint("Post", "post_name")],
-            ),
-        ]
-
-        table = SQLite3Adapter.Table(name="Post", columns=columns)
-
-    class Comment(Table):  # type: ignore
-
-        columns = [
-            SQLite3Adapter.Column(
-                name="comment_id",
-                data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("Comment", "comment_id")],
-            ),
-            SQLite3Adapter.Column(
-                name="comment_name",
-                data_type="TEXT",
-                constraints=[C.NotNullConstraint("Comment", "comment_name")],
-            ),
-        ]
-
-        table = SQLite3Adapter.Table(name="Comment", columns=columns)
+    from tmp.mock_schema2 import Table
 
     SQLite3Config(tmp_database)
 
     m = MigrationElement()
     m.migrate()
 
-    assert type(MigrationElement.operations[0]) == CreateTableOperation
-    assert len(MigrationElement.operations) == 1
+    assert type(m.operations[0]) == CreateTableOperation
+    assert len(m.operations) == 1
 
 
 @pytest.mark.parametrize(
@@ -291,7 +234,8 @@ def test_delete_table_operation_needed(
     m = MigrationElement()
     m.migrate()
 
-    assert type(MigrationElement.operations[0]) == DeleteTableOperation
+    assert len(m.operations) == 1
+    assert type(m.operations[0]) == DeleteTableOperation
 
 
 @pytest.mark.parametrize(
@@ -348,8 +292,8 @@ def test_rename_table_operation_needed(
     m = MigrationElement()
     m.migrate()
 
-    assert type(MigrationElement.operations[0]) == RenameTableOperation
-    assert len(MigrationElement.operations) == 1
+    assert type(m.operations[0]) == RenameTableOperation
+    assert len(m.operations) == 1
 
 
 @pytest.mark.parametrize(
@@ -411,8 +355,8 @@ def test_create_column_operation_needed(
     m = MigrationElement()
     m.migrate()
 
-    assert type(MigrationElement.operations[0]) == AddColumnOperation
-    assert len(MigrationElement.operations) == 1
+    assert type(m.operations[0]) == AddColumnOperation
+    assert len(m.operations) == 1
 
 
 @pytest.mark.parametrize(
@@ -464,5 +408,5 @@ def test_delete_column_operation_needed(
     m = MigrationElement()
     m.migrate()
 
-    assert type(MigrationElement.operations[0]) == DeleteColumnOperation
-    assert len(MigrationElement.operations) == 1
+    assert type(m.operations[0]) == DeleteColumnOperation
+    assert len(m.operations) == 1
