@@ -10,17 +10,17 @@ class SQLConverter(ABC):
     providers should inherit a converter from this base class and implement its
     methods"""
 
-    @classmethod
+    @staticmethod
     @abstractmethod
-    def convert_table_operation_to_SQL(cls, operation: TableOperation) -> str:
+    def convert_table_operation_to_SQL(operation: TableOperation) -> str:
         """Convert a given table operation object to raw SQL in a specific dialect"""
 
-    @classmethod
+    @staticmethod
     @abstractmethod
-    def convert_column_operation_to_SQL(cls, operation: ColumnOperation) -> str:
+    def convert_column_operation_to_SQL(operation: ColumnOperation) -> str:
         """Convert a given column operation object to raw SQL in a specific dialect"""
 
-    @classmethod
+    @staticmethod
     @abstractmethod
-    def _convert_constraint_to_SQL(cls, constraint: Constraint) -> str:
+    def _convert_constraint_to_SQL(constraint: Constraint) -> str:
         """Convert a given constraint to raw SQL in a specific dialect"""
