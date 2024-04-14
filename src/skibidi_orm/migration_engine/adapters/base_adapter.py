@@ -28,6 +28,12 @@ class Relation:
 
 class BaseAdapter(ABC):
 
+    @property
+    @abstractmethod
+    def operation_list(self) -> list[Any]:
+        """Return the operation list"""
+        pass
+
     @abstractmethod
     def create_table(self, table: BaseTable[BaseColumn[Any]]):
         """Create a table in the database"""
