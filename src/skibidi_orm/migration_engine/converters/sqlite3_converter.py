@@ -17,6 +17,7 @@ from skibidi_orm.migration_engine.operations.table_operations import (
 )
 from skibidi_orm.exceptions.operations import UnsupportedOperationError
 from typing import cast
+from itertools import chain
 
 
 class SQLite3Converter(SQLConverter):
@@ -74,14 +75,40 @@ class SQLite3Converter(SQLConverter):
     ) -> str:
         """Convert a given create table operation to a SQLite3 SQL string"""
         definition_string = f"CREATE TABLE {operation.table.name}"
+        constraints_at_end, constraints_at_columns = cls.split_constraints(
+            operation.table
+        )
+        # TODO: refactor
         column_listing = (
             # (name1 datatype1, name2 datatype2, ...)
             ", ".join(
-                f"{column.name} {column.data_type}"
+                " ".join(
+                    element
+                    for element in (
+                        f"{column.name} {column.data_type}",
+                        ", ".join(
+                            cls.convert_constraint_to_SQL(constraint)
+                            for constraint in column.constraints
+                            if constraint in constraints_at_columns
+                        ),
+                    )
+                    if element
+                )
                 for column in operation.table.columns
             )
         )
-        return f"{definition_string} ({column_listing});"
+
+        constraints_at_end = ", ".join(
+            cls.convert_constraint_to_SQL(constraint)
+            for constraint in constraints_at_end
+        )
+        return " ".join(
+            element
+            for element in (
+                definition_string,
+                f"({', '.join(string for string in (column_listing, constraints_at_end) if string)});",
+            )
+        )
 
     @classmethod
     def _convert_drop_table_operation_to_SQL(
@@ -105,4 +132,38 @@ class SQLite3Converter(SQLConverter):
             cls.convert_table_operation_to_SQL(delete_op)
             + " "
             + cls.convert_table_operation_to_SQL(create_op)
+        )
+
+    @staticmethod
+    def split_constraints(
+        table: SQLite3Adapter.Table,
+    ) -> tuple[set[Constraint], set[Constraint]]:
+        # TODO: better typing
+        """Split the constraints of a table into those that have to be added at the end of the
+        table definition and those that have to be added in the definitions of their resective columns
+        """
+        all_constraints = set(
+            chain.from_iterable(column.constraints for column in table.columns)
+        )
+
+        """These constraints have to be added at the end of the table definition, not by the
+        columns they correspond to"""
+        constraints_at_end = set(
+            filter(
+                lambda c: c.constraint_type
+                not in [ConstraintType.PRIMARY_KEY, ConstraintType.UNIQUE],
+                all_constraints,
+            )
+        )
+
+        # These constraints have to be added in the column definition
+        constraints_at_columns = all_constraints - constraints_at_end
+
+        return set(constraints_at_end), set(constraints_at_columns)
+
+    @classmethod
+    def convert_constraint_list_to_SQL(cls, constraints: list[Constraint]) -> str:
+        """Convert a list of constraints to a SQLite3 SQL string"""
+        return ", ".join(
+            cls.convert_constraint_to_SQL(constraint) for constraint in constraints
         )

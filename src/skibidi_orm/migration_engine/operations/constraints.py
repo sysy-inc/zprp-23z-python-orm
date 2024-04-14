@@ -48,7 +48,7 @@ class PrimaryKeyConstraint(Constraint):
     column_name: str
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, unsafe_hash=True)
 class ForeignKeyConstraint(Constraint):
     """Class for the FOREIGN KEY constraint"""
 
@@ -56,9 +56,9 @@ class ForeignKeyConstraint(Constraint):
         init=False, default=ConstraintType.FOREIGN_KEY
     )
     referenced_table: str
-    column_mapping: dict[
-        str, str
-    ]  # maps the corresponding column names: {referencing_column1: referenced_column1, ...}
+    column_mapping: dict[str, str] = field(
+        hash=False
+    )  # maps the corresponding column names: {referencing_column1: referenced_column1, ...}
 
 
 @dataclass(frozen=True)
