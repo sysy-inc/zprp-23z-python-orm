@@ -1,7 +1,14 @@
 import pytest
 import math
 import decimal
-from skibidi_orm.query_engine.field.field import *
+from skibidi_orm.query_engine.field.field import (
+    BooleanField,
+    IntegerField,
+    FloatField,
+    DecimalField,
+    CharField,
+    Error,
+)
 
 
 def test_instances_count():
