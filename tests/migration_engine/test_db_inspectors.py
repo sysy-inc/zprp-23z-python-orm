@@ -2,6 +2,7 @@ from pathlib import Path
 import pytest
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
+from skibidi_orm.migration_engine.operations import constraints as C
 import sqlite3
 
 
@@ -105,10 +106,10 @@ def test_get_table_columns(tmp_database: str):
     columns = inspector.get_table_columns("table1")
     assert columns[0].name == "id"
     assert columns[0].data_type == "INTEGER"
-    assert columns[0].constraints == ["PRIMARY KEY"]
+    assert columns[0].constraints == [C.PrimaryKeyConstraint("table1", "id")]
     assert columns[1].name == "name"
     assert columns[1].data_type == "TEXT"
-    assert columns[1].constraints == ["NOT NULL"]
+    assert columns[1].constraints == [C.NotNullConstraint("table1", "name")]
     assert len(columns) == 2
 
 
@@ -121,7 +122,10 @@ def test_get_table_columns__primaryk_notnull(tmp_database: str):
     columns = inspector.get_table_columns("table_primary_key_not_null")
     assert columns[0].name == "id"
     assert columns[0].data_type == "INTEGER"
-    assert columns[0].constraints == ["PRIMARY KEY", "NOT NULL"]
+    assert columns[0].constraints == [
+        C.PrimaryKeyConstraint("table_primary_key_not_null", "id"),
+        C.NotNullConstraint("table_primary_key_not_null", "id"),
+    ]
 
 
 @pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
@@ -136,16 +140,16 @@ def test_get_tables(tmp_database: str):
     assert len(tables[1].columns) == 2
     assert tables[0].columns[0].name == "id"
     assert tables[0].columns[0].data_type == "INTEGER"
-    assert tables[0].columns[0].constraints == ["PRIMARY KEY"]
+    assert tables[0].columns[0].constraints == [C.PrimaryKeyConstraint("table1", "id")]
     assert tables[0].columns[1].name == "name"
     assert tables[0].columns[1].data_type == "TEXT"
-    assert tables[0].columns[1].constraints == ["NOT NULL"]
+    assert tables[0].columns[1].constraints == [C.NotNullConstraint("table1", "name")]
     assert tables[1].columns[0].name == "id"
     assert tables[1].columns[0].data_type == "INTEGER"
-    assert tables[1].columns[0].constraints == ["PRIMARY KEY"]
+    assert tables[1].columns[0].constraints == [C.PrimaryKeyConstraint("table2", "id")]
     assert tables[1].columns[1].name == "name"
     assert tables[1].columns[1].data_type == "TEXT"
-    assert tables[1].columns[1].constraints == ["NOT NULL"]
+    assert tables[1].columns[1].constraints == [C.NotNullConstraint("table2", "name")]
 
 
 @pytest.mark.parametrize("tmp_database", [[*sql_schema_with_fks]], indirect=True)
