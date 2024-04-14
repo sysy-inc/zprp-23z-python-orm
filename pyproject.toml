@@ -26,8 +26,5 @@ distribution = true
 test = [
     "pytest>=8.1.1",
 ]
-dev = [
-    "pyright>=1.1.358",
-]
 [project.entry-points."console_scripts"]
 skibidi-orm = "skibidi_orm.cli.run:main"
