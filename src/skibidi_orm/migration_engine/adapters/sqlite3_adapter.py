@@ -11,6 +11,7 @@ from skibidi_orm.migration_engine.operations.column_operations import ColumnOper
 
 
 class SQLite3Adapter(BaseAdapter):
+
     DataTypes = SQLite3Typing.DataTypes
     Constraints = SQLite3Typing.Constraints
     Column = SQLite3Typing.Column
@@ -18,7 +19,7 @@ class SQLite3Adapter(BaseAdapter):
     Relation = SQLite3Typing.Relation
     Relation = Relation
     tables: list[Table] = []
-    relations: list[SQLite3Adapter.Relation] = []
+    relations: list[Relation] = []
 
     def __init__(self):
         pass
@@ -42,9 +43,16 @@ class SQLite3Adapter(BaseAdapter):
     def execute_migration(self):
         """Execute the migration process on a full adapter."""
 
-        for table in self.tables:
-            print(f"Creating table {table.name}")
-            for column in table.columns:
-                print(
-                    f"\t Creating column {column.name} with type {column.data_type} and constraints {column.constraints}"
-                )
+        self.inspector = SqliteInspector()
+
+        db_tables = self.inspector.get_tables()
+        db_relations = self.inspector.get_relations()
+
+        state_manager = StateManager[self.Table](
+            db_tables=db_tables,
+            db_relations=db_relations,
+            schema_tables=self.tables,
+            schema_relations=self.relations,
+        )
+
+        self.operations = state_manager.get_operations()
