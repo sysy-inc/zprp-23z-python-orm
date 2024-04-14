@@ -1,20 +1,21 @@
 from __future__ import annotations
-from typing import Literal
-from skibidi_orm.migration_engine.adapters.base_adapter import (
-    BaseAdapter,
-    BaseColumn,
-    Relation,
-    BaseTable,
-)
-from skibidi_orm.migration_engine.operations.constraints import Constraint
+
+from skibidi_orm.migration_engine.adapters.base_adapter import BaseAdapter
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
+
+from skibidi_orm.migration_engine.schema_analysys.state_manager import StateManager
+
+from skibidi_orm.migration_engine.operations.table_operations import TableOperation
+from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
 
 
 class SQLite3Adapter(BaseAdapter):
-
-    DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]
-    Constraints = Constraint
-    Column = BaseColumn[DataTypes]
-    Table = BaseTable[Column]
+    DataTypes = SQLite3Typing.DataTypes
+    Constraints = SQLite3Typing.Constraints
+    Column = SQLite3Typing.Column
+    Table = SQLite3Typing.Table
+    Relation = SQLite3Typing.Relation
     Relation = Relation
     tables: list[Table] = []
     relations: list[SQLite3Adapter.Relation] = []
