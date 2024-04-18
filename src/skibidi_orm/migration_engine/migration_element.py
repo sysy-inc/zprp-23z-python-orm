@@ -7,15 +7,13 @@ class MigrationElement:
     adapter: BaseAdapter
     operations: list[Any] = []
 
-    def __init__(self) -> None:
-        self.operations = []
-
     #   @classmethod
     def migrate(self):
         table = MigrationElement.__subclasses__()
+
         for cls in table:
             # Do migration action
             # print(cls.__name__, cls.__dict__)
             table_instance = cls()
             table_instance.adapter.execute_migration()
-            self.operations = table_instance.adapter.operation_list
+            MigrationElement.operations = table_instance.adapter.operation_list
