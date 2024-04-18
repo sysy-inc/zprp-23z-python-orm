@@ -14,6 +14,14 @@ def reset_config_singleton(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(BaseDbConfig, "_BaseDbConfig__instance", None)
 
 
+# MigrationElement.__subclasses__
+
+
+# @pytest.fixture(autouse=True)
+# def reset_migration_element_class_hierartchy():
+#     from skibidi_orm.migration_engine.migration_element import MigrationElement
+
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item: Any) -> Any:
     """Print tests' docstring when running the test."""
