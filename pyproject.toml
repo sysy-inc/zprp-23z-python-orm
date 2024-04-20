@@ -29,6 +29,9 @@ test = [
 ]
 dev = [
     "pyright>=1.1.358",
+    "sphinx>=7.2.6",
+    "sphinxcontrib-napoleon>=0.7",
+    "sphinx-rtd-theme>=2.0.0",
 ]
 [project.entry-points."console_scripts"]
 skibidi-orm = "skibidi_orm.cli.run:main"
