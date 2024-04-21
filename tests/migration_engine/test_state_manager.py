@@ -217,8 +217,6 @@ def test_no_operation_needed(tmp_database: str, capfd: pytest.CaptureFixture[str
 
     assert len(MigrationElement.operations) == 0
 
-    # del sys.modules["skibidi_orm.migration_engine.migration_element"]
-
 
 @pytest.mark.parametrize(
     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
