@@ -45,6 +45,11 @@ class BaseAdapter(ABC):
         pass
 
     @abstractmethod
+    def reset_adapter(self):
+        """Reset the adapter"""
+        pass
+
+    @abstractmethod
     def execute_migration(self):
         """Execute the migration"""
         pass
