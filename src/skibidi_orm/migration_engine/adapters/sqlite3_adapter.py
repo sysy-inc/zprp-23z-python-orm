@@ -21,6 +21,7 @@ class SQLite3Adapter(BaseAdapter):
     relations: list[Relation] = []
 
     def __init__(self):
+        self.reset_adapter()
         self.operations: list[TableOperation | ColumnOperation] = []
 
     @property
@@ -45,6 +46,12 @@ class SQLite3Adapter(BaseAdapter):
             f"Creating relation from {relation.origin_table}.{relation.origin_column} to {relation.referenced_table}.{relation.referenced_column}"
         )
 
+    def reset_adapter(self):
+        """Reset the adapter"""
+
+        self.tables = []
+        self.relations = []
+
     def execute_migration(self):
         """Execute the migration process on a full adapter."""
 
@@ -61,5 +68,4 @@ class SQLite3Adapter(BaseAdapter):
         )
 
         self.operations = state_manager.get_operations()
-        ops = self.operation_list
-        print(ops)
+        # print(ops)
