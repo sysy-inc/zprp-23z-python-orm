@@ -1,8 +1,6 @@
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 
-import sys
-
 from skibidi_orm.migration_engine.operations import constraints as C
 from skibidi_orm.migration_engine.operations.column_operations import (
     AddColumnOperation,
@@ -13,6 +11,8 @@ from skibidi_orm.migration_engine.operations.table_operations import (
     DeleteTableOperation,
     RenameTableOperation,
 )
+
+from skibidi_orm.migration_engine.migration_element import MigrationElement
 
 # from tmp.mock_schema import Table
 
@@ -104,73 +104,69 @@ def tmp_database(request: pytest.FixtureRequest, tmp_path: Path):
     yield str(tmp_file)
 
 
-# @pytest.mark.parametrize(
-#     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
-# )
-# def test_rename_table_operation_needed(
-#     tmp_database: str, capfd: pytest.CaptureFixture[str]
-# ):
-#     from skibidi_orm.migration_engine.migration_element import MigrationElement
+@pytest.mark.parametrize(
+    "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
+)
+def test_rename_table_operation_needed(
+    tmp_database: str, capfd: pytest.CaptureFixture[str]
+):
+    from skibidi_orm.migration_engine.migration_element import MigrationElement
 
-#     class Table(MigrationElement):
+    class Table(MigrationElement):
 
-#         def __init__(self) -> None:
-#             self.adapter = SQLite3Adapter()
+        def __init__(self) -> None:
+            self.adapter = SQLite3Adapter()
 
-#             models = Table.__subclasses__()
-#             if self.__class__ == Table:
-#                 for cls in models:
-#                     self.adapter.create_table(cls.__dict__["table"])
+            models = Table.__subclasses__()
+            if self.__class__ == Table:
+                for cls in models:
+                    self.adapter.create_table(cls.__dict__["table"])
 
-#     class User(Table):  # type: ignore
-#         columns = [
-#             SQLite3Adapter.Column(
-#                 name="user_id",
-#                 data_type="INTEGER",
-#                 constraints=[C.PrimaryKeyConstraint("User", "user_id")],
-#             ),
-#             SQLite3Adapter.Column(
-#                 name="user_name",
-#                 data_type="TEXT",
-#                 constraints=[C.NotNullConstraint("User", "user_name")],
-#             ),
-#         ]
+    class User(Table):  # type: ignore
+        columns = [
+            SQLite3Adapter.Column(
+                name="user_id",
+                data_type="INTEGER",
+                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+            ),
+            SQLite3Adapter.Column(
+                name="user_name",
+                data_type="TEXT",
+                constraints=[C.NotNullConstraint("User", "user_name")],
+            ),
+        ]
 
-#         table = SQLite3Adapter.Table(name="User", columns=columns)
+        table = SQLite3Adapter.Table(name="User", columns=columns)
 
-#     class NewNamePost(Table):  # type: ignore
-#         columns = [
-#             SQLite3Adapter.Column(
-#                 name="post_id",
-#                 data_type="INTEGER",
-#                 constraints=[C.PrimaryKeyConstraint("NewNamePost", "post_id")],
-#             ),
-#             SQLite3Adapter.Column(
-#                 name="post_name",
-#                 data_type="TEXT",
-#                 constraints=[C.NotNullConstraint("NewNamePost", "post_name")],
-#             ),
-#         ]
+    class NewNamePost(Table):  # type: ignore
+        columns = [
+            SQLite3Adapter.Column(
+                name="post_id",
+                data_type="INTEGER",
+                constraints=[C.PrimaryKeyConstraint("NewNamePost", "post_id")],
+            ),
+            SQLite3Adapter.Column(
+                name="post_name",
+                data_type="TEXT",
+                constraints=[C.NotNullConstraint("NewNamePost", "post_name")],
+            ),
+        ]
 
-#         table = SQLite3Adapter.Table(name="NewNamePost", columns=columns)
+        table = SQLite3Adapter.Table(name="NewNamePost", columns=columns)
 
-#     SQLite3Config(tmp_database)
+    SQLite3Config(tmp_database)
 
-#     m = MigrationElement()
-#     m.migrate()
+    m = MigrationElement()
+    m.migrate()
 
-#     assert type(MigrationElement.operations[0]) == RenameTableOperation
-#     assert len(MigrationElement.operations) == 1
+    assert type(MigrationElement.operations[0]) == RenameTableOperation
+    assert len(MigrationElement.operations) == 1
 
 
 @pytest.mark.parametrize(
     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
 )
 def test_no_operation_needed(tmp_database: str, capfd: pytest.CaptureFixture[str]):
-
-    from skibidi_orm.migration_engine.migration_element import MigrationElement
-
-    del sys.modules["skibidi_orm.migration_engine.migration_element"]
 
     class Table(MigrationElement):
 
@@ -223,9 +219,6 @@ def test_no_operation_needed(tmp_database: str, capfd: pytest.CaptureFixture[str
 
     # del sys.modules["skibidi_orm.migration_engine.migration_element"]
 
-    del m
-    del MigrationElement
-
 
 @pytest.mark.parametrize(
     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
@@ -233,7 +226,6 @@ def test_no_operation_needed(tmp_database: str, capfd: pytest.CaptureFixture[str
 def test_create_table_operation_needed(
     tmp_database: str, capfd: pytest.CaptureFixture[str]
 ):
-    from skibidi_orm.migration_engine.migration_element import MigrationElement
 
     class Table(MigrationElement):
 
@@ -302,89 +294,69 @@ def test_create_table_operation_needed(
     assert type(MigrationElement.operations[0]) == CreateTableOperation
     assert len(MigrationElement.operations) == 1
 
-    del sys.modules["skibidi_orm.migration_engine.migration_element"]
 
-    del m
-    del MigrationElement
+@pytest.mark.parametrize(
+    "tmp_database", [[sql_table_user, sql_table_post, sql_table_comment]], indirect=True
+)
+def test_delete_table_operation_needed(
+    tmp_database: str, capfd: pytest.CaptureFixture[str]
+):
 
+    class Table(MigrationElement):
 
-# @pytest.mark.parametrize(
-#     "tmp_database", [[sql_table_user, sql_table_post, sql_table_comment]], indirect=True
-# )
-# def test_delete_table_operation_needed(
-#     tmp_database: str, capfd: pytest.CaptureFixture[str]
-# ):
+        def __init__(self) -> None:
+            self.adapter = SQLite3Adapter()
 
-#     class Table(MigrationElement):
+            models = Table.__subclasses__()
+            if self.__class__ == Table:
+                for cls in models:
+                    self.adapter.create_table(cls.__dict__["table"])
 
-#         def __init__(self) -> None:
-#             self.adapter = SQLite3Adapter()
+    class User(Table):  # type: ignore
+        columns = [
+            SQLite3Adapter.Column(
+                name="user_id",
+                data_type="INTEGER",
+                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+            ),
+            SQLite3Adapter.Column(
+                name="user_name",
+                data_type="TEXT",
+                constraints=[C.NotNullConstraint("User", "user_name")],
+            ),
+        ]
 
-#             models = Table.__subclasses__()
-#             if self.__class__ == Table:
-#                 for cls in models:
-#                     self.adapter.create_table(cls.__dict__["table"])
+        table = SQLite3Adapter.Table(name="User", columns=columns)
 
-#     class User(Table):  # type: ignore
-#         columns = [
-#             SQLite3Adapter.Column(
-#                 name="user_id",
-#                 data_type="INTEGER",
-#                 constraints=[C.PrimaryKeyConstraint("User", "user_id")],
-#             ),
-#             SQLite3Adapter.Column(
-#                 name="user_name",
-#                 data_type="TEXT",
-#                 constraints=[C.NotNullConstraint("User", "user_name")],
-#             ),
-#         ]
+    class Post(Table):  # type: ignore
+        columns = [
+            SQLite3Adapter.Column(
+                name="post_id",
+                data_type="INTEGER",
+                constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+            ),
+            SQLite3Adapter.Column(
+                name="post_name",
+                data_type="TEXT",
+                constraints=[C.NotNullConstraint("Post", "post_name")],
+            ),
+        ]
 
-#         table = SQLite3Adapter.Table(name="User", columns=columns)
+        table = SQLite3Adapter.Table(name="Post", columns=columns)
 
-#     class Post(Table):  # type: ignore
-#         columns = [
-#             SQLite3Adapter.Column(
-#                 name="post_id",
-#                 data_type="INTEGER",
-#                 constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
-#             ),
-#             SQLite3Adapter.Column(
-#                 name="post_name",
-#                 data_type="TEXT",
-#                 constraints=[C.NotNullConstraint("Post", "post_name")],
-#             ),
-#             SQLite3Adapter.Column(
-#                 name="post_content",
-#                 data_type="TEXT",
-#                 constraints=[C.NotNullConstraint("Post", "post_content")],
-#             ),
-#         ]
+    SQLite3Config(tmp_database)
 
-#         table = SQLite3Adapter.Table(name="Post", columns=columns)
+    m = MigrationElement()
+    m.migrate()
 
-#     SQLite3Config(tmp_database)
-
-#     m = MigrationElement()
-#     m.migrate()
-
-#     assert len(MigrationElement.operations) == 1
-#     assert type(MigrationElement.operations[0]) == DeleteTableOperation
+    assert len(MigrationElement.operations) == 1
+    assert type(MigrationElement.operations[0]) == DeleteTableOperation
 
 
 @pytest.mark.parametrize(
     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
 )
-def test_create_column_operation_needed(
-    tmp_database: str, capfd: pytest.CaptureFixture[str]
-):
-
-    from skibidi_orm.migration_engine.migration_element import MigrationElement
-
-    print(MigrationElement.__subclasses__())
-
-    for key in sys.modules.keys():
-        if "orm" in key:
-            print(key)
+def test_create_column_operation_needed(tmp_database: str):
 
     class Table(MigrationElement):
 
@@ -441,60 +413,117 @@ def test_create_column_operation_needed(
     assert type(MigrationElement.operations[0]) == AddColumnOperation
     assert len(MigrationElement.operations) == 1
 
-    del sys.modules["skibidi_orm.migration_engine.migration_element"]
+
+@pytest.mark.parametrize(
+    "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
+)
+def test_delete_column_operation_needed(
+    tmp_database: str, capfd: pytest.CaptureFixture[str]
+):
+
+    class Table(MigrationElement):
+
+        def __init__(self) -> None:
+            self.adapter = SQLite3Adapter()
+
+            models = Table.__subclasses__()
+            if self.__class__ == Table:
+                for cls in models:
+                    self.adapter.create_table(cls.__dict__["table"])
+
+    class User(Table):  # type: ignore
+        columns = [
+            SQLite3Adapter.Column(
+                name="user_id",
+                data_type="INTEGER",
+                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+            ),
+            SQLite3Adapter.Column(
+                name="user_name",
+                data_type="TEXT",
+                constraints=[C.NotNullConstraint("User", "user_name")],
+            ),
+        ]
+
+        table = SQLite3Adapter.Table(name="User", columns=columns)
+
+    class Post(Table):  # type: ignore
+        columns = [
+            SQLite3Adapter.Column(
+                name="post_id",
+                data_type="INTEGER",
+                constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+            ),
+        ]
+
+        table = SQLite3Adapter.Table(name="Post", columns=columns)
+
+    SQLite3Config(tmp_database)
+
+    m = MigrationElement()
+    m.migrate()
+
+    assert type(MigrationElement.operations[0]) == DeleteColumnOperation
+    assert len(MigrationElement.operations) == 1
 
 
-# @pytest.mark.parametrize(
-#     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
-# )
-# def test_delete_column_operation_needed(
-#     tmp_database: str, capfd: pytest.CaptureFixture[str]
-# ):
-#     from skibidi_orm.migration_engine.migration_element import MigrationElement
+@pytest.mark.parametrize(
+    "tmp_database", [[sql_table_user, sql_table_post, sql_table_comment]], indirect=True
+)
+def test_add_column_and_delete_tabe_operation_needed(tmp_database: str):
+    class Table(MigrationElement):
 
-#     class Table(MigrationElement):
+        def __init__(self) -> None:
+            self.adapter = SQLite3Adapter()
 
-#         def __init__(self) -> None:
-#             self.adapter = SQLite3Adapter()
+            models = Table.__subclasses__()
+            if self.__class__ == Table:
+                for cls in models:
+                    self.adapter.create_table(cls.__dict__["table"])
 
-#             models = Table.__subclasses__()
-#             if self.__class__ == Table:
-#                 for cls in models:
-#                     self.adapter.create_table(cls.__dict__["table"])
+    class User(Table):  # type: ignore
+        columns = [
+            SQLite3Adapter.Column(
+                name="user_id",
+                data_type="INTEGER",
+                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+            ),
+            SQLite3Adapter.Column(
+                name="user_name",
+                data_type="TEXT",
+                constraints=[C.NotNullConstraint("User", "user_name")],
+            ),
+        ]
 
-#     class User(Table):  # type: ignore
-#         columns = [
-#             SQLite3Adapter.Column(
-#                 name="user_id",
-#                 data_type="INTEGER",
-#                 constraints=[C.PrimaryKeyConstraint("User", "user_id")],
-#             ),
-#             SQLite3Adapter.Column(
-#                 name="user_name",
-#                 data_type="TEXT",
-#                 constraints=[C.NotNullConstraint("User", "user_name")],
-#             ),
-#         ]
+        table = SQLite3Adapter.Table(name="User", columns=columns)
 
-#         table = SQLite3Adapter.Table(name="User", columns=columns)
+    class Post(Table):  # type: ignore
+        columns = [
+            SQLite3Adapter.Column(
+                name="post_id",
+                data_type="INTEGER",
+                constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+            ),
+            SQLite3Adapter.Column(
+                name="post_name",
+                data_type="TEXT",
+                constraints=[C.NotNullConstraint("Post", "post_name")],
+            ),
+            SQLite3Adapter.Column(
+                name="post_content",
+                data_type="TEXT",
+                constraints=[C.NotNullConstraint("Post", "post_content")],
+            ),
+        ]
 
-#     class Post(Table):  # type: ignore
-#         columns = [
-#             SQLite3Adapter.Column(
-#                 name="post_id",
-#                 data_type="INTEGER",
-#                 constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
-#             ),
-#         ]
+        table = SQLite3Adapter.Table(name="Post", columns=columns)
 
-#         table = SQLite3Adapter.Table(name="Post", columns=columns)
+    SQLite3Config(tmp_database)
 
-#     SQLite3Config(tmp_database)
+    m = MigrationElement()
+    m.migrate()
 
-#     m = MigrationElement()
-#     m.migrate()
+    assert type(MigrationElement.operations[1]) == AddColumnOperation
+    assert type(MigrationElement.operations[0]) == DeleteTableOperation
 
-#     assert type(MigrationElement.operations[0]) == DeleteColumnOperation
-#     assert len(MigrationElement.operations) == 1
-
-#     del sys.modules["skibidi_orm.migration_engine.migration_element"]
+    assert len(MigrationElement.operations) == 2
