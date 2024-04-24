@@ -1,5 +1,6 @@
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
+from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
 
 from skibidi_orm.migration_engine.adapters.database_objects import constraints as C
 from skibidi_orm.migration_engine.operations.column_operations import (
@@ -106,6 +107,21 @@ def tmp_database(request: pytest.FixtureRequest, tmp_path: Path):
     yield str(tmp_file)
 
 
+@pytest.fixture
+def mock_execute_operations(monkeypatch: pytest.MonkeyPatch):
+    # Define a function that does nothing
+    def do_nothing(operations):  # type: ignore
+        print("do_nothing")
+        pass
+
+    # Patch the execute_operations method with the do_nothing function
+    monkeypatch.setattr(
+        SQLite3Executor,
+        "execute_operations",
+        do_nothing,  # type: ignore
+    )
+
+
 @pytest.mark.parametrize(
     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
 )
@@ -170,7 +186,9 @@ def test_rename_table_operation_needed(
 @pytest.mark.parametrize(
     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
 )
-def test_no_operation_needed(tmp_database: str, capfd: pytest.CaptureFixture[str]):
+def test_no_operation_needed(
+    tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
+):
 
     class Table(MigrationElement):
 
@@ -226,7 +244,7 @@ def test_no_operation_needed(tmp_database: str, capfd: pytest.CaptureFixture[str
     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
 )
 def test_create_table_operation_needed(
-    tmp_database: str, capfd: pytest.CaptureFixture[str]
+    tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
 ):
 
     class Table(MigrationElement):
@@ -301,7 +319,7 @@ def test_create_table_operation_needed(
     "tmp_database", [[sql_table_user, sql_table_post, sql_table_comment]], indirect=True
 )
 def test_delete_table_operation_needed(
-    tmp_database: str, capfd: pytest.CaptureFixture[str]
+    tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
 ):
 
     class Table(MigrationElement):
@@ -358,7 +376,9 @@ def test_delete_table_operation_needed(
 @pytest.mark.parametrize(
     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
 )
-def test_create_column_operation_needed(tmp_database: str):
+def test_create_column_operation_needed(
+    tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
+):
 
     class Table(MigrationElement):
 
@@ -420,7 +440,7 @@ def test_create_column_operation_needed(tmp_database: str):
     "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
 )
 def test_delete_column_operation_needed(
-    tmp_database: str, capfd: pytest.CaptureFixture[str]
+    tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
 ):
 
     class Table(MigrationElement):
@@ -472,7 +492,9 @@ def test_delete_column_operation_needed(
 @pytest.mark.parametrize(
     "tmp_database", [[sql_table_user, sql_table_post, sql_table_comment]], indirect=True
 )
-def test_add_column_and_delete_tabe_operation_needed(tmp_database: str):
+def test_add_column_and_delete_tabe_operation_needed(
+    tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
+):
     class Table(MigrationElement):
 
         def __init__(self) -> None:
