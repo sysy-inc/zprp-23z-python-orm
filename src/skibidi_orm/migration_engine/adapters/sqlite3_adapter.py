@@ -56,7 +56,7 @@ class SQLite3Adapter(BaseAdapter):
         self.tables = []
         self.relations = []
 
-    def execute_migration(self):
+    def execute_migration(self, preview: bool = False):
         """Execute the migration process on a full adapter."""
 
         self.inspector = SqliteInspector()
@@ -72,5 +72,5 @@ class SQLite3Adapter(BaseAdapter):
         )
 
         self.operations = state_manager.get_operations()
-
-        SQLite3Executor.execute_operations(self.operations)
+        if not preview:
+            SQLite3Executor.execute_operations(self.operations)

@@ -52,6 +52,6 @@ class BaseAdapter(ABC):
         pass
 
     @abstractmethod
-    def execute_migration(self):
+    def execute_migration(self, preview: bool = False):
         """Execute the migration"""
         pass

@@ -177,7 +177,7 @@ def test_rename_table_operation_needed(
     SQLite3Config(tmp_database)
 
     m = MigrationElement()
-    m.migrate()
+    m.migrate(preview=True)
 
     assert type(MigrationElement.operations[0]) == RenameTableOperation
     assert len(MigrationElement.operations) == 1
@@ -235,7 +235,7 @@ def test_no_operation_needed(
     SQLite3Config(tmp_database)
 
     m = MigrationElement()
-    m.migrate()
+    m.migrate(preview=True)
 
     assert len(MigrationElement.operations) == 0
 
@@ -309,7 +309,7 @@ def test_create_table_operation_needed(
     SQLite3Config(tmp_database)
 
     m = MigrationElement()
-    m.migrate()
+    m.migrate(preview=True)
 
     assert type(MigrationElement.operations[0]) == CreateTableOperation
     assert len(MigrationElement.operations) == 1
@@ -367,7 +367,7 @@ def test_delete_table_operation_needed(
     SQLite3Config(tmp_database)
 
     m = MigrationElement()
-    m.migrate()
+    m.migrate(preview=True)
 
     assert len(MigrationElement.operations) == 1
     assert type(MigrationElement.operations[0]) == DeleteTableOperation
@@ -430,7 +430,7 @@ def test_create_column_operation_needed(
     SQLite3Config(tmp_database)
 
     m = MigrationElement()
-    m.migrate()
+    m.migrate(preview=True)
 
     assert type(MigrationElement.operations[0]) == AddColumnOperation
     assert len(MigrationElement.operations) == 1
@@ -483,7 +483,7 @@ def test_delete_column_operation_needed(
     SQLite3Config(tmp_database)
 
     m = MigrationElement()
-    m.migrate()
+    m.migrate(preview=True)
 
     assert type(MigrationElement.operations[0]) == DeleteColumnOperation
     assert len(MigrationElement.operations) == 1
@@ -545,7 +545,7 @@ def test_add_column_and_delete_tabe_operation_needed(
     SQLite3Config(tmp_database)
 
     m = MigrationElement()
-    m.migrate()
+    m.migrate(preview=True)
 
     assert type(MigrationElement.operations[1]) == AddColumnOperation
     assert type(MigrationElement.operations[0]) == DeleteTableOperation
