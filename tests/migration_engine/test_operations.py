@@ -19,7 +19,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     PrimaryKeyConstraint,
 )
 
-from skibidi_orm.exceptions.irreversible_operation_exception import (
+from skibidi_orm.exceptions.operations_exceptions import (
     IrreversibleOperationError,
 )
 
