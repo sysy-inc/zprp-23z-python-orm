@@ -1,7 +1,9 @@
 from skibidi_orm.exceptions.constraints_exceptions import UnsupportedConstraintError
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseColumn
 from skibidi_orm.migration_engine.converters.sql_converter import SQLConverter
-from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
 from skibidi_orm.migration_engine.operations.column_operations import (
     AddColumnOperation,
     ChangeDataTypeOperation,
@@ -138,6 +140,8 @@ class SQLite3Converter(SQLConverter):
             )
         elif constraint.constraint_type == ConstraintType.CHECK:
             return f"CHECK ({cast(CheckConstraint, constraint).column_name} {cast(CheckConstraint, constraint).condition})"
+        elif constraint.constraint_type == ConstraintType.NOT_NULL:
+            return "NOT NULL"
         else:
             raise UnsupportedConstraintError(
                 f"Constraints of type {constraint.constraint_type} are not supported by SQLite3"
@@ -187,7 +191,7 @@ class SQLite3Converter(SQLConverter):
         deleting the original one."""
         delete_op = DeleteTableOperation(operation.table)
         create_op = CreateTableOperation(
-            SQLite3Adapter.Table(operation.new_name, operation.table.columns)
+            SQLite3Typing.Table(operation.new_name, operation.table.columns)
         )
         return (
             SQLite3Converter.convert_table_operation_to_SQL(delete_op)
@@ -197,7 +201,7 @@ class SQLite3Converter(SQLConverter):
 
     @staticmethod
     def split_constraints(
-        table: SQLite3Adapter.Table,
+        table: SQLite3Typing.Table,
     ) -> tuple[set[Constraint], set[Constraint]]:
         # TODO: better typing
         """Split the constraints of a table into those that have to be added at the end of the
@@ -212,7 +216,11 @@ class SQLite3Converter(SQLConverter):
         constraints_at_end = set(
             filter(
                 lambda c: c.constraint_type
-                not in [ConstraintType.PRIMARY_KEY, ConstraintType.UNIQUE],
+                not in [
+                    ConstraintType.PRIMARY_KEY,
+                    ConstraintType.UNIQUE,
+                    ConstraintType.NOT_NULL,
+                ],
                 all_constraints,
             )
         )
@@ -224,7 +232,7 @@ class SQLite3Converter(SQLConverter):
 
     @staticmethod
     def convert_column_definition_to_SQL(
-        column: SQLite3Adapter.Column, constraints: list[Constraint]
+        column: SQLite3Typing.Column, constraints: list[Constraint]
     ) -> str:
         """Convert a given column definition to a SQLite3 SQL string"""
 
