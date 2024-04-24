@@ -1,4 +1,4 @@
-from skibidi_orm.exceptions.constraints import UnsupportedConstraintError
+from skibidi_orm.exceptions.constraints_exceptions import UnsupportedConstraintError
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseColumn
 from skibidi_orm.migration_engine.converters.sql_converter import SQLConverter
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
@@ -9,7 +9,7 @@ from skibidi_orm.migration_engine.operations.column_operations import (
     DeleteColumnOperation,
     RenameColumnOperation,
 )
-from skibidi_orm.migration_engine.operations.constraints import (
+from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     CheckConstraint,
     Constraint,
     ConstraintType,
@@ -22,7 +22,7 @@ from skibidi_orm.migration_engine.operations.table_operations import (
     TableOperation,
     CreateTableOperation,
 )
-from skibidi_orm.exceptions.operations import UnsupportedOperationError
+from skibidi_orm.exceptions.operations_exceptions import UnsupportedOperationError
 from typing import cast
 from itertools import chain
 

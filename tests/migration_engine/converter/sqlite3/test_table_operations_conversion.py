@@ -1,7 +1,7 @@
 import pytest
 from skibidi_orm.migration_engine.converters.sqlite3_converter import SQLite3Converter
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
-from skibidi_orm.migration_engine.operations.constraints import (
+from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     CheckConstraint,
     Constraint,
     ConstraintType,
