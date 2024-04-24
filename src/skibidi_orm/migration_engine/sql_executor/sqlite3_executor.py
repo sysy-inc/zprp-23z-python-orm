@@ -14,7 +14,11 @@ class SQLite3Executor(BaseSQLExecutor):
         sqlite_config = SQLite3Config.get_instance()
         with sqlite3.connect(sqlite_config.db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute(sql)
+            commands = sql.split(";")
+            for command in commands:
+                if not command:
+                    continue
+                cursor.execute(command.strip())
             conn.commit()
 
     @staticmethod
