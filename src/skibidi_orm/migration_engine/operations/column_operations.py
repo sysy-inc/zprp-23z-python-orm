@@ -35,6 +35,9 @@ class AddColumnOperation(ColumnOperation):
     def reverse(self) -> ColumnOperation:
         return DeleteColumnOperation(table=self.table, column=self.column)
 
+    def __str__(self) -> str:
+        return f"Add Column {self.column.name} to Table {self.table.name}"
+
 
 @dataclass(frozen=True)
 class DeleteColumnOperation(ColumnOperation):
@@ -47,6 +50,9 @@ class DeleteColumnOperation(ColumnOperation):
         raise IrreversibleOperationError(
             f"Reversing a {self.__class__.__name__} is currently not supported."
         )
+
+    def __str__(self) -> str:
+        return f"Delete Column {self.column.name} from Table {self.table.name}"
 
 
 @dataclass(frozen=True)
@@ -64,6 +70,9 @@ class RenameColumnOperation(ColumnOperation):
             column=self.column,
             new_name=self.column.name,
         )
+
+    def __str__(self) -> str:
+        return f"Rename Column {self.column.name} to {self.new_name} in Table {self.table.name}"
 
 
 @dataclass(frozen=True)
@@ -84,6 +93,9 @@ class AddConstraintOperation(ColumnOperation):
             constraint=self.constraint,
         )
 
+    def __str__(self) -> str:
+        return f"Add Constraint {self.constraint.constraint_type.value} to Column {self.column.name} in Table {self.table.name}"
+
 
 @dataclass(frozen=True)
 class DeleteConstraintOperation(ColumnOperation):
@@ -103,6 +115,9 @@ class DeleteConstraintOperation(ColumnOperation):
             constraint=self.constraint,
         )
 
+    def __str__(self) -> str:
+        return f"Delete Constraint {self.constraint.constraint_type.value} from Column {self.column.name} in Table {self.table.name}"
+
 
 @dataclass(frozen=True)
 class ChangeDataTypeOperation(ColumnOperation):
@@ -120,3 +135,6 @@ class ChangeDataTypeOperation(ColumnOperation):
             column=self.column,
             new_dtype=self.column.data_type,
         )
+
+    def __str__(self) -> str:
+        return f"Change Data Type of Column {self.column.name} in Table {self.table.name} to {self.new_dtype}"
