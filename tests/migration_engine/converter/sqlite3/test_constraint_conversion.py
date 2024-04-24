@@ -26,8 +26,7 @@ def test_unique_constraint_conversion():
 def test_not_null_constraint_conversion():
     """Test the conversion of a NotNullConstraint to SQL."""
     constraint = NotNullConstraint("users", "email")
-    with raises(UnsupportedConstraintError):
-        SQLite3Converter.convert_constraint_to_SQL(constraint)
+    assert SQLite3Converter.convert_constraint_to_SQL(constraint) == "NOT NULL"
 
 
 def test_default_constraint_conversion():
