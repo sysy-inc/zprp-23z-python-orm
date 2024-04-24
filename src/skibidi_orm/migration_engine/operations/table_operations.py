@@ -31,6 +31,9 @@ class CreateTableOperation(TableOperation):
     def reverse(self) -> TableOperation:
         return DeleteTableOperation(table=self.table)
 
+    def __str__(self) -> str:
+        return f"Create Table {self.table.name} with columns: {', '.join([col.name for col in self.table.columns])}"
+
 
 @dataclass(frozen=True)
 class DeleteTableOperation(TableOperation):
@@ -44,6 +47,9 @@ class DeleteTableOperation(TableOperation):
             f"Reversing a {self.__class__.__name__} is currently not supported."
         )
 
+    def __str__(self) -> str:
+        return f"Delete Table {self.table.name}"
+
 
 @dataclass(frozen=True)
 class RenameTableOperation(TableOperation):
@@ -56,3 +62,6 @@ class RenameTableOperation(TableOperation):
     def reverse(self) -> TableOperation:
         # todo
         return RenameTableOperation(table=self.table, new_name=self.table.name)
+
+    def __str__(self) -> str:
+        return f"Rename Table {self.table.name} to {self.new_name}"
