@@ -1,5 +1,4 @@
 import pytest
-
 from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 
@@ -38,5 +37,4 @@ def test_check_argument_saving():
     Shoud raise error when arugments are not saved
     """
     config = SQLite3Config(db_path="first_path")
-    
     assert config.db_path == "first_path"
