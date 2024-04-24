@@ -11,6 +11,8 @@ from skibidi_orm.migration_engine.schema_analysys.state_manager import StateMana
 from skibidi_orm.migration_engine.operations.table_operations import TableOperation
 from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
 
+from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
+
 
 class SQLite3Adapter(BaseAdapter):
 
@@ -70,4 +72,5 @@ class SQLite3Adapter(BaseAdapter):
         )
 
         self.operations = state_manager.get_operations()
-        # print(ops)
+
+        SQLite3Executor.execute_operations(self.operations)
