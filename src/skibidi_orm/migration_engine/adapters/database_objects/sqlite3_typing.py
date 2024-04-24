@@ -5,7 +5,9 @@ from skibidi_orm.migration_engine.adapters.base_adapter import (
     BaseTable,
 )
 
-from skibidi_orm.migration_engine.operations.constraints import Constraint
+from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
+    Constraint,
+)
 
 
 class SQLite3Typing:

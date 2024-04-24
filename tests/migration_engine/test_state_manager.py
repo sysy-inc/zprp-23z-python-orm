@@ -1,7 +1,7 @@
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 
-from skibidi_orm.migration_engine.operations import constraints as C
+from skibidi_orm.migration_engine.adapters.database_objects import constraints as C
 from skibidi_orm.migration_engine.operations.column_operations import (
     AddColumnOperation,
     DeleteColumnOperation,
@@ -12,7 +12,9 @@ from skibidi_orm.migration_engine.operations.table_operations import (
     RenameTableOperation,
 )
 
-from skibidi_orm.migration_engine.migration_element import MigrationElement
+from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
+    MigrationElement,
+)
 
 # from tmp.mock_schema import Table
 
@@ -110,7 +112,9 @@ def tmp_database(request: pytest.FixtureRequest, tmp_path: Path):
 def test_rename_table_operation_needed(
     tmp_database: str, capfd: pytest.CaptureFixture[str]
 ):
-    from skibidi_orm.migration_engine.migration_element import MigrationElement
+    from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
+        MigrationElement,
+    )
 
     class Table(MigrationElement):
 

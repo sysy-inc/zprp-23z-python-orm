@@ -1,6 +1,6 @@
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
-from skibidi_orm.migration_engine.operations.constraints import (
+from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     PrimaryKeyConstraint,
 )
 from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor

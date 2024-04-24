@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseAdapter
-from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
 
 from skibidi_orm.migration_engine.schema_analysys.state_manager import StateManager

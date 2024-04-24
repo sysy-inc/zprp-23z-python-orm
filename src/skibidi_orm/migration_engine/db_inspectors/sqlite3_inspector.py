@@ -4,8 +4,10 @@ import sqlite3
 
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
-from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
-import skibidi_orm.migration_engine.operations.constraints as C
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
+import skibidi_orm.migration_engine.adapters.database_objects.constraints as C
 
 type SQLite3PragmaTableInfo = list[
     tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]]

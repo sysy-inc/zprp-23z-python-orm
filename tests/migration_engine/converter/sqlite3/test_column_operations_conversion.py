@@ -6,7 +6,7 @@ from skibidi_orm.migration_engine.operations.column_operations import (
     DeleteColumnOperation,
     RenameColumnOperation,
 )
-from skibidi_orm.migration_engine.operations.constraints import (
+from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     CheckConstraint,
     ForeignKeyConstraint,
     PrimaryKeyConstraint,
