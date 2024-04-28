@@ -9,6 +9,7 @@ from skibidi_orm.migration_engine.operations.column_operations import (
 from skibidi_orm.migration_engine.operations.constraints import (
     CheckConstraint,
     ForeignKeyConstraint,
+    NotNullConstraint,
     PrimaryKeyConstraint,
     UniqueConstraint,
 )
@@ -21,6 +22,7 @@ column_primary_key_unique = SQLite3Adapter.Column(
     constraints=[
         PrimaryKeyConstraint("users", "user_id"),
         UniqueConstraint("users", "user_id"),
+        NotNullConstraint("users", "user_id"),
     ],
 )
 
@@ -51,12 +53,12 @@ def test_simple_column_definition():
     )
 
 
-def test_column_definition_with_primary_key_and_unique():
+def test_column_definition_with_primary_key_unique_nn():
     assert (
         SQLite3Converter.convert_column_definition_to_SQL(
             column_primary_key_unique, column_primary_key_unique.constraints
         )
-        == "user_id INTEGER PRIMARY KEY UNIQUE"
+        == "user_id INTEGER PRIMARY KEY UNIQUE NOT NULL"
     )
 
 
@@ -90,7 +92,7 @@ def test_add_column_with_primary_key_and_unique():
     operation = AddColumnOperation(empty_users_table, column_primary_key_unique)
     assert (
         SQLite3Converter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users ADD COLUMN user_id INTEGER PRIMARY KEY UNIQUE;"
+        == "ALTER TABLE users ADD COLUMN user_id INTEGER PRIMARY KEY UNIQUE NOT NULL;"
     )
 
 
@@ -192,13 +194,13 @@ def test_change_data_type_simple_column():
     )
 
 
-def test_change_data_type_column_with_primary_key_and_unique():
+def test_change_data_type_primary_key_unique_nn():
     operation = ChangeDataTypeOperation(
         empty_users_table, column_primary_key_unique, "TEXT"
     )
     assert (
         SQLite3Converter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users DROP COLUMN user_id; ALTER TABLE users ADD COLUMN user_id TEXT PRIMARY KEY UNIQUE;"
+        == "ALTER TABLE users DROP COLUMN user_id; ALTER TABLE users ADD COLUMN user_id TEXT PRIMARY KEY UNIQUE NOT NULL;"
     )
 
 

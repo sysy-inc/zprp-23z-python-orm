@@ -138,6 +138,8 @@ class SQLite3Converter(SQLConverter):
             )
         elif constraint.constraint_type == ConstraintType.CHECK:
             return f"CHECK ({cast(CheckConstraint, constraint).column_name} {cast(CheckConstraint, constraint).condition})"
+        elif constraint.constraint_type == ConstraintType.NOT_NULL:
+            return "NOT NULL"
         else:
             raise UnsupportedConstraintError(
                 f"Constraints of type {constraint.constraint_type} are not supported by SQLite3"
