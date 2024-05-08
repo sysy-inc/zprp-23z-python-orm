@@ -58,15 +58,14 @@ class MetaModel(ModelMetaclass):
         new_class._meta._prepare(new_class)
         return new_class
 
-    def add_to_class(cls, obj_name: str, obj: Any): # type: ignore
+    @classmethod
+    def add_to_class(cls, obj_name: str, obj: Any):
         """ Adds atrribute to class """
         obj.contribute_to_class(cls, obj_name)
 
 
 class Model(BaseModel, metaclass=MetaModel):
     """ A class to create your own database table """
-    class Config:
-        arbitrary_types_allowed = True
     # TODO add information about inheritance
     def __init__(self, *args: Any, **kwargs: Any):
         print(args, kwargs)
