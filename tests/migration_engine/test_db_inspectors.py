@@ -1,8 +1,12 @@
 from pathlib import Path
 import pytest
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
+from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+    SQLite3Inspector,
+)
 import sqlite3
+
+from skibidi_orm.migration_engine.operations.constraints import ForeignKeyConstraint
 
 
 sql_table1 = """
@@ -46,11 +50,12 @@ sql_schema_with_fks = [
     """
     CREATE TABLE comments (
         comment_id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL,
         user_idd INTEGER NOT NULL,
         post_id INTEGER NOT NULL,
         comment_text TEXT NOT NULL,
         comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_idd) REFERENCES users(user_id),
+        FOREIGN KEY (user_idd, username) REFERENCES users(user_id, username),
         FOREIGN KEY (post_id) REFERENCES posts(post_id)
     );
 """,
@@ -84,14 +89,14 @@ def tmp_database(request: pytest.FixtureRequest, tmp_path: Path):
 @pytest.mark.usefixtures("tmp_database")
 def test_can_only_be_instantiated_with_sqlite3config_instantiated_earlier():
     with pytest.raises(ReferenceError) as exc_info:
-        SqliteInspector()
+        SQLite3Inspector()
     assert str(exc_info.value) == "Instance does not exist"
 
 
 @pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
 def test_get_tables_names(tmp_database: str):
     SQLite3Config(tmp_database)
-    inspector = SqliteInspector()
+    inspector = SQLite3Inspector()
     tables = inspector.get_tables_names()
     assert len(tables) == 2
     assert tables[0] == "table1"
@@ -101,14 +106,14 @@ def test_get_tables_names(tmp_database: str):
 @pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
 def test_get_table_columns(tmp_database: str):
     SQLite3Config(db_path=tmp_database)
-    inspector = SqliteInspector()
+    inspector = SQLite3Inspector()
     columns = inspector.get_table_columns("table1")
     assert columns[0].name == "id"
     assert columns[0].data_type == "INTEGER"
-    assert columns[0].constraints == ["PRIMARY KEY"]
+    assert columns[0].column_constraints == ["PRIMARY KEY"]
     assert columns[1].name == "name"
     assert columns[1].data_type == "TEXT"
-    assert columns[1].constraints == ["NOT NULL"]
+    assert columns[1].column_constraints == ["NOT NULL"]
     assert len(columns) == 2
 
 
@@ -117,17 +122,17 @@ def test_get_table_columns(tmp_database: str):
 )
 def test_get_table_columns__primaryk_notnull(tmp_database: str):
     SQLite3Config(db_path=tmp_database)
-    inspector = SqliteInspector()
+    inspector = SQLite3Inspector()
     columns = inspector.get_table_columns("table_primary_key_not_null")
     assert columns[0].name == "id"
     assert columns[0].data_type == "INTEGER"
-    assert columns[0].constraints == ["PRIMARY KEY", "NOT NULL"]
+    assert columns[0].column_constraints == ["PRIMARY KEY", "NOT NULL"]
 
 
 @pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
 def test_get_tables(tmp_database: str):
     SQLite3Config(db_path=tmp_database)
-    inspector = SqliteInspector()
+    inspector = SQLite3Inspector()
     tables = inspector.get_tables()
     assert len(tables) == 2
     assert tables[0].name == "table1"
@@ -136,48 +141,29 @@ def test_get_tables(tmp_database: str):
     assert len(tables[1].columns) == 2
     assert tables[0].columns[0].name == "id"
     assert tables[0].columns[0].data_type == "INTEGER"
-    assert tables[0].columns[0].constraints == ["PRIMARY KEY"]
+    assert tables[0].columns[0].column_constraints == ["PRIMARY KEY"]
     assert tables[0].columns[1].name == "name"
     assert tables[0].columns[1].data_type == "TEXT"
-    assert tables[0].columns[1].constraints == ["NOT NULL"]
+    assert tables[0].columns[1].column_constraints == ["NOT NULL"]
     assert tables[1].columns[0].name == "id"
     assert tables[1].columns[0].data_type == "INTEGER"
-    assert tables[1].columns[0].constraints == ["PRIMARY KEY"]
+    assert tables[1].columns[0].column_constraints == ["PRIMARY KEY"]
     assert tables[1].columns[1].name == "name"
     assert tables[1].columns[1].data_type == "TEXT"
-    assert tables[1].columns[1].constraints == ["NOT NULL"]
+    assert tables[1].columns[1].column_constraints == ["NOT NULL"]
 
 
 @pytest.mark.parametrize("tmp_database", [[*sql_schema_with_fks]], indirect=True)
-def test_get_relations(tmp_database: str):
+def test_get_foreign_keys(tmp_database: str):
     SQLite3Config(db_path=tmp_database)
-    inspector = SqliteInspector()
-    relations = inspector.get_relations()
-    assert len(relations) == 3
-    posts_relation = list(filter(lambda rel: rel.origin_table == "posts", relations))[0]
-    assert posts_relation.origin_table == "posts"
-    assert posts_relation.origin_column == "user_id"
-    assert posts_relation.referenced_table == "users"
-    assert posts_relation.referenced_column == "user_id"
-    comments_relation_user = list(
-        filter(
-            lambda rel: rel.origin_table == "comments"
-            and rel.origin_column == "user_idd",
-            relations,
-        )
-    )[0]
-    assert comments_relation_user.origin_table == "comments"
-    assert comments_relation_user.origin_column == "user_idd"
-    assert comments_relation_user.referenced_table == "users"
-    assert comments_relation_user.referenced_column == "user_id"
-    comments_relation_post = list(
-        filter(
-            lambda rel: rel.origin_table == "comments"
-            and rel.origin_column == "post_id",
-            relations,
-        )
-    )[0]
-    assert comments_relation_post.origin_table == "comments"
-    assert comments_relation_post.origin_column == "post_id"
-    assert comments_relation_post.referenced_table == "posts"
-    assert comments_relation_post.referenced_column == "post_id"
+    inspector = SQLite3Inspector()
+    foreign_keys = inspector.get_foreign_key_constraints()
+    assert len(foreign_keys) == 3
+    correct_fk_set = {
+        ForeignKeyConstraint("posts", "users", {"user_id": "user_id"}),
+        ForeignKeyConstraint(
+            "comments", "users", {"user_idd": "user_id", "username": "username"}
+        ),
+        ForeignKeyConstraint("comments", "posts", {"post_id": "post_id"}),
+    }
+    assert correct_fk_set.intersection(foreign_keys) == foreign_keys

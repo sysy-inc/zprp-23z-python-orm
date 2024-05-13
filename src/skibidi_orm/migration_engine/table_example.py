@@ -2,6 +2,9 @@
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseAdapter
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.migration_element import MigrationElement
+from skibidi_orm.migration_engine.operations.constraints import (
+    ForeignKeyConstraint,
+)
 
 
 class Table(MigrationElement):
@@ -28,7 +31,17 @@ class Table(MigrationElement):
                 table: SQLite3Adapter.Table
                 data_type: SQLite3Adapter.DataTypes
                 columns: list[SQLite3Adapter.Column] = []
-                constraints: list[SQLite3Adapter.Constraints] = []
+                all_constraints = cls.__dict__["constraints"]
+
+                fks: set[SQLite3Adapter.ForeignKeyConstraint] = set(
+                    constraint
+                    for constraint in all_constraints
+                    if isinstance(constraint, ForeignKeyConstraint)
+                )
+
+                column_constraints: set[SQLite3Adapter.ColumnSpecificConstraint] = (
+                    all_constraints - fks
+                )
 
                 if cls.__dict__["data_type"] == "my_definition_of_data_type":
                     data_type = "INTEGER"
@@ -39,16 +52,18 @@ class Table(MigrationElement):
                 else:
                     data_type = "NULL"
 
-                constraints.append(cls.__dict__["constraints"])
+                column_constraints.add(cls.__dict__["constraints"])
 
                 columns.append(
                     SQLite3Adapter.Column(
                         name=cls.__dict__["name"],
                         data_type=data_type,
-                        constraints=constraints,
+                        column_constraints=column_constraints,
                     )
                 )
-                table = SQLite3Adapter.Table(name=cls.__name__, columns=columns)
+                table = SQLite3Adapter.Table(
+                    name=cls.__name__, columns=columns, foreign_keys=fks
+                )
 
                 # Table, for each instance should properly inform the adapter about being created
                 self.adapter.create_table(table)

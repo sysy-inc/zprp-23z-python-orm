@@ -23,29 +23,33 @@ class Constraint(ABC):
 
 
 @dataclass(frozen=True)
-class NotNullConstraint(Constraint):
+class ColumnSpecificConstraint(Constraint):
+    """Base class for constraints that apply to a column instead of multiple (e.g. composite foreign keys)"""
+
+    column_name: str
+
+
+@dataclass(frozen=True)
+class NotNullConstraint(ColumnSpecificConstraint):
     """Class for the NOT NULL constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.NOT_NULL)
-    column_name: str
 
 
 @dataclass(frozen=True)
-class UniqueConstraint(Constraint):
+class UniqueConstraint(ColumnSpecificConstraint):
     """Class for the UNIQUE constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.UNIQUE)
-    column_name: str
 
 
 @dataclass(frozen=True)
-class PrimaryKeyConstraint(Constraint):
+class PrimaryKeyConstraint(ColumnSpecificConstraint):
     """Class for the PRIMARY KEY constraint"""
 
     constraint_type: ConstraintType = field(
         init=False, default=ConstraintType.PRIMARY_KEY
     )
-    column_name: str
 
 
 @dataclass(frozen=True, unsafe_hash=True)
@@ -62,18 +66,16 @@ class ForeignKeyConstraint(Constraint):
 
 
 @dataclass(frozen=True)
-class CheckConstraint(Constraint):
+class CheckConstraint(ColumnSpecificConstraint):
     """Class for the CHECK constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.CHECK)
-    column_name: str
     condition: str
 
 
 @dataclass(frozen=True)
-class DefaultConstraint(Constraint):
+class DefaultConstraint(ColumnSpecificConstraint):
     """Class for the DEFAULT constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.DEFAULT)
-    column_name: str
     value: str
