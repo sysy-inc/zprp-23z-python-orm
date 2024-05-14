@@ -4,6 +4,7 @@ from skibidi_orm.query_engine.field.validators import (
     MinValueValidator,
     DecimalValidator
 )
+from skibidi_orm.query_engine.field.relation_objects import RelationObject
 from typing import Any, List, Type, Union
 import decimal
 
@@ -11,7 +12,7 @@ import decimal
 class NOT_PROVIDED:
     """
     Notes that no value has been passed to the 'default' attr in Field class
-    as 'None' could be considered as default value
+    as 'None' could be considered as a default value
     """
     pass
 
@@ -33,7 +34,8 @@ class Field:
                  max_length: Union[int, None] = None,       
                  default: Any = NOT_PROVIDED,
                  validators: List[object] = [],
-                 field_type: str = ""):
+                 field_type: str = "",
+                 related: Union[RelationObject, None] = None):
         self.null = null,
         self.name = name                # python's field name
         self.db_column = db_column      # column name in db
@@ -43,6 +45,8 @@ class Field:
         self.default = default                        
         self.validators = validators    # list of validators to validate a value; this collects all validators from all subclasses instances
         self.field_type = field_type
+        self.remote_field = related
+        self.is_relation = self.remote_field is not None
 
         self.instances_count = Field.instances_count
         Field.instances_count += 1
@@ -91,13 +95,6 @@ class Field:
         except KeyError:
             return None
         return column_type
-
-    def to_db_type(self, value: Any, conn_type: str):
-        """
-        Prepares the value to be saved into database
-        """
-        # TODO implement functionality
-        pass
 
     def check(self, **kwargs: Any):      
         """
@@ -223,7 +220,7 @@ class FloatField(Field):
             try:
                 return float(value)
             except (ValueError, TypeError):
-                raise Error("Value must be an float")
+                raise Error("Value must be a float")
 
 
 class CharField(Field):
