@@ -3,6 +3,8 @@ Module handels executing orm operations like inserting to database, selecting fr
 """
 
 from skibidi_orm.query_engine.connection.engine import Engine
+from skibidi_orm.query_engine.connection.identity import IdentityMap
+from skibidi_orm.query_engine.model.base import Model
 from typing import Any, Optional, Type
 from types import TracebackType
 
@@ -25,6 +27,10 @@ class Session:
         """
         self._engine = engine
         self._connection: Any = None
+        self._new: list[Model] = []
+        self._dirty: list[Model] = []
+        self._delete: list[Model] = []
+        self._map: IdentityMap = IdentityMap()
 
     def __enter__(self):
         """
@@ -80,3 +86,9 @@ class Session:
         Return stored connection to database
         """
         return self._connection
+
+    def add(self, obj: Model):
+        pass
+
+    def flush(self):
+        pass
