@@ -16,9 +16,8 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
 
 sys.path.insert(0, os.getcwd())
 
-import schema
+import schema  # type: ignore
 
-# import hello_test
 
 app = typer.Typer(
     help="CLI tool for managing schema creations and migrations in Skibidi ORM."

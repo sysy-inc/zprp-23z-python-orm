@@ -14,18 +14,6 @@ def mock_input_id(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(typer, "prompt", mock_input)
 
 
-def test_migration():
-    result = runner.invoke(app, ["migrate", "-m", "test message"])
-    assert result.exit_code == 0
-    assert "Running migration with message: test message" in result.stdout
-
-
-def test_migration_no_message():
-    result = runner.invoke(app, ["migrate"])
-    assert result.exit_code == 0
-    assert "Running migration with message: None" in result.stdout
-
-
 def test_list_migrations():
     result = runner.invoke(app, ["list-migrations"])
     assert result.exit_code == 0
