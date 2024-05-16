@@ -171,6 +171,8 @@ def test_removing_table_from_database(make_database: str):
 
     tables = SqliteInspector().get_tables()
 
+    tables.sort(key=lambda table: table.name, reverse=True)
+
     assert len(tables) == 2
     assert tables[0].name == "User"
     assert tables[0].columns[0].name == "user_id"
@@ -254,6 +256,8 @@ def test_add_column_to_database(make_database: str):
 
     tables = SqliteInspector().get_tables()
 
+    tables.sort(key=lambda table: table.name, reverse=True)
+
     assert len(tables) == 2
     assert tables[0].name == "User"
     assert tables[0].columns[0].name == "user_id"
@@ -331,6 +335,8 @@ def test_removing_column_from_database(make_database: str):
     m.migrate()
 
     tables = SqliteInspector().get_tables()
+
+    tables.sort(key=lambda table: table.name, reverse=True)
 
     assert len(tables) == 2
     assert tables[0].name == "User"
