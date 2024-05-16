@@ -6,7 +6,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing impor
 )
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
 
-from skibidi_orm.migration_engine.schema_analysys.state_manager import StateManager
+from skibidi_orm.migration_engine.state_manager.state_manager import StateManager
 
 from skibidi_orm.migration_engine.operations.table_operations import TableOperation
 from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
