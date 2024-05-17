@@ -1,4 +1,4 @@
-from pathlib import Path
+import pathlib
 import pytest
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
@@ -69,7 +69,7 @@ def execute_sqlite3_commands(db_path: str, commands: list[str]):
 
 
 @pytest.fixture
-def tmp_database(request: pytest.FixtureRequest, tmp_path: Path):
+def tmp_database(request: pytest.FixtureRequest, tmp_path: pathlib.Path):
     """Fixture for creating a temporary database and executing sqlite3 code. Yields the
     path of the db file."""
     sql_commands = request.param

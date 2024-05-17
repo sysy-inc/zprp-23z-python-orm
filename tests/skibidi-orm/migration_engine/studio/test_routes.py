@@ -1,27 +1,103 @@
 import importlib
+
 from fastapi.testclient import TestClient
 import pytest
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
 from skibidi_orm.migration_engine.studio.server import app
+import pathlib
 
 
 client = TestClient(app)
 
+sql_schema_with_fks = [
+    """
+    CREATE TABLE users (
+        user_id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL UNIQUE,
+        email TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+""",
+    """
+    CREATE TABLE posts (
+        post_id INTEGER PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    );
+""",
+    """
+    CREATE TABLE comments (
+        comment_id INTEGER PRIMARY KEY,
+        user_idd INTEGER NOT NULL,
+        post_id INTEGER NOT NULL,
+        comment_text TEXT NOT NULL,
+        comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_idd) REFERENCES users(user_id),
+        FOREIGN KEY (post_id) REFERENCES posts(post_id)
+    );
+""",
+]
 
-def test_GET_db(monkeypatch: pytest.MonkeyPatch):
-    # import skibidi_orm.migration_engine.studio.server  # type: ignore
+sql_simple_db = [
+    """
+    CREATE TABLE users (
+        user_id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL UNIQUE
+    );
+"""
+]
 
-    # module = importlib.import_module("skibidi_orm.migration_engine.studio.server")
-    # print(module.__dict__)
-    return
-    SQLite3Config(db_path="./tmp/test_GET_db.db")
-    # db_inspector = SqliteInspector()  # type: ignore
-    # monkeypatch.setattr(
-    #     "skibidi_orm.migration_engine.studio.server.db_inspector",
-    #     SqliteInspector(),
-    # )
+
+@pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)
+def test_GET_db(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path, make_database: str
+):
+    import skibidi_orm.migration_engine.studio.server  # type: ignore
+
+    importlib.import_module("skibidi_orm.migration_engine.studio.server")
+
+    SQLite3Config(db_path=make_database)
+    monkeypatch.setattr(
+        "skibidi_orm.migration_engine.studio.server.db_inspector",
+        SqliteInspector(),
+    )
     response = client.get("/db")
-    print(response.json())
     assert response.status_code == 200
-    assert response.json() == {"tables": []}
+    assert sorted(response.json()) == sorted(
+        {
+            "tables": [
+                {
+                    "name": "users",
+                    "columns": [
+                        {
+                            "constraints": [
+                                {
+                                    "constraint_type": "PRIMARY KEY",
+                                    "column_name": "username",
+                                    "table_name": "users",
+                                }
+                            ],
+                            "data_type": "INTEGER",
+                            "name": "user_id",
+                        },
+                        {
+                            "data_type": "TEXT",
+                            "name": "username",
+                            "constraints": [
+                                {
+                                    "constraint_type": "NOT NULL",
+                                    "column_name": "username",
+                                    "table_name": "users",
+                                }
+                            ],
+                        },
+                    ],
+                }
+            ]
+        }
+    )
