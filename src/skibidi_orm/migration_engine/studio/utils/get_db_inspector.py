@@ -1,0 +1,17 @@
+from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
+from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
+from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
+from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
+from skibidi_orm.migration_engine.studio.utils.db_config_dynamic_import import (
+    db_config_dynamic_import,
+)
+
+
+def get_db_inspector(schema_dir: str) -> BaseDbInspector:
+    db_config = db_config_dynamic_import(schema_dir)
+    if db_config is SQLite3Config:
+        return SqliteInspector()
+    elif db_config is PostgresConfig:
+        raise NotImplementedError
+
+    raise NotImplementedError

@@ -12,6 +12,13 @@ from skibidi_orm.migration_engine.db_config.base_config import (
 
 
 @pytest.fixture(autouse=True)
+def clear_local_tmp_dir():
+    if os.path.exists("./tmp"):
+        shutil.rmtree("./tmp")
+    os.mkdir("./tmp")
+
+
+@pytest.fixture(autouse=True)
 def reset_config_singleton(monkeypatch: pytest.MonkeyPatch):
     # monkeypatch.setattr(ConfigSingleton, "_instances", {})
     # monkeypatch.setattr(BaseDbConfig, "_BaseDbConfig__instances_count", 0)
