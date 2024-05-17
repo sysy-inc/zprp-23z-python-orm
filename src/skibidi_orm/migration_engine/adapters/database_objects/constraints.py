@@ -6,12 +6,12 @@ from dataclasses import dataclass, field
 class ConstraintType(enum.Enum):
     """All supported constraint types"""
 
-    NOT_NULL = enum.auto()
-    UNIQUE = enum.auto()
-    PRIMARY_KEY = enum.auto()
-    FOREIGN_KEY = enum.auto()
-    CHECK = enum.auto()
-    DEFAULT = enum.auto()
+    NOT_NULL = "NOT NULL"
+    UNIQUE = "UNIQUE"
+    PRIMARY_KEY = "PRIMARY KEY"
+    FOREIGN_KEY = "FOREIGN KEY"
+    CHECK = "CHECK"
+    DEFAULT = "DEFAULT"
 
 
 @dataclass(frozen=True)
