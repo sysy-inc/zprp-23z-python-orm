@@ -1,11 +1,10 @@
-from os import path
-import os
 from typing import Callable
 from typer.testing import CliRunner
 import typer
 import pytest
 from skibidi_orm.cli.run import app
 import importlib
+import py  # type: ignore
 
 runner = CliRunner()
 
@@ -36,15 +35,11 @@ def test_go_no_migration_id(mock_input_id: pytest.MonkeyPatch):
     assert "Going to migration with ID: 1" in result.stdout
 
 
-def test_studio_no_options_too_many_schemas(clear_local_tmp_dir):  # type: ignore
-    file_path = "./tmp/test/studio/schema.py"
-    file_path2 = "./tmp/test/studio/other/schema.py"
-    os.makedirs(path.dirname(file_path))
-    os.makedirs(path.dirname(file_path2))
-    with open(file_path, "w") as f:
-        f.write("")
-    with open(file_path2, "w") as f:
-        f.write("")
+def test_studio_no_options_too_many_schemas(tmpdir: py.path.local):  # type: ignore
+    file_path = tmpdir.join("schema.py")  # type: ignore
+    file_path2 = tmpdir.mkdir("other").join("schema.py")  # type: ignore
+    file_path.write("")  # type: ignore
+    file_path2.write("")  # type: ignore
     result = runner.invoke(app, ["studio"])
     assert result.exit_code == 1
     assert (
@@ -53,7 +48,7 @@ def test_studio_no_options_too_many_schemas(clear_local_tmp_dir):  # type: ignor
     )
 
 
-def test_studio_one_schema_option(monkeypatch: pytest.MonkeyPatch, clear_local_tmp_dir):  # type: ignore
+def test_studio_one_schema_option(monkeypatch: pytest.MonkeyPatch, tmpdir: py.path.local):  # type: ignore
     import skibidi_orm.migration_engine.studio.server  # type: ignore
 
     mock_func: Callable[[str], None] = lambda schema_file: print("Success test", end="")
@@ -62,10 +57,11 @@ def test_studio_one_schema_option(monkeypatch: pytest.MonkeyPatch, clear_local_t
     )
     importlib.reload(skibidi_orm.cli.run)  # type: ignore
 
-    file_path = "./tmp/schema.py"
-    with open(file_path, "w") as f:
-        f.write("")
+    file_path = tmpdir.join("schema.py")  # type: ignore
+    file_path.write("")  # type: ignore
 
-    result = runner.invoke(app, ["studio", "--schema-file", file_path])
+    result = runner.invoke(
+        app, ["studio", "--schema-file", file_path.strpath]  # type: ignore
+    )
 
     assert "Success test" == result.stdout
