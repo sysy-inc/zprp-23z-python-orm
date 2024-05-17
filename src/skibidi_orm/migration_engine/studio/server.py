@@ -5,7 +5,9 @@ from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInsp
 from skibidi_orm.migration_engine.studio.utils.get_db_inspector import get_db_inspector
 
 app = FastAPI()
-db_inspector: BaseDbInspector = cast(BaseDbInspector, {})
+db_inspector: BaseDbInspector = cast(
+    BaseDbInspector, {}
+)  # to add db_inspector to modules namespace
 
 
 def run_server(schema_file: str):
