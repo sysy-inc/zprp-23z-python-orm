@@ -8,8 +8,17 @@ class InsertRowColumn(BaseModel):
     value: str = Field(..., title="Column value")
 
 
+class DeleteRowPk(BaseModel):
+    name: str = Field(..., title="Primary key column name")
+    value: str = Field(..., title="Primary key column value")
+
+
 class BaseDataMutator(ABC):
 
     @abstractmethod
     def insert_row(self, table_name: str, row: list[InsertRowColumn]):
+        pass
+
+    @abstractmethod
+    def delete_row(self, table_name: str, pks: list[DeleteRowPk]):
         pass
