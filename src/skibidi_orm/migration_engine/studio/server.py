@@ -1,11 +1,11 @@
 from typing import cast
 from fastapi import FastAPI, Body
 import uvicorn
-from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
-from skibidi_orm.migration_engine.db_seeder.base_db_seeder import (
-    BaseDBSeeder,
+from skibidi_orm.migration_engine.data_mutator.base_data_mutator import (
+    BaseDataMutator,
     InsertRowColumn,
 )
+from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
 from skibidi_orm.migration_engine.studio.utils.get_db_inspector import get_db_inspector
 from skibidi_orm.migration_engine.studio.utils.get_db_seeder import get_db_seeder
 
@@ -13,8 +13,8 @@ app = FastAPI()
 db_inspector: BaseDbInspector = cast(
     BaseDbInspector, {}
 )  # to add db_inspector to modules namespace
-db_seeder: BaseDBSeeder = cast(
-    BaseDBSeeder, {}
+db_seeder: BaseDataMutator = cast(
+    BaseDataMutator, {}
 )  # to add db_seeder to modules namespace
 
 

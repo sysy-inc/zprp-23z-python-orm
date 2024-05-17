@@ -8,7 +8,7 @@ class InsertRowColumn(BaseModel):
     value: str = Field(..., title="Column value")
 
 
-class BaseDBSeeder(ABC):
+class BaseDataMutator(ABC):
 
     @abstractmethod
     def insert_row(self, table_name: str, row: list[InsertRowColumn]):

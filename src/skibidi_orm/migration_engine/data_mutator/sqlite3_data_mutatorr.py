@@ -1,10 +1,12 @@
 import sqlite3
+from skibidi_orm.migration_engine.data_mutator.base_data_mutator import (
+    BaseDataMutator,
+    InsertRowColumn,
+)
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
-from skibidi_orm.migration_engine.db_seeder.base_db_seeder import BaseDBSeeder
-from skibidi_orm.migration_engine.db_seeder.base_db_seeder import InsertRowColumn
 
 
-class SQLite3DBSeeder(BaseDBSeeder):
+class SQLite3DataMutator(BaseDataMutator):
 
     def __init__(self):
         self.config = SQLite3Config.get_instance()

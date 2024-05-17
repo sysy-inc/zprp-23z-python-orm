@@ -7,10 +7,12 @@ from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
 from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
     SQLite3Typing,
 )
+from skibidi_orm.migration_engine.data_mutator.base_data_mutator import InsertRowColumn
+from skibidi_orm.migration_engine.data_mutator.sqlite3_data_mutatorr import (
+    SQLite3DataMutator,
+)
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
-from skibidi_orm.migration_engine.db_seeder.base_db_seeder import InsertRowColumn
-from skibidi_orm.migration_engine.db_seeder.sqlite3_db_seeder import SQLite3DBSeeder
 
 sql_simple_db = [
     """
@@ -25,7 +27,7 @@ sql_simple_db = [
 @pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)
 def test_insert_row(make_database: str):
     SQLite3Config(db_path=make_database)
-    db_seeder = SQLite3DBSeeder()
+    db_seeder = SQLite3DataMutator()
     db_seeder.insert_row(
         table_name="users",
         row=[
