@@ -34,5 +34,8 @@ def get_db():
 
 @app.post("/db/{table_name}/row")
 def insert_row(table_name: str, row: list[InsertRowColumn] = Body(embed=True)):
+    if table_name not in db_inspector.get_tables_names():
+        return {"message": "Table does not exist."}
+
     db_seeder.insert_row(table_name=table_name, row=row)
     return {"message": "Row inserted successfully."}
