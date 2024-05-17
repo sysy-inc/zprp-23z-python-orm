@@ -1,5 +1,7 @@
+import sqlite3
 import pytest
 
+from skibidi_orm.exceptions.db_mutator_exceptions import AmbigiousDeleteRowError
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     NotNullConstraint,
     PrimaryKeyConstraint,
@@ -7,7 +9,10 @@ from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
 from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
     SQLite3Typing,
 )
-from skibidi_orm.migration_engine.data_mutator.base_data_mutator import InsertRowColumn
+from skibidi_orm.migration_engine.data_mutator.base_data_mutator import (
+    DeleteRowPk,
+    InsertRowColumn,
+)
 from skibidi_orm.migration_engine.data_mutator.sqlite3_data_mutatorr import (
     SQLite3DataMutator,
 )
@@ -19,6 +24,16 @@ sql_simple_db = [
     CREATE TABLE users (
         user_id INTEGER PRIMARY KEY,
         username TEXT NOT NULL
+    );
+"""
+]
+
+sql_double_pk_db = [
+    """
+    CREATE TABLE Orders (
+        order_id INTEGER,
+        product_id INTEGER,
+        PRIMARY KEY (order_id, product_id)
     );
 """
 ]
@@ -57,3 +72,202 @@ def test_insert_row(make_database: str):
             ),
         ],
     )
+
+
+@pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)
+def test_delete_row_one_pk(make_database: str):
+    config = SQLite3Config(db_path=make_database)
+    db_seeder = SQLite3DataMutator()
+
+    db_seeder.insert_row(
+        table_name="users",
+        row=[
+            InsertRowColumn(name="user_id", value=str(1)),
+            InsertRowColumn(name="username", value="test"),
+        ],
+    )
+
+    with sqlite3.connect(config.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users")
+        data = cursor.fetchall()
+        cursor.close()
+
+    assert len(data) == 1
+
+    db_seeder.delete_row(
+        table_name="users",
+        pks=[
+            DeleteRowPk(name="user_id", value=str(1)),
+        ],
+    )
+
+    with sqlite3.connect(config.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users")
+        data = cursor.fetchall()
+        cursor.close()
+
+    assert len(data) == 0
+
+
+@pytest.mark.parametrize("make_database", [[*sql_double_pk_db]], indirect=True)
+def test_delete_row_two_pk(make_database: str):
+    config = SQLite3Config(db_path=make_database)
+    db_seeder = SQLite3DataMutator()
+    db_seeder.insert_row(
+        table_name="Orders",
+        row=[
+            InsertRowColumn(name="order_id", value=str(1)),
+            InsertRowColumn(name="product_id", value=str(2)),
+        ],
+    )
+
+    with sqlite3.connect(config.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Orders")
+        data = cursor.fetchall()
+        cursor.close()
+
+    assert len(data) == 1
+
+    db_seeder.delete_row(
+        table_name="Orders",
+        pks=[
+            DeleteRowPk(name="order_id", value=str(1)),
+            DeleteRowPk(name="product_id", value=str(2)),
+        ],
+    )
+
+    with sqlite3.connect(config.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Orders")
+        data = cursor.fetchall()
+        cursor.close()
+
+    assert len(data) == 0
+
+
+@pytest.mark.parametrize("make_database", [[*sql_double_pk_db]], indirect=True)
+def test_delete_row_table_two_pk_one_pk_given_ok(make_database: str):
+    config = SQLite3Config(db_path=make_database)
+    db_seeder = SQLite3DataMutator()
+    db_seeder.insert_row(
+        table_name="Orders",
+        row=[
+            InsertRowColumn(name="order_id", value=str(1)),
+            InsertRowColumn(name="product_id", value=str(1)),
+        ],
+    )
+    db_seeder.insert_row(
+        table_name="Orders",
+        row=[
+            InsertRowColumn(name="order_id", value=str(1)),
+            InsertRowColumn(name="product_id", value=str(2)),
+        ],
+    )
+
+    with sqlite3.connect(config.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Orders")
+        data = cursor.fetchall()
+        cursor.close()
+
+    assert len(data) == 2
+
+    db_seeder.delete_row(
+        table_name="Orders",
+        pks=[
+            DeleteRowPk(name="product_id", value=str(2)),
+        ],
+    )
+
+    with sqlite3.connect(config.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Orders")
+        data = cursor.fetchall()
+        cursor.close()
+
+    assert len(data) == 1
+    assert data[0] == (1, 1)
+
+
+@pytest.mark.parametrize("make_database", [[*sql_double_pk_db]], indirect=True)
+def test_delete_row_table_two_pk_two_pk_given_ok(make_database: str):
+    config = SQLite3Config(db_path=make_database)
+    db_seeder = SQLite3DataMutator()
+    db_seeder.insert_row(
+        table_name="Orders",
+        row=[
+            InsertRowColumn(name="order_id", value=str(1)),
+            InsertRowColumn(name="product_id", value=str(1)),
+        ],
+    )
+    db_seeder.insert_row(
+        table_name="Orders",
+        row=[
+            InsertRowColumn(name="order_id", value=str(1)),
+            InsertRowColumn(name="product_id", value=str(2)),
+        ],
+    )
+
+    with sqlite3.connect(config.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Orders")
+        data = cursor.fetchall()
+        cursor.close()
+
+    assert len(data) == 2
+
+    db_seeder.delete_row(
+        table_name="Orders",
+        pks=[
+            DeleteRowPk(name="order_id", value=str(1)),
+            DeleteRowPk(name="product_id", value=str(2)),
+        ],
+    )
+
+    with sqlite3.connect(config.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Orders")
+        data = cursor.fetchall()
+        cursor.close()
+
+    assert len(data) == 1
+    assert data[0] == (1, 1)
+
+
+@pytest.mark.parametrize("make_database", [[*sql_double_pk_db]], indirect=True)
+def test_delete_row_table_two_pk_one_pk_given_ambigious(make_database: str):
+    config = SQLite3Config(db_path=make_database)
+    db_seeder = SQLite3DataMutator()
+    db_seeder.insert_row(
+        table_name="Orders",
+        row=[
+            InsertRowColumn(name="order_id", value=str(1)),
+            InsertRowColumn(name="product_id", value=str(1)),
+        ],
+    )
+    db_seeder.insert_row(
+        table_name="Orders",
+        row=[
+            InsertRowColumn(name="order_id", value=str(1)),
+            InsertRowColumn(name="product_id", value=str(2)),
+        ],
+    )
+
+    with sqlite3.connect(config.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Orders")
+        data = cursor.fetchall()
+        cursor.close()
+
+    assert len(data) == 2
+
+    with pytest.raises(AmbigiousDeleteRowError):
+        db_seeder.delete_row(
+            table_name="Orders",
+            pks=[
+                DeleteRowPk(name="order_id", value=str(1)),
+            ],
+        )
