@@ -1,3 +1,4 @@
+import importlib
 from os import path
 import sys
 from skibidi_orm.migration_engine.db_config.base_config import BaseDbConfig
@@ -11,6 +12,6 @@ def db_config_dynamic_import(schema_file_path: str) -> BaseDbConfig:
     file = path.basename(schema_file_path)
     dir = path.dirname(schema_file_path)
     sys.path.append(dir)
-    __import__(file[:-3])
+    importlib.import_module(file[:-3])
 
     return BaseDbConfig.get_instance()
