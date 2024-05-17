@@ -9,7 +9,7 @@ def write_temp_schema_file(file_path: str, file_content: str):
 
 
 def test_get_db_inspector_sqlite3():
-    schema_file = os.getcwd() + "/tmp/test_schema_test_get_db_inspector_sqlite3.py"
+    schema_file = os.getcwd() + "/tmp/schema_test_get_db_inspector_sqlite3.py"
     write_temp_schema_file(
         file_path=schema_file,
         file_content="""from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
