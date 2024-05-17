@@ -7,9 +7,9 @@ app = FastAPI()
 db_inspector: BaseDbInspector
 
 
-def run_server(schema_dir: str):
+def run_server(scheme_file: str):
     global db_inspector
-    db_inspector = get_db_inspector(schema_file=schema_dir)
+    db_inspector = get_db_inspector(schema_file=scheme_file)
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 
