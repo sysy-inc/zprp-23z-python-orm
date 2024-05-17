@@ -120,7 +120,7 @@ def test_POST_route_db_table_name_row_correct(
         SqliteInspector(),
     )
     monkeypatch.setattr(
-        "skibidi_orm.migration_engine.studio.server.db_seeder",
+        "skibidi_orm.migration_engine.studio.server.db_mutator",
         SQLite3DataMutator(),
     )
     response = client.post(

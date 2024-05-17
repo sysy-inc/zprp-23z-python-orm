@@ -6,7 +6,7 @@ from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInsp
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
 
 
-def get_db_seeder(db_inspector: BaseDbInspector) -> BaseDataMutator:
+def get_db_mutator(db_inspector: BaseDbInspector) -> BaseDataMutator:
     if isinstance(db_inspector, SqliteInspector):
         return SQLite3DataMutator()
     raise NotImplementedError
