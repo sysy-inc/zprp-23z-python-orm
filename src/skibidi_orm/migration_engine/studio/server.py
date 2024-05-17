@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
+from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
 from skibidi_orm.migration_engine.studio.utils.get_db_inspector import get_db_inspector
 
 app = FastAPI()
@@ -15,4 +16,5 @@ def run_server(schema_file: str):
 
 @app.get("/db")
 def get_db():
-    pass
+    tables = db_inspector.get_tables()
+    return {"tables": tables}

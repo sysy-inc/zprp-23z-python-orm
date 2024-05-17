@@ -36,7 +36,7 @@ def test_go_no_migration_id(mock_input_id: pytest.MonkeyPatch):
     assert "Going to migration with ID: 1" in result.stdout
 
 
-def test_studio_no_options_too_many_schemas():
+def test_studio_no_options_too_many_schemas(clear_local_tmp_dir):  # type: ignore
     file_path = "./tmp/test/studio/schema.py"
     file_path2 = "./tmp/test/studio/other/schema.py"
     os.makedirs(path.dirname(file_path))
@@ -53,7 +53,7 @@ def test_studio_no_options_too_many_schemas():
     )
 
 
-def test_studio_one_schema_option(monkeypatch: pytest.MonkeyPatch):
+def test_studio_one_schema_option(monkeypatch: pytest.MonkeyPatch, clear_local_tmp_dir):  # type: ignore
     import skibidi_orm.migration_engine.studio.server  # type: ignore
 
     mock_func: Callable[[str], None] = lambda schema_file: print("Success test", end="")

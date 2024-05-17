@@ -30,7 +30,7 @@ dev = [
 ]
 
 [tool.pdm.scripts]
-tests = "pytest --verbose --color=yes"
+tests = "pytest --verbose --color=yes --ignore ./tmp"
 
 [project.entry-points."console_scripts"]
 skibidi-orm = "skibidi_orm.cli.run:main"
