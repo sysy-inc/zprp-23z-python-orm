@@ -16,7 +16,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
     MigrationElement,
 )
 from skibidi_orm.migration_engine.studio.server import run_server
-from colorama import Fore, Back, Style
+from colorama import Fore
 
 sys.path.insert(0, os.getcwd())
 
