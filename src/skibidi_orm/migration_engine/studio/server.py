@@ -3,6 +3,7 @@ from fastapi import FastAPI, Body
 import uvicorn
 from skibidi_orm.migration_engine.data_mutator.base_data_mutator import (
     BaseDataMutator,
+    DeleteRowPk,
     InsertRowColumn,
 )
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
@@ -39,3 +40,12 @@ def insert_row(table_name: str, row: list[InsertRowColumn] = Body(embed=True)):
 
     db_mutator.insert_row(table_name=table_name, row=row)
     return {"message": "Row inserted successfully."}
+
+
+@app.post("/db/{table_name}/row/delete")
+def delete_row(table_name: str, pks: list[DeleteRowPk] = Body(embed=True)):
+    if table_name not in db_inspector.get_tables_names():
+        return {"message": "Table does not exist."}
+
+    db_mutator.delete_row(table_name=table_name, pks=pks)
+    return {"message": "Row deleted successfully."}
