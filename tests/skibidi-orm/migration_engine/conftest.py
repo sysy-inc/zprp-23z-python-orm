@@ -1,6 +1,3 @@
-import os
-from pathlib import Path
-import shutil
 import sqlite3
 from typing import Any
 from colorama import Style
@@ -29,19 +26,6 @@ def pytest_runtest_makereport(item: Any) -> Any:
     if docstring:
         docstring = docstring.strip()
         report.nodeid = Style.DIM + docstring + Style.RESET_ALL
-
-
-def recreate_temp_db_file(temp_dir: str, db_file: str):
-    if os.path.exists(temp_dir):
-        shutil.rmtree(temp_dir)
-
-    os.mkdir(temp_dir)
-    Path(db_file).touch()
-
-
-def delete_temp_db_dir(temp_dir: str):
-    if os.path.exists(temp_dir):
-        shutil.rmtree(temp_dir)
 
 
 def execute_sqlite3_commands(db_path: str, commands: list[str]):
