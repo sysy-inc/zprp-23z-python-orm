@@ -2,9 +2,11 @@ import importlib
 
 from fastapi.testclient import TestClient
 import pytest
+from skibidi_orm.migration_engine.data_mutator.sqlite3_data_mutatorr import (
+    SQLite3DataMutator,
+)
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
-from skibidi_orm.migration_engine.db_seeder.sqlite3_db_seeder import SQLite3DBSeeder
 from skibidi_orm.migration_engine.studio.server import app
 import pathlib
 
@@ -119,7 +121,7 @@ def test_POST_route_db_table_name_row_correct(
     )
     monkeypatch.setattr(
         "skibidi_orm.migration_engine.studio.server.db_seeder",
-        SQLite3DBSeeder(),
+        SQLite3DataMutator(),
     )
     response = client.post(
         "/db/users/row",
