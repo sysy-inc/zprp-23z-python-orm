@@ -1,7 +1,11 @@
+from os import path
+import os
+from typing import Callable
 from typer.testing import CliRunner
 import typer
 import pytest
 from skibidi_orm.cli.run import app
+import importlib
 
 runner = CliRunner()
 
@@ -30,3 +34,38 @@ def test_go_no_migration_id(mock_input_id: pytest.MonkeyPatch):
     result = runner.invoke(app, ["go"])
     assert result.exit_code == 0
     assert "Going to migration with ID: 1" in result.stdout
+
+
+def test_studio_no_options_too_many_schemas():
+    file_path = "./tmp/test/studio/schema.py"
+    file_path2 = "./tmp/test/studio/other/schema.py"
+    os.makedirs(path.dirname(file_path))
+    os.makedirs(path.dirname(file_path2))
+    with open(file_path, "w") as f:
+        f.write("")
+    with open(file_path2, "w") as f:
+        f.write("")
+    result = runner.invoke(app, ["studio"])
+    assert result.exit_code == 1
+    assert (
+        "Multiple schema files found. Please specify the schema file to use: --schema-file <PATH>"
+        in result.stdout
+    )
+
+
+def test_studio_one_schema_option(monkeypatch: pytest.MonkeyPatch):
+    import skibidi_orm.migration_engine.studio.server  # type: ignore
+
+    mock_func: Callable[[str], None] = lambda schema_file: print("Success test", end="")
+    monkeypatch.setattr(
+        "skibidi_orm.migration_engine.studio.server.run_server", mock_func
+    )
+    importlib.reload(skibidi_orm.cli.run)  # type: ignore
+
+    file_path = "./tmp/schema.py"
+    with open(file_path, "w") as f:
+        f.write("")
+
+    result = runner.invoke(app, ["studio", "--schema-file", file_path])
+
+    assert "Success test" == result.stdout
