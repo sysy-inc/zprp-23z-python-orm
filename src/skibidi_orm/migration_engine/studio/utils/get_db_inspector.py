@@ -7,11 +7,11 @@ from skibidi_orm.migration_engine.studio.utils.db_config_dynamic_import import (
 )
 
 
-def get_db_inspector(schema_dir: str) -> BaseDbInspector:
-    db_config = db_config_dynamic_import(schema_dir)
-    if db_config is SQLite3Config:
+def get_db_inspector(schema_file: str) -> BaseDbInspector:
+    db_config = db_config_dynamic_import(schema_file_path=schema_file)
+    if isinstance(db_config, SQLite3Config):
         return SqliteInspector()
-    elif db_config is PostgresConfig:
+    elif isinstance(db_config, PostgresConfig):
         raise NotImplementedError
 
     raise NotImplementedError

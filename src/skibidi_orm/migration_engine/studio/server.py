@@ -9,7 +9,7 @@ db_inspector: BaseDbInspector
 
 def run_server(schema_dir: str):
     global db_inspector
-    db_inspector = get_db_inspector(schema_dir=schema_dir)
+    db_inspector = get_db_inspector(schema_file=schema_dir)
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 

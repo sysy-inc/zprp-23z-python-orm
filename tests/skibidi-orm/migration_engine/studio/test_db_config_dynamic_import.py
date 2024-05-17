@@ -14,7 +14,9 @@ def write_temp_schema_file(file_path: str, file_content: str):
 
 
 def test_db_config_dynamic_import_normal():
-    schema_file = os.getcwd() + "/tmp/test_schema_v1.py"
+    schema_file = (
+        os.getcwd() + "/tmp/test_schema_test_db_config_dynamic_import_normal.py"
+    )
     write_temp_schema_file(
         file_path=schema_file,
         file_content="""from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
