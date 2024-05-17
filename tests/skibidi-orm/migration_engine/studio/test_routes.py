@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 import pytest
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
+from skibidi_orm.migration_engine.db_seeder.sqlite3_db_seeder import SQLite3DBSeeder
 from skibidi_orm.migration_engine.studio.server import app
 import pathlib
 
@@ -101,3 +102,33 @@ def test_GET_db(
             ]
         }
     )
+
+
+@pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)
+def test_POST_route_db_table_name_row_correct(
+    monkeypatch: pytest.MonkeyPatch, make_database: str
+):
+    import skibidi_orm.migration_engine.studio.server  # type: ignore
+
+    importlib.import_module("skibidi_orm.migration_engine.studio.server")
+
+    SQLite3Config(db_path=make_database)
+    monkeypatch.setattr(
+        "skibidi_orm.migration_engine.studio.server.db_inspector",
+        SqliteInspector(),
+    )
+    monkeypatch.setattr(
+        "skibidi_orm.migration_engine.studio.server.db_seeder",
+        SQLite3DBSeeder(),
+    )
+    response = client.post(
+        "/db/users/row",
+        json={
+            "row": [
+                {"name": "user_id", "value": "1"},
+                {"name": "username", "value": "test"},
+            ]
+        },
+    )
+    assert response.status_code == 200
+    assert response.json() == {"message": "Row inserted successfully."}
