@@ -46,6 +46,7 @@ def test_studio_no_options_too_many_schemas(tmpdir: py.path.local):  # type: ign
         "Multiple schema files found. Please specify the schema file to use: --schema-file <PATH>"
         in result.stdout
     )
+    tmpdir.remove()
 
 
 def test_studio_one_schema_option(monkeypatch: pytest.MonkeyPatch, tmpdir: py.path.local):  # type: ignore
@@ -65,3 +66,4 @@ def test_studio_one_schema_option(monkeypatch: pytest.MonkeyPatch, tmpdir: py.pa
     )
 
     assert "Success test" == result.stdout
+    tmpdir.remove()

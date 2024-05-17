@@ -16,3 +16,4 @@ SQLite3Config(db_path="some/path/to/db.db")"""
     )
     db_inspector = get_db_inspector(schema_file=p.strpath)  # type: ignore
     assert isinstance(db_inspector, SqliteInspector)
+    tmpdir.remove()

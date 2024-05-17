@@ -26,6 +26,7 @@ SQLite3Config(db_path="some/path/to/db.db")"""
     assert isinstance(db_config, SQLite3Config)
     assert db_config.db_path == "some/path/to/db.db"
     assert BaseDbConfig.get_instance() == db_config
+    tmpdir.remove()
 
 
 def test_db_config_dynamic_import_file_not_exists():
