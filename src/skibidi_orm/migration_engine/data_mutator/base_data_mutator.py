@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -21,4 +22,8 @@ class BaseDataMutator(ABC):
 
     @abstractmethod
     def delete_row(self, table_name: str, pks: list[DeleteRowPk]):
+        pass
+
+    @abstractmethod
+    def raw_query(self, query: str) -> list[Any]:
         pass

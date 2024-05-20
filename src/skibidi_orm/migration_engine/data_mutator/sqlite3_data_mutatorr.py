@@ -46,3 +46,6 @@ class SQLite3DataMutator(BaseDataMutator):
             data = cursor.fetchall()
             cursor.close()
         return data
+
+    def raw_query(self, query: str):
+        return self._sqlite_execute(query, [])

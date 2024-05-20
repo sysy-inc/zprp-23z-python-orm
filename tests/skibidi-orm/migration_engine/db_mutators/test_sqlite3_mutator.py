@@ -38,6 +38,16 @@ sql_double_pk_db = [
 """
 ]
 
+sql_simple_insert = [
+    """
+    INSERT INTO users (user_id, username) VALUES
+    (1, 'test1'),
+    (2, 'test2'),
+    (3, 'test3')
+;
+"""
+]
+
 
 @pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)
 def test_insert_row(make_database: str):
@@ -271,3 +281,13 @@ def test_delete_row_table_two_pk_one_pk_given_ambigious(make_database: str):
                 DeleteRowPk(name="order_id", value=str(1)),
             ],
         )
+
+
+@pytest.mark.parametrize(
+    "make_database", [[*sql_simple_db, *sql_simple_insert]], indirect=True
+)
+def test_raw_query(make_database: str):
+    SQLite3Config(db_path=make_database)
+    db_mutator = SQLite3DataMutator()
+    data = db_mutator.raw_query("SELECT * FROM users;")
+    assert data == [(1, "test1"), (2, "test2"), (3, "test3")]
