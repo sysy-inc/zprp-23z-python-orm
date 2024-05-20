@@ -27,3 +27,7 @@ class BaseDataMutator(ABC):
     @abstractmethod
     def raw_query(self, query: str) -> list[Any]:
         pass
+
+    @abstractmethod
+    def get_rows(self, table_name: str, limit: int = 100, offset: int = 0) -> list[Any]:
+        pass

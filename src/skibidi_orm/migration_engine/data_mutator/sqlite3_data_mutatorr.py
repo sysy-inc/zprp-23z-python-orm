@@ -49,3 +49,7 @@ class SQLite3DataMutator(BaseDataMutator):
 
     def raw_query(self, query: str):
         return self._sqlite_execute(query, [])
+
+    def get_rows(self, table_name: str, limit: int = 100, offset: int = 0):
+        query = f"SELECT * FROM {table_name} LIMIT {limit} OFFSET {offset}"
+        return self._sqlite_execute(query, [])
