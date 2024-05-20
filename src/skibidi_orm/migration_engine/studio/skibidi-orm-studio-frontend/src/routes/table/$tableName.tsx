@@ -1,8 +1,9 @@
 import { WorkspaceEditor } from '@/components/WorkspaceEditor';
+import { CommandsHisotryDialog } from '@/components/commands-hisotry-dialog';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
-import { useCommandsHistory } from '@/hooks/useCommandsHistory';
+import { useCommands } from '@/hooks/useCommandsHistory';
 import { QueryColumn, RowType, useQueryStore } from '@/lib/query-store';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
@@ -10,7 +11,7 @@ import { CellEditingStoppedEvent, ColDef, ICellRendererParams } from 'ag-grid-co
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import { FaCog } from "react-icons/fa";
@@ -33,8 +34,7 @@ function labelRow(row: RowType, columns: QueryColumn[]) {
 
 export function Table() {
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
-    const { addCommand, commands } = useCommandsHistory()
-    const [command, setCommand] = useState<string>('')
+    const { saveCommand, commandsHistory, currentCommand } = useCommands()
     const gridRef = useRef<AgGridReact>(null)
     const { tableName } = Route.useParams()
     const { data, refetch } = useQueryStore().tableData<RowType>(tableName)
@@ -130,7 +130,6 @@ export function Table() {
         // e.oldValue
     }
 
-
     return (
         <div className='ag-theme-quartz h-[90vh]'
         >
@@ -175,36 +174,12 @@ export function Table() {
                         <Button
                             className='w-full flex items-center justify-center gap-2'
                             variant='default'
-                            onClick={() => {
-                                addCommand(command)
-                            }}
+                            onClick={() => saveCommand(currentCommand)}
                         >
                             <FaCog />
                             <p>run query</p>
                         </Button>
-                        <Dialog>
-                            <DialogTrigger className='inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2'>
-                                <RxCaretSort className='w-6 h-6' />
-                                <p>Commands history</p>
-                            </DialogTrigger>
-                            <DialogContent className='flex flex-col gap-2 pt-10 max-h-[70vh] w-full max-w-screen-md overflow-auto'>
-                                {commands.map((command, index) => (
-                                    <div key={index} className='font-mono border bg-zinc-100 px-3 py-2 rounded-md relative' >
-                                        <p dangerouslySetInnerHTML={{ __html: command.split('\n').join('<br />') }}></p>
-                                        <Button
-                                            variant={'ghost'}
-                                            className='border bg-white flex items-center justify-center absolute right-1 top-1 p-[6px] aspect-square w-[32px] h-[32px]'
-                                            onClick={() => {
-                                                toast.success('Command pasted to workspace!')
-                                                setCommand(command)
-                                            }}
-                                        >
-                                            <BsBoxArrowInUpRight className='w-[18px] h-[18px]' />
-                                        </Button>
-                                    </div>
-                                ))}
-                            </DialogContent>
-                        </Dialog>
+                        <CommandsHisotryDialog />
                     </div>
                 </ResizablePanel>
             </ResizablePanelGroup>
