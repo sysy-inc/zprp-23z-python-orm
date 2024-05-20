@@ -17,6 +17,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useCommandsHistory } from '@/hooks/useCommandsHistory';
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import { toast } from 'react-hot-toast';
+import { WorkspaceEditor } from '@/components/WorkspaceEditor';
 
 export const Route = createFileRoute('/table/$tableName')({
     component: Table
@@ -163,13 +164,14 @@ export function Table() {
                         <div className='bg-zinc-100 rounded-tl-md px-4 py-4 border-t border-l'>
                             <p className='font-medium'>write queries</p>
                         </div>
-                        <Textarea
+                        {/* <Textarea
                             ref={textAreaRef}
                             className=' h-full rounded-t-none outline-none border-r-0 font-mono'
                             placeholder='SELECT * FROM table...'
                             value={command}
                             onChange={(e) => setCommand(e.target.value)}
-                        />
+                        /> */}
+                        <WorkspaceEditor />
                     </div>
                     <div className='py-4 px-4 min-w-[200px] bg-zinc-100 border-t border-l flex flex-col gap-4'>
                         <Button
