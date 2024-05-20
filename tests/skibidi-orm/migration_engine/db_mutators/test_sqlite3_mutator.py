@@ -291,3 +291,43 @@ def test_raw_query(make_database: str):
     db_mutator = SQLite3DataMutator()
     data = db_mutator.raw_query("SELECT * FROM users;")
     assert data == [(1, "test1"), (2, "test2"), (3, "test3")]
+
+
+@pytest.mark.parametrize(
+    "make_database", [[*sql_simple_db, *sql_simple_insert]], indirect=True
+)
+def test_get_rows_normal(make_database: str):
+    SQLite3Config(db_path=make_database)
+    db_mutator = SQLite3DataMutator()
+    data = db_mutator.get_rows("users")
+    assert data == [(1, "test1"), (2, "test2"), (3, "test3")]
+
+
+@pytest.mark.parametrize(
+    "make_database", [[*sql_simple_db, *sql_simple_insert]], indirect=True
+)
+def test_get_rows_offset(make_database: str):
+    SQLite3Config(db_path=make_database)
+    db_mutator = SQLite3DataMutator()
+    data = db_mutator.get_rows("users", offset=1)
+    assert data == [(2, "test2"), (3, "test3")]
+    data = db_mutator.get_rows("users", offset=2)
+    assert data == [(3, "test3")]
+    data = db_mutator.get_rows("users", offset=3)
+    assert data == []
+
+
+@pytest.mark.parametrize(
+    "make_database", [[*sql_simple_db, *sql_simple_insert]], indirect=True
+)
+def test_get_rows_limit(make_database: str):
+    SQLite3Config(db_path=make_database)
+    db_mutator = SQLite3DataMutator()
+    data = db_mutator.get_rows("users", limit=1)
+    assert data == [(1, "test1")]
+    data = db_mutator.get_rows("users", limit=2)
+    assert data == [(1, "test1"), (2, "test2")]
+    data = db_mutator.get_rows("users", limit=3)
+    assert data == [(1, "test1"), (2, "test2"), (3, "test3")]
+    data = db_mutator.get_rows("users", limit=4)
+    assert data == [(1, "test1"), (2, "test2"), (3, "test3")]
