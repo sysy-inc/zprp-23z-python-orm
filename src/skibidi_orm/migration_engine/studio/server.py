@@ -64,3 +64,13 @@ def delete_row(table_name: str, pks: list[DeleteRowPk] = Body(embed=True)):
 def query_table(query: str = Body(embed=True)):
     results = db_mutator.raw_query(query)
     return results
+
+
+@app.get("/db/{table_name}/rows")
+def get_rows(table_name: str, offset: int = 0, limit: int = 100):
+    print(db_inspector.get_tables_names())
+    if table_name not in db_inspector.get_tables_names():
+        return {"message": "Table does not exist."}
+
+    rows = db_mutator.get_rows(table_name, offset=offset, limit=limit)
+    return rows
