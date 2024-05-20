@@ -16,6 +16,7 @@ import { RxCaretSort } from "react-icons/rx";
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useCommandsHistory } from '@/hooks/useCommandsHistory';
 import { BsBoxArrowInUpRight } from "react-icons/bs";
+import { toast } from 'react-hot-toast';
 
 export const Route = createFileRoute('/table/$tableName')({
     component: Table
@@ -32,6 +33,7 @@ function labelRow(row: RowType, columns: QueryColumn[]) {
 }
 
 export function Table() {
+    const textAreaRef = useRef<HTMLTextAreaElement>(null)
     const { addCommand, commands } = useCommandsHistory()
     const [command, setCommand] = useState<string>('')
     const gridRef = useRef<AgGridReact>(null)
@@ -162,6 +164,7 @@ export function Table() {
                             <p className='font-medium'>write queries</p>
                         </div>
                         <Textarea
+                            ref={textAreaRef}
                             className=' h-full rounded-t-none outline-none border-r-0 font-mono'
                             placeholder='SELECT * FROM table...'
                             value={command}
@@ -191,6 +194,10 @@ export function Table() {
                                         <Button
                                             variant={'ghost'}
                                             className='border bg-white flex items-center justify-center absolute right-1 top-1 p-[6px] aspect-square w-[32px] h-[32px]'
+                                            onClick={() => {
+                                                toast.success('Command pasted to workspace!')
+                                                setCommand(command)
+                                            }}
                                         >
                                             <BsBoxArrowInUpRight className='w-[18px] h-[18px]' />
                                         </Button>
