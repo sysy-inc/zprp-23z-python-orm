@@ -9,6 +9,7 @@ import { ColDef, CellEditingStoppedEvent, ICellRendererParams } from 'ag-grid-co
 import { useMutation } from '@tanstack/react-query'
 import { RiDeleteBinLine } from "react-icons/ri";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import { Textarea } from '@/components/ui/textarea';
 
 
 export const Route = createFileRoute('/table/$tableName')({
@@ -128,16 +129,35 @@ export function Table() {
             <ResizablePanelGroup direction='horizontal'>
                 <ResizablePanel>
                     <AgGridReact
-                        // className='w-[70vw]'
                         ref={gridRef}
                         rowData={labeledData}
                         columnDefs={columnDefs}
                         onCellEditingStopped={onCellEditingStopped}
                     />
                 </ResizablePanel>
-                <ResizableHandle />
-                <ResizablePanel>
-                    <div>
+                <div className='relative'>
+                    <div className='absolute w-[50px] h-[55px] z-10 -translate-x-1/2 left-1/2 top-1/2 flex items-center justify-center gap-[5px]'>
+                        <div className='h-[50%] bg-zinc-200 w-[4px] rounded-md'>
+
+                        </div>
+                        <div className='h-full w-[4px] bg-zinc-200 rounded-md'>
+
+                        </div>
+                        <div className='h-[50%] w-[4px] bg-zinc-200 rounded-md'>
+
+                        </div>
+                    </div>
+                    <ResizableHandle className='opacity-100 bg-transparent mx-1 h-full z-20' />
+                </div>
+                <ResizablePanel className='relative '>
+                    <div className='bg-zinc-100 rounded-t-md px-4 py-4 border-t border-r border-l'>
+                        <p className='font-medium'>write queries</p>
+                    </div>
+                    <Textarea
+                        className='w-full h-full rounded-t-none outline-none'
+                        placeholder='SELECT * FROM table...'
+                    />
+                    {/* <div>
                         <Button
                             onClick={() => {
                                 refetch()
@@ -145,7 +165,7 @@ export function Table() {
                         >
                             Refresh
                         </Button>
-                    </div>
+                    </div> */}
                 </ResizablePanel>
             </ResizablePanelGroup>
         </div>
