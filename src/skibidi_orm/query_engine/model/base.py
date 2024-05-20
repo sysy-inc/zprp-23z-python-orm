@@ -31,16 +31,11 @@ class MetaModel(ModelMetaclass):
             return super_new(cls, name, bases, attrs)
 
         # TODO add database config
-
         metadata: dict[str, Any] = {}
         new_attrs: dict[str, Any] = {}
 
         # TODO improve convert db table name and check if name is correct
-        db_table_name = attrs.pop("db_table", None)
-        if db_table_name:
-            check_db_name_is_correct(db_table_name)
-        else:
-            db_table_name = convert_name_to_table(name)
+        db_table_name = attrs.pop("__db_table__", name.lower())
         metadata["db_table"] = db_table_name
 
         field_attrs = {}
@@ -79,8 +74,9 @@ class Model(BaseModel, metaclass=MetaModel):
         for val, field in zip(args, fields_iter):
             kwargs[field.name] = val
         for field in fields_iter:
+            # TODO related field
             if field.name not in kwargs:
-                kwargs[field.name] = field.default       # TODO add error
+                kwargs[field.name] = field.default
         args = ()
         super().__init__(*args, **kwargs)
 

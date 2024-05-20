@@ -4,12 +4,11 @@ import pytest
 
 @pytest.fixture
 def meta_options() -> MetaOptions:
-    meta_attrs = {'db_table': 'test_table'}
+    meta_attrs = {}
     return MetaOptions(meta_attrs)
 
 def test_meta_options_init(meta_options: MetaOptions):
-    assert meta_options.db_table == 'test_table'
-    assert meta_options.meta == {'db_table': 'test_table'}
+    assert meta_options.meta == {}
     assert meta_options.primary_key is None
     assert meta_options.local_fields == []
 
@@ -20,6 +19,7 @@ def test_meta_options_contribute_to_class(meta_options: MetaOptions):
     meta_options.contribute_to_class(TestClass, 'meta')
     assert hasattr(TestClass, '_meta')
     assert hasattr(meta_options, 'model')
+    assert meta_options.db_table == 'testclass'
 
 def test_meta_option_add_field(meta_options: MetaOptions):
     pass

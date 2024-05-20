@@ -5,7 +5,7 @@ import bisect
 class MetaOptions:
     """ A subsidiary to store additional information"""
     def __init__(self, meta: Dict[str, Any]):
-        self.db_table = meta['db_table']
+        self.db_table = ''
         self.meta = meta
         self.primary_key = None
         self.local_fields: List[Any] = []
@@ -14,6 +14,9 @@ class MetaOptions:
         """ Adds atrributes to classes """
         cls._meta = self
         self.model = cls
+
+        db_table = self.meta['db_table'] if self.meta else cls.__name__.lower()
+        self.db_table = db_table
 
     def add_field(self, field: Any):
         """ Adds database column """
