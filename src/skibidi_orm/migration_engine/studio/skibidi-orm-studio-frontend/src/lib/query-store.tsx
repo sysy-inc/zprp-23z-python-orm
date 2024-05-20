@@ -1,24 +1,29 @@
 import { useQuery } from '@tanstack/react-query'
 
-type QueryConstraint = {
+export type QueryConstraint = {
     constraint_type: string
     table_name: string
     column_name: string
 }
 
-type QueryColumn = {
+export type QueryColumn = {
     name: string
     data_type: string
     constraints: QueryConstraint[]
 }
 
-type QueryTable = {
+export type QueryTable = {
     name: string
     columns: QueryColumn[]
 }
 
+export type RowType = {
+    [key: string]: string
+}
+
+
 export const useQueryStore = () => {
-    const tablesInfo = () => useQuery({
+    const queryTablesInfo = () => useQuery({
         queryKey: ['tablesInfo'],
         initialData: [],
         queryFn: async () => {
@@ -28,7 +33,7 @@ export const useQueryStore = () => {
         },
     })
 
-    const tableData = <RowT,>(tableName: string, offset: number = 0, limit: number = 100) => useQuery({
+    const queryTableData = <RowT,>(tableName: string, offset: number = 0, limit: number = 100) => useQuery({
         queryKey: ['tableData', tableName],
         initialData: [],
         queryFn: async () => {
@@ -39,7 +44,7 @@ export const useQueryStore = () => {
     })
 
     return {
-        tablesInfo,
-        tableData,
+        tablesInfo: queryTablesInfo,
+        tableData: queryTableData,
     }
 }
