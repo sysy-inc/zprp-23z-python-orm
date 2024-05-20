@@ -1,7 +1,6 @@
 import { WorkspaceEditor } from '@/components/WorkspaceEditor';
 import { CommandsHisotryDialog } from '@/components/commands-hisotry-dialog';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { useCommands } from '@/hooks/useCommandsHistory';
 import { QueryColumn, RowType, useQueryStore } from '@/lib/query-store';
@@ -11,12 +10,9 @@ import { CellEditingStoppedEvent, ColDef, ICellRendererParams } from 'ag-grid-co
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
-import { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-hot-toast';
-import { BsBoxArrowInUpRight } from "react-icons/bs";
+import { useRef } from 'react';
 import { FaCog } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { RxCaretSort } from "react-icons/rx";
 
 export const Route = createFileRoute('/table/$tableName')({
     component: Table
@@ -33,8 +29,7 @@ function labelRow(row: RowType, columns: QueryColumn[]) {
 }
 
 export function Table() {
-    const textAreaRef = useRef<HTMLTextAreaElement>(null)
-    const { saveCommand, commandsHistory, currentCommand } = useCommands()
+    const { saveCommand, currentCommand } = useCommands()
     const gridRef = useRef<AgGridReact>(null)
     const { tableName } = Route.useParams()
     const { data, refetch } = useQueryStore().tableData<RowType>(tableName)
@@ -96,13 +91,11 @@ export function Table() {
         {
             headerName: '',
             cellRenderer: (params: ICellRendererParams) => {
-                // console.log('parr', params)
                 return (
                     <Button
                         className='flex items-center gap-2 bg-transparent hover:bg-transparent hover:underline text-red-800'
                         variant={'secondary'}
                         onClick={() => {
-                            // console.log("p.n.d", params.node.data)
                             rowDeleteMutation.mutate({
                                 tableName,
                                 row: params.data
@@ -127,7 +120,6 @@ export function Table() {
             oldRow: oldRow,
             newRow: newRow
         })
-        // e.oldValue
     }
 
     return (
@@ -161,13 +153,6 @@ export function Table() {
                         <div className='bg-zinc-100 rounded-tl-md px-4 py-4 border-t border-l'>
                             <p className='font-medium'>write queries</p>
                         </div>
-                        {/* <Textarea
-                            ref={textAreaRef}
-                            className=' h-full rounded-t-none outline-none border-r-0 font-mono'
-                            placeholder='SELECT * FROM table...'
-                            value={command}
-                            onChange={(e) => setCommand(e.target.value)}
-                        /> */}
                         <WorkspaceEditor />
                     </div>
                     <div className='py-4 px-4 min-w-[200px] bg-zinc-100 border-t border-l flex flex-col gap-4'>
