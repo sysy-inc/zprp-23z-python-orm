@@ -6,6 +6,7 @@ from skibidi_orm.migration_engine.data_mutator.base_data_mutator import (
     DeleteRowPk,
     InsertRowColumn,
 )
+from fastapi.middleware.cors import CORSMiddleware
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
 from skibidi_orm.migration_engine.studio.utils.get_db_inspector import get_db_inspector
 from skibidi_orm.migration_engine.studio.utils.get_db_seeder import get_db_mutator
@@ -17,6 +18,14 @@ db_inspector: BaseDbInspector = cast(
 db_mutator: BaseDataMutator = cast(
     BaseDataMutator, {}
 )  # to add db_seeder to modules namespace
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://localhost:8000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def run_server(schema_file: str):
