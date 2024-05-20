@@ -58,3 +58,9 @@ def delete_row(table_name: str, pks: list[DeleteRowPk] = Body(embed=True)):
 
     db_mutator.delete_row(table_name=table_name, pks=pks)
     return {"message": "Row deleted successfully."}
+
+
+@app.post("/db/query")
+def query_table(query: str = Body(embed=True)):
+    results = db_mutator.raw_query(query)
+    return results
