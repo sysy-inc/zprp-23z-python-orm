@@ -8,6 +8,7 @@ import { useRef, useState } from 'react';
 import { ColDef, CellEditingStoppedEvent, ICellRendererParams } from 'ag-grid-community';
 import { useMutation } from '@tanstack/react-query'
 import { RiDeleteBinLine } from "react-icons/ri";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
 
 export const Route = createFileRoute('/table/$tableName')({
@@ -124,12 +125,29 @@ export function Table() {
     return (
         <div className='ag-theme-quartz h-[90vh]'
         >
-            <AgGridReact
-                ref={gridRef}
-                rowData={labeledData}
-                columnDefs={columnDefs}
-                onCellEditingStopped={onCellEditingStopped}
-            />
+            <ResizablePanelGroup direction='horizontal'>
+                <ResizablePanel>
+                    <AgGridReact
+                        // className='w-[70vw]'
+                        ref={gridRef}
+                        rowData={labeledData}
+                        columnDefs={columnDefs}
+                        onCellEditingStopped={onCellEditingStopped}
+                    />
+                </ResizablePanel>
+                <ResizableHandle />
+                <ResizablePanel>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                refetch()
+                            }}
+                        >
+                            Refresh
+                        </Button>
+                    </div>
+                </ResizablePanel>
+            </ResizablePanelGroup>
         </div>
     )
 }
