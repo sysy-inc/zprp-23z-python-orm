@@ -4,8 +4,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
-import { useState } from 'react';
-import { ColDef, CellEditingStoppedEvent } from 'ag-grid-community';
+import { useRef, useState } from 'react';
+import { ColDef, CellEditingStoppedEvent, ICellRendererParams } from 'ag-grid-community';
+import { useMutation } from '@tanstack/react-query'
+import { RiDeleteBinLine } from "react-icons/ri";
+
 
 export const Route = createFileRoute('/table/$tableName')({
     component: Table
@@ -22,27 +25,71 @@ function labelRow(row: RowType, columns: QueryColumn[]) {
 }
 
 export function Table() {
+    const gridRef = useRef<AgGridReact>(null)
     const { tableName } = Route.useParams()
-    const { data } = useQueryStore().tableData<RowType>(tableName)
+    const { data, refetch } = useQueryStore().tableData<RowType>(tableName)
     const tableColumns = useQueryStore().tablesInfo().data.find(table => table.name === tableName)?.columns
+    const rowDeleteMutation = useMutation({
+        mutationFn: async ({ tableName, row }: { tableName: string, row: RowType }) => {
+            const where = Object.entries(row).map(([key, value]) => `${key} = '${value}'`).join(' AND ')
+            const body = JSON.stringify({
+                query: `DELETE FROM ${tableName} WHERE ${where}`
+            })
+            console.log(body)
+            return fetch(`http://localhost:8000/db/query`, {
+                method: "POST",
+                body: body,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        },
+        onSuccess: () => {
+            refetch()
+        }
+    })
 
     if (!data || !tableColumns) {
         return null
     }
 
     const labeledData = data.map(row => labelRow(row, tableColumns))
-    const columnDefs: ColDef[] = tableColumns.map(column => ({
-        headerName: column.name,
-        field: column.name,
-        filter: true,
-        editable: true,
-        cellEditor: 'agTextCellEditor',
-    }))
+    const columnDefs: ColDef[] = [
+        ...tableColumns.map(column => ({
+            headerName: column.name,
+            field: column.name,
+            filter: true,
+            editable: true,
+            cellEditor: 'agTextCellEditor'
+        })),
+        {
+            headerName: '',
+            cellRenderer: (params: ICellRendererParams) => {
+                // console.log('chuj', params)
+                return (
+                    <Button
+                        className='flex items-center gap-2 bg-transparent hover:bg-transparent hover:underline text-red-800'
+                        variant={'secondary'}
+                        onClick={() => {
+                            // console.log("p.n.d", params.node.data)
+                            rowDeleteMutation.mutate({
+                                tableName,
+                                row: params.data
+                            })
+                        }}
+                    >
+                        <RiDeleteBinLine />
+                        <p>delete</p>
+                    </Button>
+                )
+            }
+        }
+    ]
 
     function onCellEditingStopped(e: CellEditingStoppedEvent) {
         if (e.oldValue === e.newValue) return
-        console.log(e)
-        e.oldValue
+        // console.log(e)
+        // e.oldValue
     }
 
 
@@ -50,6 +97,7 @@ export function Table() {
         <div className='ag-theme-quartz h-[90vh]'
         >
             <AgGridReact
+                ref={gridRef}
                 rowData={labeledData}
                 columnDefs={columnDefs}
                 onCellEditingStopped={onCellEditingStopped}
