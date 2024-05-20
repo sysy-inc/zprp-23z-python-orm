@@ -1,3 +1,4 @@
+import { TablesList } from '@/components/tables-list'
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/')({
@@ -6,8 +7,8 @@ export const Route = createLazyFileRoute('/')({
 
 function Index() {
     return (
-        <div className="p-2">
-            <h3>Welcome Home!</h3>
-        </div>
+        <main className='flex items-center justify-center'>
+            <TablesList />
+        </main>
     )
 }
