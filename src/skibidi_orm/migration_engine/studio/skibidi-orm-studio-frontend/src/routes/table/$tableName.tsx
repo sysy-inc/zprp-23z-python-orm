@@ -10,6 +10,7 @@ import { useMutation } from '@tanstack/react-query'
 import { RiDeleteBinLine } from "react-icons/ri";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { Textarea } from '@/components/ui/textarea';
+import { FaCog } from "react-icons/fa";
 
 
 export const Route = createFileRoute('/table/$tableName')({
@@ -149,23 +150,25 @@ export function Table() {
                     </div>
                     <ResizableHandle className='opacity-100 bg-transparent mx-1 h-full z-20' />
                 </div>
-                <ResizablePanel className='relative '>
-                    <div className='bg-zinc-100 rounded-t-md px-4 py-4 border-t border-r border-l'>
-                        <p className='font-medium'>write queries</p>
+                <ResizablePanel className='relative flex'>
+                    <div className='h-full flex-1'>
+                        <div className='bg-zinc-100 rounded-tl-md px-4 py-4 border-t border-l'>
+                            <p className='font-medium'>write queries</p>
+                        </div>
+                        <Textarea
+                            className=' h-full rounded-t-none outline-none border-r-0'
+                            placeholder='SELECT * FROM table...'
+                        />
                     </div>
-                    <Textarea
-                        className='w-full h-full rounded-t-none outline-none'
-                        placeholder='SELECT * FROM table...'
-                    />
-                    {/* <div>
+                    <div className='py-4 px-4 min-w-[200px] bg-zinc-100 border-t border-l'>
                         <Button
-                            onClick={() => {
-                                refetch()
-                            }}
+                            className='w-full flex items-center justify-center gap-2'
+                            variant='default'
                         >
-                            Refresh
+                            <FaCog />
+                            <p>run query</p>
                         </Button>
-                    </div> */}
+                    </div>
                 </ResizablePanel>
             </ResizablePanelGroup>
         </div>
