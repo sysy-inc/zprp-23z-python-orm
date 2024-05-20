@@ -49,6 +49,27 @@ export function Table() {
         }
     })
 
+    const rowEditMutation = useMutation({
+        mutationFn: async ({ tableName, oldRow, newRow }: { tableName: string, oldRow: RowType, newRow: RowType }) => {
+            const set = Object.entries(newRow).map(([key, value]) => `${key} = '${value}'`).join(', ')
+            const where = Object.entries(oldRow).map(([key, value]) => `${key} = '${value}'`).join(' AND ')
+            const body = JSON.stringify({
+                query: `UPDATE ${tableName} SET ${set} WHERE ${where}`
+            })
+            console.log(body)
+            return fetch(`http://localhost:8000/db/query`, {
+                method: "POST",
+                body: body,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        },
+        onSuccess: () => {
+            refetch()
+        }
+    })
+
     if (!data || !tableColumns) {
         return null
     }
@@ -65,7 +86,7 @@ export function Table() {
         {
             headerName: '',
             cellRenderer: (params: ICellRendererParams) => {
-                // console.log('chuj', params)
+                // console.log('parr', params)
                 return (
                     <Button
                         className='flex items-center gap-2 bg-transparent hover:bg-transparent hover:underline text-red-800'
@@ -88,7 +109,14 @@ export function Table() {
 
     function onCellEditingStopped(e: CellEditingStoppedEvent) {
         if (e.oldValue === e.newValue) return
-        // console.log(e)
+        console.log('ev', e)
+        const newRow = e.data
+        const oldRow = { ...e.data, [e.colDef.field!]: e.oldValue }
+        rowEditMutation.mutate({
+            tableName,
+            oldRow: oldRow,
+            newRow: newRow
+        })
         // e.oldValue
     }
 
