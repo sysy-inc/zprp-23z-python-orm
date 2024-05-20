@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { createContext, useCallback, useContext, useState } from "react"
 
 
 const loadCommands = () => {
@@ -8,20 +8,48 @@ const loadCommands = () => {
     }
 }
 
-export function useCommandsHistory() {
-    const [commands, setCommands] = useState<string[]>(loadCommands() || [])
+interface ICommandsStore {
+    commandsHistory: string[]
+    currentCommand: string
+    setCurrentCommand: React.Dispatch<React.SetStateAction<string>>
+    saveCommand: (command: string) => void
+}
+const commandsContext = createContext<ICommandsStore>({ commandsHistory: [], currentCommand: '', setCurrentCommand: () => { }, saveCommand: () => { } })
 
-    const addCommand = (command: string) => {
+function commandsStore() {
+    const [commandsHistory, setCommandsHistory] = useState<string[]>(loadCommands() || [])
+    const [currentCommand, setCurrentCommand] = useState<string>('')
 
+
+    const saveCommand = useCallback((command: string) => {
         console.log('command', command)
-        setCommands((prevCommands) => {
+        setCommandsHistory((prevCommands) => {
             console.log(JSON.stringify([...prevCommands, command].map((command) => ({ command: command }))))
             localStorage.setItem('commands', JSON.stringify([...prevCommands, command].map((command) => ({ command: command }))))
             return [...prevCommands, command]
         })
+    }, [])
+
+
+
+    return {
+        commandsHistory,
+        currentCommand,
+        setCurrentCommand,
+        saveCommand
     }
+}
 
+export const CommandsProvider = ({ children }: { children: React.ReactNode }) => {
+    const commands = commandsStore()
 
+    return (
+        <commandsContext.Provider value={commands}>
+            {children}
+        </commandsContext.Provider>
+    )
+}
 
-    return { addCommand, commands }
+export function useCommands() {
+    return useContext(commandsContext)
 }
