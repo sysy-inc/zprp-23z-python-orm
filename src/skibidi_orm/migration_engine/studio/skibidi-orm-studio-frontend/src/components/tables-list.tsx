@@ -2,7 +2,7 @@ import { useQueryStore } from "@/lib/query-store"
 import { Link } from "@tanstack/react-router"
 
 export const TablesList = () => {
-    const { data } = useQueryStore().tables()
+    const { data } = useQueryStore().tablesInfo()
 
     return (
         <div className="border rounded-md flex flex-col gap-2">

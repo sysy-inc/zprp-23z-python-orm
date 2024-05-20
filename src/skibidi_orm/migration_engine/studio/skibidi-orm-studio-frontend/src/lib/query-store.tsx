@@ -18,8 +18,8 @@ type QueryTable = {
 }
 
 export const useQueryStore = () => {
-    const tables = () => useQuery({
-        queryKey: ['tablesData'],
+    const tablesInfo = () => useQuery({
+        queryKey: ['tablesInfo'],
         initialData: [],
         queryFn: async () => {
             const response = await fetch('http://localhost:8000/db')
@@ -28,7 +28,18 @@ export const useQueryStore = () => {
         },
     })
 
+    const tableData = <RowT,>(tableName: string, offset: number = 0, limit: number = 100) => useQuery({
+        queryKey: ['tableData', tableName],
+        initialData: [],
+        queryFn: async () => {
+            const response = await fetch(`http://localhost:8000/db/${tableName}/rows?offset=${offset}&limit=${limit}`)
+            const data = await response.json()
+            return data as RowT[]
+        },
+    })
+
     return {
-        tables,
+        tablesInfo,
+        tableData,
     }
 }
