@@ -13,7 +13,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { FaCog } from "react-icons/fa";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { RxCaretSort } from "react-icons/rx";
-
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { useCommandsHistory } from '@/hooks/useCommandsHistory';
+import { BsBoxArrowInUpRight } from "react-icons/bs";
 
 export const Route = createFileRoute('/table/$tableName')({
     component: Table
@@ -30,6 +32,8 @@ function labelRow(row: RowType, columns: QueryColumn[]) {
 }
 
 export function Table() {
+    const { addCommand, commands } = useCommandsHistory()
+    const [command, setCommand] = useState<string>('')
     const gridRef = useRef<AgGridReact>(null)
     const { tableName } = Route.useParams()
     const { data, refetch } = useQueryStore().tableData<RowType>(tableName)
@@ -158,22 +162,42 @@ export function Table() {
                             <p className='font-medium'>write queries</p>
                         </div>
                         <Textarea
-                            className=' h-full rounded-t-none outline-none border-r-0'
+                            className=' h-full rounded-t-none outline-none border-r-0 font-mono'
                             placeholder='SELECT * FROM table...'
+                            value={command}
+                            onChange={(e) => setCommand(e.target.value)}
                         />
                     </div>
                     <div className='py-4 px-4 min-w-[200px] bg-zinc-100 border-t border-l flex flex-col gap-4'>
                         <Button
                             className='w-full flex items-center justify-center gap-2'
                             variant='default'
+                            onClick={() => {
+                                addCommand(command)
+                            }}
                         >
                             <FaCog />
                             <p>run query</p>
                         </Button>
-                        <Button variant={'outline'} className='flex items-center justify-center gap-1'>
-                            <RxCaretSort className='w-6 h-6' />
-                            <p>Commands history</p>
-                        </Button>
+                        <Dialog>
+                            <DialogTrigger className='inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2'>
+                                <RxCaretSort className='w-6 h-6' />
+                                <p>Commands history</p>
+                            </DialogTrigger>
+                            <DialogContent className='flex flex-col gap-2 pt-10 max-h-[70vh] w-full max-w-screen-md overflow-auto'>
+                                {commands.map((command, index) => (
+                                    <div key={index} className='font-mono border bg-zinc-100 px-3 py-2 rounded-md relative' >
+                                        <p dangerouslySetInnerHTML={{ __html: command.split('\n').join('<br />') }}></p>
+                                        <Button
+                                            variant={'ghost'}
+                                            className='border bg-white flex items-center justify-center absolute right-1 top-1 p-[6px] aspect-square w-[32px] h-[32px]'
+                                        >
+                                            <BsBoxArrowInUpRight className='w-[18px] h-[18px]' />
+                                        </Button>
+                                    </div>
+                                ))}
+                            </DialogContent>
+                        </Dialog>
                     </div>
                 </ResizablePanel>
             </ResizablePanelGroup>
