@@ -1,23 +1,21 @@
-import { Button } from '@/components/ui/button'
-import { QueryColumn, RowType, useQueryStore } from '@/lib/query-store'
-import { createFileRoute } from '@tanstack/react-router'
-import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
+import { WorkspaceEditor } from '@/components/WorkspaceEditor';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import { useCommandsHistory } from '@/hooks/useCommandsHistory';
+import { QueryColumn, RowType, useQueryStore } from '@/lib/query-store';
+import { useMutation } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
+import { CellEditingStoppedEvent, ColDef, ICellRendererParams } from 'ag-grid-community';
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
+import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import { useRef, useState } from 'react';
-import { ColDef, CellEditingStoppedEvent, ICellRendererParams } from 'ag-grid-community';
-import { useMutation } from '@tanstack/react-query'
-import { RiDeleteBinLine } from "react-icons/ri";
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
-import { Textarea } from '@/components/ui/textarea';
-import { FaCog } from "react-icons/fa";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { RxCaretSort } from "react-icons/rx";
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { useCommandsHistory } from '@/hooks/useCommandsHistory';
-import { BsBoxArrowInUpRight } from "react-icons/bs";
 import { toast } from 'react-hot-toast';
-import { WorkspaceEditor } from '@/components/WorkspaceEditor';
+import { BsBoxArrowInUpRight } from "react-icons/bs";
+import { FaCog } from "react-icons/fa";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { RxCaretSort } from "react-icons/rx";
 
 export const Route = createFileRoute('/table/$tableName')({
     component: Table

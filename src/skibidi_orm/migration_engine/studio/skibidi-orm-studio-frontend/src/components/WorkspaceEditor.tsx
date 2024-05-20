@@ -1,8 +1,3 @@
-import CodeEditor from '@uiw/react-textarea-code-editor';
-import rehypePrism from "rehype-prism-plus";
-import rehypeRewrite from "rehype-rewrite";
-import React from 'react';
-
 import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/mode-sql'
 import 'ace-builds/src-noconflict/theme-dracula'
