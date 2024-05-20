@@ -11,6 +11,8 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { Textarea } from '@/components/ui/textarea';
 import { FaCog } from "react-icons/fa";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { RxCaretSort } from "react-icons/rx";
 
 
 export const Route = createFileRoute('/table/$tableName')({
@@ -160,13 +162,17 @@ export function Table() {
                             placeholder='SELECT * FROM table...'
                         />
                     </div>
-                    <div className='py-4 px-4 min-w-[200px] bg-zinc-100 border-t border-l'>
+                    <div className='py-4 px-4 min-w-[200px] bg-zinc-100 border-t border-l flex flex-col gap-4'>
                         <Button
                             className='w-full flex items-center justify-center gap-2'
                             variant='default'
                         >
                             <FaCog />
                             <p>run query</p>
+                        </Button>
+                        <Button variant={'outline'} className='flex items-center justify-center gap-1'>
+                            <RxCaretSort className='w-6 h-6' />
+                            <p>Commands history</p>
                         </Button>
                     </div>
                 </ResizablePanel>
