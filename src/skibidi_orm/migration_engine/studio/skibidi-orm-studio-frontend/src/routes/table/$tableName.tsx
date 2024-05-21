@@ -6,13 +6,15 @@ import { useDeleteTableRow } from '@/features/delete-table-row';
 import { useEditTableRow } from '@/features/edit-row';
 import { RowType, useTableData } from '@/features/get-table-data';
 import { QueryColumn, useTableInfo } from '@/features/get-table-info';
+import { useRunCommand } from '@/features/run-command';
+import { useCommandResult } from '@/hooks/useCommandResult';
 import { useCommands } from '@/hooks/useCommandsHistory';
 import { createFileRoute } from '@tanstack/react-router';
 import { CellEditingStoppedEvent, ColDef, ICellRendererParams } from 'ag-grid-community';
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaCog } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 
@@ -32,6 +34,7 @@ function labelRow(row: RowType, columns: QueryColumn[]) {
 
 export function Table() {
     const { saveCommand, currentCommand } = useCommands()
+    const { commandResult, setCommandResult } = useCommandResult()
     const gridRef = useRef<AgGridReact>(null)
     const { tableName } = Route.useParams()
     const { data: tableColumns } = useTableInfo<QueryColumn[]>({
@@ -58,6 +61,17 @@ export function Table() {
     })
     const rowDeleteMutation = useDeleteTableRow({ mutationConfig: { onSuccess: () => refetch() } })
     const rowEditMutation = useEditTableRow({ mutationConfig: { onSuccess: () => refetch() } })
+    const commandMutation = useRunCommand({
+        mutationConfig: {
+            onSuccess(data, variables, context) {
+                setCommandResult(data)
+            },
+        }
+    })
+
+    useEffect(() => {
+        console.log('commandResult', commandResult)
+    }, [commandResult])
 
     if (!labeledData || !tableColumns) {
         return null
@@ -105,6 +119,11 @@ export function Table() {
         })
     }
 
+    function handleRunCommand() {
+        saveCommand(currentCommand)
+        commandMutation.mutate({ command: currentCommand })
+    }
+
     return (
         <div className='ag-theme-quartz h-full flex flex-1 flex-col'
         >
@@ -144,7 +163,7 @@ export function Table() {
                                 <Button
                                     className='w-full flex items-center justify-center gap-2'
                                     variant='default'
-                                    onClick={() => saveCommand(currentCommand)}
+                                    onClick={() => handleRunCommand()}
                                 >
                                     <FaCog />
                                     <p>run query</p>
