@@ -22,20 +22,18 @@ function deleteTableRow({ tableName, row }: DeleteTableRowOptions) {
 }
 
 type UseDeleteTableRowOptions = {
-    tableName: string,
-    rowId: RowType,
     mutationConfig: MutationConfig<typeof deleteTableRow>
 }
-export function useDeleteTableRow({ tableName, rowId, mutationConfig }: UseDeleteTableRowOptions) {
+export function useDeleteTableRow({ mutationConfig }: UseDeleteTableRowOptions) {
     const queryClient = useQueryClient()
     const { onSuccess, ...restConfig } = mutationConfig || {}
 
     return useMutation({
         ...restConfig,
-        mutationFn: () => deleteTableRow({ tableName, row: rowId }),
+        mutationFn: ({ tableName, row }) => deleteTableRow({ tableName, row }),
         onSuccess: (...args) => {
             queryClient.invalidateQueries({
-                queryKey: getTableDataQueryOptions({ tableName }).queryKey
+                queryKey: getTableDataQueryOptions({ tableName: args[1].tableName }).queryKey
             })
             onSuccess?.(...args)
         }
