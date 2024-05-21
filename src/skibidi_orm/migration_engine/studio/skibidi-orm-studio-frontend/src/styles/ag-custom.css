@@ -1,0 +1,9 @@
+#ag-results .ag-header {
+    height: 0px !important;
+    min-height: 0px !important;
+    border: none !important;
+}
+
+#ag-results .ag-root-wrapper {
+    border-radius: 0px !important;
+}

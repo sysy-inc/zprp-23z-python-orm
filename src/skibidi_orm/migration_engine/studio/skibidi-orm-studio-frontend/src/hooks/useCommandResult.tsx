@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from "react"
 
 
 interface ICommandResultStore {
-    commandResult: any[]
+    commandResult: string[][]
     setCommandResult: React.Dispatch<React.SetStateAction<any[]>>
 }
 const commandResultContext = createContext<ICommandResultStore>({ commandResult: [], setCommandResult: () => { } })
@@ -26,6 +26,12 @@ export const CommandResultProvider = ({ children }: { children: React.ReactNode 
     )
 }
 
-export function useCommandResult() {
-    return useContext(commandResultContext)
+export function useCommandResult<T = ICommandResultStore['commandResult']>({ select }: { select?: (data: ICommandResultStore['commandResult']) => T } = {}) {
+    const { commandResult, setCommandResult } = useContext(commandResultContext)
+
+    return {
+        commandResult,
+        setCommandResult,
+        selected: select ? select(commandResult) : commandResult as T
+    }
 }
