@@ -132,23 +132,37 @@ export function Table() {
                     <ResizableHandle className='opacity-100 bg-transparent mx-1 h-full z-20' />
                 </div>
                 <ResizablePanel className='relative flex'>
-                    <div className='h-full flex-1'>
-                        <div className='bg-zinc-100 rounded-tl-md px-4 py-4 border-t border-l'>
-                            <p className='font-medium'>write queries</p>
-                        </div>
-                        <WorkspaceEditor />
-                    </div>
-                    <div className='py-4 px-4 min-w-[200px] bg-zinc-100 border-t border-l flex flex-col gap-4'>
-                        <Button
-                            className='w-full flex items-center justify-center gap-2'
-                            variant='default'
-                            onClick={() => saveCommand(currentCommand)}
-                        >
-                            <FaCog />
-                            <p>run query</p>
-                        </Button>
-                        <CommandsHisotryDialog />
-                    </div>
+                    <ResizablePanelGroup direction='vertical'>
+                        <ResizablePanel className='relative flex'>
+                            <div className='h-full flex-1'>
+                                <div className='bg-zinc-100 rounded-tl-md px-4 py-4 border-t border-l'>
+                                    <p className='font-medium'>write queries</p>
+                                </div>
+                                <WorkspaceEditor />
+                            </div>
+                            <div className='py-4 px-4 min-w-[200px] bg-zinc-100 border-t border-l flex flex-col gap-4'>
+                                <Button
+                                    className='w-full flex items-center justify-center gap-2'
+                                    variant='default'
+                                    onClick={() => saveCommand(currentCommand)}
+                                >
+                                    <FaCog />
+                                    <p>run query</p>
+                                </Button>
+                                <CommandsHisotryDialog />
+                            </div>
+                        </ResizablePanel>
+                        <ResizableHandle />
+                        <ResizablePanel className=''>
+                            <p className='font-medium bg-zinc-100 px-4 py-2 border-l'>query results</p>
+                            <AgGridReact
+                                ref={gridRef}
+                                rowData={labeledData}
+                                columnDefs={columnDefs}
+                                onCellEditingStopped={onCellEditingStopped}
+                            />
+                        </ResizablePanel>
+                    </ResizablePanelGroup>
                 </ResizablePanel>
             </ResizablePanelGroup>
         </div>
