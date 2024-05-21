@@ -106,9 +106,9 @@ export function Table() {
     }
 
     return (
-        <div className='ag-theme-quartz h-[90vh]'
+        <div className='ag-theme-quartz h-full flex flex-1 flex-col'
         >
-            <ResizablePanelGroup direction='horizontal'>
+            <ResizablePanelGroup direction='horizontal' className='flex-1'>
                 <ResizablePanel>
                     <AgGridReact
                         ref={gridRef}
