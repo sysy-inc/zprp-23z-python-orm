@@ -2,8 +2,10 @@ import { WorkspaceEditor } from '@/components/WorkspaceEditor';
 import { CommandsHisotryDialog } from '@/components/commands-hisotry-dialog';
 import { Button } from '@/components/ui/button';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import { useDeleteTableRow } from '@/features/delete-table-row';
+import { RowType, useTableData } from '@/features/get-table-data';
+import { QueryColumn, useTableInfo } from '@/features/get-table-info';
 import { useCommands } from '@/hooks/useCommandsHistory';
-import { QueryColumn, RowType, useQueryStore } from '@/lib/query-store';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { CellEditingStoppedEvent, ColDef, ICellRendererParams } from 'ag-grid-community';
@@ -32,27 +34,29 @@ export function Table() {
     const { saveCommand, currentCommand } = useCommands()
     const gridRef = useRef<AgGridReact>(null)
     const { tableName } = Route.useParams()
-    const { data, refetch } = useQueryStore().tableData<RowType>(tableName)
-    const tableColumns = useQueryStore().tablesInfo().data.find(table => table.name === tableName)?.columns
-    const rowDeleteMutation = useMutation({
-        mutationFn: async ({ tableName, row }: { tableName: string, row: RowType }) => {
-            const where = Object.entries(row).map(([key, value]) => `${key} = '${value}'`).join(' AND ')
-            const body = JSON.stringify({
-                query: `DELETE FROM ${tableName} WHERE ${where}`
-            })
-            console.log(body)
-            return fetch(`http://localhost:8000/db/query`, {
-                method: "POST",
-                body: body,
-                headers: {
-                    'Content-Type': 'application/json'
+    const { data: tableColumns } = useTableInfo<QueryColumn[]>({
+        queryConfig: {
+            select(data) {
+                const found = data.find(table => table.name === tableName)?.columns
+                if (!found) {
+                    throw new Error('table not found')
                 }
-            })
-        },
-        onSuccess: () => {
-            refetch()
+                return found
+            },
         }
     })
+    const { data: labeledData, refetch } = useTableData({
+        tableName: tableName,
+        queryConfig: {
+            select(data) {
+                if (!tableColumns) {
+                    throw new Error('table columns not found')
+                }
+                return data.map(row => labelRow(row, tableColumns))
+            }
+        }
+    })
+    const rowDeleteMutation = useDeleteTableRow({ mutationConfig: { onSuccess: () => refetch() } })
 
     const rowEditMutation = useMutation({
         mutationFn: async ({ tableName, oldRow, newRow }: { tableName: string, oldRow: RowType, newRow: RowType }) => {
@@ -75,11 +79,10 @@ export function Table() {
         }
     })
 
-    if (!data || !tableColumns) {
+    if (!labeledData || !tableColumns) {
         return null
     }
 
-    const labeledData = data.map(row => labelRow(row, tableColumns))
     const columnDefs: ColDef[] = [
         ...tableColumns.map(column => ({
             headerName: column.name,
