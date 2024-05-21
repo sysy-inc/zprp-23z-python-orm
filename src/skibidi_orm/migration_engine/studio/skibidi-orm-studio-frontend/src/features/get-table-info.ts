@@ -1,5 +1,5 @@
-import { useQuery, queryOptions } from '@tanstack/react-query'
 import { QueryConfig } from '@/lib/react-query'
+import { useQuery, queryOptions } from '@tanstack/react-query'
 
 
 export type QueryConstraint = {
@@ -23,20 +23,19 @@ function getTableInfo(): Promise<QueryTable[]> {
     return fetch(`http://localhost:8000/db`) as any
 }
 
-export function getTableInfoQueryOptions() {
-    return queryOptions({
+export function getTableInfoQueryOptions<T>() {
+    return queryOptions<QueryTable[], Error, T>({
         queryKey: ['tableInfo'],
         queryFn: () => getTableInfo(),
-    });
+    })
 }
 
-type UseTableInfoOptions = {
-    queryConfig?: QueryConfig<typeof getTableInfoQueryOptions>
-}
-
-export function useTableInfo({ queryConfig }: UseTableInfoOptions) {
+type UseTableInfoOptions<T> = {
+    queryConfig?: QueryConfig<typeof getTableInfo, T>;
+};
+export function useTableInfo<T>({ queryConfig }: UseTableInfoOptions<T>) {
     return useQuery({
-        ...getTableInfoQueryOptions(),
+        ...getTableInfoQueryOptions<T>(),
         ...queryConfig
     })
 }
