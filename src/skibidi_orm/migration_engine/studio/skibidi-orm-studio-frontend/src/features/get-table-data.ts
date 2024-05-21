@@ -1,4 +1,4 @@
-import { useQuery, queryOptions } from '@tanstack/react-query'
+import { useQuery, queryOptions, QueryKey } from '@tanstack/react-query'
 import { QueryConfig } from '@/lib/react-query'
 
 export type RowType = {
@@ -10,13 +10,13 @@ type GetTableDataOptions = {
     offset?: number,
     limit?: number
 }
-function getTableData({ tableName, offset = 0, limit = 100 }: GetTableDataOptions): Promise<RowType> {
+function getTableData({ tableName, offset = 0, limit = 100 }: GetTableDataOptions): Promise<RowType[]> {
     return fetch(`http://localhost:8000/db/${tableName}/rows?offset=${offset}&limit=${limit}`) as any
 }
 
 export function getTableDataQueryOptions({ tableName, offset = 0, limit = 100 }: GetTableDataOptions) {
     return queryOptions({
-        queryKey: ['tableData', tableName],
+        queryKey: ['tableData', tableName] as QueryKey,
         queryFn: () => getTableData({ tableName, limit, offset }),
     });
 }
@@ -25,7 +25,7 @@ type UseTableDataOptions = {
     tableName: string,
     offset?: number,
     limit?: number
-    queryConfig?: QueryConfig<typeof getTableDataQueryOptions>
+    queryConfig?: QueryConfig<typeof getTableData>
 }
 
 export function useTableData({ tableName, queryConfig, offset = 0, limit = 100 }: UseTableDataOptions) {
