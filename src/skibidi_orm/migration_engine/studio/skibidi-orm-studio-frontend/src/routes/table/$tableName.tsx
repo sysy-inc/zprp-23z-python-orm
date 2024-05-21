@@ -3,6 +3,7 @@ import { CommandsHisotryDialog } from '@/components/commands-hisotry-dialog';
 import { Button } from '@/components/ui/button';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { useDeleteTableRow } from '@/features/delete-table-row';
+import { useEditTableRow } from '@/features/edit-row';
 import { RowType, useTableData } from '@/features/get-table-data';
 import { QueryColumn, useTableInfo } from '@/features/get-table-info';
 import { useCommands } from '@/hooks/useCommandsHistory';
@@ -57,27 +58,7 @@ export function Table() {
         }
     })
     const rowDeleteMutation = useDeleteTableRow({ mutationConfig: { onSuccess: () => refetch() } })
-
-    const rowEditMutation = useMutation({
-        mutationFn: async ({ tableName, oldRow, newRow }: { tableName: string, oldRow: RowType, newRow: RowType }) => {
-            const set = Object.entries(newRow).map(([key, value]) => `${key} = '${value}'`).join(', ')
-            const where = Object.entries(oldRow).map(([key, value]) => `${key} = '${value}'`).join(' AND ')
-            const body = JSON.stringify({
-                query: `UPDATE ${tableName} SET ${set} WHERE ${where}`
-            })
-            console.log(body)
-            return fetch(`http://localhost:8000/db/query`, {
-                method: "POST",
-                body: body,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-        },
-        onSuccess: () => {
-            refetch()
-        }
-    })
+    const rowEditMutation = useEditTableRow({ mutationConfig: { onSuccess: () => refetch() } })
 
     if (!labeledData || !tableColumns) {
         return null
