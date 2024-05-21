@@ -1,5 +1,5 @@
-import { useQuery, queryOptions, QueryKey } from '@tanstack/react-query'
-import { QueryConfig } from '@/lib/react-query'
+import { useQuery, queryOptions, QueryKey, UseQueryOptions } from '@tanstack/react-query'
+import { QueryConfig, ReqQueryOptions } from '@/lib/react-query'
 
 export type RowType = {
     [key: string]: string
@@ -14,21 +14,21 @@ function getTableData({ tableName, offset = 0, limit = 100 }: GetTableDataOption
     return fetch(`http://localhost:8000/db/${tableName}/rows?offset=${offset}&limit=${limit}`) as any
 }
 
-export function getTableDataQueryOptions({ tableName, offset = 0, limit = 100 }: GetTableDataOptions) {
-    return queryOptions({
-        queryKey: ['tableData', tableName] as QueryKey,
+export function getTableDataQueryOptions({ tableName, offset = 0, limit = 100 }: GetTableDataOptions): ReqQueryOptions<typeof getTableData> {
+    return {
+        queryKey: ['tableData', tableName],
         queryFn: () => getTableData({ tableName, limit, offset }),
-    });
+    };
 }
 
-type UseTableDataOptions = {
+type UseTableDataOptions<T> = {
     tableName: string,
     offset?: number,
     limit?: number
-    queryConfig?: QueryConfig<typeof getTableData>
+    queryConfig?: QueryConfig<typeof getTableData, T>
 }
 
-export function useTableData({ tableName, queryConfig, offset = 0, limit = 100 }: UseTableDataOptions) {
+export function useTableData<T>({ tableName, queryConfig, offset = 0, limit = 100 }: UseTableDataOptions<T>) {
     return useQuery({
         ...getTableDataQueryOptions({ tableName, offset, limit }),
         ...queryConfig
