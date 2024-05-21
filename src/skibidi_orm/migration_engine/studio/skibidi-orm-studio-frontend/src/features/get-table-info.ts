@@ -19,8 +19,10 @@ export type QueryTable = {
     columns: QueryColumn[]
 }
 
-function getTableInfo(): Promise<QueryTable[]> {
-    return fetch(`http://localhost:8000/db`) as any
+async function getTableInfo(): Promise<QueryTable[]> {
+    const res = await fetch(`http://localhost:8000/db`) as any
+    const data = await res.json()
+    return data.tables as QueryTable[]
 }
 
 export function getTableInfoQueryOptions(): ReqQueryOptions<typeof getTableInfo> {
@@ -33,7 +35,7 @@ export function getTableInfoQueryOptions(): ReqQueryOptions<typeof getTableInfo>
 type UseTableInfoOptions<T> = {
     queryConfig?: QueryConfig<typeof getTableInfo, T>;
 };
-export function useTableInfo<T>({ queryConfig }: UseTableInfoOptions<T>) {
+export function useTableInfo<T = QueryTable[]>({ queryConfig }: UseTableInfoOptions<T> = {}) {
     return useQuery({
         ...getTableInfoQueryOptions(),
         ...queryConfig
