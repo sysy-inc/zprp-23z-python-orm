@@ -1,20 +1,22 @@
 import { WorkspaceEditor } from '@/components/WorkspaceEditor';
 import { CommandsHisotryDialog } from '@/components/commands-hisotry-dialog';
+import { QueryResultsTable } from '@/components/queryResultsTable';
 import { Button } from '@/components/ui/button';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { useDeleteTableRow } from '@/features/delete-table-row';
 import { useEditTableRow } from '@/features/edit-row';
-import { RowType, useTableData } from '@/features/get-table-data';
+import { useTableData } from '@/features/get-table-data';
 import { QueryColumn, useTableInfo } from '@/features/get-table-info';
 import { useRunCommand } from '@/features/run-command';
 import { useCommandResult } from '@/hooks/useCommandResult';
 import { useCommands } from '@/hooks/useCommandsHistory';
+import { labelRow } from '@/lib/table-data-utils';
 import { createFileRoute } from '@tanstack/react-router';
 import { CellEditingStoppedEvent, ColDef, ICellRendererParams } from 'ag-grid-community';
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { FaCog } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 
@@ -22,15 +24,6 @@ export const Route = createFileRoute('/table/$tableName')({
     component: Table
 })
 
-function labelRow(row: RowType, columns: QueryColumn[]) {
-    const labeledRow: { [key: string]: string } = {}
-    let i = 0
-    for (const { name } of columns) {
-        labeledRow[name] = row[i]
-        i++
-    }
-    return labeledRow
-}
 
 export function Table() {
     const { saveCommand, currentCommand } = useCommands()
@@ -63,7 +56,7 @@ export function Table() {
     const rowEditMutation = useEditTableRow({ mutationConfig: { onSuccess: () => refetch() } })
     const commandMutation = useRunCommand({
         mutationConfig: {
-            onSuccess(data, variables, context) {
+            onSuccess(data) {
                 setCommandResult(data)
             },
         }
@@ -174,12 +167,7 @@ export function Table() {
                         <ResizableHandle />
                         <ResizablePanel className=''>
                             <p className='font-medium bg-zinc-100 px-4 py-2 border-l'>query results</p>
-                            <AgGridReact
-                                ref={gridRef}
-                                rowData={labeledData}
-                                columnDefs={columnDefs}
-                                onCellEditingStopped={onCellEditingStopped}
-                            />
+                            <QueryResultsTable />
                         </ResizablePanel>
                     </ResizablePanelGroup>
                 </ResizablePanel>
