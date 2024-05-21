@@ -4,7 +4,10 @@ from skibidi_orm.query_engine.field.validators import (
     MinValueValidator,
     DecimalValidator
 )
-from skibidi_orm.query_engine.field.relation_objects import RelationObject
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from skibidi_orm.query_engine.field.relation_objects import RelationObject
 from typing import Any, List, Type, Union
 import decimal
 
@@ -35,7 +38,7 @@ class Field:
                  default: Any = NOT_PROVIDED,
                  validators: List[object] = [],
                  field_type: str = "",
-                 related: Union[RelationObject, None] = None):
+                 related: 'Union[RelationObject, None]' = None):
         self.null = null,
         self.name = name                # python's field name
         self.db_column = db_column      # column name in db

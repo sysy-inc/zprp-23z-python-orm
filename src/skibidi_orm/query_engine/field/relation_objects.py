@@ -1,4 +1,7 @@
-from skibidi_orm.query_engine.field.related_field import ForeignKey
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from skibidi_orm.query_engine.field.related_field import ForeignKey
 
 
 class RelationObject:
@@ -7,7 +10,7 @@ class RelationObject:
     """
     def __init__(
         self,
-        field: ForeignKey,
+        field: 'ForeignKey',
         to: str,                        # target model name
         related_name: str = "",
         on_delete: str = "",            # TODO implement proper deleting

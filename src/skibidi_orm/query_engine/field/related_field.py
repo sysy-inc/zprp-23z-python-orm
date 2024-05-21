@@ -1,6 +1,10 @@
 from skibidi_orm.query_engine.field.field import Field, IntegerField
 from skibidi_orm.query_engine.field.relation_objects import RelationObject
 from typing import Any, Type, Union
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from skibidi_orm.query_engine.model.base import Model
 
 
 def get_field(x: str):
@@ -17,7 +21,7 @@ class ForeignKey(Field):
 
     def __init__(
         self,
-        to: str,
+        to: 'Model',
         on_delete: str,
         # to_fields: list[str],
         rel: Union[RelationObject, None] = None,
