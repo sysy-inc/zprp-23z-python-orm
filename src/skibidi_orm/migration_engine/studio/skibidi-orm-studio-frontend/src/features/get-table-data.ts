@@ -14,7 +14,7 @@ function getTableData({ tableName, offset = 0, limit = 100 }: GetTableDataOption
     return fetch(`http://localhost:8000/db/${tableName}/rows?offset=${offset}&limit=${limit}`) as any
 }
 
-function getTableDataQueryOptions({ tableName, offset = 0, limit = 100 }: GetTableDataOptions) {
+export function getTableDataQueryOptions({ tableName, offset = 0, limit = 100 }: GetTableDataOptions) {
     return queryOptions({
         queryKey: ['tableData', tableName],
         queryFn: () => getTableData({ tableName, limit, offset }),
@@ -34,7 +34,3 @@ export function useTableData({ tableName, queryConfig, offset = 0, limit = 100 }
         ...queryConfig
     })
 }
-
-const { } = useTableData({
-    tableName: 'tableName',
-})
