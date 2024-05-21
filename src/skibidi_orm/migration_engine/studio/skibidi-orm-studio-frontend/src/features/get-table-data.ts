@@ -10,8 +10,10 @@ type GetTableDataOptions = {
     offset?: number,
     limit?: number
 }
-function getTableData({ tableName, offset = 0, limit = 100 }: GetTableDataOptions): Promise<RowType[]> {
-    return fetch(`http://localhost:8000/db/${tableName}/rows?offset=${offset}&limit=${limit}`) as any
+async function getTableData({ tableName, offset = 0, limit = 100 }: GetTableDataOptions): Promise<RowType[]> {
+    const res = await fetch(`http://localhost:8000/db/${tableName}/rows?offset=${offset}&limit=${limit}`) as any
+    const data = await res.json()
+    return data as RowType[]
 }
 
 export function getTableDataQueryOptions({ tableName, offset = 0, limit = 100 }: GetTableDataOptions): ReqQueryOptions<typeof getTableData> {
@@ -28,7 +30,7 @@ type UseTableDataOptions<T> = {
     queryConfig?: QueryConfig<typeof getTableData, T>
 }
 
-export function useTableData<T>({ tableName, queryConfig, offset = 0, limit = 100 }: UseTableDataOptions<T>) {
+export function useTableData<T = RowType[]>({ tableName, queryConfig, offset = 0, limit = 100 }: UseTableDataOptions<T>) {
     return useQuery({
         ...getTableDataQueryOptions({ tableName, offset, limit }),
         ...queryConfig

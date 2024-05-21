@@ -3,7 +3,10 @@ import {
     UseQueryOptions
 } from '@tanstack/react-query';
 
-export type ReqQueryOptions<TQueryFn extends (...args: any) => any> = Pick<UseQueryOptions<Awaited<ReturnType<TQueryFn>>, Error>, 'queryKey' | 'queryFn'>
+export type ReqQueryOptions<TQueryFn extends (...args: any) => any> = Pick<
+    UseQueryOptions<Awaited<ReturnType<TQueryFn>>, Error>,
+    'queryKey' | 'queryFn'
+>
 export type QueryConfig<TQueryFn extends (...args: any) => any, TData = Awaited<ReturnType<TQueryFn>>> = Omit<
     UseQueryOptions<Awaited<ReturnType<TQueryFn>>, Error, TData>,
     'queryKey' | 'queryFn'
