@@ -1,5 +1,5 @@
-import { useQuery, queryOptions, QueryKey, UseQueryOptions } from '@tanstack/react-query'
 import { QueryConfig, ReqQueryOptions } from '@/lib/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 export type RowType = {
     [key: string]: string

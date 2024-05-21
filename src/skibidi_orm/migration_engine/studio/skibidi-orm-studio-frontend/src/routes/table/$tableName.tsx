@@ -7,7 +7,6 @@ import { useEditTableRow } from '@/features/edit-row';
 import { RowType, useTableData } from '@/features/get-table-data';
 import { QueryColumn, useTableInfo } from '@/features/get-table-info';
 import { useCommands } from '@/hooks/useCommandsHistory';
-import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { CellEditingStoppedEvent, ColDef, ICellRendererParams } from 'ag-grid-community';
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
