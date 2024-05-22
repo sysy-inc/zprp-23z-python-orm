@@ -1,6 +1,7 @@
 import { WorkspaceEditor } from '@/components/WorkspaceEditor';
 import { CommandsHisotryDialog } from '@/components/commands-hisotry-dialog';
 import { QueryResultsTable } from '@/components/queryResultsTable';
+import { useTheme } from '@/components/theme-provider';
 import { Button } from '@/components/ui/button';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { useDeleteTableRow } from '@/features/delete-table-row';
@@ -11,10 +12,9 @@ import { useRunCommand } from '@/features/run-command';
 import { useCommandResult } from '@/hooks/useCommandResult';
 import { useCommands } from '@/hooks/useCommandsHistory';
 import { labelRow } from '@/lib/table-data-utils';
+import { cn } from '@/lib/utils';
 import { createFileRoute } from '@tanstack/react-router';
 import { CellEditingStoppedEvent, ColDef, ICellRendererParams } from 'ag-grid-community';
-import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
-import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import { useEffect, useRef } from 'react';
 import { FaCog } from "react-icons/fa";
@@ -26,6 +26,7 @@ export const Route = createFileRoute('/table/$tableName')({
 
 
 export function Table() {
+    const { theme } = useTheme()
     const { saveCommand, currentCommand } = useCommands()
     const { commandResult, setCommandResult } = useCommandResult()
     const gridRef = useRef<AgGridReact>(null)
@@ -118,10 +119,9 @@ export function Table() {
     }
 
     return (
-        <div className='ag-theme-quartz h-full flex flex-1 flex-col'
-        >
+        <div className='h-full flex flex-1 flex-col'>
             <ResizablePanelGroup direction='horizontal' className='flex-1'>
-                <ResizablePanel>
+                <ResizablePanel className={cn(theme === 'dark' ? `ag-theme-quartz-dark` : 'ag-theme-quartz')}>
                     <AgGridReact
                         ref={gridRef}
                         rowData={labeledData}
@@ -131,13 +131,13 @@ export function Table() {
                 </ResizablePanel>
                 <div className='relative'>
                     <div className='absolute w-[50px] h-[55px] z-10 -translate-x-1/2 left-1/2 top-1/2 flex items-center justify-center gap-[5px]'>
-                        <div className='h-[50%] bg-zinc-200 w-[4px] rounded-md'>
+                        <div className='h-[50%] bg-zinc-200 w-[4px] rounded-md dark:bg-zinc-500'>
 
                         </div>
-                        <div className='h-full w-[4px] bg-zinc-200 rounded-md'>
+                        <div className='h-full w-[4px] bg-zinc-200 rounded-md dark:bg-zinc-500'>
 
                         </div>
-                        <div className='h-[50%] w-[4px] bg-zinc-200 rounded-md'>
+                        <div className='h-[50%] w-[4px] bg-zinc-200 rounded-md dark:bg-zinc-500'>
 
                         </div>
                     </div>
@@ -147,14 +147,14 @@ export function Table() {
                     <ResizablePanelGroup direction='vertical'>
                         <ResizablePanel className='relative flex'>
                             <div className='h-full flex-1'>
-                                <div className='bg-zinc-100 rounded-tl-md px-4 py-4 border-t border-l'>
+                                <div className='bg-zinc-100 rounded-tl-md px-4 py-4 border-t border-l dark:bg-zinc-900'>
                                     <p className='font-medium'>write queries</p>
                                 </div>
                                 <WorkspaceEditor />
                             </div>
-                            <div className='py-4 px-4 min-w-[200px] bg-zinc-100 border-t border-l flex flex-col gap-4'>
+                            <div className='py-4 px-4 min-w-[200px] bg-zinc-100 border-t border-l flex flex-col gap-4 dark:bg-zinc-900'>
                                 <Button
-                                    className='w-full flex items-center justify-center gap-2'
+                                    className='w-full flex items-center justify-center gap-2 dark:bg-zinc-200'
                                     variant='default'
                                     onClick={() => handleRunCommand()}
                                 >
@@ -166,7 +166,7 @@ export function Table() {
                         </ResizablePanel>
                         <ResizableHandle />
                         <ResizablePanel className='flex flex-col'>
-                            <p className='font-medium bg-zinc-100 px-4 py-2 border-l'>query results</p>
+                            <p className='font-medium bg-zinc-100 px-4 py-2 border-l dark:bg-zinc-900'>query results</p>
                             <QueryResultsTable />
                         </ResizablePanel>
                     </ResizablePanelGroup>

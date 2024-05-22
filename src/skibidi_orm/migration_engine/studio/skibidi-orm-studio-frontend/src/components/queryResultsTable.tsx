@@ -3,8 +3,11 @@ import { GridOptions, ColDef } from 'ag-grid-community'
 import { AgGridReact } from "ag-grid-react"
 import { useMemo, useRef } from "react"
 import '@/styles/ag-custom.css'
+import { useTheme } from "./theme-provider"
+import { cn } from "@/lib/utils"
 
 export function QueryResultsTable() {
+    const { theme } = useTheme()
     const gridRef = useRef<AgGridReact>(null)
     const { selected: labeledData, commandResult } = useCommandResult({
         select(data) {
@@ -26,7 +29,7 @@ export function QueryResultsTable() {
 
 
     return (
-        <div id='ag-results' className="w-full h-full">
+        <div id='ag-results' className={cn(`w-full h-full`, theme === 'dark' ? 'ag-theme-quartz-dark' : 'ag-theme-quartz')}>
             <AgGridReact
                 ref={gridRef}
                 {...gridOptions}
