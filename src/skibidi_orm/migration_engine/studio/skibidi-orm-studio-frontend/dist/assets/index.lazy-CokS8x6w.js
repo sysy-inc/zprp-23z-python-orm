@@ -1,0 +1,1 @@
+import{c as t,j as e}from"./index-CT5dnm0u.js";const c=t("/")({component:n});function n(){return e.jsx("main",{className:"flex items-center justify-center w-full h-full",children:e.jsx("p",{className:"text-muted-foreground",children:"Select table to inspect"})})}export{c as Route};
