@@ -1,5 +1,8 @@
+import os
 from typing import cast
 from fastapi import FastAPI, Body
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 import uvicorn
 from skibidi_orm.migration_engine.data_mutator.base_data_mutator import (
     BaseDataMutator,
@@ -27,6 +30,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.mount(
+    "/assets",
+    StaticFiles(
+        directory="src/skibidi_orm/migration_engine/studio/skibidi-orm-studio-frontend/dist/assets"
+    ),
+    name="static",
+)
+
 
 def run_server(schema_file: str):
     global db_inspector
@@ -34,6 +45,13 @@ def run_server(schema_file: str):
     db_inspector = get_db_inspector(schema_file=schema_file)
     db_mutator = get_db_mutator(db_inspector)
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+
+@app.get("/")
+def read_index():
+    return FileResponse(
+        "src/skibidi_orm/migration_engine/studio/skibidi-orm-studio-frontend/dist/index.html"
+    )
 
 
 @app.get("/db")
