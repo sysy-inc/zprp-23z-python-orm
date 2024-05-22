@@ -1,21 +1,18 @@
 import AceEditor from 'react-ace'
-import 'ace-builds/src-noconflict/mode-sql'
 import 'ace-builds/src-noconflict/theme-dracula'
+import 'ace-builds/src-noconflict/mode-sql'
 import 'ace-builds/src-noconflict/ext-language_tools'
 import { useCommands } from '@/hooks/useCommandsHistory'
-import { useEffect } from 'react'
+import { useTheme } from './theme-provider'
 
 
 export function WorkspaceEditor() {
     const { setCurrentCommand, currentCommand } = useCommands()
+    const { theme } = useTheme()
 
     function onChange(newValue: string) {
         setCurrentCommand(newValue)
     }
-
-    useEffect(() => {
-        console.log('currentCommandDDDDDDD', currentCommand)
-    }, [currentCommand])
 
     return (
         <AceEditor
@@ -25,7 +22,7 @@ export function WorkspaceEditor() {
             }}
             className=''
             mode="sql"
-            theme="github"
+            theme={theme === 'dark' ? 'dracula' : 'github'}
             onChange={onChange}
             value={currentCommand}
             name="UNIQUE_ID_OF_DIV"
