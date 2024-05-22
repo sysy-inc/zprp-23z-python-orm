@@ -148,7 +148,7 @@ export function Table() {
                         <ResizablePanel className='relative flex'>
                             <div className='h-full flex-1'>
                                 <div className='bg-zinc-100 rounded-tl-md px-4 py-4 border-t border-l dark:bg-zinc-900'>
-                                    <p className='font-medium'>write queries</p>
+                                    <p className='font-medium text-sm'>write queries</p>
                                 </div>
                                 <WorkspaceEditor />
                             </div>
@@ -166,7 +166,7 @@ export function Table() {
                         </ResizablePanel>
                         <ResizableHandle />
                         <ResizablePanel className='flex flex-col'>
-                            <p className='font-medium bg-zinc-100 px-4 py-2 border-l dark:bg-zinc-900'>query results</p>
+                            <p className='font-medium bg-zinc-100 px-4 py-3 border-l dark:bg-zinc-900 text-sm'>query results</p>
                             <QueryResultsTable />
                         </ResizablePanel>
                     </ResizablePanelGroup>
