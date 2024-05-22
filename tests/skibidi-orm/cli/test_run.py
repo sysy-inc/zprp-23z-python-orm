@@ -52,7 +52,9 @@ def test_studio_no_options_too_many_schemas(tmpdir: py.path.local):  # type: ign
 def test_studio_one_schema_option(monkeypatch: pytest.MonkeyPatch, tmpdir: py.path.local):  # type: ignore
     import skibidi_orm.migration_engine.studio.server  # type: ignore
 
-    mock_func: Callable[[str], None] = lambda schema_file: print("Success test", end="")
+    def mock_func(schema_file: str):
+        print("Success test", end="")
+
     monkeypatch.setattr(
         "skibidi_orm.migration_engine.studio.server.run_server", mock_func
     )
