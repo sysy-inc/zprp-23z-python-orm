@@ -1,4 +1,3 @@
-import os
 from typing import cast
 from fastapi import FastAPI, Body
 from fastapi.responses import FileResponse
