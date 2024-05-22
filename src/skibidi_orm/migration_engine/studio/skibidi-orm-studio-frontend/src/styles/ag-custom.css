@@ -31,3 +31,7 @@
     /* --ag-font-size: 17px !important; */
     /* --ag-font-family: monospace !important; */
 }
+
+/* :not([data-status="active"]){
+    color: red;
+} */
