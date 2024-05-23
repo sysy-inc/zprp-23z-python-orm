@@ -5,6 +5,7 @@ Module handels executing orm operations like inserting to database, selecting fr
 from skibidi_orm.query_engine.connection.engine import Engine
 from skibidi_orm.query_engine.connection.identity import IdentityMap
 from skibidi_orm.query_engine.model.base import Model
+from skibidi_orm.query_engine.connection.transaction import Transaction
 from typing import Any, Optional, Type
 from types import TracebackType
 
@@ -59,6 +60,7 @@ class Session:
         In future it will also execute any pending operations
         that where stored in given session (lazy execution)
         """
+        self.flush()
         self._connection.commit()
 
     def rollback(self):
@@ -88,7 +90,18 @@ class Session:
         return self._connection
 
     def add(self, obj: Model):
-        pass
+        # if obj in self._map TODO add checking if it is already added
+        self._new.append(obj)
 
     def flush(self):
-        pass
+        if self._new:
+            config = self._engine.config
+            trans = Transaction(config.compiler, self._connection)
+            for o in self._new:
+                # TODO adjust for relations, order matters
+                trans.register_insert(o)
+            trans.execute()
+            for o in self._new:
+                # TODO maybe add function register_pending that adds to map and cleans _new
+                self._map.add(o)
+            self._new = []
