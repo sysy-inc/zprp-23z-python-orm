@@ -57,3 +57,7 @@ class Engine:
         Return whether there is open connection or not
         """
         return self._is_connected
+    
+    @property
+    def config(self):
+        return self._config
