@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 from skibidi_orm.query_engine.adapter.sqlite_adapter import SQLiteAdapter
 from skibidi_orm.query_engine.adapter.base_adapter import Adapter
+from skibidi_orm.query_engine.adapter.base_compiler import SQLCompiler
 
 
 class Config(ABC):
@@ -24,6 +25,10 @@ class Config(ABC):
         Return correct adapter for this database
         """
         return self._adapter
+    
+    @property
+    def compiler(self) -> SQLCompiler:
+        return self._adapter.compiler
 
     @abstractmethod
     def connection_data(self) -> dict[str, Any]:
