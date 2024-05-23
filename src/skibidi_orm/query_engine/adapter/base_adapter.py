@@ -4,6 +4,7 @@ by different databases
 """
 from abc import ABC, abstractmethod
 from typing import Any
+from skibidi_orm.query_engine.adapter.base_compiler import SQLCompiler
 
 
 class Adapter(ABC):
@@ -16,6 +17,7 @@ class Adapter(ABC):
     """
     def __init__(self) -> None:
         self._connector = None
+        self._compiler = SQLCompiler()
 
     @abstractmethod
     def _import_connector(self):
@@ -38,3 +40,7 @@ class Adapter(ABC):
         Return connector to database
         """
         return self._connector
+    
+    @property
+    def compiler(self):
+        return self._compiler
