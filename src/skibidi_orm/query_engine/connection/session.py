@@ -108,6 +108,24 @@ class Session:
             return
         self._dirty.append(o)
 
+    def delete(self, obj: Model):
+        # o = self._map.get(obj.key(), None) TOCHANGE
+        if obj in self._new:
+            # object wasn't yet insserted so only delete from list to be inserted
+            self._new.remove(obj)
+            self._dirty.remove(obj)
+            return
+
+        o = self._map.get(("test_model", 1), None)
+        if o is None:
+            raise ValueError("Given object is not part of session")
+        else:
+            if o in self._dirty:
+                # if pending update, delete it, no need to update if it is deleted
+                self._dirty.remove(o)
+            # TODO tell model to remove session from attributes
+            self._delete.append(o)
+
     def flush(self):
         if not self._check_clear():
             # there are some pending changes
@@ -123,8 +141,12 @@ class Session:
 
             # UPDATE
             for o in self._dirty:
-                # TODO check if in delete, no need to update if deleting
+                # TODO check if in delete, no need to update if
                 trans.register_update(o)
+
+            # DELETE
+            for o in self._delete:
+                trans.register_delete(o)
 
             trans.execute()
             self._new = []
