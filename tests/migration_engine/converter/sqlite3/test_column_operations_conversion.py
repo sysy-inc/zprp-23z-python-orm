@@ -12,6 +12,7 @@ from skibidi_orm.migration_engine.operations.column_operations import (
 )
 from skibidi_orm.migration_engine.operations.constraints import (
     CheckConstraint,
+    ForeignKeyConstraint,
     NotNullConstraint,
     PrimaryKeyConstraint,
     UniqueConstraint,
@@ -99,10 +100,16 @@ def test_add_column_with_primary_key_and_unique():
 
 
 def test_add_column_with_foreign_key_and_unique():
-    operation = AddColumnOperation(empty_users_table, column_unique)
+    operation = AddColumnOperation(
+        empty_users_table,
+        column_unique,
+        related_foreign_key=ForeignKeyConstraint(
+            empty_users_table.name, "people", {"user_id": "person_id"}
+        ),
+    )
     assert (
         SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users ADD COLUMN user_id INTEGER UNIQUE;"  # TODO REFERENCES people (person_id);"
+        == "ALTER TABLE users ADD COLUMN user_id INTEGER UNIQUE REFERENCES people (person_id);"
     )
 
 

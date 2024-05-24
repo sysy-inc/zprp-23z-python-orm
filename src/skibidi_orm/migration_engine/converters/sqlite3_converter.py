@@ -1,5 +1,4 @@
 from skibidi_orm.exceptions.constraints import UnsupportedConstraintError
-from skibidi_orm.migration_engine.adapters.base_adapter import BaseColumn
 from itertools import chain
 from skibidi_orm.migration_engine.converters.sql_converter import (
     ColumnOperationSQLConverter,
@@ -140,7 +139,22 @@ class SQLite3ColumnOperationConverter(ColumnOperationSQLConverter):
     @staticmethod
     def convert_add_column_operation_to_SQL(operation: AddColumnOperation) -> str:
         """Convert a given add column operation to a SQLite3 SQL string"""
-        return f"ALTER TABLE {operation.table.name} ADD COLUMN {SQLite3ColumnOperationConverter.convert_column_definition_to_SQL(operation.column, operation.column.column_constraints)};"
+        column_definition = (
+            SQLite3ColumnOperationConverter.convert_column_definition_to_SQL(
+                operation.column, operation.column.column_constraints
+            )
+        )
+        return_value = (
+            f"ALTER TABLE {operation.table.name} ADD COLUMN {column_definition}"
+        )
+        if operation.related_foreign_key is not None:
+            referenced_column = operation.related_foreign_key.column_mapping[
+                operation.column.name
+            ]
+            fk_definition = f"REFERENCES {operation.related_foreign_key.referenced_table} ({referenced_column})"
+            return_value += f" {fk_definition}"
+
+        return f"{return_value};"
 
     @staticmethod
     def convert_delete_column_operation_to_SQL(operation: DeleteColumnOperation) -> str:

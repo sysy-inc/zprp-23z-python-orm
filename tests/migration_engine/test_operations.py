@@ -58,6 +58,55 @@ def test_add_column_operation_init_reverse():
     )
 
 
+def test_add_column_composite_foreign_key():
+    """Shouldn't be able to initialise an AddColumnOperation with a composite foreign key."""
+    with raises(ValueError):
+        AddColumnOperation(
+            table=mock_table_1,
+            column=mock_column_1,
+            related_foreign_key=ForeignKeyConstraint(
+                mock_table_1.name,
+                mock_table_2.name,
+                {
+                    "composite": "key",
+                    mock_column_1.name: mock_column_2.name,
+                },
+            ),
+        )
+
+
+def test_add_column_foreign_key_references_different_column():
+    """Shouldn't be able to initialise an AddColumnOperation with a foreign key that references a different column."""
+    with raises(ValueError):
+        AddColumnOperation(
+            table=mock_table_1,
+            column=mock_column_1,
+            related_foreign_key=ForeignKeyConstraint(
+                mock_table_1.name,
+                mock_table_2.name,
+                {
+                    mock_column_2.name: "this should throw an exception",
+                },
+            ),
+        )
+
+
+def test_add_column_foreign_key_references_different_table():
+    """Shouldn't be able to initialise an AddColumnOperation with a foreign key that references the wrong table."""
+    with raises(ValueError):
+        AddColumnOperation(
+            table=mock_table_1,
+            column=mock_column_1,
+            related_foreign_key=ForeignKeyConstraint(
+                mock_table_2.name,
+                "this should throw an exception",
+                {
+                    mock_column_1.name: mock_column_2.name,
+                },
+            ),
+        )
+
+
 def test_delete_column_operation_init_reverse():
     operation = DeleteColumnOperation(table=mock_table_1, column=mock_column_1)
     assert operation.operation_type == OperationType.DELETE
