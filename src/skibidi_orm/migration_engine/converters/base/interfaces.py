@@ -23,23 +23,23 @@ class SQLConverter(ABC):
 
     @staticmethod
     @abstractmethod
-    def constraint_converter() -> type[ConstraintSQLConverter]:
+    def get_constraint_converter() -> type[ConstraintSQLConverter]:
         """Return the corresponding constraint converter class"""
 
-    @staticmethod
-    @abstractmethod
-    def convert_table_operation_to_SQL(operation: TableOperation) -> str:
+    @classmethod
+    def convert_table_operation_to_SQL(cls, operation: TableOperation) -> str:
         """Convert a given table operation object to raw SQL in a specific dialect"""
+        return cls.get_table_operation_converter().convert_table_operation_to_SQL(operation)
 
-    @staticmethod
-    @abstractmethod
-    def convert_column_operation_to_SQL(operation: ColumnOperation) -> str:
+    @classmethod
+    def convert_column_operation_to_SQL(cls, operation: ColumnOperation) -> str:
         """Convert a given column operation object to raw SQL in a specific dialect"""
+        return cls.get_column_operation_converter().convert_column_operation_to_SQL(operation)
 
-    @staticmethod
-    @abstractmethod
-    def _convert_constraint_to_SQL(constraint: Constraint) -> str:
+    @classmethod
+    def _convert_constraint_to_SQL(cls, constraint: Constraint) -> str:
         """Convert a given constraint to raw SQL in a specific dialect"""
+        return cls.get_constraint_converter().convert_constraint_to_SQL(constraint)
 
 
 class ColumnOperationSQLConverter(ABC):
