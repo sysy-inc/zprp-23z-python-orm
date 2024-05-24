@@ -1,6 +1,10 @@
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SQLite3Inspector
+from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+    SQLite3Inspector,
+)
 from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
@@ -42,7 +46,6 @@ def test_adding_table_to_database(make_database: str):
     SQLite3Executor.execute_sql(sql_table_post)
 
     class Table(MigrationElement):
-
         def __init__(self) -> None:
             self.adapter = SQLite3Adapter()
 
@@ -109,12 +112,12 @@ def test_adding_table_to_database(make_database: str):
     assert tables[2].name == "Comment"
     assert tables[2].columns[0].name == "comment_id"
     assert tables[2].columns[0].data_type == "INTEGER"
-    assert tables[2].columns[0].constraints == [
+    assert tables[2].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("Comment", "comment_id")
     ]
     assert tables[2].columns[1].name == "comment_name"
     assert tables[2].columns[1].data_type == "TEXT"
-    assert tables[2].columns[1].constraints == [
+    assert tables[2].columns[1].column_constraints == [
         C.NotNullConstraint("Comment", "comment_name")
     ]
 
@@ -178,24 +181,24 @@ def test_removing_table_from_database(make_database: str):
     assert tables[0].name == "User"
     assert tables[0].columns[0].name == "user_id"
     assert tables[0].columns[0].data_type == "INTEGER"
-    assert tables[0].columns[0].constraints == [
+    assert tables[0].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("User", "user_id")
     ]
     assert tables[0].columns[1].name == "user_name"
     assert tables[0].columns[1].data_type == "TEXT"
-    assert tables[0].columns[1].constraints == [
+    assert tables[0].columns[1].column_constraints == [
         C.NotNullConstraint("User", "user_name")
     ]
 
     assert tables[1].name == "Post"
     assert tables[1].columns[0].name == "post_id"
     assert tables[1].columns[0].data_type == "INTEGER"
-    assert tables[1].columns[0].constraints == [
+    assert tables[1].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("Post", "post_id")
     ]
     assert tables[1].columns[1].name == "post_name"
     assert tables[1].columns[1].data_type == "TEXT"
-    assert tables[1].columns[1].constraints == [
+    assert tables[1].columns[1].column_constraints == [
         C.NotNullConstraint("Post", "post_name")
     ]
 
@@ -263,29 +266,29 @@ def test_add_column_to_database(make_database: str):
     assert tables[0].name == "User"
     assert tables[0].columns[0].name == "user_id"
     assert tables[0].columns[0].data_type == "INTEGER"
-    assert tables[0].columns[0].constraints == [
+    assert tables[0].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("User", "user_id")
     ]
     assert tables[0].columns[1].name == "user_name"
     assert tables[0].columns[1].data_type == "TEXT"
-    assert tables[0].columns[1].constraints == [
+    assert tables[0].columns[1].column_constraints == [
         C.NotNullConstraint("User", "user_name")
     ]
 
     assert tables[1].name == "Post"
     assert tables[1].columns[0].name == "post_id"
     assert tables[1].columns[0].data_type == "INTEGER"
-    assert tables[1].columns[0].constraints == [
+    assert tables[1].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("Post", "post_id")
     ]
     assert tables[1].columns[1].name == "post_name"
     assert tables[1].columns[1].data_type == "TEXT"
-    assert tables[1].columns[1].constraints == [
+    assert tables[1].columns[1].column_constraints == [
         C.NotNullConstraint("Post", "post_name")
     ]
     assert tables[1].columns[2].name == "post_content"
     assert tables[1].columns[2].data_type == "TEXT"
-    assert tables[1].columns[2].constraints == [
+    assert tables[1].columns[2].column_constraints == [
         C.NotNullConstraint("Post", "post_content")
     ]
 
@@ -296,7 +299,6 @@ def test_removing_column_from_database(make_database: str):
     SQLite3Executor.execute_sql(sql_table_post)
 
     class Table(MigrationElement):
-
         def __init__(self) -> None:
             self.adapter = SQLite3Adapter()
 
@@ -343,12 +345,12 @@ def test_removing_column_from_database(make_database: str):
     assert tables[0].name == "User"
     assert tables[0].columns[0].name == "user_id"
     assert tables[0].columns[0].data_type == "INTEGER"
-    assert tables[0].columns[0].constraints == [
+    assert tables[0].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("User", "user_id")
     ]
     assert tables[0].columns[1].name == "user_name"
     assert tables[0].columns[1].data_type == "TEXT"
-    assert tables[0].columns[1].constraints == [
+    assert tables[0].columns[1].column_constraints == [
         C.NotNullConstraint("User", "user_name")
     ]
 
@@ -356,7 +358,7 @@ def test_removing_column_from_database(make_database: str):
     assert len(tables[1].columns) == 1
     assert tables[1].columns[0].name == "post_id"
     assert tables[1].columns[0].data_type == "INTEGER"
-    assert tables[1].columns[0].constraints == [
+    assert tables[1].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("Post", "post_id")
     ]
 
@@ -417,24 +419,24 @@ def test_renaming_table_in_database(make_database: str):
     assert tables[0].name == "User"
     assert tables[0].columns[0].name == "user_id"
     assert tables[0].columns[0].data_type == "INTEGER"
-    assert tables[0].columns[0].constraints == [
+    assert tables[0].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("User", "user_id")
     ]
     assert tables[0].columns[1].name == "user_name"
     assert tables[0].columns[1].data_type == "TEXT"
-    assert tables[0].columns[1].constraints == [
+    assert tables[0].columns[1].column_constraints == [
         C.NotNullConstraint("User", "user_name")
     ]
 
     assert tables[1].name == "NewNamePost"
     assert tables[1].columns[0].name == "post_id"
     assert tables[1].columns[0].data_type == "INTEGER"
-    assert tables[1].columns[0].constraints == [
+    assert tables[1].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("NewNamePost", "post_id")
     ]
     assert tables[1].columns[1].name == "post_name"
     assert tables[1].columns[1].data_type == "TEXT"
-    assert tables[1].columns[1].constraints == [
+    assert tables[1].columns[1].column_constraints == [
         C.NotNullConstraint("NewNamePost", "post_name")
     ]
 
@@ -501,28 +503,28 @@ def test_add_column_to_database_and_remove_table_from_database(make_database: st
     assert tables[0].name == "User"
     assert tables[0].columns[0].name == "user_id"
     assert tables[0].columns[0].data_type == "INTEGER"
-    assert tables[0].columns[0].constraints == [
+    assert tables[0].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("User", "user_id")
     ]
     assert tables[0].columns[1].name == "user_name"
     assert tables[0].columns[1].data_type == "TEXT"
-    assert tables[0].columns[1].constraints == [
+    assert tables[0].columns[1].column_constraints == [
         C.NotNullConstraint("User", "user_name")
     ]
 
     assert tables[1].name == "Post"
     assert tables[1].columns[0].name == "post_id"
     assert tables[1].columns[0].data_type == "INTEGER"
-    assert tables[1].columns[0].constraints == [
+    assert tables[1].columns[0].column_constraints == [
         C.PrimaryKeyConstraint("Post", "post_id")
     ]
     assert tables[1].columns[1].name == "post_name"
     assert tables[1].columns[1].data_type == "TEXT"
-    assert tables[1].columns[1].constraints == [
+    assert tables[1].columns[1].column_constraints == [
         C.NotNullConstraint("Post", "post_name")
     ]
     assert tables[1].columns[2].name == "post_content"
     assert tables[1].columns[2].data_type == "TEXT"
-    assert tables[1].columns[2].constraints == [
+    assert tables[1].columns[2].column_constraints == [
         C.NotNullConstraint("Post", "post_content")
     ]

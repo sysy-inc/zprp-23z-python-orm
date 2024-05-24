@@ -29,12 +29,16 @@ class SQLConverter(ABC):
     @classmethod
     def convert_table_operation_to_SQL(cls, operation: TableOperation) -> str:
         """Convert a given table operation object to raw SQL in a specific dialect"""
-        return cls.get_table_operation_converter().convert_table_operation_to_SQL(operation)
+        return cls.get_table_operation_converter().convert_table_operation_to_SQL(
+            operation
+        )
 
     @classmethod
     def convert_column_operation_to_SQL(cls, operation: ColumnOperation) -> str:
         """Convert a given column operation object to raw SQL in a specific dialect"""
-        return cls.get_column_operation_converter().convert_column_operation_to_SQL(operation)
+        return cls.get_column_operation_converter().convert_column_operation_to_SQL(
+            operation
+        )
 
     @classmethod
     def _convert_constraint_to_SQL(cls, constraint: Constraint) -> str:

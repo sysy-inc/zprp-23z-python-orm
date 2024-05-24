@@ -117,7 +117,7 @@ class SQLite3TableOperationConverter(TableOperationSQLConverter):
         constraints_at_end = set(
             filter(
                 lambda c: c.constraint_type
-                not in [ConstraintType.PRIMARY_KEY, ConstraintType.UNIQUE],
+                not in [ConstraintType.PRIMARY_KEY, ConstraintType.UNIQUE, ConstraintType.NOT_NULL],
                 all_constraints,
             )
         )

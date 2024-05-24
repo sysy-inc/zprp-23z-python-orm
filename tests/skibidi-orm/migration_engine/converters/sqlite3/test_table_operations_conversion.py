@@ -9,6 +9,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     ForeignKeyConstraint,
     PrimaryKeyConstraint,
     UniqueConstraint,
+    NotNullConstraint,
 )
 from skibidi_orm.migration_engine.operations.table_operations import (
     CreateTableOperation,
@@ -39,7 +40,10 @@ complex_table_with_constraints = SQLite3Typing.Table(
         SQLite3Typing.Column(
             "user_id",
             "INTEGER",
-            column_constraints=[PrimaryKeyConstraint("users", "user_id")],
+            column_constraints=[
+                PrimaryKeyConstraint("users", "user_id"),
+                NotNullConstraint("users", "user_id"),
+            ],
         ),
         SQLite3Typing.Column("name", "TEXT"),
         SQLite3Typing.Column(
@@ -72,10 +76,16 @@ def non_random_constraint_order(monkeypatch: pytest.MonkeyPatch):
             chain.from_iterable(column.column_constraints for column in table.columns)
         )
 
+        # TODO: make this dependent on the implementation of the TableOperationConverter instead of
+        #  doing it here
         constraints_at_end = list(
             filter(
                 lambda c: c.constraint_type
-                not in [ConstraintType.PRIMARY_KEY, ConstraintType.UNIQUE],
+                not in [
+                    ConstraintType.PRIMARY_KEY,
+                    ConstraintType.UNIQUE,
+                    ConstraintType.NOT_NULL,
+                ],
                 all_constraints,
             )
         )
@@ -117,7 +127,7 @@ def test_create_table_conversion_complex_with_constraints():
     operation = CreateTableOperation(complex_table_with_constraints)
     assert (
         SQLite3TableOperationConverter.convert_table_operation_to_SQL(operation)
-        == "CREATE TABLE admin_users (user_id INTEGER PRIMARY KEY, name TEXT, "
+        == "CREATE TABLE admin_users (user_id INTEGER PRIMARY KEY NOT NULL, name TEXT, "
         "email TEXT UNIQUE, active BLOB, age INTEGER, CHECK (age > 18), FOREIGN KEY (active, name) REFERENCES users ("
            "active, name));"
     )
