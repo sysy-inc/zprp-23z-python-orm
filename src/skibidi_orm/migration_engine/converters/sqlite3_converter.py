@@ -10,7 +10,6 @@ from skibidi_orm.migration_engine.converters.sql_converter import (
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.operations.column_operations import (
     AddColumnOperation,
-    ChangeDataTypeOperation,
     ColumnOperation,
     DeleteColumnOperation,
     RenameColumnOperation,
@@ -134,19 +133,6 @@ class SQLite3ColumnOperationConverter(ColumnOperationSQLConverter):
                     cast(RenameColumnOperation, operation)
                 )
             )
-        elif operation.operation_type == OperationType.DTYPE_CHANGE:
-            return (
-                SQLite3ColumnOperationConverter.convert_dtype_change_operation_to_SQL(
-                    cast(ChangeDataTypeOperation, operation)
-                )
-            )
-        # TODO: constraint change
-        elif operation.operation_type == OperationType.CONSTRAINT_CHANGE:
-            return (
-                SQLite3ConstraintConverter.convert_constraint_change_operation_to_SQL(
-                    cast(Constraint, operation)
-                )
-            )
         raise UnsupportedOperationError(
             "The given operation is not supported in SQLite3."
         )
@@ -167,26 +153,6 @@ class SQLite3ColumnOperationConverter(ColumnOperationSQLConverter):
     def convert_rename_column_operation_to_SQL(operation: RenameColumnOperation) -> str:
         """Convert a given rename column operation to a SQLite3 SQL string"""
         return f"ALTER TABLE {operation.table.name} RENAME COLUMN {operation.column.name} TO {operation.new_name};"
-
-    @staticmethod
-    def convert_dtype_change_operation_to_SQL(
-        operation: ChangeDataTypeOperation,
-    ) -> str:
-        """Convert a given data type change operation to a SQLite3 SQL string"""
-        delete_op = DeleteColumnOperation(operation.table, operation.column)
-        add_op = AddColumnOperation(
-            operation.table,
-            BaseColumn(
-                name=operation.column.name,
-                data_type=operation.new_dtype,
-                column_constraints=operation.column.column_constraints,
-            ),
-        )
-        return (
-            SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(delete_op)
-            + " "
-            + SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(add_op)
-        )
 
     @staticmethod
     def convert_column_definition_to_SQL(

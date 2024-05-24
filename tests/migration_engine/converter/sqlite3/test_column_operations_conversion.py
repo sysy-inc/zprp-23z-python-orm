@@ -1,3 +1,5 @@
+from pytest import raises
+from skibidi_orm.exceptions.operations import UnsupportedOperationError
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.converters.sqlite3_converter import (
     SQLite3ColumnOperationConverter,
@@ -186,35 +188,28 @@ def test_change_data_type_simple_column():
     operation = ChangeDataTypeOperation(
         empty_users_table, simple_column_no_constraints, "INTEGER"
     )
-    assert (
+    with raises(UnsupportedOperationError):
         SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users DROP COLUMN name; ALTER TABLE users ADD COLUMN name INTEGER;"
-    )
 
 
 def test_change_data_type_primary_key_unique_nn():
     operation = ChangeDataTypeOperation(
         empty_users_table, column_primary_key_unique, "TEXT"
     )
-    assert (
+    with raises(UnsupportedOperationError):
         SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users DROP COLUMN user_id; ALTER TABLE users ADD COLUMN user_id TEXT PRIMARY KEY UNIQUE NOT NULL;"
-    )
 
 
 def test_change_data_type_column_with_foreign_key_and_unique():
     operation = ChangeDataTypeOperation(empty_users_table, column_unique, "TEXT")
-    assert (
+
+    with raises(UnsupportedOperationError):
         SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users DROP COLUMN user_id; ALTER TABLE users ADD COLUMN user_id TEXT UNIQUE;"  # TODO REFERENCES people (person_id) UNIQUE;"
-    )
 
 
 def test_change_data_type_column_with_check_constraint():
     operation = ChangeDataTypeOperation(
         empty_users_table, column_check_constraint, "TEXT"
     )
-    assert (
+    with raises(UnsupportedOperationError):
         SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users DROP COLUMN age; ALTER TABLE users ADD COLUMN age TEXT CHECK (age > 18);"
-    )
