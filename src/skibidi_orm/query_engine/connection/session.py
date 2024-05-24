@@ -104,7 +104,7 @@ class Session:
     def changed(self, obj: Model):
         # o = self._map.get(obj.key(), obj) TOCHANGE
         o = self._map.get(("test_model", 1), obj)
-        if o in self._dirty:
+        if o in self._dirty or o is None:
             return
         self._dirty.append(o)
 
