@@ -1,7 +1,7 @@
 """
 Base sql compiler
 """
-from skibidi_orm.query_engine.operations.crud import Insert, ValueBase, Update
+from skibidi_orm.query_engine.operations.crud import Insert, ValueBase, Update, Delete
 from skibidi_orm.query_engine.operations import clauses as c
 from typing import Any, Type
 
@@ -67,6 +67,15 @@ class SQLCompiler:
         text += statement.table()
         text += " SET "
         text += self._col_val(statement.attributes())
+        text += " "
+        text += self._prepare_where(statement.where_clause())
+        text += ";"
+        print(text)
+        return text
+
+    def delete(self, statement: Delete) -> str:
+        text = "DELETE FROM "
+        text += statement.table()
         text += " "
         text += self._prepare_where(statement.where_clause())
         text += ";"
