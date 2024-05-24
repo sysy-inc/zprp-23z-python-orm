@@ -1,7 +1,6 @@
 from typing import Literal
 from skibidi_orm.migration_engine.adapters.base_adapter import (
     BaseColumn,
-    Relation,
     BaseTable,
 )
 
@@ -16,6 +15,4 @@ class SQLite3Typing:
     Constraints = Constraint
     Column = BaseColumn[DataTypes]
     Table = BaseTable[Column]
-    Relation = Relation
     tables: list[Table] = []
-    relations: list[Relation] = []

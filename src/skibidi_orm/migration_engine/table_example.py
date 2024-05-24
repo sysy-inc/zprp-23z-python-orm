@@ -1,9 +1,10 @@
 # Example of how Table class and classes modeling DB schema can be implemented
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseAdapter
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
-from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
-    MigrationElement,
-)
+import skibidi_orm.migration_engine.adapters.database_objects.constraints as C
+# TODO: make C lowercase everywhere
+from skibidi_orm.migration_engine.adapters.database_objects.migration_element import MigrationElement
 
 
 class Table(MigrationElement):
@@ -27,10 +28,22 @@ class Table(MigrationElement):
         # This will only populate the adapter in inside migration scripts, as Table will never be instantiated
         if self.__class__ == Table:
             for cls in models:
-                table: SQLite3Adapter.Table
-                data_type: SQLite3Adapter.DataTypes
-                columns: list[SQLite3Adapter.Column] = []
-                constraints: list[SQLite3Adapter.Constraints] = []
+                table: SQLite3Typing.Table
+                data_type: SQLite3Typing.DataTypes
+                columns: list[SQLite3Typing.Column] = []
+                all_constraints = cls.__dict__["constraints"]
+
+                fks: set[C.ForeignKeyConstraint] = set(
+                    constraint
+                    for constraint in all_constraints
+                    if isinstance(constraint, C.ForeignKeyConstraint)
+                )
+
+                column_constraints = [
+                    constraint
+                    for constraint in all_constraints
+                    if isinstance(constraint, C.ColumnSpecificConstraint)
+                ]
 
                 if cls.__dict__["data_type"] == "my_definition_of_data_type":
                     data_type = "INTEGER"
@@ -41,16 +54,16 @@ class Table(MigrationElement):
                 else:
                     data_type = "NULL"
 
-                constraints.append(cls.__dict__["constraints"])
-
                 columns.append(
-                    SQLite3Adapter.Column(
+                    SQLite3Typing.Column(
                         name=cls.__dict__["name"],
                         data_type=data_type,
-                        constraints=constraints,
+                        column_constraints=column_constraints,
                     )
                 )
-                table = SQLite3Adapter.Table(name=cls.__name__, columns=columns)
+                table = SQLite3Typing.Table(
+                    name=cls.__name__, columns=columns, foreign_keys=fks
+                )
 
                 # Table, for each instance should properly inform the adapter about being created
                 self.adapter.create_table(table)

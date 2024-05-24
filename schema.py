@@ -1,6 +1,7 @@
 from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
     MigrationElement,
 )
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.adapters.database_objects import constraints as C
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
@@ -19,19 +20,19 @@ class Table(MigrationElement):
 
 class Post(Table):  # type: ignore
     columns = [
-        SQLite3Adapter.Column(
+        SQLite3Typing.Column(
             name="post_id",
             data_type="INTEGER",
-            constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+            column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
         ),
-        SQLite3Adapter.Column(
+        SQLite3Typing.Column(
             name="post_name",
             data_type="TEXT",
-            constraints=[C.NotNullConstraint("Post", "post_name")],
+            column_constraints=[C.NotNullConstraint("Post", "post_name")],
         ),
     ]
 
-    table = SQLite3Adapter.Table(name="Post", columns=columns)
+    table = SQLite3Typing.Table(name="Post", columns=columns)
 
 
 SQLite3Config("test_database.db")

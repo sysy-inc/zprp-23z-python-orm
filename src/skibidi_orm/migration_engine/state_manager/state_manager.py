@@ -1,7 +1,6 @@
 from skibidi_orm.migration_engine.adapters.base_adapter import (
     BaseTable,
     BaseColumn,
-    Relation,
 )
 from typing import Any
 from skibidi_orm.migration_engine.operations.column_operations import (
@@ -22,14 +21,10 @@ class StateManager[TTable: BaseTable[BaseColumn[Any]]]:
     def __init__(
         self,
         db_tables: list[TTable],
-        db_relations: list[Relation],
         schema_tables: list[TTable],
-        schema_relations: list[Relation],
     ) -> None:
         self.db_tables = db_tables
-        self.db_relations = db_relations
         self.schema_tables = schema_tables
-        self.schema_relations = schema_relations
 
         self.serviced_tables: list[TTable] = []
 
@@ -119,7 +114,8 @@ class StateManager[TTable: BaseTable[BaseColumn[Any]]]:
                                 DeleteColumnOperation(db_table, db_column)
                             )
 
-    def get_relations_operations(self):
-        for relation in self.schema_relations:
-            if relation not in self.db_relations:
-                pass  # add crea
+    # def get_relations_operations(self):
+    #     # TODO: implement using foreign keys
+    #     for relation in self.schema_relations:
+    #         if relation not in self.db_relations:
+    #             pass  # add crea

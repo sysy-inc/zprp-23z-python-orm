@@ -1,28 +1,7 @@
-from skibidi_orm.migration_engine.operations.table_operations import (
-    CreateTableOperation,
-    DeleteTableOperation,
-    RenameTableOperation,
-)
-from skibidi_orm.migration_engine.operations.column_operations import (
-    AddColumnOperation,
-    DeleteColumnOperation,
-    RenameColumnOperation,
-    ChangeDataTypeOperation,
-    AddConstraintOperation,
-    DeleteConstraintOperation,
-)
-
-
+from skibidi_orm.migration_engine.operations.table_operations import *
+from skibidi_orm.migration_engine.operations.column_operations import *
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
-
-from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
-    PrimaryKeyConstraint,
-)
-
-from skibidi_orm.exceptions.operations_exceptions import (
-    IrreversibleOperationError,
-)
-
+from skibidi_orm.migration_engine.adapters.database_objects.constraints import *
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable, BaseColumn
 from typing import Literal
 from pytest import raises
@@ -77,6 +56,55 @@ def test_add_column_operation_init_reverse():
         table=operation.table,
         column=operation.column,
     )
+
+
+def test_add_column_composite_foreign_key():
+    """Shouldn't be able to initialise an AddColumnOperation with a composite foreign key."""
+    with raises(ValueError):
+        AddColumnOperation(
+            table=mock_table_1,
+            column=mock_column_1,
+            related_foreign_key=ForeignKeyConstraint(
+                mock_table_1.name,
+                mock_table_2.name,
+                {
+                    "composite": "key",
+                    mock_column_1.name: mock_column_2.name,
+                },
+            ),
+        )
+
+
+def test_add_column_foreign_key_references_different_column():
+    """Shouldn't be able to initialise an AddColumnOperation with a foreign key that references a different column."""
+    with raises(ValueError):
+        AddColumnOperation(
+            table=mock_table_1,
+            column=mock_column_1,
+            related_foreign_key=ForeignKeyConstraint(
+                mock_table_1.name,
+                mock_table_2.name,
+                {
+                    mock_column_2.name: "this should throw an exception",
+                },
+            ),
+        )
+
+
+def test_add_column_foreign_key_references_different_table():
+    """Shouldn't be able to initialise an AddColumnOperation with a foreign key that references the wrong table."""
+    with raises(ValueError):
+        AddColumnOperation(
+            table=mock_table_1,
+            column=mock_column_1,
+            related_foreign_key=ForeignKeyConstraint(
+                mock_table_2.name,
+                "this should throw an exception",
+                {
+                    mock_column_1.name: mock_column_2.name,
+                },
+            ),
+        )
 
 
 def test_delete_column_operation_init_reverse():

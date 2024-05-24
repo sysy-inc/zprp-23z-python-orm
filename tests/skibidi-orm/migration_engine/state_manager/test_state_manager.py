@@ -1,3 +1,4 @@
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
@@ -50,6 +51,7 @@ sql_table_primary_key_not_null = """
 """
 
 
+# TODO: what is this?
 # sql_schema_with_fks = [
 #     """
 #     CREATE TABLE users (
@@ -144,35 +146,35 @@ def test_rename_table_operation_needed(
 
     class User(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[C.NotNullConstraint("User", "user_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="User", columns=columns)
+        table = SQLite3Typing.Table(name="User", columns=columns)
 
     class NewNamePost(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("NewNamePost", "post_id")],
+                column_constraints=[C.PrimaryKeyConstraint("NewNamePost", "post_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("NewNamePost", "post_name")],
+                column_constraints=[C.NotNullConstraint("NewNamePost", "post_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="NewNamePost", columns=columns)
+        table = SQLite3Typing.Table(name="NewNamePost", columns=columns)
 
     SQLite3Config(tmp_database)
 
@@ -189,7 +191,7 @@ def test_rename_table_operation_needed(
 def test_no_operation_needed(
     tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
 ):
-
+    # TODO: refactor to avoid duplicating the setup multiple times
     class Table(MigrationElement):
 
         def __init__(self) -> None:
@@ -202,35 +204,35 @@ def test_no_operation_needed(
 
     class User(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[C.NotNullConstraint("User", "user_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="User", columns=columns)
+        table = SQLite3Typing.Table(name="User", columns=columns)
 
     class Post(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("Post", "post_name")],
+                column_constraints=[C.NotNullConstraint("Post", "post_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="Post", columns=columns)
+        table = SQLite3Typing.Table(name="Post", columns=columns)
 
     SQLite3Config(tmp_database)
 
@@ -259,52 +261,52 @@ def test_create_table_operation_needed(
 
     class User(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[C.NotNullConstraint("User", "user_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="User", columns=columns)
+        table = SQLite3Typing.Table(name="User", columns=columns)
 
     class Post(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("Post", "post_name")],
+                column_constraints=[C.NotNullConstraint("Post", "post_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="Post", columns=columns)
+        table = SQLite3Typing.Table(name="Post", columns=columns)
 
     class Comment(Table):  # type: ignore
 
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="comment_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("Comment", "comment_id")],
+                column_constraints=[C.PrimaryKeyConstraint("Comment", "comment_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="comment_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("Comment", "comment_name")],
+                column_constraints=[C.NotNullConstraint("Comment", "comment_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="Comment", columns=columns)
+        table = SQLite3Typing.Table(name="Comment", columns=columns)
 
     SQLite3Config(tmp_database)
 
@@ -334,35 +336,35 @@ def test_delete_table_operation_needed(
 
     class User(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[C.NotNullConstraint("User", "user_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="User", columns=columns)
+        table = SQLite3Typing.Table(name="User", columns=columns)
 
     class Post(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("Post", "post_name")],
+                column_constraints=[C.NotNullConstraint("Post", "post_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="Post", columns=columns)
+        table = SQLite3Typing.Table(name="Post", columns=columns)
 
     SQLite3Config(tmp_database)
 
@@ -392,40 +394,40 @@ def test_create_column_operation_needed(
 
     class User(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[C.NotNullConstraint("User", "user_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="User", columns=columns)
+        table = SQLite3Typing.Table(name="User", columns=columns)
 
     class Post(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("Post", "post_name")],
+                column_constraints=[C.NotNullConstraint("Post", "post_name")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_content",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("Post", "post_content")],
+                column_constraints=[C.NotNullConstraint("Post", "post_content")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="Post", columns=columns)
+        table = SQLite3Typing.Table(name="Post", columns=columns)
 
     SQLite3Config(tmp_database)
 
@@ -455,30 +457,30 @@ def test_delete_column_operation_needed(
 
     class User(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[C.NotNullConstraint("User", "user_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="User", columns=columns)
+        table = SQLite3Typing.Table(name="User", columns=columns)
 
     class Post(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="Post", columns=columns)
+        table = SQLite3Typing.Table(name="Post", columns=columns)
 
     SQLite3Config(tmp_database)
 
@@ -507,40 +509,40 @@ def test_add_column_and_delete_tabe_operation_needed(
 
     class User(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[C.NotNullConstraint("User", "user_name")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="User", columns=columns)
+        table = SQLite3Typing.Table(name="User", columns=columns)
 
     class Post(Table):  # type: ignore
         columns = [
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("Post", "post_name")],
+                column_constraints=[C.NotNullConstraint("Post", "post_name")],
             ),
-            SQLite3Adapter.Column(
+            SQLite3Typing.Column(
                 name="post_content",
                 data_type="TEXT",
-                constraints=[C.NotNullConstraint("Post", "post_content")],
+                column_constraints=[C.NotNullConstraint("Post", "post_content")],
             ),
         ]
 
-        table = SQLite3Adapter.Table(name="Post", columns=columns)
+        table = SQLite3Typing.Table(name="Post", columns=columns)
 
     SQLite3Config(tmp_database)
 
