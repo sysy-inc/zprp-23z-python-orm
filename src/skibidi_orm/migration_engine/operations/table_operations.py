@@ -54,5 +54,4 @@ class RenameTableOperation(TableOperation):
     new_name: str
 
     def reverse(self) -> TableOperation:
-        # todo
         return RenameTableOperation(table=self.table, new_name=self.table.name)
