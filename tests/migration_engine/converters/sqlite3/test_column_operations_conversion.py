@@ -1,7 +1,7 @@
 from pytest import raises
 from skibidi_orm.exceptions.operations import UnsupportedOperationError
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
-from skibidi_orm.migration_engine.converters.sqlite3_converter import (
+from skibidi_orm.migration_engine.converters.sqlite3.all import (
     SQLite3ColumnOperationConverter,
 )
 from skibidi_orm.migration_engine.operations.column_operations import (

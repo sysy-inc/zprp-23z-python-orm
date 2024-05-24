@@ -1,6 +1,5 @@
 import pytest
-from skibidi_orm.migration_engine.converters.sqlite3_converter import (
-    SQLite3Converter,
+from skibidi_orm.migration_engine.converters.sqlite3.tables import (
     SQLite3TableOperationConverter,
 )
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
@@ -90,7 +89,9 @@ def non_random_constraint_order(monkeypatch: pytest.MonkeyPatch):
 
         return list(constraints_at_end), list(constraints_at_columns)
 
-    monkeypatch.setattr(SQLite3Converter, "split_constraints", split_using_lists)
+    monkeypatch.setattr(
+        SQLite3TableOperationConverter, "split_constraints", split_using_lists
+    )
 
 
 def test_create_table_conversion_simple():

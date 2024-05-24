@@ -1,6 +1,6 @@
 from pytest import raises
 from skibidi_orm.exceptions.constraints import UnsupportedConstraintError
-from skibidi_orm.migration_engine.converters.sqlite3_converter import (
+from skibidi_orm.migration_engine.converters.sqlite3.constraints import (
     SQLite3ConstraintConverter,
 )
 from skibidi_orm.migration_engine.operations.constraints import (
