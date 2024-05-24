@@ -5,7 +5,9 @@ import sqlite3
 
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
 import skibidi_orm.migration_engine.adapters.database_objects.constraints as C
 
 type SQLite3PragmaTableInfo = list[
@@ -134,7 +136,7 @@ class SQLite3Inspector(BaseDbInspector):
                 name=name,
                 data_type=cast(SQLite3Typing.DataTypes, data_type),
                 column_constraints=[
-                    cast(SQLite3Typing.Constraints, constraint)
+                    cast(C.ColumnSpecificConstraint, constraint)
                     for constraint in [
                         (
                             C.PrimaryKeyConstraint(
