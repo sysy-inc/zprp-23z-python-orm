@@ -3,6 +3,7 @@ from skibidi_orm.migration_engine.adapters.base_adapter import BaseAdapter
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.migration_element import MigrationElement
 from skibidi_orm.migration_engine.operations.constraints import (
+    ColumnSpecificConstraint,
     ForeignKeyConstraint,
 )
 
@@ -39,9 +40,11 @@ class Table(MigrationElement):
                     if isinstance(constraint, ForeignKeyConstraint)
                 )
 
-                column_constraints: set[SQLite3Adapter.ColumnSpecificConstraint] = (
-                    all_constraints - fks
-                )
+                column_constraints = [
+                    constraint
+                    for constraint in all_constraints
+                    if isinstance(constraint, ColumnSpecificConstraint)
+                ]
 
                 if cls.__dict__["data_type"] == "my_definition_of_data_type":
                     data_type = "INTEGER"
@@ -51,8 +54,6 @@ class Table(MigrationElement):
                     data_type = "BLOB"
                 else:
                     data_type = "NULL"
-
-                column_constraints.add(cls.__dict__["constraints"])
 
                 columns.append(
                     SQLite3Adapter.Column(
