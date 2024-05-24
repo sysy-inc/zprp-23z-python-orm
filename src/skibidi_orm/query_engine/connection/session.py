@@ -91,17 +91,41 @@ class Session:
 
     def add(self, obj: Model):
         # if obj in self._map TODO add checking if it is already added
+        # TODO register this session to model, model.add_session()
         self._new.append(obj)
 
+    def _check_clear(self) -> bool:
+        if self._new or self._delete or self._dirty:
+            # not clear
+            return False
+        else:
+            return True
+
+    def changed(self, obj: Model):
+        # o = self._map.get(obj.key(), obj) TOCHANGE
+        o = self._map.get(("test_model", 1), obj)
+        if o in self._dirty:
+            return
+        self._dirty.append(o)
+
     def flush(self):
-        if self._new:
+        if not self._check_clear():
+            # there are some pending changes
             config = self._engine.config
             trans = Transaction(config.compiler, self._connection)
+            # INSERT
             for o in self._new:
                 # TODO adjust for relations, order matters
                 trans.register_insert(o)
-            trans.execute()
             for o in self._new:
                 # TODO maybe add function register_pending that adds to map and cleans _new
                 self._map.add(o)
+
+            # UPDATE
+            for o in self._dirty:
+                # TODO check if in delete, no need to update if deleting
+                trans.register_update(o)
+
+            trans.execute()
             self._new = []
+            self._dirty = []
