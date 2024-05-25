@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
-from skibidi_orm.exceptions.irreversible_operation import IrreversibleOperationError
+from skibidi_orm.exceptions.operations_exceptions import IrreversibleOperationError
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable, BaseColumn
 from typing import Any
 from dataclasses import dataclass, field
@@ -31,6 +31,9 @@ class CreateTableOperation(TableOperation):
     def reverse(self) -> TableOperation:
         return DeleteTableOperation(table=self.table)
 
+    def __str__(self) -> str:
+        return f"Create Table {self.table.name} with columns: {', '.join([col.name for col in self.table.columns])}"
+
 
 @dataclass(frozen=True)
 class DeleteTableOperation(TableOperation):
@@ -44,6 +47,9 @@ class DeleteTableOperation(TableOperation):
             f"Reversing a {self.__class__.__name__} is currently not supported."
         )
 
+    def __str__(self) -> str:
+        return f"Delete Table {self.table.name}"
+
 
 @dataclass(frozen=True)
 class RenameTableOperation(TableOperation):
@@ -56,3 +62,6 @@ class RenameTableOperation(TableOperation):
     def reverse(self) -> TableOperation:
         # todo
         return RenameTableOperation(table=self.table, new_name=self.table.name)
+
+    def __str__(self) -> str:
+        return f"Rename Table {self.table.name} to {self.new_name}"

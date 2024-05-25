@@ -20,7 +20,6 @@ class Constraint(ABC):
 
     constraint_type: ConstraintType = field(init=False)
     table_name: str
-    column_name: str
 
 
 @dataclass(frozen=True)
@@ -28,6 +27,7 @@ class NotNullConstraint(Constraint):
     """Class for the NOT NULL constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.NOT_NULL)
+    column_name: str
 
 
 @dataclass(frozen=True)
@@ -35,6 +35,7 @@ class UniqueConstraint(Constraint):
     """Class for the UNIQUE constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.UNIQUE)
+    column_name: str
 
 
 @dataclass(frozen=True)
@@ -44,9 +45,10 @@ class PrimaryKeyConstraint(Constraint):
     constraint_type: ConstraintType = field(
         init=False, default=ConstraintType.PRIMARY_KEY
     )
+    column_name: str
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, unsafe_hash=True)
 class ForeignKeyConstraint(Constraint):
     """Class for the FOREIGN KEY constraint"""
 
@@ -54,9 +56,9 @@ class ForeignKeyConstraint(Constraint):
         init=False, default=ConstraintType.FOREIGN_KEY
     )
     referenced_table: str
-    column_mapping: dict[
-        str, str
-    ]  # maps the names of corresponding columns from both tables (in case of composite foreign keys)
+    column_mapping: dict[str, str] = field(
+        hash=False
+    )  # maps the corresponding column names: {referencing_column1: referenced_column1, ...}
 
 
 @dataclass(frozen=True)
@@ -64,6 +66,7 @@ class CheckConstraint(Constraint):
     """Class for the CHECK constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.CHECK)
+    column_name: str
     condition: str
 
 
@@ -72,4 +75,5 @@ class DefaultConstraint(Constraint):
     """Class for the DEFAULT constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.DEFAULT)
+    column_name: str
     value: str

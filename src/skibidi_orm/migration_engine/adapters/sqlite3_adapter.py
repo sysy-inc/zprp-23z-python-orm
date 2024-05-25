@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseAdapter
-from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
 
-from skibidi_orm.migration_engine.schema_analysys.state_manager import StateManager
+from skibidi_orm.migration_engine.state_manager.state_manager import StateManager
 
 from skibidi_orm.migration_engine.operations.table_operations import TableOperation
 from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
+
+from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
 
 
 class SQLite3Adapter(BaseAdapter):
@@ -52,7 +56,7 @@ class SQLite3Adapter(BaseAdapter):
         self.tables = []
         self.relations = []
 
-    def execute_migration(self):
+    def execute_migration(self, preview: bool = False):
         """Execute the migration process on a full adapter."""
 
         self.inspector = SqliteInspector()
@@ -68,4 +72,5 @@ class SQLite3Adapter(BaseAdapter):
         )
 
         self.operations = state_manager.get_operations()
-        # print(ops)
+        if not preview:
+            SQLite3Executor.execute_operations(self.operations)

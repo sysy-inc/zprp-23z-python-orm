@@ -11,10 +11,19 @@ from skibidi_orm.migration_engine.operations.column_operations import (
     AddConstraintOperation,
     DeleteConstraintOperation,
 )
+
+
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
-from skibidi_orm.migration_engine.operations.constraints import PrimaryKeyConstraint
+
+from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
+    PrimaryKeyConstraint,
+)
+
+from skibidi_orm.exceptions.operations_exceptions import (
+    IrreversibleOperationError,
+)
+
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable, BaseColumn
-from skibidi_orm.exceptions.irreversible_operation import IrreversibleOperationError
 from typing import Literal
 from pytest import raises
 

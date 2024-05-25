@@ -2,7 +2,9 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
-from skibidi_orm.migration_engine.operations.constraints import Constraint
+from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
+    Constraint,
+)
 
 
 @dataclass(unsafe_hash=True)
@@ -50,6 +52,6 @@ class BaseAdapter(ABC):
         pass
 
     @abstractmethod
-    def execute_migration(self):
+    def execute_migration(self, preview: bool = False):
         """Execute the migration"""
         pass

@@ -2,7 +2,7 @@ from pathlib import Path
 import pytest
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
-from skibidi_orm.migration_engine.operations import constraints as C
+from skibidi_orm.migration_engine.adapters.database_objects import constraints as C
 import sqlite3
 
 

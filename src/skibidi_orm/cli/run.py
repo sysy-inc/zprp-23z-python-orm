@@ -6,6 +6,18 @@
 
 import typer
 from typing import Union
+import os
+
+# import shutil
+import sys
+from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
+    MigrationElement,
+)
+
+sys.path.insert(0, os.getcwd())
+
+import schema  # type: ignore
+
 
 app = typer.Typer(
     help="CLI tool for managing schema creations and migrations in Skibidi ORM."
@@ -21,8 +33,25 @@ def migrate(
     """
     Used to run migration for current schema file. Can accept an optional message as a description of the migration.
     """
+    m = MigrationElement()
+    m.migrate(preview=False)
+    pass
 
-    print(f"Running migration with message: {message}")
+
+@app.command(name="preview-migration")
+def preview_migration():
+    """
+    Preview the migration that will be executed.
+    """
+    m = MigrationElement()
+    m.migrate(preview=True)
+
+    operations = m.operations
+    if not operations:
+        print("No changes to be made.")
+    else:
+        for i, operation in enumerate(m.operations):
+            print(f"{i+1}) {operation}")
     pass
 
 
