@@ -1,7 +1,8 @@
-from skibidi_orm.migration_engine.operations.table_operations import *
-from skibidi_orm.migration_engine.operations.column_operations import *
+from skibidi_orm.exceptions.operations import IrreversibleOperationError
+import skibidi_orm.migration_engine.operations.table_operations as t_ops
+import skibidi_orm.migration_engine.operations.column_operations as c_ops
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
-from skibidi_orm.migration_engine.adapters.database_objects.constraints import *
+import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable, BaseColumn
 from typing import Literal
 from pytest import raises
@@ -14,17 +15,17 @@ mock_column_2 = BaseColumn[DataType]("column_2", "TEXT")
 
 
 def test_create_table_operation_init_reverse():
-    operation = CreateTableOperation(table=mock_table_1)
+    operation = t_ops.CreateTableOperation(table=mock_table_1)
     assert operation.operation_type == OperationType.CREATE
     assert operation.table == mock_table_1
     assert operation.is_reversible is True
 
     reverse_operation = operation.reverse()
-    assert reverse_operation == DeleteTableOperation(table=operation.table)
+    assert reverse_operation == t_ops.DeleteTableOperation(table=operation.table)
 
 
 def test_delete_table_operation_init_reverse():
-    operation = DeleteTableOperation(table=mock_table_1)
+    operation = t_ops.DeleteTableOperation(table=mock_table_1)
     assert operation.operation_type == OperationType.DELETE
     assert operation.table == mock_table_1
     assert operation.is_reversible is False
@@ -34,37 +35,39 @@ def test_delete_table_operation_init_reverse():
 
 
 def test_rename_table_operation_init_reverse():
-    operation = RenameTableOperation(table=mock_table_1, new_name=mock_table_2.name)
+    operation = t_ops.RenameTableOperation(
+        table=mock_table_1, new_name=mock_table_2.name
+    )
     assert operation.operation_type == OperationType.RENAME
     assert operation.table == mock_table_1
     assert operation.new_name == mock_table_2.name
     assert operation.is_reversible is True
-    assert operation.reverse() == RenameTableOperation(
+    assert operation.reverse() == t_ops.RenameTableOperation(
         table=mock_table_1, new_name=mock_table_1.name
     )
 
 
 def test_add_column_operation_init_reverse():
-    operation = AddColumnOperation(table=mock_table_1, column=mock_column_1)
+    operation = c_ops.AddColumnOperation(table=mock_table_1, column=mock_column_1)
     assert operation.operation_type == OperationType.CREATE
     assert operation.table == mock_table_1
     assert operation.column == mock_column_1
     assert operation.is_reversible is True
 
     reverse_operation = operation.reverse()
-    assert reverse_operation == DeleteColumnOperation(
+    assert reverse_operation == c_ops.DeleteColumnOperation(
         table=operation.table,
         column=operation.column,
     )
 
 
 def test_add_column_composite_foreign_key():
-    """Shouldn't be able to initialise an AddColumnOperation with a composite foreign key."""
+    """Shouldn't be able to initialise an c_ops.AddColumnOperation with a composite foreign key."""
     with raises(ValueError):
-        AddColumnOperation(
+        c_ops.AddColumnOperation(
             table=mock_table_1,
             column=mock_column_1,
-            related_foreign_key=ForeignKeyConstraint(
+            related_foreign_key=c.ForeignKeyConstraint(
                 mock_table_1.name,
                 mock_table_2.name,
                 {
@@ -76,12 +79,12 @@ def test_add_column_composite_foreign_key():
 
 
 def test_add_column_foreign_key_references_different_column():
-    """Shouldn't be able to initialise an AddColumnOperation with a foreign key that references a different column."""
+    """Shouldn't be able to initialise an c_ops.AddColumnOperation with a foreign key that references a different column."""
     with raises(ValueError):
-        AddColumnOperation(
+        c_ops.AddColumnOperation(
             table=mock_table_1,
             column=mock_column_1,
-            related_foreign_key=ForeignKeyConstraint(
+            related_foreign_key=c.ForeignKeyConstraint(
                 mock_table_1.name,
                 mock_table_2.name,
                 {
@@ -92,12 +95,12 @@ def test_add_column_foreign_key_references_different_column():
 
 
 def test_add_column_foreign_key_references_different_table():
-    """Shouldn't be able to initialise an AddColumnOperation with a foreign key that references the wrong table."""
+    """Shouldn't be able to initialise an c_ops.AddColumnOperation with a foreign key that references the wrong table."""
     with raises(ValueError):
-        AddColumnOperation(
+        c_ops.AddColumnOperation(
             table=mock_table_1,
             column=mock_column_1,
-            related_foreign_key=ForeignKeyConstraint(
+            related_foreign_key=c.ForeignKeyConstraint(
                 mock_table_2.name,
                 "this should throw an exception",
                 {
@@ -108,7 +111,7 @@ def test_add_column_foreign_key_references_different_table():
 
 
 def test_delete_column_operation_init_reverse():
-    operation = DeleteColumnOperation(table=mock_table_1, column=mock_column_1)
+    operation = c_ops.DeleteColumnOperation(table=mock_table_1, column=mock_column_1)
     assert operation.operation_type == OperationType.DELETE
     assert operation.table == mock_table_1
     assert operation.column == mock_column_1
@@ -118,7 +121,7 @@ def test_delete_column_operation_init_reverse():
 
 
 def test_rename_column_operation_init_reverse():
-    operation = RenameColumnOperation(
+    operation = c_ops.RenameColumnOperation(
         table=mock_table_1,
         column=mock_column_1,
         new_name=mock_column_2.name,
@@ -128,7 +131,7 @@ def test_rename_column_operation_init_reverse():
     assert operation.column == mock_column_1
     assert operation.new_name == mock_column_2.name
     assert operation.is_reversible is True
-    assert operation.reverse() == RenameColumnOperation(
+    assert operation.reverse() == c_ops.RenameColumnOperation(
         table=mock_table_1,
         column=mock_column_1,
         new_name=mock_column_1.name,
@@ -136,21 +139,21 @@ def test_rename_column_operation_init_reverse():
 
 
 def test_add_constraint_operation_init_reverse():
-    operation = AddConstraintOperation(
+    operation = c_ops.AddConstraintOperation(
         table=mock_table_1,
         column=mock_column_1,
-        constraint=PrimaryKeyConstraint(mock_table_1.name, mock_column_1.name),
+        constraint=c.PrimaryKeyConstraint(mock_table_1.name, mock_column_1.name),
     )
     assert operation.operation_type == OperationType.CONSTRAINT_CHANGE
     assert operation.table == mock_table_1
     assert operation.column == mock_column_1
-    assert operation.constraint == PrimaryKeyConstraint(
+    assert operation.constraint == c.PrimaryKeyConstraint(
         mock_table_1.name, mock_column_1.name
     )
     assert operation.is_reversible is True
 
     reverse_operation = operation.reverse()
-    assert reverse_operation == DeleteConstraintOperation(
+    assert reverse_operation == c_ops.DeleteConstraintOperation(
         table=operation.table,
         column=operation.column,
         constraint=operation.constraint,
@@ -158,20 +161,20 @@ def test_add_constraint_operation_init_reverse():
 
 
 def test_delete_constraint_operation_init_reverse():
-    operation = DeleteConstraintOperation(
+    operation = c_ops.DeleteConstraintOperation(
         table=mock_table_1,
         column=mock_column_1,
-        constraint=PrimaryKeyConstraint(mock_table_1.name, mock_column_1.name),
+        constraint=c.PrimaryKeyConstraint(mock_table_1.name, mock_column_1.name),
     )
     assert operation.operation_type == OperationType.CONSTRAINT_CHANGE
     assert operation.table == mock_table_1
     assert operation.column == mock_column_1
-    assert operation.constraint == PrimaryKeyConstraint(
+    assert operation.constraint == c.PrimaryKeyConstraint(
         mock_table_1.name, mock_column_1.name
     )
     assert operation.is_reversible is True
     reverse_operation = operation.reverse()
-    assert reverse_operation == AddConstraintOperation(
+    assert reverse_operation == c_ops.AddConstraintOperation(
         table=operation.table,
         column=operation.column,
         constraint=operation.constraint,
@@ -179,7 +182,7 @@ def test_delete_constraint_operation_init_reverse():
 
 
 def test_change_data_type_operation_init_reverse():
-    operation = ChangeDataTypeOperation(
+    operation = c_ops.ChangeDataTypeOperation(
         table=mock_table_1,
         column=mock_column_1,
         new_dtype=mock_column_2.data_type,
@@ -189,7 +192,7 @@ def test_change_data_type_operation_init_reverse():
     assert operation.column == mock_column_1
     assert operation.new_dtype == mock_column_2.data_type
     assert operation.is_reversible is True
-    assert operation.reverse() == ChangeDataTypeOperation(
+    assert operation.reverse() == c_ops.ChangeDataTypeOperation(
         table=mock_table_1,
         column=mock_column_1,
         new_dtype=mock_column_1.data_type,
