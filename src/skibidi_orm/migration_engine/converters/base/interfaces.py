@@ -2,7 +2,9 @@ from __future__ import annotations
 from abc import abstractmethod, ABC
 from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
 from skibidi_orm.migration_engine.operations.table_operations import TableOperation
-from skibidi_orm.migration_engine.adapters.database_objects.constraints import Constraint
+from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
+    Constraint,
+)
 
 
 class SQLConverter(ABC):
