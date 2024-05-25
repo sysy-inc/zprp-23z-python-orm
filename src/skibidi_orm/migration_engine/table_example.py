@@ -1,10 +1,13 @@
 # Example of how Table class and classes modeling DB schema can be implemented
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseAdapter
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
-import skibidi_orm.migration_engine.adapters.database_objects.constraints as C
-# TODO: make C lowercase everywhere
-from skibidi_orm.migration_engine.adapters.database_objects.migration_element import MigrationElement
+import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
+from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
+    MigrationElement,
+)
 
 
 class Table(MigrationElement):
@@ -33,16 +36,16 @@ class Table(MigrationElement):
                 columns: list[SQLite3Typing.Column] = []
                 all_constraints = cls.__dict__["constraints"]
 
-                fks: set[C.ForeignKeyConstraint] = set(
+                fks: set[c.ForeignKeyConstraint] = set(
                     constraint
                     for constraint in all_constraints
-                    if isinstance(constraint, C.ForeignKeyConstraint)
+                    if isinstance(constraint, c.ForeignKeyConstraint)
                 )
 
                 column_constraints = [
                     constraint
                     for constraint in all_constraints
-                    if isinstance(constraint, C.ColumnSpecificConstraint)
+                    if isinstance(constraint, c.ColumnSpecificConstraint)
                 ]
 
                 if cls.__dict__["data_type"] == "my_definition_of_data_type":
