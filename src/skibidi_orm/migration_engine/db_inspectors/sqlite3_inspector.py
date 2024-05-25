@@ -8,7 +8,7 @@ from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInsp
 from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
     SQLite3Typing,
 )
-import skibidi_orm.migration_engine.adapters.database_objects.constraints as C
+import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
 
 type SQLite3PragmaTableInfo = list[
     tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]]
@@ -77,11 +77,11 @@ class SQLite3Inspector(BaseDbInspector):
     @staticmethod
     def foreign_keys_from_pragma_entries(
         table_entry_mapping: dict[str, list[PragmaForeignKeyListEntry]]
-    ) -> set[C.ForeignKeyConstraint]:
+    ) -> set[c.ForeignKeyConstraint]:
         """Creates all of the ForeignKeyConstraint objects based on the entries
         gathered from the pragma table"""
 
-        return_value: set[C.ForeignKeyConstraint] = set()
+        return_value: set[c.ForeignKeyConstraint] = set()
 
         for table_name, pragma_entry_list in table_entry_mapping.items():
             for id in set(entry.id for entry in pragma_entry_list):
@@ -92,7 +92,7 @@ class SQLite3Inspector(BaseDbInspector):
                 ]
                 referenced_table = corresponding_entries[0].table
 
-                corresponding_constraint = C.ForeignKeyConstraint(
+                corresponding_constraint = c.ForeignKeyConstraint(
                     table_name,
                     referenced_table,
                     {
@@ -104,7 +104,7 @@ class SQLite3Inspector(BaseDbInspector):
 
         return return_value
 
-    def get_foreign_key_constraints(self) -> set[C.ForeignKeyConstraint]:
+    def get_foreign_key_constraints(self) -> set[c.ForeignKeyConstraint]:
         """Get all foreign key constraints from the database."""
 
         tables_names = self.get_tables_names()
@@ -121,7 +121,7 @@ class SQLite3Inspector(BaseDbInspector):
         }
         pragma_results = pragma_results  # todo: remove
 
-        constraints: set[C.ForeignKeyConstraint] = (
+        constraints: set[c.ForeignKeyConstraint] = (
             SQLite3Inspector.foreign_keys_from_pragma_entries(pragma_results)
         )
         return constraints
@@ -136,17 +136,17 @@ class SQLite3Inspector(BaseDbInspector):
                 name=name,
                 data_type=cast(SQLite3Typing.DataTypes, data_type),
                 column_constraints=[
-                    cast(C.ColumnSpecificConstraint, constraint)
+                    cast(c.ColumnSpecificConstraint, constraint)
                     for constraint in [
                         (
-                            C.PrimaryKeyConstraint(
+                            c.PrimaryKeyConstraint(
                                 table_name=table_name, column_name=name
                             )
                             if pk
                             else None
                         ),
                         (
-                            C.NotNullConstraint(table_name=table_name, column_name=name)
+                            c.NotNullConstraint(table_name=table_name, column_name=name)
                             if notnull
                             else None
                         ),

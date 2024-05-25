@@ -1,9 +1,11 @@
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
 
-from skibidi_orm.migration_engine.adapters.database_objects import constraints as C
+from skibidi_orm.migration_engine.adapters.database_objects import constraints as c
 from skibidi_orm.migration_engine.operations.column_operations import (
     AddColumnOperation,
     DeleteColumnOperation,
@@ -149,12 +151,12 @@ def test_rename_table_operation_needed(
             SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[c.PrimaryKeyConstraint("User", "user_id")],
             ),
             SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[c.NotNullConstraint("User", "user_name")],
             ),
         ]
 
@@ -165,12 +167,12 @@ def test_rename_table_operation_needed(
             SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("NewNamePost", "post_id")],
+                column_constraints=[c.PrimaryKeyConstraint("NewNamePost", "post_id")],
             ),
             SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("NewNamePost", "post_name")],
+                column_constraints=[c.NotNullConstraint("NewNamePost", "post_name")],
             ),
         ]
 
@@ -207,12 +209,12 @@ def test_no_operation_needed(
             SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[c.PrimaryKeyConstraint("User", "user_id")],
             ),
             SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[c.NotNullConstraint("User", "user_name")],
             ),
         ]
 
@@ -223,12 +225,12 @@ def test_no_operation_needed(
             SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[c.PrimaryKeyConstraint("Post", "post_id")],
             ),
             SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("Post", "post_name")],
+                column_constraints=[c.NotNullConstraint("Post", "post_name")],
             ),
         ]
 
@@ -264,12 +266,12 @@ def test_create_table_operation_needed(
             SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[c.PrimaryKeyConstraint("User", "user_id")],
             ),
             SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[c.NotNullConstraint("User", "user_name")],
             ),
         ]
 
@@ -280,12 +282,12 @@ def test_create_table_operation_needed(
             SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[c.PrimaryKeyConstraint("Post", "post_id")],
             ),
             SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("Post", "post_name")],
+                column_constraints=[c.NotNullConstraint("Post", "post_name")],
             ),
         ]
 
@@ -297,12 +299,12 @@ def test_create_table_operation_needed(
             SQLite3Typing.Column(
                 name="comment_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("Comment", "comment_id")],
+                column_constraints=[c.PrimaryKeyConstraint("Comment", "comment_id")],
             ),
             SQLite3Typing.Column(
                 name="comment_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("Comment", "comment_name")],
+                column_constraints=[c.NotNullConstraint("Comment", "comment_name")],
             ),
         ]
 
@@ -339,12 +341,12 @@ def test_delete_table_operation_needed(
             SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[c.PrimaryKeyConstraint("User", "user_id")],
             ),
             SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[c.NotNullConstraint("User", "user_name")],
             ),
         ]
 
@@ -355,12 +357,12 @@ def test_delete_table_operation_needed(
             SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[c.PrimaryKeyConstraint("Post", "post_id")],
             ),
             SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("Post", "post_name")],
+                column_constraints=[c.NotNullConstraint("Post", "post_name")],
             ),
         ]
 
@@ -397,12 +399,12 @@ def test_create_column_operation_needed(
             SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[c.PrimaryKeyConstraint("User", "user_id")],
             ),
             SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[c.NotNullConstraint("User", "user_name")],
             ),
         ]
 
@@ -413,17 +415,17 @@ def test_create_column_operation_needed(
             SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[c.PrimaryKeyConstraint("Post", "post_id")],
             ),
             SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("Post", "post_name")],
+                column_constraints=[c.NotNullConstraint("Post", "post_name")],
             ),
             SQLite3Typing.Column(
                 name="post_content",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("Post", "post_content")],
+                column_constraints=[c.NotNullConstraint("Post", "post_content")],
             ),
         ]
 
@@ -460,12 +462,12 @@ def test_delete_column_operation_needed(
             SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[c.PrimaryKeyConstraint("User", "user_id")],
             ),
             SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[c.NotNullConstraint("User", "user_name")],
             ),
         ]
 
@@ -476,7 +478,7 @@ def test_delete_column_operation_needed(
             SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[c.PrimaryKeyConstraint("Post", "post_id")],
             ),
         ]
 
@@ -512,12 +514,12 @@ def test_add_column_and_delete_tabe_operation_needed(
             SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("User", "user_id")],
+                column_constraints=[c.PrimaryKeyConstraint("User", "user_id")],
             ),
             SQLite3Typing.Column(
                 name="user_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("User", "user_name")],
+                column_constraints=[c.NotNullConstraint("User", "user_name")],
             ),
         ]
 
@@ -528,17 +530,17 @@ def test_add_column_and_delete_tabe_operation_needed(
             SQLite3Typing.Column(
                 name="post_id",
                 data_type="INTEGER",
-                column_constraints=[C.PrimaryKeyConstraint("Post", "post_id")],
+                column_constraints=[c.PrimaryKeyConstraint("Post", "post_id")],
             ),
             SQLite3Typing.Column(
                 name="post_name",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("Post", "post_name")],
+                column_constraints=[c.NotNullConstraint("Post", "post_name")],
             ),
             SQLite3Typing.Column(
                 name="post_content",
                 data_type="TEXT",
-                column_constraints=[C.NotNullConstraint("Post", "post_content")],
+                column_constraints=[c.NotNullConstraint("Post", "post_content")],
             ),
         ]
 

@@ -1,10 +1,12 @@
 from pathlib import Path
 import pytest
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
-from skibidi_orm.migration_engine.adapters.database_objects import constraints as C
+from skibidi_orm.migration_engine.adapters.database_objects import constraints as c
 import sqlite3
 
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SQLite3Inspector
+from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+    SQLite3Inspector,
+)
 
 sql_table1 = """
     CREATE TABLE table1 (
@@ -107,10 +109,10 @@ def test_get_table_columns(tmp_database: str):
     columns = inspector.get_table_columns("table1")
     assert columns[0].name == "id"
     assert columns[0].data_type == "INTEGER"
-    assert columns[0].column_constraints == [C.PrimaryKeyConstraint("table1", "id")]
+    assert columns[0].column_constraints == [c.PrimaryKeyConstraint("table1", "id")]
     assert columns[1].name == "name"
     assert columns[1].data_type == "TEXT"
-    assert columns[1].column_constraints == [C.NotNullConstraint("table1", "name")]
+    assert columns[1].column_constraints == [c.NotNullConstraint("table1", "name")]
     assert len(columns) == 2
 
 
@@ -124,8 +126,8 @@ def test_get_table_columns__primaryk_notnull(tmp_database: str):
     assert columns[0].name == "id"
     assert columns[0].data_type == "INTEGER"
     assert columns[0].column_constraints == [
-        C.PrimaryKeyConstraint("table_primary_key_not_null", "id"),
-        C.NotNullConstraint("table_primary_key_not_null", "id"),
+        c.PrimaryKeyConstraint("table_primary_key_not_null", "id"),
+        c.NotNullConstraint("table_primary_key_not_null", "id"),
     ]
 
 
@@ -141,16 +143,24 @@ def test_get_tables(tmp_database: str):
     assert len(tables[1].columns) == 2
     assert tables[0].columns[0].name == "id"
     assert tables[0].columns[0].data_type == "INTEGER"
-    assert tables[0].columns[0].column_constraints == [C.PrimaryKeyConstraint("table1", "id")]
+    assert tables[0].columns[0].column_constraints == [
+        c.PrimaryKeyConstraint("table1", "id")
+    ]
     assert tables[0].columns[1].name == "name"
     assert tables[0].columns[1].data_type == "TEXT"
-    assert tables[0].columns[1].column_constraints == [C.NotNullConstraint("table1", "name")]
+    assert tables[0].columns[1].column_constraints == [
+        c.NotNullConstraint("table1", "name")
+    ]
     assert tables[1].columns[0].name == "id"
     assert tables[1].columns[0].data_type == "INTEGER"
-    assert tables[1].columns[0].column_constraints == [C.PrimaryKeyConstraint("table2", "id")]
+    assert tables[1].columns[0].column_constraints == [
+        c.PrimaryKeyConstraint("table2", "id")
+    ]
     assert tables[1].columns[1].name == "name"
     assert tables[1].columns[1].data_type == "TEXT"
-    assert tables[1].columns[1].column_constraints == [C.NotNullConstraint("table2", "name")]
+    assert tables[1].columns[1].column_constraints == [
+        c.NotNullConstraint("table2", "name")
+    ]
 
 
 @pytest.mark.parametrize("tmp_database", [[*sql_schema_with_fks]], indirect=True)
@@ -160,10 +170,10 @@ def test_get_foreign_keys(tmp_database: str):
     foreign_keys = inspector.get_foreign_key_constraints()
     assert len(foreign_keys) == 3
     correct_fk_set = {
-        C.ForeignKeyConstraint("posts", "users", {"user_id": "user_id"}),
-        C.ForeignKeyConstraint(
+        c.ForeignKeyConstraint("posts", "users", {"user_id": "user_id"}),
+        c.ForeignKeyConstraint(
             "comments", "users", {"user_idd": "user_id", "username": "username"}
         ),
-        C.ForeignKeyConstraint("comments", "posts", {"post_id": "post_id"}),
+        c.ForeignKeyConstraint("comments", "posts", {"post_id": "post_id"}),
     }
     assert correct_fk_set.intersection(foreign_keys) == foreign_keys
