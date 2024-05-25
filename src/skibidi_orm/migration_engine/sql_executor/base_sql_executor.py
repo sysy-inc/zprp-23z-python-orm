@@ -10,10 +10,8 @@ class BaseSQLExecutor(ABC):
     @abstractmethod
     def execute_sql(sql: str) -> None:
         """Execute the given SQL query in the database"""
-        pass
 
     @staticmethod
     @abstractmethod
     def execute_operations(operations: list[TableOperation | ColumnOperation]) -> None:
         """Execute the given operations in the database"""
-        pass

@@ -13,6 +13,11 @@ from skibidi_orm.migration_engine.converters.sqlite3.constraints import (
 from skibidi_orm.migration_engine.converters.sqlite3.tables import (
     SQLite3TableOperationConverter,
 )
+from skibidi_orm.migration_engine.revisions.constants import REVISION_TABLE_COLUMN_NAMES
+from skibidi_orm.migration_engine.revisions.revision import Revision
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
 
 
 class SQLite3Converter(SQLConverter):
@@ -30,3 +35,21 @@ class SQLite3Converter(SQLConverter):
     @staticmethod
     def get_column_operation_converter() -> type[ColumnOperationSQLConverter]:
         return SQLite3ColumnOperationConverter
+
+    @classmethod
+    def convert_revision_to_insertion_sql(cls, revision: Revision) -> str:
+        revision_table_name = SQLite3Typing.get_revision_table_object().name
+        _, timestamp, description, schema_repr, config_data, table_data, _ = (
+            REVISION_TABLE_COLUMN_NAMES
+        )
+
+        return (
+            f"INSERT INTO {revision_table_name} "
+            f"{timestamp, description, schema_repr, config_data, table_data} VALUES {
+                revision.timestamp,
+                revision.description,
+                revision.schema_repr,
+                revision.config_data,
+                revision.table_data
+            };"
+        )

@@ -7,6 +7,7 @@ from skibidi_orm.migration_engine.operations.table_operations import (
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     Constraint,
 )
+from skibidi_orm.migration_engine.revisions.revision import Revision
 
 
 class SQLConverter(ABC):
@@ -36,6 +37,12 @@ class SQLConverter(ABC):
         """Return the SQL string which creates a special internal table
         used to hold revision data"""
         return cls.get_table_operation_converter().get_revision_table_creation_query()
+
+    @classmethod
+    @abstractmethod
+    def convert_revision_to_insertion_sql(cls, revision: Revision) -> str:
+        """Converts a revision object into an SQL string in a specific dialect,
+        that can be executed to add the revision to the database"""
 
     @classmethod
     def convert_table_operation_to_SQL(cls, operation: TableOperation) -> str:
