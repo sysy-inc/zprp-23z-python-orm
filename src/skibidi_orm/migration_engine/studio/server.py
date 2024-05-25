@@ -55,12 +55,14 @@ def read_index():
 
 @app.get("/db")
 def get_db():
+    """Get the tables in the database."""
     tables = db_inspector.get_tables()
     return {"tables": tables}
 
 
 @app.post("/db/{table_name}/row")
 def insert_row(table_name: str, row: list[InsertRowColumn] = Body(embed=True)):
+    """Insert a row in the table."""
     if table_name not in db_inspector.get_tables_names():
         return {"message": "Table does not exist."}
 
@@ -70,6 +72,7 @@ def insert_row(table_name: str, row: list[InsertRowColumn] = Body(embed=True)):
 
 @app.post("/db/{table_name}/row/delete")
 def delete_row(table_name: str, pks: list[DeleteRowPk] = Body(embed=True)):
+    """Delete a row in the table. Row identified by primary key subset."""
     if table_name not in db_inspector.get_tables_names():
         return {"message": "Table does not exist."}
 
@@ -79,13 +82,14 @@ def delete_row(table_name: str, pks: list[DeleteRowPk] = Body(embed=True)):
 
 @app.post("/db/query")
 def query_table(query: str = Body(embed=True)):
+    """Execute a raw sql query in the database."""
     results = db_mutator.raw_query(query)
     return results
 
 
 @app.get("/db/{table_name}/rows")
 def get_rows(table_name: str, offset: int = 0, limit: int = 100):
-    print(db_inspector.get_tables_names())
+    """Get paginated rows from the table."""
     if table_name not in db_inspector.get_tables_names():
         return {"message": "Table does not exist."}
 
