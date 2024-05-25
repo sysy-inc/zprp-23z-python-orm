@@ -3,6 +3,7 @@ from skibidi_orm.migration_engine.db_config.base_config import (
 )
 
 
+# TODO: make a dataclass out of config classes
 class SQLite3Config(BaseDbConfig):
     """
     Configuration class for SQLite3 database.

@@ -1,7 +1,9 @@
 from __future__ import annotations
 from abc import abstractmethod, ABC
 from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
-from skibidi_orm.migration_engine.operations.table_operations import TableOperation
+from skibidi_orm.migration_engine.operations.table_operations import (
+    TableOperation,
+)
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     Constraint,
 )
@@ -27,6 +29,13 @@ class SQLConverter(ABC):
     @abstractmethod
     def get_constraint_converter() -> type[ConstraintSQLConverter]:
         """Return the corresponding constraint converter class"""
+
+    @classmethod
+    @abstractmethod
+    def get_revision_table_creation_query(cls) -> str:
+        """Return the SQL string which creates a special internal table
+        used to hold revision data"""
+        return cls.get_table_operation_converter().get_revision_table_creation_query()
 
     @classmethod
     def convert_table_operation_to_SQL(cls, operation: TableOperation) -> str:
@@ -68,6 +77,12 @@ class TableOperationSQLConverter(ABC):
     @abstractmethod
     def convert_table_operation_to_SQL(operation: TableOperation) -> str:
         """Convert a given table operation object to raw SQL in a specific dialect"""
+
+    @staticmethod
+    @abstractmethod
+    def get_revision_table_creation_query() -> str:
+        """Return the SQL string which creates a special internal table
+        used to hold revision data"""
 
 
 class ConstraintSQLConverter(ABC):

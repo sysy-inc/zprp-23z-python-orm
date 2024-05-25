@@ -1,4 +1,6 @@
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
 from skibidi_orm.migration_engine.converters.base.interfaces import (
     TableOperationSQLConverter,
 )
@@ -50,6 +52,14 @@ class SQLite3TableOperationConverter(TableOperationSQLConverter):
             raise UnsupportedOperationError(
                 "The given operation is not supported in SQLite3."
             )
+
+    @staticmethod
+    def get_revision_table_creation_query() -> str:
+        """Return the SQL string which creates a special internal table
+        used to hold revision data"""
+        return SQLite3TableOperationConverter._convert_create_table_operation_to_SQL(
+            CreateTableOperation(SQLite3Typing.get_revision_table_object())
+        )
 
     @staticmethod
     def _convert_create_table_operation_to_SQL(operation: CreateTableOperation) -> str:
@@ -117,7 +127,11 @@ class SQLite3TableOperationConverter(TableOperationSQLConverter):
         constraints_at_end = set(
             filter(
                 lambda c: c.constraint_type
-                not in [ConstraintType.PRIMARY_KEY, ConstraintType.UNIQUE, ConstraintType.NOT_NULL],
+                not in [
+                    ConstraintType.PRIMARY_KEY,
+                    ConstraintType.UNIQUE,
+                    ConstraintType.NOT_NULL,
+                ],
                 all_constraints,
             )
         )

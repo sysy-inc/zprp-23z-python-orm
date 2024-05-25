@@ -1,7 +1,11 @@
 import pytest
 
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
-from skibidi_orm.migration_engine.converters.sqlite3.tables import SQLite3TableOperationConverter
+from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+    SQLite3Typing,
+)
+from skibidi_orm.migration_engine.converters.sqlite3.tables import (
+    SQLite3TableOperationConverter,
+)
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     CheckConstraint,
     Constraint,
@@ -129,7 +133,7 @@ def test_create_table_conversion_complex_with_constraints():
         SQLite3TableOperationConverter.convert_table_operation_to_SQL(operation)
         == "CREATE TABLE admin_users (user_id INTEGER PRIMARY KEY NOT NULL, name TEXT, "
         "email TEXT UNIQUE, active BLOB, age INTEGER, CHECK (age > 18), FOREIGN KEY (active, name) REFERENCES users ("
-           "active, name));"
+        "active, name));"
     )
 
 
@@ -148,4 +152,13 @@ def test_rename_table_conversion_simple():
     assert (
         SQLite3TableOperationConverter.convert_table_operation_to_SQL(operation)
         == "DROP TABLE users; CREATE TABLE users2 (name TEXT);"
+    )
+
+
+def test_correct_revision_table_SQL_conversion():
+    """Tests whether the query used to create the internal revision table is correct"""
+    assert SQLite3TableOperationConverter.get_revision_table_creation_query() == (
+        "CREATE TABLE __revisions (timestamp TEXT NOT NULL, "
+        "description TEXT NOT NULL, schema_string TEXT NOT NULL, config_data BLOB NOT NULL, "
+        "schema_data BLOB NOT NULL, __internal TEXT);"
     )
