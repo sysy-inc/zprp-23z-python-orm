@@ -4,7 +4,7 @@ from skibidi_orm.migration_engine.sql_executor.base_sql_executor import BaseSQLE
 from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
 from skibidi_orm.migration_engine.operations.table_operations import TableOperation
 
-from skibidi_orm.migration_engine.converters.sqlite3_converter import SQLite3Converter
+from skibidi_orm.migration_engine.converters.sqlite3.all import SQLite3Converter
 
 
 class SQLite3Executor(BaseSQLExecutor):

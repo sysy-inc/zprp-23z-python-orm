@@ -1,7 +1,8 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
+
+from skibidi_orm.exceptions.operations import IrreversibleOperationError
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
-from skibidi_orm.exceptions.operations_exceptions import IrreversibleOperationError
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable, BaseColumn
 from typing import Any
 from dataclasses import dataclass, field
@@ -60,7 +61,7 @@ class RenameTableOperation(TableOperation):
     new_name: str
 
     def reverse(self) -> TableOperation:
-        # todo
+        # todo: make sure it works properly
         return RenameTableOperation(table=self.table, new_name=self.table.name)
 
     def __str__(self) -> str:

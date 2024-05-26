@@ -16,7 +16,6 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
 
 sys.path.insert(0, os.getcwd())
 
-import schema  # type: ignore
 
 
 app = typer.Typer(
