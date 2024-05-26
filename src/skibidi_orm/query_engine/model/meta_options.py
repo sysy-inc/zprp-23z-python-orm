@@ -1,5 +1,7 @@
 from typing import Any, Dict, List
+from pydantic import Field
 import bisect
+from skibidi_orm.query_engine.field.field import AutoField
 
 
 class MetaOptions:
@@ -32,7 +34,7 @@ class MetaOptions:
             self.primary_key = field
 
     def _prepare(self, model: Any):
-        # TODO check if attrs' names are correct
-        # TODO check if is primary key
-        # TODO check if atrr db_column is unique
-        pass
+        if not self.primary_key:
+            obj_name = self.model.__name__.lower() + '_id'
+            self.model.add_to_class(obj_name, AutoField(primary_key=True))
+            self.model.__fields__[obj_name] = Field(default=None)
