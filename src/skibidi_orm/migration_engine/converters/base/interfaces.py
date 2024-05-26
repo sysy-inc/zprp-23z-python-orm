@@ -31,6 +31,11 @@ class SQLConverter(ABC):
     def get_constraint_converter() -> type[ConstraintSQLConverter]:
         """Return the corresponding constraint converter class"""
 
+    @staticmethod
+    @abstractmethod
+    def get_query_converter() -> type[SQLQueryConverter]:
+        """Return the corresponding query converter class"""
+
     @classmethod
     @abstractmethod
     def get_revision_table_creation_query(cls) -> str:
@@ -101,3 +106,13 @@ class ConstraintSQLConverter(ABC):
     @abstractmethod
     def convert_constraint_to_SQL(constraint: Constraint) -> str:
         """Convert a given constraint object to raw SQL in a specific dialect"""
+
+
+class SQLQueryConverter(ABC):
+    """Class responsible for converting SELECT queries to raw SQL strings.
+    Used mainly to retrieve data from the revision table."""
+
+    @staticmethod
+    @abstractmethod
+    def convert_get_revision_data_query() -> str:
+        """Return the SQL string which selects all of the data from the revision table"""

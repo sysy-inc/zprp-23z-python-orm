@@ -1,4 +1,7 @@
+from skibidi_orm.migration_engine.converters.sqlite3.all import SQLite3Converter
 from skibidi_orm.migration_engine.revisions.revision import Revision
+from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
+import sqlite3
 
 
 class RevisionManager:
@@ -8,11 +11,20 @@ class RevisionManager:
         # todo : get all revisions and store them in a list
         ...
 
-    def find_revision_table(self) -> bool:
+    @staticmethod
+    def find_revision_table() -> bool:
         """Used to find the revision table with the name
         specified by the user. Returns True if found,
         False otherwise"""
-        raise NotImplementedError()
+        # todo: maybe do one query instead of two for finding and fetching data
+        try:
+            revision_data_query = (
+                SQLite3Converter.get_query_converter().convert_get_revision_data_query()
+            )
+            SQLite3Executor.execute_sql(revision_data_query)
+            return True
+        except sqlite3.OperationalError:
+            return False
 
     def create_revision_table(self) -> None:
         """If the revision table is not found when migrating,
