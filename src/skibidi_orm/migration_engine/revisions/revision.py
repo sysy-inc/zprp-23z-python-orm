@@ -1,15 +1,15 @@
-from dataclasses import dataclass
-from datetime import datetime
+from dataclasses import dataclass, field
 
 
-@dataclass(frozen=True)
+@dataclass
 class Revision:
     """Class representing a single revision in the database.
 
     Attributes:
-        id (int): Unique id.
+        id (int | Null): Unique id. Nulled before being saved into the database, which
+        assigns the value using an autoincrementing id.
 
-        timestamp (datetime): Timestamp of the migration.
+        timestamp (str): Timestamp of the creation.
 
         description (str): Migration message provided by the user when migrating.
 
@@ -21,12 +21,12 @@ class Revision:
         and constraints in the schema, based on which the schema can be recreated.
     """
 
-    id: int
-    timestamp: datetime
+    timestamp: str
     description: str
     schema_repr: str
     config_data: bytes
-    table_data: bytes
+    schema_data: bytes
+    id: int | None = field(default_factory=lambda: None)
 
     def __str__(self) -> str:
         raise NotImplementedError()

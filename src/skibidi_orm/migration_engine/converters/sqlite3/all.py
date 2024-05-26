@@ -45,11 +45,11 @@ class SQLite3Converter(SQLConverter):
 
         return (
             f"INSERT INTO {revision_table_name} "
-            f"{timestamp, description, schema_repr, config_data, table_data} VALUES {
+            f"({', '.join([timestamp, description, schema_repr, config_data, table_data])}) VALUES {
                 revision.timestamp,
                 revision.description,
                 revision.schema_repr,
                 revision.config_data,
-                revision.table_data
+                revision.schema_data
             };"
         )
