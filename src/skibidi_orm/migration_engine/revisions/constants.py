@@ -11,7 +11,7 @@ REVISION_TABLE_COLUMN_NAMES = (
     "timestamp",
     "description",
     "schema_repr",
-    "config_data",
+    "provider",
     "schema_data",
     "__internal",
 )

@@ -39,17 +39,17 @@ class SQLite3Converter(SQLConverter):
     @classmethod
     def convert_revision_to_insertion_sql(cls, revision: Revision) -> str:
         revision_table_name = SQLite3Typing.get_revision_table_object().name
-        _, timestamp, description, schema_repr, config_data, table_data, _ = (
+        _, timestamp, description, schema_repr, provider, table_data, _ = (
             REVISION_TABLE_COLUMN_NAMES
         )
 
         return (
             f"INSERT INTO {revision_table_name} "
-            f"({', '.join([timestamp, description, schema_repr, config_data, table_data])}) VALUES {
+            f"({', '.join([timestamp, description, schema_repr, provider, table_data])}) VALUES {
                 revision.timestamp,
                 revision.description,
                 revision.schema_repr,
-                revision.config_data,
+                revision.provider,
                 revision.schema_data
             };"
         )

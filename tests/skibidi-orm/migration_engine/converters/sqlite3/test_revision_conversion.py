@@ -8,7 +8,7 @@ def test_convert_revision_to_insertion_sql():
         timestamp="timestamp",
         description="description",
         schema_repr="test schema",
-        config_data=b"config_data",
+        provider="provider",
         schema_data=b"schema_data",
     )
 
@@ -16,6 +16,6 @@ def test_convert_revision_to_insertion_sql():
 
     assert result == (
         "INSERT INTO __revisions ("
-        "timestamp, description, schema_repr, config_data, schema_data)"
-        " VALUES ('timestamp', 'description', 'test schema', b'config_data', b'schema_data');"
+        "timestamp, description, schema_repr, provider, schema_data)"
+        " VALUES ('timestamp', 'description', 'test schema', 'provider', b'schema_data');"
     )

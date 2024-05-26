@@ -15,7 +15,7 @@ class Revision:
 
         schema_repr (str): String representation of the schema.
 
-        config_data (str): Serialized BaseDbConfig deriving object used when migrating.
+        provider (str): Database provider.
 
         table_data (str): Serialized object containing information about tables, columns
         and constraints in the schema, based on which the schema can be recreated.
@@ -24,7 +24,7 @@ class Revision:
     timestamp: str
     description: str
     schema_repr: str
-    config_data: bytes
+    provider: str
     schema_data: bytes
     id: int | None = field(default_factory=lambda: None)
 

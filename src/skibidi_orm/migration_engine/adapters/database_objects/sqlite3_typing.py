@@ -40,7 +40,7 @@ class SQLite3Typing:
             timestamp,
             description,
             schema_string,
-            config_data,
+            provider,
             schema_data,
             internal,
         ) = REVISION_TABLE_COLUMN_NAMES
@@ -63,10 +63,10 @@ class SQLite3Typing:
             column_constraints=[NotNullConstraint(revision_table_name, schema_string)],
         )
 
-        config_data_column = SQLite3Typing.Column(
-            name=config_data,
-            data_type="BLOB",
-            column_constraints=[NotNullConstraint(revision_table_name, config_data)],
+        provider_column = SQLite3Typing.Column(
+            name=provider,
+            data_type="TEXT",
+            column_constraints=[NotNullConstraint(revision_table_name, provider)],
         )
 
         schema_data_column = SQLite3Typing.Column(
@@ -84,7 +84,7 @@ class SQLite3Typing:
             timestamp_colum,
             description_column,
             schema_string_column,
-            config_data_column,
+            provider_column,
             schema_data_column,
             internal_special_column,
         ]

@@ -3,7 +3,6 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable
-from skibidi_orm.migration_engine.db_config.base_config import BaseDbConfig
 
 
 @dataclass
@@ -20,7 +19,7 @@ class SchemaSnapshot:
 
         schema_repr (str): String representation of the schema.
 
-        config (BaseDbConfig): Serialized BaseDbConfig deriving object used when migrating.
+        provider (str): Database provider.
 
         tables (list[BaseTable]): List of tables in the schema.
     """
@@ -28,5 +27,5 @@ class SchemaSnapshot:
     timestamp: datetime = field(init=False, default_factory=lambda: datetime.now())
     description: str
     schema_repr: str
-    config: BaseDbConfig
+    provider: str
     tables: list[BaseTable[Any]]
