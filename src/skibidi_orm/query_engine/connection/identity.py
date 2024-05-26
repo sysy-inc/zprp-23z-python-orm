@@ -18,6 +18,10 @@ class IdentityMap:
             raise KeyError(key)
         return o
 
+    def __contains__(self, item: Model):
+        # return item.key() in self._dict     # TOCHANGE
+        return ("test_model", 1) in self._dict
+
     def add(self, obj: Model) -> bool:
         # key = obj.key()   this function needs to be made in Model, returns (model_name, primary_key)
         key = ("test_model", 1)     # temporarly TOCHANGE
