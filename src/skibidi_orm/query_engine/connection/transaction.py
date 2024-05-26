@@ -15,6 +15,18 @@ class Transaction:
         self._update: list[Update] = []
         self._delete: list[Delete] = []
 
+    @property
+    def insert_list(self):
+        return self._insert
+
+    @property
+    def update_list(self):
+        return self._update
+
+    @property
+    def delete_list(self):
+        return self._delete
+
     def register_insert(self, obj: Model):
         self._insert.append(Insert(obj))
 
