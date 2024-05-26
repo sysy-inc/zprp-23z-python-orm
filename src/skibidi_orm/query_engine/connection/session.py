@@ -90,7 +90,9 @@ class Session:
         return self._connection
 
     def add(self, obj: Model):
-        # if obj in self._map TODO add checking if it is already added
+        if obj in self._map:
+            # already added
+            return
         # TODO register this session to model, model.add_session()
         self._new.append(obj)
 
@@ -104,7 +106,10 @@ class Session:
     def changed(self, obj: Model):
         # o = self._map.get(obj.key(), obj) TOCHANGE
         o = self._map.get(("test_model", 1), obj)
-        if o in self._dirty or o is None:
+        if o in self._dirty or o is None or o in self._delete:
+            return
+        if o not in self._map and o not in self._new:
+            # object hasn't been add to this session
             return
         self._dirty.append(o)
 
@@ -113,7 +118,8 @@ class Session:
         if obj in self._new:
             # object wasn't yet insserted so only delete from list to be inserted
             self._new.remove(obj)
-            self._dirty.remove(obj)
+            if obj in self._dirty:
+                self._dirty.remove(obj)
             return
 
         o = self._map.get(("test_model", 1), None)
@@ -135,9 +141,10 @@ class Session:
             for o in self._new:
                 # TODO adjust for relations, order matters
                 trans.register_insert(o)
-            for o in self._new:
-                # TODO maybe add function register_pending that adds to map and cleans _new
                 self._map.add(o)
+            # for o in self._new:
+            #     # TODO maybe add function register_pending that adds to map and cleans _new
+            #     self._map.add(o)
 
             # UPDATE
             for o in self._dirty:
@@ -151,3 +158,4 @@ class Session:
             trans.execute()
             self._new = []
             self._dirty = []
+            self._delete = []
