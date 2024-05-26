@@ -1,16 +1,10 @@
-""" A model class for mapping database table """
-
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pydantic._internal._model_construction import ModelMetaclass
 from typing import Any
 import inspect
 from skibidi_orm.query_engine.model.meta_options import MetaOptions
+from skibidi_orm.query_engine.field.field import AutoField
 
-def convert_name_to_table(name: str) -> str:
-    return name
-
-def check_db_name_is_correct(db_table_name: str) -> bool:
-    return True
 
 def _is_field(value: Any):
     # Only call contribute_to_class() if it's bound.
@@ -22,19 +16,15 @@ class MetaModel(ModelMetaclass):
     def __new__(cls, name: str, bases: tuple[Any], attrs: dict[str, Any]) -> Any:
         super_new: Any = super().__new__ # type: ignore
 
-        # TODO subclass is final
-
-        # Also ensure initialization is only performed for subclasses of Model
+        # Ensure initialization is only performed for subclasses of Model
         # (excluding Model class itself).
-        parents = [ b for b in bases if isinstance(b, MetaModel) ]
+        parents = [b for b in bases if isinstance(b, MetaModel)]
         if not parents:
             return super_new(cls, name, bases, attrs)
 
-        # TODO add database config
         metadata: dict[str, Any] = {}
         new_attrs: dict[str, Any] = {}
 
-        # TODO improve convert db table name and check if name is correct
         db_table_name = attrs.pop("__db_table__", name.lower())
         metadata["db_table"] = db_table_name
 
@@ -44,6 +34,7 @@ class MetaModel(ModelMetaclass):
                 field_attrs[obj_name] = obj
             else:
                 new_attrs[obj_name] = obj
+
         new_class = super_new(cls, name, bases, new_attrs)
         new_class.add_to_class("_meta", MetaOptions(metadata))
 
@@ -54,7 +45,7 @@ class MetaModel(ModelMetaclass):
         return new_class
 
     def add_to_class(cls, obj_name: str, obj: Any): # type: ignore
-        """ Adds atrribute to class """
+        """ Adds attribute to class """
         obj.contribute_to_class(cls, obj_name)
 
 
@@ -62,21 +53,51 @@ class Model(BaseModel, metaclass=MetaModel):
     """ A class to create your own database table """
     class Config:
         arbitrary_types_allowed = True
-    # TODO add information about inheritance
+        allow_population_by_field_name = True
+
     def __init__(self, *args: Any, **kwargs: Any):
-        print(args, kwargs)
         opts: MetaOptions = self._meta # type: ignore
         if len(args) > len(opts.local_fields): # type: ignore
-            # Daft, but matches old exception sans the err msg.
             raise IndexError("Number of args exceeds number of fields")
 
         fields_iter = iter(opts.local_fields)    # type: ignore
         for val, field in zip(args, fields_iter):
             kwargs[field.name] = val
         for field in fields_iter:
-            # TODO related field
-            if field.name not in kwargs:
+            if field.is_relation and field.column in kwargs:
+                    kwargs[field.name] = None
+                    self.__fields__[field.column] = Field(default=None)
+            elif field.name not in kwargs:
+                if field.primary_key:
+                    continue
                 kwargs[field.name] = field.default
         args = ()
         super().__init__(*args, **kwargs)
+        # if primary key is AutoField change it to None
+        if isinstance(self._meta.primary_key, AutoField):
+            self.pk = None
 
+
+    def _get_pk_val(self):
+        return getattr(self, self._meta.primary_key.name)
+
+    def _set_pk_val(self, value: Any):
+        name = self._meta.primary_key.name
+        setattr(self, name, value)
+
+    pk = property(_get_pk_val, _set_pk_val)
+
+    def __eq__(self, other: MetaModel):
+        if not isinstance(other, Model):
+            return NotImplemented
+        if type(self) != type(other):
+            return False
+        my_pk = self.pk
+        if my_pk is None:
+            return self is other
+        return my_pk == other.pk
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name not in self.__fields__:
+            self.__fields__[name] = Field(default=None)
+        return super().__setattr__(name, value)
