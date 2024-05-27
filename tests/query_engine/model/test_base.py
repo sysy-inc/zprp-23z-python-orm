@@ -105,7 +105,46 @@ def test_create_foreign_key():
     adam = Owner(1, 'Adam')
     dog = Dog(1, "Reksio", adam)
     assert dog.owner == adam
+    assert dog.owner_id == 1
+
+def test_create_foreign_key_none():
+    adam = Owner(1, 'Adam')
+    dog = Dog(1, "Reksio", None)
+    assert dog.owner is None
+    assert dog.owner_id is None
 
 def test_create_foreign_key_by_id():
-    dog = Dog(1, "Reksio", owner_id=1)
+    dog = Dog(1, "Reksio", owner_id=2)
+    assert dog.owner_id == 2
+    assert dog.owner == 5
+
+def test_set_foreign_key():
+    adam = Owner(1, "Adam")
+    bolek = Owner(2, "Bolek")
+    dog = Dog(1, "Reksio", adam)
+    assert dog.owner == adam
     assert dog.owner_id == 1
+
+    dog.owner = bolek
+    assert dog.owner == bolek
+    assert dog.owner_id == 2
+
+def test_set_foreign_key_from_none():
+    adam = Owner(1, "Adam")
+    dog = Dog(1, "Reksio", None)
+    assert dog.owner is None
+    assert dog.owner_id is None
+
+    dog.owner = adam
+    assert dog.owner == adam
+    assert dog.owner_id == 1
+
+def test_set_foreign_key_to_none():
+    adam = Owner(1, "Adam")
+    dog = Dog(1, "Reksio", adam)
+    assert dog.owner == adam
+    assert dog.owner_id == 1
+
+    dog.owner = None
+    assert dog.owner is None
+    assert dog.owner_id is None

@@ -11,6 +11,7 @@ class MetaOptions:
         self.meta = meta
         self.primary_key = None
         self.local_fields: List[Any] = []
+        self.relation_fields: List[Any] = []
 
     def contribute_to_class(self, cls: Any, obj_name: str) -> None:
         """ Adds atrributes to classes """
@@ -24,6 +25,8 @@ class MetaOptions:
         """ Adds database column """
         bisect.insort(self.local_fields, field)
         self.setup_pk(field)
+        if field.is_relation:
+            bisect.insort(self.relation_fields, field)
 
     def setup_pk(self, field: Any):
         """ Setup the primary key """
@@ -38,3 +41,16 @@ class MetaOptions:
             obj_name = self.model.__name__.lower() + '_id'
             self.model.add_to_class(obj_name, AutoField(primary_key=True))
             self.model.__fields__[obj_name] = Field(default=None)
+
+    def relation_fields_name(self):
+        return [field.name for field in self.relation_fields]
+
+    def get_relation_field(self, name: str) -> Any:
+        for field in self.relation_fields:
+            if field.name == name or field.column == name:
+                return field
+        return None
+
+    def relation_fields_column(self):
+        return [field.column for field in self.relation_fields]
+
