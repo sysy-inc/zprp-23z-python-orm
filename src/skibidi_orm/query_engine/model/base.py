@@ -65,17 +65,24 @@ class Model(BaseModel, metaclass=MetaModel):
             kwargs[field.name] = val
         for field in fields_iter:
             if field.is_relation and field.column in kwargs:
-                    kwargs[field.name] = None
-                    self.__fields__[field.column] = Field(default=None)
+                kwargs[field.name] = None   # add none to have attr value
             elif field.name not in kwargs:
-                if field.primary_key:
-                    continue
                 kwargs[field.name] = field.default
         args = ()
         super().__init__(*args, **kwargs)
+
         # if primary key is AutoField change it to None
         if isinstance(self._meta.primary_key, AutoField):
             self.pk = None
+
+        # if foreign key is given by id set it correct
+        for field in self._meta.relation_fields:
+            if field.column in kwargs:
+                value = kwargs[field.column]
+            else:
+                value = kwargs[field.name].pk if kwargs[field.name] else None
+            setattr(self, field.column, value)
+
 
 
     def _get_pk_val(self):
@@ -100,4 +107,25 @@ class Model(BaseModel, metaclass=MetaModel):
     def __setattr__(self, name: str, value: Any) -> None:
         if name not in self.__fields__:
             self.__fields__[name] = Field(default=None)
-        return super().__setattr__(name, value)
+        super().__setattr__(name, value)
+        if name in self._meta.relation_fields_name():
+            field = self._meta.get_relation_field(name)
+            obj_id = object.__getattribute__(self, field.name).pk if object.__getattribute__(self, field.name) else None
+            if obj_id != getattr(self, field.column):
+                setattr(self, field.column, obj_id)
+        elif name in self._meta.relation_fields_column():
+            field = self._meta.get_relation_field(name)
+            obj_id = getattr(self, field.name).pk if getattr(self, field.name) else None
+            if obj_id != getattr(self, field.column):
+                setattr(self, field.name, None)
+
+    def __getattribute__(self, name: str) -> Any:
+        value = super().__getattribute__(name)
+        if value is None and name in self._meta.relation_fields_name():
+            field = self._meta.get_relation_field(name)
+            if getattr(self, field.column):
+                # if id select obj from db
+                # TODO add select if is id
+                value = 5
+            # return none if not id
+        return value
