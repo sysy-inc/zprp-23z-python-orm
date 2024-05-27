@@ -84,7 +84,6 @@ class Model(BaseModel, metaclass=MetaModel):
             setattr(self, field.column, value)
 
 
-
     def _get_pk_val(self):
         return getattr(self, self._meta.primary_key.name)
 
@@ -129,3 +128,18 @@ class Model(BaseModel, metaclass=MetaModel):
                 value = 5
             # return none if not id
         return value
+
+    def _get_name_and_pk(self):
+        return (self._meta.db_table, self.pk)
+
+    def _get_attr_values(self):
+        atrr_values : list[Any] = []
+        for field in self._meta.local_fields:
+            if field.is_relation:
+                atrr_values.append((field.column, getattr(self, field.column)))
+            else:
+                value = getattr(self, field.name)
+                if value is not None:
+                    atrr_values.append((field.name, value))
+        return atrr_values
+
