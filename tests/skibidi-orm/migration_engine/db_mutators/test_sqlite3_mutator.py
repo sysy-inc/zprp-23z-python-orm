@@ -17,7 +17,9 @@ from skibidi_orm.migration_engine.data_mutator.sqlite3_data_mutatorr import (
     SQLite3DataMutator,
 )
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
+from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+    SQLite3Inspector,
+)
 
 sql_simple_db = [
     """
@@ -60,7 +62,7 @@ def test_insert_row(make_database: str):
             InsertRowColumn(name="username", value="test"),
         ],
     )
-    db_inspector = SqliteInspector()
+    db_inspector = SQLite3Inspector()
     tables = db_inspector.get_tables()
 
     assert tables[0] == SQLite3Typing.Table(
@@ -69,14 +71,14 @@ def test_insert_row(make_database: str):
             SQLite3Typing.Column(
                 name="user_id",
                 data_type="INTEGER",
-                constraints=[
+                column_constraints=[
                     PrimaryKeyConstraint(table_name="users", column_name="user_id"),
                 ],
             ),
             SQLite3Typing.Column(
                 name="username",
                 data_type="TEXT",
-                constraints=[
+                column_constraints=[
                     NotNullConstraint(table_name="users", column_name="username"),
                 ],
             ),

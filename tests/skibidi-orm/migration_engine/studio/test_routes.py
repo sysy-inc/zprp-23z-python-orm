@@ -6,7 +6,9 @@ from skibidi_orm.migration_engine.data_mutator.sqlite3_data_mutatorr import (
     SQLite3DataMutator,
 )
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import SqliteInspector
+from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+    SQLite3Inspector,
+)
 from skibidi_orm.migration_engine.studio.server import app
 import pathlib
 
@@ -67,7 +69,7 @@ def test_GET_db(
     SQLite3Config(db_path=make_database)
     monkeypatch.setattr(
         "skibidi_orm.migration_engine.studio.server.db_inspector",
-        SqliteInspector(),
+        SQLite3Inspector(),
     )
     response = client.get("/db")
     assert response.status_code == 200
@@ -117,7 +119,7 @@ def test_POST_route_db_table_name_row_correct(
     SQLite3Config(db_path=make_database)
     monkeypatch.setattr(
         "skibidi_orm.migration_engine.studio.server.db_inspector",
-        SqliteInspector(),
+        SQLite3Inspector(),
     )
     monkeypatch.setattr(
         "skibidi_orm.migration_engine.studio.server.db_mutator",
