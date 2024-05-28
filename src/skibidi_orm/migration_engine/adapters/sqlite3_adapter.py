@@ -47,3 +47,6 @@ class SQLite3Adapter(BaseAdapter):
                 print(
                     f"\t Creating column {column.name} with type {column.data_type} and constraints {column.constraints}"
                 )
+
+
+#
