@@ -26,3 +26,30 @@ class Clause(ABC):
 
 class Eq(Clause):
     pass
+
+class NotEq(Clause):
+    pass
+
+class Gt(Clause):
+    # greater than
+    pass
+
+class GtEq(Clause):
+    # greater than or equal
+    pass
+
+class Lt(Clause):
+    # less than
+    pass
+
+class LtEq(Clause):
+    # less than or equal
+    pass
+
+class Null(Clause):
+    # is Null
+    pass
+
+class NotNull(Clause):
+    # is not Null
+    pass
