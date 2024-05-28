@@ -1,4 +1,5 @@
 import sqlite3
+from typing import Any
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.sql_executor.base_sql_executor import BaseSQLExecutor
 from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
@@ -20,6 +21,15 @@ class SQLite3Executor(BaseSQLExecutor):
                     continue
                 cursor.execute(command.strip())
             conn.commit()
+
+    @staticmethod
+    def execute_sql_query(sql: str) -> list[Any]:
+        sqlite_config = SQLite3Config.get_instance()
+        with sqlite3.connect(sqlite_config.db_path) as conn:
+            cursor = conn.cursor()
+            result = cursor.execute(sql)
+
+        return result.fetchall()
 
     @staticmethod
     def execute_operations(operations: list[TableOperation | ColumnOperation]):
