@@ -4,6 +4,7 @@ from typing import Any
 import inspect
 from skibidi_orm.query_engine.model.meta_options import MetaOptions
 from skibidi_orm.query_engine.field.field import AutoField
+from skibidi_orm.query_engine.connection.session import Session
 
 
 def _is_field(value: Any):
@@ -107,9 +108,8 @@ class Model(BaseModel, metaclass=MetaModel):
         super().__setattr__(name, value)
         if hasattr(self, '_changes') and name != '_changes':
             self._changes[name] = value
-        # sprawdź czy to relation
-        # sprawdź czy oba nie none
-        # teraz reszta
+            if hasattr(self, '_session'):
+                self._session.changed(self)
         if name in self._meta.relation_fields_name():
             field = self._meta.get_relation_field(name)
             obj_id = value.pk if value else None
@@ -154,3 +154,15 @@ class Model(BaseModel, metaclass=MetaModel):
         changes = self._changes
         self._changes = {}
         return changes
+
+    def _add_session(self, session: Session):
+        self._session = session
+
+    def _remove_session(self):
+        self._session = None
+
+    def _is_pk_none(self):
+        return self.pk is None and isinstance(self._meta.primary_key, AutoField)
+
+    def _get_db_pk(self):
+        return self._meta.primary_key.db_column, self.pk
