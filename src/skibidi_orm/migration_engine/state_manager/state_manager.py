@@ -16,8 +16,10 @@ from skibidi_orm.migration_engine.operations.table_operations import (
     RenameTableOperation,
 )
 
+from skibidi_orm.migration_engine.state_manager.i_state_manager import IStateManager
 
-class StateManager[TTable: BaseTable[BaseColumn[Any]]]:
+
+class StateManager[TTable: BaseTable[BaseColumn[Any]]](IStateManager):
     def __init__(
         self,
         db_tables: list[TTable],
