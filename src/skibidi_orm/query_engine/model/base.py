@@ -64,7 +64,7 @@ class Model(BaseModel, metaclass=MetaModel):
         for val, field in zip(args, fields_iter):
             kwargs[field.name] = val
         for field in fields_iter:
-            if field.is_relation and field.column in kwargs:
+            if field.is_relation and field.db_column in kwargs:
                 kwargs[field.name] = None   # add none to have attr value
             elif field.name not in kwargs:
                 kwargs[field.name] = field.default
@@ -77,11 +77,9 @@ class Model(BaseModel, metaclass=MetaModel):
 
         # if foreign key is given by id set it correct
         for field in self._meta.relation_fields:
-            if field.column in kwargs:
-                value = kwargs[field.column]
-            else:
-                value = kwargs[field.name].pk if kwargs[field.name] else None
-            setattr(self, field.column, value)
+            value = kwargs.get(field.db_column, None)
+            object.__setattr__(self, field.db_column, value)
+        self._changes: dict [str, str] = {}
 
 
     def _get_pk_val(self):
@@ -93,7 +91,7 @@ class Model(BaseModel, metaclass=MetaModel):
 
     pk = property(_get_pk_val, _set_pk_val)
 
-    def __eq__(self, other: MetaModel):
+    def __eq__(self, other: object):
         if not isinstance(other, Model):
             return NotImplemented
         if type(self) != type(other):
@@ -107,26 +105,35 @@ class Model(BaseModel, metaclass=MetaModel):
         if name not in self.__fields__:
             self.__fields__[name] = Field(default=None)
         super().__setattr__(name, value)
+        if hasattr(self, '_changes') and name != '_changes':
+            self._changes[name] = value
+        # sprawdź czy to relation
+        # sprawdź czy oba nie none
+        # teraz reszta
         if name in self._meta.relation_fields_name():
             field = self._meta.get_relation_field(name)
-            obj_id = object.__getattribute__(self, field.name).pk if object.__getattribute__(self, field.name) else None
-            if obj_id != getattr(self, field.column):
-                setattr(self, field.column, obj_id)
+            obj_id = value.pk if value else None
+            if obj_id != object.__getattribute__(self, field.db_column):
+                object.__setattr__(self, field.db_column, None)
         elif name in self._meta.relation_fields_column():
             field = self._meta.get_relation_field(name)
-            obj_id = getattr(self, field.name).pk if getattr(self, field.name) else None
-            if obj_id != getattr(self, field.column):
-                setattr(self, field.name, None)
+            obj_id = object.__getattribute__(self, field.name).pk if object.__getattribute__(self, field.name) else None
+            if obj_id != value:
+                object.__setattr__(self, field.name, None)
 
     def __getattribute__(self, name: str) -> Any:
         value = super().__getattribute__(name)
         if value is None and name in self._meta.relation_fields_name():
             field = self._meta.get_relation_field(name)
-            if getattr(self, field.column):
+            if object.__getattribute__(self, field.db_column):
                 # if id select obj from db
                 # TODO add select if is id
                 value = 5
             # return none if not id
+        elif value is None and name in self._meta.relation_fields_column():
+            field = self._meta.get_relation_field(name)
+            if object.__getattribute__(self, field.name):
+                value = object.__getattribute__(self, field.name).pk
         return value
 
     def _get_name_and_pk(self):
@@ -136,10 +143,14 @@ class Model(BaseModel, metaclass=MetaModel):
         atrr_values : list[Any] = []
         for field in self._meta.local_fields:
             if field.is_relation:
-                atrr_values.append((field.column, getattr(self, field.column)))
+                atrr_values.append((field.db_column, getattr(self, field.db_column)))
             else:
                 value = getattr(self, field.name)
                 if value is not None:
                     atrr_values.append((field.name, value))
         return atrr_values
 
+    def _update_changes_db(self):
+        changes = self._changes
+        self._changes = {}
+        return changes
