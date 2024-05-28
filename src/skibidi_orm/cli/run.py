@@ -17,7 +17,6 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
 sys.path.insert(0, os.getcwd())
 
 
-
 app = typer.Typer(
     help="CLI tool for managing schema creations and migrations in Skibidi ORM."
 )
@@ -45,8 +44,7 @@ def preview_migration():
     m = MigrationElement()
     m.migrate(preview=True)
 
-    operations = m.operations
-    if not operations:
+    if not m.operations:
         print("No changes to be made.")
     else:
         for i, operation in enumerate(m.operations):
