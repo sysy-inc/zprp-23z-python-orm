@@ -8,12 +8,11 @@ class MigrationElement:
     operations: list[Any] = []
 
     #   @classmethod
+    # todo: why is classmethod commented?
     def migrate(self, preview: bool = False):
         table = MigrationElement.__subclasses__()
 
         for cls in table:
-            # Do migration action
-            # print(cls.__name__, cls.__dict__)
             table_instance = cls()
             table_instance.adapter.execute_migration(preview)
             MigrationElement.operations = table_instance.adapter.operation_list
