@@ -148,3 +148,17 @@ def test_set_foreign_key_to_none():
     dog.owner = None
     assert dog.owner is None
     assert dog.owner_id is None
+
+def test_changes():
+    adam = Owner(1, "Adam")
+    adam.name = 'Jurek'
+    assert adam._update_changes_db() == {'name': 'Jurek'}
+
+def test_changes2():
+    adam = Owner(1, "Adam")
+    dog = Dog(1, "Reksio", adam)
+    assert dog.owner == adam
+    assert dog.owner_id == 1
+    adam.id = 2
+    assert dog.owner == adam
+    assert dog.owner_id == 2

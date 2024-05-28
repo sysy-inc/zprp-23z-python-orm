@@ -28,6 +28,7 @@ class MetaOptions:
         if field.is_relation:
             bisect.insort(self.relation_fields, field)
 
+
     def setup_pk(self, field: Any):
         """ Setup the primary key """
         if self.primary_key and field.primary_key:
@@ -47,10 +48,10 @@ class MetaOptions:
 
     def get_relation_field(self, name: str) -> Any:
         for field in self.relation_fields:
-            if field.name == name or field.column == name:
+            if field.name == name or field.db_column == name:
                 return field
         return None
 
     def relation_fields_column(self):
-        return [field.column for field in self.relation_fields]
+        return [field.db_column for field in self.relation_fields]
 
