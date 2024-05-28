@@ -64,6 +64,11 @@ class SQLConverter(ABC):
         )
 
     @classmethod
+    def get_revision_data_query(cls) -> str:
+        """Return the SQL string which selects all of the data from the revision table"""
+        return cls.get_query_converter().convert_get_revision_data_query()
+
+    @classmethod
     def _convert_constraint_to_SQL(cls, constraint: Constraint) -> str:
         """Convert a given constraint to raw SQL in a specific dialect"""
         return cls.get_constraint_converter().convert_constraint_to_SQL(constraint)
