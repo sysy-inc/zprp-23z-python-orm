@@ -6,6 +6,8 @@ from skibidi_orm.query_engine.connection.engine import Engine
 from skibidi_orm.query_engine.connection.identity import IdentityMap
 from skibidi_orm.query_engine.model.base import Model
 from skibidi_orm.query_engine.connection.transaction import Transaction
+from skibidi_orm.query_engine.operations.select import Select
+from skibidi_orm.query_engine.connection.result import Result
 from typing import Any, Optional, Type
 from types import TracebackType
 
@@ -116,7 +118,7 @@ class Session:
     def delete(self, obj: Model):
         # o = self._map.get(obj.key(), None) TOCHANGE
         if obj in self._new:
-            # object wasn't yet insserted so only delete from list to be inserted
+            # object wasn't yet inserted so only delete from list to be inserted
             self._new.remove(obj)
             if obj in self._dirty:
                 self._dirty.remove(obj)
@@ -159,3 +161,31 @@ class Session:
             self._new = []
             self._dirty = []
             self._delete = []
+
+    def select(self, statement: Select):
+        self.flush()    # flush all pending changes
+        comp = self._engine.config.compiler
+        sql = comp.select(statement)
+        cur = self._connection.cursor()
+        cur.execute(sql)
+        ret = cur.fetchall()
+
+        result: list[Model|Result] = []     # TODO make class for this
+        column_names: list[str] = [description[0] for description in cur.description]
+        rows: list[dict[str, Any]] = []
+        for row in ret:
+                row_dict: dict[str, Any] = dict(zip(column_names, row))
+                rows.append(row_dict)
+        
+        if statement.returning_model:
+            # select returns model
+            for row in rows:
+                model_class = statement.model
+                print(row)
+                result.append(model_class(**row))
+                # TODO add to identity map
+        else:
+            # return named tuple
+            for row in rows:
+                result.append(Result(row))
+        return result
