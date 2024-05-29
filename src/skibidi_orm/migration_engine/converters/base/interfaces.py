@@ -25,10 +25,18 @@ class SQLConverter(ABC):
     def get_table_operation_converter() -> type[TableOperationSQLConverter]:
         """Return the corresponsing table operation converter class"""
 
-    @staticmethod
-    @abstractmethod
-    def get_constraint_converter() -> type[ConstraintSQLConverter]:
-        """Return the corresponding constraint converter class"""
+    @classmethod
+    def convert_operation_to_SQL(
+        cls, operation: ColumnOperation | TableOperation
+    ) -> str:
+        """Convert a given operation object to raw SQL in a specific dialect"""
+        if isinstance(operation, ColumnOperation):
+            return cls.get_column_operation_converter().convert_column_operation_to_SQL(
+                operation
+            )
+        return cls.get_table_operation_converter().convert_table_operation_to_SQL(
+            operation
+        )
 
     @staticmethod
     @abstractmethod
@@ -55,28 +63,9 @@ class SQLConverter(ABC):
         The revision needs to be provided as a second argument to cur.execute()"""
 
     @classmethod
-    def convert_table_operation_to_SQL(cls, operation: TableOperation) -> str:
-        """Convert a given table operation object to raw SQL in a specific dialect"""
-        return cls.get_table_operation_converter().convert_table_operation_to_SQL(
-            operation
-        )
-
-    @classmethod
-    def convert_column_operation_to_SQL(cls, operation: ColumnOperation) -> str:
-        """Convert a given column operation object to raw SQL in a specific dialect"""
-        return cls.get_column_operation_converter().convert_column_operation_to_SQL(
-            operation
-        )
-
-    @classmethod
     def get_revision_data_query(cls) -> str:
         """Return the SQL string which selects all of the data from the revision table"""
         return cls.get_query_converter().get_revision_data_query()
-
-    @classmethod
-    def _convert_constraint_to_SQL(cls, constraint: Constraint) -> str:
-        """Convert a given constraint to raw SQL in a specific dialect"""
-        return cls.get_constraint_converter().convert_constraint_to_SQL(constraint)
 
 
 class ColumnOperationSQLConverter(ABC):

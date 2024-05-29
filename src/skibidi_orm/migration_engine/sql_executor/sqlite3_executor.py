@@ -55,11 +55,6 @@ class SQLite3Executor(BaseSQLExecutor):
     @staticmethod
     def execute_operations(operations: list[TableOperation | ColumnOperation]):
         for operation in operations:
-            if isinstance(operation, TableOperation):
-                SQLite3Executor.execute_sql(
-                    SQLite3Converter.convert_table_operation_to_SQL(operation)
-                )
-            else:
-                SQLite3Executor.execute_sql(
-                    SQLite3Converter.convert_column_operation_to_SQL(operation)
-                )
+            SQLite3Executor.execute_sql(
+                SQLite3Converter.convert_operation_to_SQL(operation)
+            )

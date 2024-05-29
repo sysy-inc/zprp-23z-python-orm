@@ -68,7 +68,7 @@ def test_save_and_get_revision_sqlite(make_database: str):
     assert revisions[2] == revision_2
 
 
-def test_clear_database(make_database: str):
+def test_clear_database_sqlite(make_database: str):
     """Clearing the database removes everything but the revisions table and its contents"""
     SQLite3Config(make_database)
     table_1 = SQLite3Typing.Table(
@@ -82,7 +82,7 @@ def test_clear_database(make_database: str):
             SQLite3Typing.Column("idd", "INTEGER"),
             SQLite3Typing.Column("count_", "INTEGER"),
         ],
-        {ForeignKeyConstraint("test_table_2", "test_table_1", {"idd": "id"})},
+        {ForeignKeyConstraint("test_table_2", "test_table", {"idd": "id"})},
     )
     SQLite3Executor.execute_sql(
         """
@@ -107,3 +107,40 @@ def test_clear_database(make_database: str):
 
     all_tables = SQLite3Inspector().get_tables_names()
     assert len(all_tables) == 1
+
+
+def test_get_revision_SQL_sqlite(make_database: str):
+    SQLite3Config(make_database)
+    table_1 = SQLite3Typing.Table(
+        "test_table",
+        [SQLite3Typing.Column("id", "INTEGER"), SQLite3Typing.Column("name", "TEXT")],
+    )
+
+    table_2 = SQLite3Typing.Table(
+        "test_table_2",
+        [
+            SQLite3Typing.Column("idd", "INTEGER"),
+            SQLite3Typing.Column("count_", "INTEGER"),
+        ],
+        {ForeignKeyConstraint("test_table_2", "test_table", {"idd": "id"})},
+    )
+    SQLite3Executor.execute_sql(
+        """
+        CREATE TABLE test_table (id INTEGER, name TEXT);
+        CREATE TABLE test_table_2 (idd INTEGER, count_ INTEGER, FOREIGN KEY (idd) REFERENCES test_table (id));
+        INSERT INTO test_table (id, name) VALUES (1, 'test');
+        """
+    )
+    manager = RevisionManager()
+    revision = Revision(
+        "test description",
+        "test schema repr",
+        DatabaseProvider.SQLITE3,
+        [table_1, table_2],
+    )
+    revision_sql = manager.get_revision_SQL(revision)
+    assert revision_sql == (
+        "CREATE TABLE test_table (id INTEGER, name TEXT);\n"
+        "CREATE TABLE test_table_2 (idd INTEGER, count_ INTEGER, FOREIGN KEY (idd) "
+        "REFERENCES test_table (id));"
+    )

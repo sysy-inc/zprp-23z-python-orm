@@ -5,6 +5,8 @@ from skibidi_orm.migration_engine.revisions.revision import Revision
 from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
 import sqlite3
 
+from skibidi_orm.migration_engine.state_manager.state_manager import StateManager
+
 
 class RevisionManager:
     """Class responsible for moving between revisions"""
@@ -75,7 +77,17 @@ class RevisionManager:
     def get_revision_SQL(self, revision: Revision) -> str:
         """Returns the SQL string, the execution of which
         will result in checkouting the revision"""
-        raise NotImplementedError()
+        tables = revision.tables
+        # initialize the statemanager with an empty list, so that
+        # everything is considered as a new table
+        state_manager = StateManager([], tables)
+        operations = state_manager.get_operations()
+        return "\n".join(
+            (
+                self.converter.convert_operation_to_SQL(operation)
+                for operation in operations
+            )
+        )
 
     def clear_database(self) -> None:
         """Clears the database of all tables except the revision table.
