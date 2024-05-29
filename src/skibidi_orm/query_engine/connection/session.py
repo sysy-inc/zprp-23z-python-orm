@@ -170,13 +170,13 @@ class Session:
         cur.execute(sql)
         ret = cur.fetchall()
 
-        result: list[Model|Result] = []     # TODO make class for this
+        result: list[Model | Result] = []     # TODO make class for this
         column_names: list[str] = [description[0] for description in cur.description]
         rows: list[dict[str, Any]] = []
         for row in ret:
-                row_dict: dict[str, Any] = dict(zip(column_names, row))
-                rows.append(row_dict)
-        
+            row_dict: dict[str, Any] = dict(zip(column_names, row))
+            rows.append(row_dict)
+
         if statement.returning_model:
             # select returns model
             for row in rows:
@@ -189,3 +189,9 @@ class Session:
             for row in rows:
                 result.append(Result(row))
         return result
+
+    def get(self, model: Type[Model], primary_key: Any):
+        primary_key_name = "id"     # TOCHANGE function from Model
+        st = Select(model).filter(**{primary_key_name: primary_key})
+        ret = self.select(st)
+        return ret[0]
