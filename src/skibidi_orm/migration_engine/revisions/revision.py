@@ -1,15 +1,22 @@
+from datetime import datetime
 from dataclasses import dataclass, field
+from typing import Any
+import sqlite3
+import pickle
+
+from skibidi_orm.migration_engine.adapters.base_adapter import BaseColumn, BaseTable
+from skibidi_orm.migration_engine.adapters.providers import DatabaseProvider
 
 
 @dataclass
 class Revision:
-    """Class representing a single revision in the database.
+    """Class representing a revision of the schema at a given time.
+    After serializing it, it is stored in the revision table.
+    Every database provider has to take care of adapting and converting it
+    before inserting it into the table.
 
     Attributes:
-        id (int | Null): Unique id. Nulled before being saved into the database, which
-        assigns the value using an autoincrementing id.
-
-        timestamp (str): Timestamp of the creation.
+        timestamp (datetime): Timestamp of the creation.
 
         description (str): Migration message provided by the user when migrating.
 
@@ -17,16 +24,26 @@ class Revision:
 
         provider (str): Database provider.
 
-        table_data (str): Serialized object containing information about tables, columns
-        and constraints in the schema, based on which the schema can be recreated.
+        tables (list[BaseTable]): List of tables in the schema.
     """
 
-    timestamp: str
+    timestamp: datetime = field(init=False, default_factory=lambda: datetime.now())
     description: str
     schema_repr: str
-    provider: str
-    schema_data: bytes
-    id: int | None = field(default_factory=lambda: None)
+    provider: DatabaseProvider
+    tables: list[BaseTable[BaseColumn[Any]]]
 
-    def __str__(self) -> str:
-        raise NotImplementedError()
+    def __conform__(self, protocol: Any):
+        """This method is used to serialize the object before inserting it into the database.
+        Every database provider has to take care of adapting and converting it."""
+        if protocol is sqlite3.PrepareProtocol:
+            return pickle.dumps(self)
+
+    @staticmethod
+    def deserialize(data: bytes):
+        """Deserializes the data from the database."""
+        return pickle.loads(data)
+
+
+# register the converter function which deserializes the object
+sqlite3.register_converter("REVISION", Revision.deserialize)
