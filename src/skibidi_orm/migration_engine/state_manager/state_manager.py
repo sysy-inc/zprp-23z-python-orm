@@ -20,6 +20,13 @@ from skibidi_orm.migration_engine.state_manager.i_state_manager import IStateMan
 
 
 class StateManager[TTable: BaseTable[BaseColumn[Any]]](IStateManager):
+    """
+    Class that will analyze the diffrences between ta database schema and a class structure defined schema
+    when instantiated.
+
+    It can provide a list of operations needed to transform the first database into the second one
+    """
+
     def __init__(
         self,
         db_tables: list[TTable],
@@ -32,18 +39,29 @@ class StateManager[TTable: BaseTable[BaseColumn[Any]]](IStateManager):
 
         self.operations: list[TableOperation | ColumnOperation] = []
 
-        self.analyze_schemas()
+        self._analyze_schemas()
 
-    def analyze_schemas(self):
-        self.get_delete_tables_operations()
-        self.get_create_tables_operations()
-        self.get_delete_columns_operations()
-        self.get_create_columns_operations()
+    def _analyze_schemas(self):
+        """
+        Call helper functions to retrive all operations needed for database transformation.
+        """
+        self._get_delete_tables_operations()
+        self._get_create_tables_operations()
+        self._get_delete_columns_operations()
+        self._get_create_columns_operations()
 
-    def get_operations(self) -> list[TableOperation | ColumnOperation]:
+    def get_operations_transforming_database_schema_into_class_hierarchy_schema(
+        self,
+    ) -> list[TableOperation | ColumnOperation]:
+        """
+        Return operations required for transforming the database calculated by the schema analysys.
+        """
         return self.operations
 
-    def get_create_tables_operations(self) -> None:
+    def _get_create_tables_operations(self) -> None:
+        """
+        Get operations concerning the creation of new tables.
+        """
 
         t_db_names = set([t.name for t in self.db_tables])
 
@@ -53,7 +71,10 @@ class StateManager[TTable: BaseTable[BaseColumn[Any]]](IStateManager):
                     self.operations.append(CreateTableOperation(s_table))
                     self.serviced_tables.append(s_table)
 
-    def get_delete_tables_operations(self) -> None:
+    def _get_delete_tables_operations(self) -> None:
+        """
+        Get operations concerning the deletion of tables.
+        """
 
         class TableFound(Exception):
             pass
@@ -78,7 +99,10 @@ class StateManager[TTable: BaseTable[BaseColumn[Any]]](IStateManager):
             except TableFound:
                 pass
 
-    def get_create_columns_operations(self):
+    def _get_create_columns_operations(self):
+        """
+        Get operations concerning the creation of new columns.
+        """
 
         db_table_dict = {t.name: t for t in self.db_tables}
         schema_table_dict = {t.name: t for t in self.schema_tables}
@@ -98,7 +122,10 @@ class StateManager[TTable: BaseTable[BaseColumn[Any]]](IStateManager):
                                 )
                             )
 
-    def get_delete_columns_operations(self):
+    def _get_delete_columns_operations(self):
+        """
+        Get operations concerning the deletion of columns.
+        """
 
         db_table_dict = {t.name: t for t in self.db_tables}
         schema_table_dict = {t.name: t for t in self.schema_tables}
