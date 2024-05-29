@@ -167,3 +167,26 @@ class PostgresInspector(BaseDbInspector):
 
         data_type_upper = cast(str, data_type[0]).upper()
         return cast(PostgresTyping.DataTypes, data_type_upper)
+
+    def _is_column_nullable(self, table_name: str, column_name: str) -> bool:
+        """
+        Check if the column is nullable.
+        """
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f"""
+                SELECT is_nullable
+                FROM information_schema.columns
+                WHERE table_name = '{table_name}'
+                AND column_name = '{column_name}'
+                """
+            )
+
+            is_nullable = cursor.fetchone()
+            if not is_nullable:
+                raise ValueError(
+                    f"Column '{column_name}' does not exist in table '{table_name}'"
+                )
+
+        return is_nullable[0] == "YES"
