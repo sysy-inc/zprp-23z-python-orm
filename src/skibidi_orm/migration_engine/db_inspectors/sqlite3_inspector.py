@@ -60,6 +60,10 @@ class SQLite3Inspector(BaseDbInspector):
     def get_tables(
         self,
     ) -> list[SQLite3Typing.Table]:
+        """
+        Retrieve all tables from the database.
+        """
+
         tables: list[SQLite3Typing.Table] = []
         tables_names = self.get_tables_names()
         for table_name in tables_names:
@@ -69,6 +73,10 @@ class SQLite3Inspector(BaseDbInspector):
         return tables
 
     def get_tables_names(self) -> list[str]:
+        """
+        Retrieve just tables names from the database.
+        """
+
         tables = self._sqlite_execute(
             "SELECT name FROM sqlite_master WHERE type='table';"
         )
@@ -130,6 +138,9 @@ class SQLite3Inspector(BaseDbInspector):
         columns: SQLite3PragmaTableInfo = self._sqlite_execute(
             f"PRAGMA table_info({table_name});"
         )
+        """
+        When given a table name, returns a list of Column objects inside it.
+        """
 
         return [
             SQLite3Typing.Column(
@@ -159,7 +170,7 @@ class SQLite3Inspector(BaseDbInspector):
 
     def _sqlite_execute(self, query: str):
         """
-        Execute a query in the SQLite3 database, rutrns its result.
+        Execute a query in the SQLite3 database, returns its result.
         """
 
         db_path = self.config.db_path
