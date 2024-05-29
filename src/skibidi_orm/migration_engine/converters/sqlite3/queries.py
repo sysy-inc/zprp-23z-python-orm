@@ -6,5 +6,16 @@ class SQLite3QueryConverter(SQLQueryConverter):
     """Class responsible for converting query objects to SQLite3 SQL strings"""
 
     @staticmethod
-    def convert_get_revision_data_query() -> str:
+    def get_revision_data_query() -> str:
         return f"SELECT rowid, * FROM {get_revision_table_name()};"
+
+    @staticmethod
+    def get_table_clearing_query() -> str:
+        return f"""
+            PRAGMA writable_schema = 1;
+            DELETE FROM sqlite_master WHERE type IN ('table', 'index', 'trigger') AND name != '{get_revision_table_name()}';
+            PRAGMA writable_schema = 0;
+            COMMIT;
+            VACUUM;
+            PRAGMA INTEGRITY_CHECK;
+            """

@@ -36,11 +36,17 @@ class SQLConverter(ABC):
         """Return the corresponding query converter class"""
 
     @classmethod
-    @abstractmethod
     def get_revision_table_creation_query(cls) -> str:
         """Return the SQL string which creates a special internal table
         used to hold revision data"""
         return cls.get_table_operation_converter().get_revision_table_creation_query()
+
+    @classmethod
+    @abstractmethod
+    def get_table_clearing_query(cls) -> str:
+        """Return the SQL string which clears the table of all data
+        except the revision table"""
+        return cls.get_query_converter().get_table_clearing_query()
 
     @classmethod
     @abstractmethod
@@ -65,7 +71,7 @@ class SQLConverter(ABC):
     @classmethod
     def get_revision_data_query(cls) -> str:
         """Return the SQL string which selects all of the data from the revision table"""
-        return cls.get_query_converter().convert_get_revision_data_query()
+        return cls.get_query_converter().get_revision_data_query()
 
     @classmethod
     def _convert_constraint_to_SQL(cls, constraint: Constraint) -> str:
@@ -118,5 +124,11 @@ class SQLQueryConverter(ABC):
 
     @staticmethod
     @abstractmethod
-    def convert_get_revision_data_query() -> str:
+    def get_revision_data_query() -> str:
         """Return the SQL string which selects all of the data from the revision table"""
+
+    @staticmethod
+    @abstractmethod
+    def get_table_clearing_query() -> str:
+        """Return the SQL string which clears the table of all data
+        except the revision table"""
