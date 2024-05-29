@@ -15,6 +15,9 @@ from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Ex
 
 
 class SQLite3Adapter(BaseAdapter):
+    """
+    This is a adapter that will select the proper functionality of the whole migration engine to accomodate a SQLite3 database.
+    """
 
     tables: list[SQLite3Typing.Table]
 
@@ -38,7 +41,9 @@ class SQLite3Adapter(BaseAdapter):
             schema_tables=self.tables,
         )
 
-        MigrationElement.operations = state_manager.get_operations()
+        MigrationElement.operations = (
+            state_manager.get_operations_transforming_database_schema_into_class_hierarchy_schema()
+        )
 
         if not preview:
             SQLite3Executor.execute_operations(MigrationElement.operations)
