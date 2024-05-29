@@ -106,6 +106,17 @@ class PostgresTablesData:
     sql_table_primary_key_not_null = SQLite3TablesData.sql_table_primary_key_not_null
     sql_simple_db = SQLite3TablesData.sql_simple_db
     sql_double_pk_db = SQLite3TablesData.sql_double_pk_db
+    SQL_TABLE_MANY_COLUMNS1 = """
+        CREATE TABLE table_many_columns1 (
+            primary_key INTEGER PRIMARY KEY,
+            text_not_null TEXT NOT NULL,
+            text_nullabe TEXT,
+            integer_not_null INTEGER NOT NULL,
+            integer_nullable INTEGER,
+            date_not_null DATE NOT NULL,
+            date_nullable DATE
+        );
+"""
 
 
 class SQLite3InsertData:
