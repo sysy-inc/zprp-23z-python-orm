@@ -20,10 +20,12 @@ from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
     SQLite3Inspector,
 )
-from ..sql_data import sql_double_pk_db, sql_simple_db, sql_simple_insert
+from ..sql_data import SQLite3InsertData, SQLite3TablesData
 
 
-@pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)
+@pytest.mark.parametrize(
+    "make_database", [[*SQLite3TablesData.sql_simple_db]], indirect=True
+)
 def test_insert_row(make_database: str):
     SQLite3Config(db_path=make_database)
     db_seeder = SQLite3DataMutator()
@@ -58,7 +60,9 @@ def test_insert_row(make_database: str):
     )
 
 
-@pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)
+@pytest.mark.parametrize(
+    "make_database", [[*SQLite3TablesData.sql_simple_db]], indirect=True
+)
 def test_delete_row_one_pk(make_database: str):
     config = SQLite3Config(db_path=make_database)
     db_seeder = SQLite3DataMutator()
@@ -95,7 +99,9 @@ def test_delete_row_one_pk(make_database: str):
     assert len(data) == 0
 
 
-@pytest.mark.parametrize("make_database", [[*sql_double_pk_db]], indirect=True)
+@pytest.mark.parametrize(
+    "make_database", [[*SQLite3TablesData.sql_double_pk_db]], indirect=True
+)
 def test_delete_row_two_pk(make_database: str):
     config = SQLite3Config(db_path=make_database)
     db_seeder = SQLite3DataMutator()
@@ -132,7 +138,9 @@ def test_delete_row_two_pk(make_database: str):
     assert len(data) == 0
 
 
-@pytest.mark.parametrize("make_database", [[*sql_double_pk_db]], indirect=True)
+@pytest.mark.parametrize(
+    "make_database", [[*SQLite3TablesData.sql_double_pk_db]], indirect=True
+)
 def test_delete_row_table_two_pk_one_pk_given_ok(make_database: str):
     config = SQLite3Config(db_path=make_database)
     db_seeder = SQLite3DataMutator()
@@ -176,7 +184,9 @@ def test_delete_row_table_two_pk_one_pk_given_ok(make_database: str):
     assert data[0] == (1, 1)
 
 
-@pytest.mark.parametrize("make_database", [[*sql_double_pk_db]], indirect=True)
+@pytest.mark.parametrize(
+    "make_database", [[*SQLite3TablesData.sql_double_pk_db]], indirect=True
+)
 def test_delete_row_table_two_pk_two_pk_given_ok(make_database: str):
     config = SQLite3Config(db_path=make_database)
     db_seeder = SQLite3DataMutator()
@@ -221,7 +231,9 @@ def test_delete_row_table_two_pk_two_pk_given_ok(make_database: str):
     assert data[0] == (1, 1)
 
 
-@pytest.mark.parametrize("make_database", [[*sql_double_pk_db]], indirect=True)
+@pytest.mark.parametrize(
+    "make_database", [[*SQLite3TablesData.sql_double_pk_db]], indirect=True
+)
 def test_delete_row_table_two_pk_one_pk_given_ambigious(make_database: str):
     config = SQLite3Config(db_path=make_database)
     db_seeder = SQLite3DataMutator()
@@ -258,7 +270,9 @@ def test_delete_row_table_two_pk_one_pk_given_ambigious(make_database: str):
 
 
 @pytest.mark.parametrize(
-    "make_database", [[*sql_simple_db, *sql_simple_insert]], indirect=True
+    "make_database",
+    [[*SQLite3TablesData.sql_simple_db, *SQLite3InsertData.sql_simple_insert]],
+    indirect=True,
 )
 def test_raw_query(make_database: str):
     SQLite3Config(db_path=make_database)
@@ -268,7 +282,9 @@ def test_raw_query(make_database: str):
 
 
 @pytest.mark.parametrize(
-    "make_database", [[*sql_simple_db, *sql_simple_insert]], indirect=True
+    "make_database",
+    [[*SQLite3TablesData.sql_simple_db, *SQLite3InsertData.sql_simple_insert]],
+    indirect=True,
 )
 def test_get_rows_normal(make_database: str):
     SQLite3Config(db_path=make_database)
@@ -278,7 +294,9 @@ def test_get_rows_normal(make_database: str):
 
 
 @pytest.mark.parametrize(
-    "make_database", [[*sql_simple_db, *sql_simple_insert]], indirect=True
+    "make_database",
+    [[*SQLite3TablesData.sql_simple_db, *SQLite3InsertData.sql_simple_insert]],
+    indirect=True,
 )
 def test_get_rows_offset(make_database: str):
     SQLite3Config(db_path=make_database)
@@ -292,7 +310,9 @@ def test_get_rows_offset(make_database: str):
 
 
 @pytest.mark.parametrize(
-    "make_database", [[*sql_simple_db, *sql_simple_insert]], indirect=True
+    "make_database",
+    [[*SQLite3TablesData.sql_simple_db, *SQLite3InsertData.sql_simple_insert]],
+    indirect=True,
 )
 def test_get_rows_limit(make_database: str):
     SQLite3Config(db_path=make_database)
