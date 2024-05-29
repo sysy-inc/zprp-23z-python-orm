@@ -58,4 +58,3 @@ class PostgresTyping:
     Constraints = Constraint
     Column = BaseColumn[DataTypes]
     Table = BaseTable[Column]
-    tables: list[Table] = []
