@@ -137,18 +137,21 @@ def studio(
     """
     Run web UI for CRUD operations on current DB.
     """
-    if schema_file is not None:
-        run_server(schema_file=schema_file)
-        return
 
     try:
-        schema_file = find_schema_file()
-        run_server(schema_file=schema_file)
+        if schema_file is None:
+            schema_file = find_schema_file()
     except MultipleSchemaFilesError:
         print(
             Fore.RED
             + "Multiple schema files found. Please specify the schema file to use: --schema-file <PATH>"
         )
+        raise typer.Exit(code=1)
+
+    try:
+        run_server(schema_file=schema_file)
+    except Exception as e:
+        print(Fore.RED + f"Error: {e}")
         raise typer.Exit(code=1)
 
 
