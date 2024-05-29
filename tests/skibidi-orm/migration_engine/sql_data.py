@@ -117,6 +117,24 @@ class PostgresTablesData:
             date_nullable DATE
         );
 """
+    SQL_TABLE_DIFFICULT_TYPES = """
+        CREATE TABLE table_difficult_types (
+            big_primary_key_alias serial8 PRIMARY KEY,
+            bit_varying_alias VARBIT,
+            bit_varying_alias_arg VARBIT(20),
+            double_precision DOUBLE PRECISION,
+            timestamp TIMESTAMP,
+            timestamp_arg TIMESTAMP(2),
+            timestamp_without_time_zone TIMESTAMP WITHOUT TIME ZONE,
+            timestamp_without_time_zone_arg TIMESTAMP(3) WITHOUT TIME ZONE,
+            timestamp_with_time_zone_alias TIMESTAMPTZ,
+            timestamp_with_time_zone_arg_alias TIMESTAMPTZ(3),
+            charachter_varying CHARACTER VARYING,
+            charachter_varying_arg CHARACTER VARYING(40),
+            charachter_varying_alias VARCHAR,
+            charachter_varying_alias_args VARCHAR(40)
+        );
+"""
 
 
 class SQLite3InsertData:
