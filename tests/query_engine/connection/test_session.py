@@ -309,3 +309,22 @@ def test_select_return_result(mock_get_configuration):
         assert len(ret) == 1
         assert ret[0].id == 1
         assert isinstance(ret[0], Result)
+
+
+def test_get(mock_get_configuration):
+    engine = Engine()
+
+    class TestModel(Model):
+        id: int = IntegerField()  # type: ignore
+    st = Select(TestModel)
+    obj = TestModel(1)
+    mock_get_configuration[2].fetchall.return_value = [(1,)]
+    mock_get_configuration[2].description = [["id"]]
+
+    with Session(engine) as session:
+        session.add(obj)
+        assert len(session._new) == 1
+        ret = session.get(TestModel, 1)
+        mock_get_configuration[2].execute.assert_called()
+        assert ret.id == 1
+        assert isinstance(ret, TestModel)
