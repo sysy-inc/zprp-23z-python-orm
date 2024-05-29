@@ -25,6 +25,8 @@ from skibidi_orm.exceptions.operations import UnsupportedOperationError
 from typing import cast
 from itertools import chain
 
+from skibidi_orm.migration_engine.revisions.constants import get_revision_table_name
+
 
 class SQLite3TableOperationConverter(TableOperationSQLConverter):
     """Class responsible for converting table operation objects to raw SQLite3 SQL strings"""
@@ -57,9 +59,8 @@ class SQLite3TableOperationConverter(TableOperationSQLConverter):
     def get_revision_table_creation_query() -> str:
         """Return the SQL string which creates a special internal table
         used to hold revision data"""
-        return SQLite3TableOperationConverter._convert_create_table_operation_to_SQL(
-            CreateTableOperation(SQLite3Typing.get_revision_table_object())
-        )
+        table_name = get_revision_table_name()
+        return f"CREATE TABLE {table_name} (rev REVISION NOT NULL);"
 
     @staticmethod
     def _convert_create_table_operation_to_SQL(operation: CreateTableOperation) -> str:

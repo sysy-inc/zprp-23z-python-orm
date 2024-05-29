@@ -158,7 +158,5 @@ def test_rename_table_conversion_simple():
 def test_correct_revision_table_SQL_conversion():
     """Tests whether the query used to create the internal revision table is correct"""
     assert SQLite3TableOperationConverter.get_revision_table_creation_query() == (
-        "CREATE TABLE __revisions (timestamp TEXT NOT NULL, "
-        "description TEXT NOT NULL, schema_repr TEXT NOT NULL, provider TEXT NOT NULL, "
-        "schema_data BLOB NOT NULL, __internal TEXT);"
+        "CREATE TABLE __revisions (rev REVISION NOT NULL);"
     )

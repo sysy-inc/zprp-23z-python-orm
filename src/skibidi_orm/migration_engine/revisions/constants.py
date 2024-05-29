@@ -6,16 +6,6 @@ create revision tables, etc."""
 
 DEFAULT_REVISION_TABLE_NAME = "__revisions"
 
-REVISION_TABLE_COLUMN_NAMES = (
-    "id",
-    "timestamp",
-    "description",
-    "schema_repr",
-    "provider",
-    "schema_data",
-    "__internal",
-)
-
 
 def get_revision_table_name() -> str:
     """Get the name of the table used to store revision data.
