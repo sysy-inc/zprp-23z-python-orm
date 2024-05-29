@@ -236,3 +236,73 @@ def test__get_column_data_type(query, table_name, column_name, expected_data_typ
         assert data_type == expected_data_type
 
     test_fn()
+
+
+@pytest.mark.parametrize(
+    "query, table_name, column_name, expected_nullable",
+    [
+        (  # 0
+            [PostgresTablesData.SQL_TABLE_MANY_COLUMNS1],
+            "table_many_columns1",
+            "text_not_null",
+            False,
+        ),
+        (  # 1
+            [PostgresTablesData.SQL_TABLE_MANY_COLUMNS1],
+            "table_many_columns1",
+            "text_nullabe",
+            True,
+        ),
+        (  # 2
+            [PostgresTablesData.SQL_TABLE_MANY_COLUMNS1],
+            "table_many_columns1",
+            "integer_not_null",
+            False,
+        ),
+        (  # 3
+            [PostgresTablesData.SQL_TABLE_MANY_COLUMNS1],
+            "table_many_columns1",
+            "integer_nullable",
+            True,
+        ),
+        (  # 4
+            [PostgresTablesData.SQL_TABLE_MANY_COLUMNS1],
+            "table_many_columns1",
+            "date_not_null",
+            False,
+        ),
+        (  # 5
+            [PostgresTablesData.SQL_TABLE_MANY_COLUMNS1],
+            "table_many_columns1",
+            "date_nullable",
+            True,
+        ),
+        (  # 6
+            [PostgresTablesData.SQL_TABLE_MANY_COLUMNS1],
+            "table_many_columns1",
+            "primary_key",
+            False,
+        ),
+    ],
+)
+def test__is_column_nullable(query, table_name, column_name, expected_nullable):  # type: ignore
+    @postgres_db_fixture(
+        db_name="postgres",
+        db_user="admin",
+        db_password="admin",
+        db_host="0.0.0.0",
+        db_port=5432,
+        queries=query,  # type: ignore
+    )
+    def test_fn():
+        PostgresConfig(
+            db_name="postgres",
+            db_user="admin",
+            db_password="admin",
+            db_host="0.0.0.0",
+            db_port=5432,
+        )
+        inspector = PostgresInspector()
+        assert inspector._is_column_nullable(table_name, column_name) is expected_nullable  # type: ignore
+
+    test_fn()
