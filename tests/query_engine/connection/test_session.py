@@ -5,6 +5,8 @@ from skibidi_orm.query_engine import config
 from skibidi_orm.query_engine.adapter.sqlite_adapter import SQLiteAdapter
 from skibidi_orm.query_engine.model.base import Model
 from skibidi_orm.query_engine.field.field import IntegerField
+from skibidi_orm.query_engine.operations.select import Select
+from skibidi_orm.query_engine.connection.result import Result
 import pytest
 from unittest.mock import MagicMock
 
@@ -267,3 +269,43 @@ def test_flush_delete_pending(mock_get_configuration):
         session.flush()
         assert len(session._delete) == 0
         mock_get_configuration[2].execute.assert_called()
+
+
+def test_select_return_model(mock_get_configuration):
+    engine = Engine()
+
+    class TestModel(Model):
+        id: int = IntegerField()  # type: ignore
+    st = Select(TestModel)
+    obj = TestModel(1)
+    mock_get_configuration[2].fetchall.return_value = [(1,)]
+    mock_get_configuration[2].description = [["id"]]
+
+    with Session(engine) as session:
+        session.add(obj)
+        assert len(session._new) == 1
+        ret = session.select(st)
+        mock_get_configuration[2].execute.assert_called()
+        assert len(ret) == 1
+        assert ret[0].id == 1
+        assert isinstance(ret[0], TestModel)
+
+
+def test_select_return_result(mock_get_configuration):
+    engine = Engine()
+
+    class TestModel(Model):
+        id: int = IntegerField()  # type: ignore
+    st = Select(TestModel).group_by("id")
+    obj = TestModel(1)
+    mock_get_configuration[2].fetchall.return_value = [(1,)]
+    mock_get_configuration[2].description = [["id"]]
+
+    with Session(engine) as session:
+        session.add(obj)
+        assert len(session._new) == 1
+        ret = session.select(st)
+        mock_get_configuration[2].execute.assert_called()
+        assert len(ret) == 1
+        assert ret[0].id == 1
+        assert isinstance(ret[0], Result)
