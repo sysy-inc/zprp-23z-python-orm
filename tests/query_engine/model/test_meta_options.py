@@ -16,7 +16,7 @@ def test_meta_options_init(meta_options: MetaOptions):
 def test_meta_options_contribute_to_class(meta_options: MetaOptions):
     class TestClass:
         pass
-    meta_options.contribute_to_class(TestClass, 'meta')
+    meta_options.contribute_to_class(TestClass, '_meta')
     assert hasattr(TestClass, '_meta')
     assert hasattr(meta_options, 'model')
     assert meta_options.db_table == 'testclass'
