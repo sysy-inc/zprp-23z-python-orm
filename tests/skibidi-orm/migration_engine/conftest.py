@@ -117,7 +117,7 @@ def postgres_db_fixture(
                 db_name, db_user, db_password, db_host, db_port, queries
             )
             func()
-            clear_postgres_database(db_name, db_user, db_password, db_host, db_port)
+            # clear_postgres_database(db_name, db_user, db_password, db_host, db_port)
 
         return wrapper
 
