@@ -33,7 +33,7 @@ class MetaOptions:
         """ Setup the primary key """
         if self.primary_key and field.primary_key:
             # TODO raise error
-            pass
+            raise ValueError('Model cannot have two pk!')
         elif not self.primary_key and field.primary_key:
             self.primary_key = field
 

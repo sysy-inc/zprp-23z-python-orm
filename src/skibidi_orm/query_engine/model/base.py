@@ -57,11 +57,11 @@ class Model(BaseModel, metaclass=MetaModel):
         allow_population_by_field_name = True
 
     def __init__(self, *args: Any, **kwargs: Any):
-        opts: MetaOptions = self._meta # type: ignore
-        if len(args) > len(opts.local_fields): # type: ignore
+        opts: MetaOptions = self._meta
+        if len(args) > len(opts.local_fields):
             raise IndexError("Number of args exceeds number of fields")
 
-        fields_iter = iter(opts.local_fields)    # type: ignore
+        fields_iter = iter(opts.local_fields)
         for val, field in zip(args, fields_iter):
             kwargs[field.name] = val
         for field in fields_iter:
@@ -112,14 +112,10 @@ class Model(BaseModel, metaclass=MetaModel):
                 self._session.changed(self)
         if name in self._meta.relation_fields_name():
             field = self._meta.get_relation_field(name)
-            obj_id = value.pk if value else None
-            if obj_id != object.__getattribute__(self, field.db_column):
-                object.__setattr__(self, field.db_column, None)
+            object.__setattr__(self, field.db_column, None)
         elif name in self._meta.relation_fields_column():
             field = self._meta.get_relation_field(name)
-            obj_id = object.__getattribute__(self, field.name).pk if object.__getattribute__(self, field.name) else None
-            if obj_id != value:
-                object.__setattr__(self, field.name, None)
+            object.__setattr__(self, field.name, None)
 
     def __getattribute__(self, name: str) -> Any:
         value = super().__getattribute__(name)
