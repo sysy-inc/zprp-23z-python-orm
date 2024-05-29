@@ -6,7 +6,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     NotNullConstraint,
     PrimaryKeyConstraint,
 )
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
     SQLite3Typing,
 )
 from skibidi_orm.migration_engine.data_mutator.base_data_mutator import (

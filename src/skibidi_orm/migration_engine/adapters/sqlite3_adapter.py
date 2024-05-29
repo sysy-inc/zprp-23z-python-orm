@@ -3,7 +3,7 @@ from skibidi_orm.migration_engine.adapters.base_adapter import BaseAdapter
 from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
     MigrationElement,
 )
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
     SQLite3Typing,
 )
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (

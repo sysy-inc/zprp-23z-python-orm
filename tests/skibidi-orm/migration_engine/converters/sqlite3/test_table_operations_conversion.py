@@ -1,7 +1,9 @@
 import pytest
 
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
-from skibidi_orm.migration_engine.converters.sqlite3.tables import SQLite3TableOperationConverter
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.converters.sqlite3.tables import (
+    SQLite3TableOperationConverter,
+)
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     CheckConstraint,
     Constraint,
@@ -129,7 +131,7 @@ def test_create_table_conversion_complex_with_constraints():
         SQLite3TableOperationConverter.convert_table_operation_to_SQL(operation)
         == "CREATE TABLE admin_users (user_id INTEGER PRIMARY KEY NOT NULL, name TEXT, "
         "email TEXT UNIQUE, active BLOB, age INTEGER, CHECK (age > 18), FOREIGN KEY (active, name) REFERENCES users ("
-           "active, name));"
+        "active, name));"
     )
 
 

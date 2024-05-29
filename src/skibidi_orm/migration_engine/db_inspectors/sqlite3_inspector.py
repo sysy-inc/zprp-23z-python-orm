@@ -5,7 +5,7 @@ import sqlite3
 
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
     SQLite3Typing,
 )
 import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
