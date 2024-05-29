@@ -28,3 +28,9 @@ class BaseSQLExecutor(ABC):
     @abstractmethod
     def save_revision(revision: Revision) -> None:
         """Save the given revision in the database"""
+
+    @staticmethod
+    @abstractmethod
+    def get_all_revisions() -> list[tuple[int, Revision]]:
+        """Get all the revisions from the database
+        returns a list of tuples (id, revision)"""

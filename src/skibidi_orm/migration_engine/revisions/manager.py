@@ -46,9 +46,9 @@ class RevisionManager:
         """Saves a given revision to the revision database"""
         self.executor.save_revision(revision)
 
-    def get_all_revisions(self) -> list[Revision]:
+    def get_all_revisions(self) -> dict[int, Revision]:
         """Returns all revisions in the database"""
-        raise NotImplementedError()
+        return {id: revision for id, revision in self.executor.get_all_revisions()}
 
     def go_to_revision(self, revision_id: int) -> None:
         """Checkouts the user to a given revision.

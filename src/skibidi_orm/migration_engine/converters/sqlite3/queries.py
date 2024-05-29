@@ -7,4 +7,4 @@ class SQLite3QueryConverter(SQLQueryConverter):
 
     @staticmethod
     def convert_get_revision_data_query() -> str:
-        return f"SELECT * FROM {get_revision_table_name()};"
+        return f"SELECT rowid, * FROM {get_revision_table_name()};"

@@ -43,6 +43,16 @@ class SQLite3Executor(BaseSQLExecutor):
             conn.commit()
 
     @staticmethod
+    def get_all_revisions() -> list[tuple[int, Revision]]:
+        query = SQLite3Converter.get_revision_data_query()
+        with sqlite3.connect(
+            SQLite3Config.get_instance().db_path, detect_types=sqlite3.PARSE_DECLTYPES
+        ) as conn:
+            cursor = conn.cursor()
+            result = cursor.execute(query)
+            return result.fetchall()
+
+    @staticmethod
     def execute_operations(operations: list[TableOperation | ColumnOperation]):
         for operation in operations:
             if isinstance(operation, TableOperation):
