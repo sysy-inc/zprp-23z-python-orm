@@ -11,33 +11,11 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
     MigrationElement,
 )
 from skibidi_orm.migration_engine.adapters.database_objects import constraints as c
-
-
-sql_table_user = """
-    CREATE TABLE User (
-        user_id INTEGER PRIMARY KEY,
-        user_name TEXT NOT NULL
-    );
-"""
-sql_table_post = """
-    CREATE TABLE Post (
-        post_id INTEGER PRIMARY KEY,
-        post_name TEXT NOT NULL
-    );
-"""
-
-sql_table_comment = """
-    CREATE TABLE Comment (
-        comment_id INTEGER PRIMARY KEY,
-        comment_name TEXT NOT NULL
-    );
-"""
-
-sql_table_primary_key_not_null = """
-    CREATE TABLE table_primary_key_not_null (
-        id INTEGER PRIMARY KEY NOT NULL
-    );
-"""
+from .sql_data import (
+    sql_table_post,
+    sql_table_user,
+    sql_table_comment,
+)
 
 
 def test_adding_table_to_database(make_database: str):

@@ -4,24 +4,7 @@ from skibidi_orm.migration_engine.db_inspectors.postgres_inspector import (
     PostgresInspector,
 )
 from ..conftest import postgres_db_fixture
-
-sql_table1 = """
-    CREATE TABLE table1 (
-        id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL
-    );
-"""
-sql_table2 = """
-    CREATE TABLE table2 (
-        id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL
-    );
-"""
-sql_table_primary_key_not_null = """
-    CREATE TABLE table_primary_key_not_null (
-        id INTEGER PRIMARY KEY NOT NULL
-    );
-"""
+from ..sql_data import sql_table2, sql_table1, sql_table_primary_key_not_null
 
 
 @pytest.mark.parametrize(

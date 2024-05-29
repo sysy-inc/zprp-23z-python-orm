@@ -20,35 +20,7 @@ from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
     SQLite3Inspector,
 )
-
-sql_simple_db = [
-    """
-    CREATE TABLE users (
-        user_id INTEGER PRIMARY KEY,
-        username TEXT NOT NULL
-    );
-"""
-]
-
-sql_double_pk_db = [
-    """
-    CREATE TABLE Orders (
-        order_id INTEGER,
-        product_id INTEGER,
-        PRIMARY KEY (order_id, product_id)
-    );
-"""
-]
-
-sql_simple_insert = [
-    """
-    INSERT INTO users (user_id, username) VALUES
-    (1, 'test1'),
-    (2, 'test2'),
-    (3, 'test3')
-;
-"""
-]
+from ..sql_data import sql_double_pk_db, sql_simple_db, sql_simple_insert
 
 
 @pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)

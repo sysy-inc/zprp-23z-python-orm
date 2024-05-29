@@ -11,51 +11,9 @@ from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
 )
 from skibidi_orm.migration_engine.studio.server import app
 import pathlib
-
+from ..sql_data import sql_simple_db
 
 client = TestClient(app)
-
-sql_schema_with_fks = [
-    """
-    CREATE TABLE users (
-        user_id INTEGER PRIMARY KEY,
-        username TEXT NOT NULL UNIQUE,
-        email TEXT NOT NULL UNIQUE,
-        password_hash TEXT NOT NULL,
-        registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-""",
-    """
-    CREATE TABLE posts (
-        post_id INTEGER PRIMARY KEY,
-        user_id INTEGER NOT NULL,
-        title TEXT NOT NULL,
-        content TEXT NOT NULL,
-        post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(user_id)
-    );
-""",
-    """
-    CREATE TABLE comments (
-        comment_id INTEGER PRIMARY KEY,
-        user_idd INTEGER NOT NULL,
-        post_id INTEGER NOT NULL,
-        comment_text TEXT NOT NULL,
-        comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_idd) REFERENCES users(user_id),
-        FOREIGN KEY (post_id) REFERENCES posts(post_id)
-    );
-""",
-]
-
-sql_simple_db = [
-    """
-    CREATE TABLE users (
-        user_id INTEGER PRIMARY KEY,
-        username TEXT NOT NULL UNIQUE
-    );
-"""
-]
 
 
 @pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)
