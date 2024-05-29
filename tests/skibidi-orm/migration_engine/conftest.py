@@ -4,7 +4,6 @@ from typing import Any, Callable
 from colorama import Style
 import psycopg2
 import pytest
-from psycopg2.extensions import connection as Connection
 
 from skibidi_orm.migration_engine.db_config.base_config import (
     BaseDbConfig,
