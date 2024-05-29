@@ -31,7 +31,7 @@ class RevisionManager:
             self.executor.execute_sql(revision_data_query)
             return True
         except (
-            sqlite3.OperationalError
+            sqlite3.OperationalError  # more exceptions can be added here for each provider
         ):  # todo: change to a more general exception type or inherit
             return False
 
@@ -44,7 +44,7 @@ class RevisionManager:
 
     def save_revision(self, revision: Revision) -> None:
         """Saves a given revision to the revision database"""
-        raise NotImplementedError()
+        self.executor.save_revision(revision)
 
     def get_all_revisions(self) -> list[Revision]:
         """Returns all revisions in the database"""

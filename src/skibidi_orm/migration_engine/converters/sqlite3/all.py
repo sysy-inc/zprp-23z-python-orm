@@ -17,10 +17,8 @@ from skibidi_orm.migration_engine.converters.sqlite3.queries import (
 from skibidi_orm.migration_engine.converters.sqlite3.tables import (
     SQLite3TableOperationConverter,
 )
-from skibidi_orm.migration_engine.revisions.constants import REVISION_TABLE_COLUMN_NAMES
-from skibidi_orm.migration_engine.revisions.revision import Revision
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
-    SQLite3Typing,
+from skibidi_orm.migration_engine.revisions.constants import (
+    get_revision_table_name,
 )
 
 
@@ -45,19 +43,6 @@ class SQLite3Converter(SQLConverter):
         return SQLite3QueryConverter
 
     @classmethod
-    def convert_revision_to_insertion_sql(cls, revision: Revision) -> str:
-        revision_table_name = SQLite3Typing.get_revision_table_object().name
-        _, timestamp, description, schema_repr, provider, table_data, _ = (
-            REVISION_TABLE_COLUMN_NAMES
-        )
-
-        return (
-            f"INSERT INTO {revision_table_name} "
-            f"({', '.join([timestamp, description, schema_repr, provider, table_data])}) VALUES {
-                revision.timestamp,
-                revision.description,
-                revision.schema_repr,
-                revision.provider,
-                revision.schema_data
-            };"
-        )
+    def get_revision_insertion_query(cls) -> str:
+        revision_table_name = get_revision_table_name()
+        return f"INSERT INTO {revision_table_name} (rev) VALUES (?);"

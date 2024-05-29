@@ -3,6 +3,7 @@ from typing import Any
 
 from skibidi_orm.migration_engine.operations.table_operations import TableOperation
 from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
+from skibidi_orm.migration_engine.revisions.revision import Revision
 
 
 class BaseSQLExecutor(ABC):
@@ -22,3 +23,8 @@ class BaseSQLExecutor(ABC):
     @abstractmethod
     def execute_operations(operations: list[TableOperation | ColumnOperation]) -> None:
         """Execute the given operations in the database"""
+
+    @staticmethod
+    @abstractmethod
+    def save_revision(revision: Revision) -> None:
+        """Save the given revision in the database"""

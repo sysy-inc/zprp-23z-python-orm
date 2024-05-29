@@ -1,6 +1,7 @@
 import sqlite3
 from typing import Any
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
+from skibidi_orm.migration_engine.revisions.revision import Revision
 from skibidi_orm.migration_engine.sql_executor.base_sql_executor import BaseSQLExecutor
 from skibidi_orm.migration_engine.operations.column_operations import ColumnOperation
 from skibidi_orm.migration_engine.operations.table_operations import TableOperation
@@ -30,6 +31,16 @@ class SQLite3Executor(BaseSQLExecutor):
             result = cursor.execute(sql)
 
         return result.fetchall()
+
+    @staticmethod
+    def save_revision(revision: Revision):
+        query = SQLite3Converter.get_revision_insertion_query()
+        with sqlite3.connect(
+            SQLite3Config.get_instance().db_path, detect_types=sqlite3.PARSE_DECLTYPES
+        ) as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, (revision,))
+            conn.commit()
 
     @staticmethod
     def execute_operations(operations: list[TableOperation | ColumnOperation]):

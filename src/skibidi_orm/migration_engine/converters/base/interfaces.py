@@ -45,9 +45,9 @@ class SQLConverter(ABC):
 
     @classmethod
     @abstractmethod
-    def convert_revision_to_insertion_sql(cls, revision: Revision) -> str:
-        """Converts a revision object into an SQL string in a specific dialect,
-        that can be executed to add the revision to the database"""
+    def get_revision_insertion_query(cls) -> str:
+        """Return the SQL string which inserts a revision into the revision table.
+        The revision needs to be provided as a second argument to cur.execute()"""
 
     @classmethod
     def convert_table_operation_to_SQL(cls, operation: TableOperation) -> str:
