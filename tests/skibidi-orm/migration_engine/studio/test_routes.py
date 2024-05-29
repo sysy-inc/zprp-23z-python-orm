@@ -11,12 +11,14 @@ from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
 )
 from skibidi_orm.migration_engine.studio.server import app
 import pathlib
-from ..sql_data import sql_simple_db
+from ..sql_data import SQLite3TablesData
 
 client = TestClient(app)
 
 
-@pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)
+@pytest.mark.parametrize(
+    "make_database", [[*SQLite3TablesData.sql_simple_db]], indirect=True
+)
 def test_GET_db(
     monkeypatch: pytest.MonkeyPatch, tmp_path: pathlib.Path, make_database: str
 ):
@@ -66,7 +68,9 @@ def test_GET_db(
     )
 
 
-@pytest.mark.parametrize("make_database", [[*sql_simple_db]], indirect=True)
+@pytest.mark.parametrize(
+    "make_database", [[*SQLite3TablesData.sql_simple_db]], indirect=True
+)
 def test_POST_route_db_table_name_row_correct(
     monkeypatch: pytest.MonkeyPatch, make_database: str
 ):

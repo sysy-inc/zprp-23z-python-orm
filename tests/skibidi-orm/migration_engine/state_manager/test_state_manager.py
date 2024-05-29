@@ -25,7 +25,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
 from pathlib import Path
 import pytest
 import sqlite3
-from ..sql_data import sql_table_user, sql_table_post, sql_table_comment
+from ..sql_data import SQLite3TablesData
 
 
 def execute_sqlite3_commands(db_path: str, commands: list[str]):
@@ -67,7 +67,9 @@ def mock_execute_operations(monkeypatch: pytest.MonkeyPatch):
 
 
 @pytest.mark.parametrize(
-    "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
+    "tmp_database",
+    [[SQLite3TablesData.sql_table_user, SQLite3TablesData.sql_table_post]],
+    indirect=True,
 )
 def test_rename_table_operation_needed(
     tmp_database: str, capfd: pytest.CaptureFixture[str]
@@ -128,7 +130,9 @@ def test_rename_table_operation_needed(
 
 
 @pytest.mark.parametrize(
-    "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
+    "tmp_database",
+    [[SQLite3TablesData.sql_table_user, SQLite3TablesData.sql_table_post]],
+    indirect=True,
 )
 def test_no_operation_needed(
     tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
@@ -185,7 +189,9 @@ def test_no_operation_needed(
 
 
 @pytest.mark.parametrize(
-    "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
+    "tmp_database",
+    [[SQLite3TablesData.sql_table_user, SQLite3TablesData.sql_table_post]],
+    indirect=True,
 )
 def test_create_table_operation_needed(
     tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
@@ -260,7 +266,15 @@ def test_create_table_operation_needed(
 
 
 @pytest.mark.parametrize(
-    "tmp_database", [[sql_table_user, sql_table_post, sql_table_comment]], indirect=True
+    "tmp_database",
+    [
+        [
+            SQLite3TablesData.sql_table_user,
+            SQLite3TablesData.sql_table_post,
+            SQLite3TablesData.sql_table_comment,
+        ]
+    ],
+    indirect=True,
 )
 def test_delete_table_operation_needed(
     tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
@@ -318,7 +332,9 @@ def test_delete_table_operation_needed(
 
 
 @pytest.mark.parametrize(
-    "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
+    "tmp_database",
+    [[SQLite3TablesData.sql_table_user, SQLite3TablesData.sql_table_post]],
+    indirect=True,
 )
 def test_create_column_operation_needed(
     tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
@@ -381,7 +397,9 @@ def test_create_column_operation_needed(
 
 
 @pytest.mark.parametrize(
-    "tmp_database", [[sql_table_user, sql_table_post]], indirect=True
+    "tmp_database",
+    [[SQLite3TablesData.sql_table_user, SQLite3TablesData.sql_table_post]],
+    indirect=True,
 )
 def test_delete_column_operation_needed(
     tmp_database: str, mock_execute_operations: pytest.MonkeyPatch
@@ -434,7 +452,15 @@ def test_delete_column_operation_needed(
 
 
 @pytest.mark.parametrize(
-    "tmp_database", [[sql_table_user, sql_table_post, sql_table_comment]], indirect=True
+    "tmp_database",
+    [
+        [
+            SQLite3TablesData.sql_table_user,
+            SQLite3TablesData.sql_table_post,
+            SQLite3TablesData.sql_table_comment,
+        ]
+    ],
+    indirect=True,
 )
 def test_add_column_and_delete_tabe_operation_needed(
     tmp_database: str, mock_execute_operations: pytest.MonkeyPatch

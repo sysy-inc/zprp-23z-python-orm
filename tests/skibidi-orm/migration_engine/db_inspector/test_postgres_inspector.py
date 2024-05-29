@@ -4,15 +4,23 @@ from skibidi_orm.migration_engine.db_inspectors.postgres_inspector import (
     PostgresInspector,
 )
 from ..conftest import postgres_db_fixture
-from ..sql_data import sql_table2, sql_table1, sql_table_primary_key_not_null
+from ..sql_data import SQLite3TablesData
 
 
 @pytest.mark.parametrize(
     "query, expected_tables_len, expected_tables_list",
     [
-        ([sql_table1], 1, ["table1"]),
-        ([sql_table1, sql_table2], 2, ["table1", "table2"]),
-        ([sql_table_primary_key_not_null], 1, ["table_primary_key_not_null"]),
+        ([SQLite3TablesData.sql_table1], 1, ["table1"]),
+        (
+            [SQLite3TablesData.sql_table1, SQLite3TablesData.sql_table2],
+            2,
+            ["table1", "table2"],
+        ),
+        (
+            [SQLite3TablesData.sql_table_primary_key_not_null],
+            1,
+            ["table_primary_key_not_null"],
+        ),
     ],
 )
 def test_get_tables_names(query, expected_tables_list, expected_tables_len):  # type: ignore

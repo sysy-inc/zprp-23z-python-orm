@@ -8,12 +8,7 @@ from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
     SQLite3Inspector,
 )
 
-from ..sql_data import (
-    sql_table1,
-    sql_table2,
-    sql_table_primary_key_not_null,
-    sql_schema_with_fks,
-)
+from ..sql_data import SQLite3TablesData
 
 
 def execute_sqlite3_commands(db_path: str, commands: list[str]):
@@ -39,7 +34,11 @@ def tmp_database(request: pytest.FixtureRequest, tmp_path: pathlib.Path):
     yield str(tmp_file)
 
 
-@pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
+@pytest.mark.parametrize(
+    "tmp_database",
+    [[SQLite3TablesData.sql_table1, SQLite3TablesData.sql_table2]],
+    indirect=True,
+)
 @pytest.mark.usefixtures("tmp_database")
 def test_can_only_be_instantiated_with_sqlite3config_instantiated_earlier():
     with pytest.raises(ReferenceError) as exc_info:
@@ -47,7 +46,11 @@ def test_can_only_be_instantiated_with_sqlite3config_instantiated_earlier():
     assert str(exc_info.value) == "Instance does not exist"
 
 
-@pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
+@pytest.mark.parametrize(
+    "tmp_database",
+    [[SQLite3TablesData.sql_table1, SQLite3TablesData.sql_table2]],
+    indirect=True,
+)
 def test_get_tables_names(tmp_database: str):
     SQLite3Config(tmp_database)
     inspector = SQLite3Inspector()
@@ -57,7 +60,11 @@ def test_get_tables_names(tmp_database: str):
     assert tables[1] == "table2"
 
 
-@pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
+@pytest.mark.parametrize(
+    "tmp_database",
+    [[SQLite3TablesData.sql_table1, SQLite3TablesData.sql_table2]],
+    indirect=True,
+)
 def test_get_table_columns(tmp_database: str):
     SQLite3Config(db_path=tmp_database)
     inspector = SQLite3Inspector()
@@ -72,7 +79,7 @@ def test_get_table_columns(tmp_database: str):
 
 
 @pytest.mark.parametrize(
-    "tmp_database", [[sql_table_primary_key_not_null]], indirect=True
+    "tmp_database", [[SQLite3TablesData.sql_table_primary_key_not_null]], indirect=True
 )
 def test_get_table_columns__primaryk_notnull(tmp_database: str):
     SQLite3Config(db_path=tmp_database)
@@ -86,7 +93,11 @@ def test_get_table_columns__primaryk_notnull(tmp_database: str):
     ]
 
 
-@pytest.mark.parametrize("tmp_database", [[sql_table1, sql_table2]], indirect=True)
+@pytest.mark.parametrize(
+    "tmp_database",
+    [[SQLite3TablesData.sql_table1, SQLite3TablesData.sql_table2]],
+    indirect=True,
+)
 def test_get_tables(tmp_database: str):
     SQLite3Config(db_path=tmp_database)
     inspector = SQLite3Inspector()
@@ -118,7 +129,9 @@ def test_get_tables(tmp_database: str):
     ]
 
 
-@pytest.mark.parametrize("tmp_database", [[*sql_schema_with_fks]], indirect=True)
+@pytest.mark.parametrize(
+    "tmp_database", [[*SQLite3TablesData.sql_schema_with_fks]], indirect=True
+)
 def test_get_foreign_keys(tmp_database: str):
     SQLite3Config(db_path=tmp_database)
     inspector = SQLite3Inspector()
