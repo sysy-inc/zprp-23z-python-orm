@@ -7,7 +7,6 @@ from skibidi_orm.migration_engine.operations.table_operations import (
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     Constraint,
 )
-from skibidi_orm.migration_engine.revisions.revision import Revision
 
 
 class SQLConverter(ABC):
