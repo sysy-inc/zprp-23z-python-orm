@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Any, Literal
+from typing import Any, Literal, cast
 from skibidi_orm.migration_engine.adapters.postgres_typing import PostgresTyping
 from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
@@ -59,24 +59,15 @@ class PostgresInspector(BaseDbInspector):
         Get all columns from the table.
         """
 
-        with self.config.connection.cursor() as cursor:
-            cursor.execute(
-                f"""
-                SELECT column_name, data_type
-                FROM information_schema.columns
-                WHERE table_name = '{table_name}'
-                """
-            )
-
-            columns = cursor.fetchall()
-
         return [
             PostgresTyping.Column(
-                name=column[0],
-                data_type=column[1],
-                column_constraints=self._get_column_constraints(table_name, column[0]),
+                name=column_name,
+                data_type=self._get_column_data_type(table_name, column_name),
+                column_constraints=self._get_column_constraints(
+                    table_name, column_name
+                ),
             )
-            for column in columns
+            for column_name in self._get_table_columns_names(table_name)
         ]
 
     def _get_column_constraints(
@@ -151,3 +142,28 @@ class PostgresInspector(BaseDbInspector):
             columns = cursor.fetchall()
 
         return [column[0] for column in columns]
+
+    def _get_column_data_type(
+        self, table_name: str, column_name: str
+    ) -> PostgresTyping.DataTypes:
+        """
+        Get the data type of the column.
+        """
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f"""
+                SELECT data_type
+                FROM information_schema.columns
+                WHERE table_name = '{table_name}'
+                AND column_name = '{column_name}'
+                """
+            )
+
+            data_type = cursor.fetchone()
+            if not data_type:
+                raise ValueError(
+                    f"Column '{column_name}' does not exist in table '{table_name}'"
+                )
+
+        data_type_upper = cast(str, data_type[0]).upper()
+        return cast(PostgresTyping.DataTypes, data_type_upper)
