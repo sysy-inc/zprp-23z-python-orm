@@ -1,7 +1,8 @@
-from skibidi_orm.query_engine.field.field import CharField, IntegerField
+from skibidi_orm.query_engine.field.field import CharField, IntegerField, AutoField
 from skibidi_orm.query_engine.field.related_field import ForeignKey
 from skibidi_orm.query_engine.model.base import Model
 from typing import Optional
+import pytest
 
 class Person(Model):
     name: Optional[str | CharField] = CharField(default='Adam')
@@ -35,13 +36,19 @@ def test_create_model_metaoptions_pimary_key_by_user():
 
 def test_db_name_default():
     class Student(Model):
-        idx: str = CharField()
+        idx: Optional [str| CharField] = CharField()
     student = Student('123123')
     assert  student._meta.db_table == 'student'
 
 def test_db_name_by_user():
     person = Person()
     assert person._meta.db_table == 'person'
+
+def test_two_pk_in_one_model():
+    with pytest.raises(ValueError):
+        class _(Model):
+            id1: Optional[ int | IntegerField] = IntegerField(primary_key=True)
+            id2: Optional[ int | AutoField] = AutoField(primary_key=True)
 
 def test_get_primary_key_autofield():
     person = Person()
@@ -59,7 +66,12 @@ def test_set_primary_key_autofield():
 
 def test_set_primary_key():
     dog = Animal(1, 'Reksio')
+    dog.pk = 2
     assert dog.pk == dog.id
+
+def test_create_person_too_many_args():
+    with pytest.raises(IndexError):
+        Animal(1, 'Reksio', 1)
 
 def test_create_person_args():
     person = Person('Mike', 21)
@@ -98,7 +110,7 @@ class Owner(Model):
 
 class Dog(Model):
     id: Optional[int | IntegerField] = IntegerField(primary_key=True)
-    name: Optional[str | CharField] = CharField('Adam')
+    name: Optional[str | CharField] = CharField('Reksio')
     owner: Optional[Owner | ForeignKey] = ForeignKey(to=Owner, on_delete='cos')
 
 def test_create_foreign_key():
@@ -149,16 +161,32 @@ def test_set_foreign_key_to_none():
     assert dog.owner is None
     assert dog.owner_id is None
 
+def test_set_foreign_key_id_to_none():
+    adam = Owner(1, "Adam")
+    dog = Dog(1, "Reksio", adam)
+    assert dog.owner == adam
+    assert dog.owner_id == 1
+
+    dog.owner_id = None
+    assert dog.owner is None
+    assert dog.owner_id is None
+
+def test_set_foreign_key_pk():
+    adam = Owner(1, "Adam")
+    dog = Dog(1, "Reksio", adam)
+    assert dog.owner == adam
+    assert dog.owner_id == 1
+
+    adam.id = 2
+    assert dog.owner == adam
+    assert dog.owner_id == 2
+
 def test_changes():
     adam = Owner(1, "Adam")
     adam.name = 'Jurek'
     assert adam._update_changes_db() == {'name': 'Jurek'}
 
-def test_changes2():
-    adam = Owner(1, "Adam")
-    dog = Dog(1, "Reksio", adam)
-    assert dog.owner == adam
-    assert dog.owner_id == 1
-    adam.id = 2
-    assert dog.owner == adam
-    assert dog.owner_id == 2
+def test_not_equal():
+    bolek = Owner(1, 'Bolek')
+    lolek = Owner(2, 'Lolek')
+    assert bolek != lolek
