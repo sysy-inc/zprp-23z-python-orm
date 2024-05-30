@@ -35,7 +35,7 @@ class BaseTable[TCol]:
 
 class BaseAdapter(ABC):
     """
-    Base adabter class that has to be properly implemented by the database specific adapter class.
+    Base adapter class that has to be properly implemented by the database specific adapter class.
     """
 
     @abstractmethod
