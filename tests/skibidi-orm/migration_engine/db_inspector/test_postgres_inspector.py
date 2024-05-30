@@ -10,6 +10,14 @@ Notice about postgres constraints and types:
 3. CHECK constraints:
     - CHECK constraints are internally stored as strings for every column referenced in the CHECK constraint.
     - Thus, PostgresInspector returns CHECK constaint for every column that is referenced in the CHECK constraint.
+4. DEFAULT constraints:
+    - Some default constaints are stored as is, e.g.
+        `my_col INTEGER DEFAULT 1`, will store `1` as the default value.
+    - Other default constaints are stored with type casting, e.g.
+        `my_col TEXT DEFAULT 'default'`, will store `'default'::text` as the default value.
+    - Other default constaints store functions names, e.g.
+        `my_col DATE DEFAULT CURRENT_DATE`, will store `CURRENT_DATE` as the default value.
+    - PostgresInspector returns the default values as stored internally by Postgres.
 """
 
 import pytest
@@ -489,6 +497,66 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
                     "nextval('table_serials_bigserial_seq'::regclass)",
                 ),
                 c.NotNullConstraint("table_serials", "bigserial"),
+            ],
+        ),
+        (  # 15
+            [PostgresTablesData.SQL_TABLE_DEFAULTS],
+            "table_defaults",
+            "integer_default",
+            [
+                c.DefaultConstraint(
+                    "table_defaults",
+                    "integer_default",
+                    "1",
+                ),
+            ],
+        ),
+        (  # 16
+            [PostgresTablesData.SQL_TABLE_DEFAULTS],
+            "table_defaults",
+            "text_default",
+            [
+                c.DefaultConstraint(
+                    "table_defaults",
+                    "text_default",
+                    "'default'::text",
+                ),
+            ],
+        ),
+        (  # 17
+            [PostgresTablesData.SQL_TABLE_DEFAULTS],
+            "table_defaults",
+            "date_default",
+            [
+                c.DefaultConstraint(
+                    "table_defaults",
+                    "date_default",
+                    "CURRENT_DATE",
+                ),
+            ],
+        ),
+        (  # 18
+            [PostgresTablesData.SQL_TABLE_DEFAULTS],
+            "table_defaults",
+            "timestamp_default",
+            [
+                c.DefaultConstraint(
+                    "table_defaults",
+                    "timestamp_default",
+                    "CURRENT_TIMESTAMP",
+                ),
+            ],
+        ),
+        (  # 19
+            [PostgresTablesData.SQL_TABLE_DEFAULTS],
+            "table_defaults",
+            "timestamp_default_lowercase",
+            [
+                c.DefaultConstraint(
+                    "table_defaults",
+                    "timestamp_default_lowercase",
+                    "CURRENT_TIMESTAMP",
+                ),
             ],
         ),
     ],
