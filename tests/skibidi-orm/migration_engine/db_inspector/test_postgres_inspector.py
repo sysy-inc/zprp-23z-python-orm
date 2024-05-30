@@ -895,3 +895,77 @@ def test_get_table_columns(query, table_name, expected_columns):  # type: ignore
         assert sorted(columns) == sorted(expected_columns)  # type: ignore
 
     test_fn()
+
+
+@pytest.mark.parametrize(
+    "query, table_name, expected_foreign_keys",
+    [
+        (  # 0
+            PostgresTablesData.SQL_TABLE_FKS_MORE_COMPLEX,
+            "departments",
+            set(),  # type: ignore
+        ),
+        (  # 1
+            PostgresTablesData.SQL_TABLE_FKS_MORE_COMPLEX,
+            "employees",
+            set(
+                [
+                    c.ForeignKeyConstraint(
+                        table_name="employees",
+                        referenced_table="departments",
+                        column_mapping={
+                            "department_id": "department_id",
+                        },
+                    )
+                ]
+            ),
+        ),
+        (  # 2
+            PostgresTablesData.SQL_TABLE_FKS_MORE_COMPLEX,
+            "projects",
+            set(
+                [
+                    c.ForeignKeyConstraint(
+                        table_name="projects",
+                        referenced_table="employees",
+                        column_mapping={
+                            "lead_employee_id": "employee_id",
+                        },
+                    ),
+                    c.ForeignKeyConstraint(
+                        table_name="projects",
+                        referenced_table="departments",
+                        column_mapping={
+                            "support_department_id": "department_id",
+                        },
+                    ),
+                ]
+            ),
+        ),
+    ],
+)
+def test__get_foreign_keys(query, table_name, expected_foreign_keys):  # type: ignore
+    @postgres_db_fixture(
+        db_name="postgres",
+        db_user="admin",
+        db_password="admin",
+        db_host="0.0.0.0",
+        db_port=5432,
+        queries=query,  # type: ignore
+    )
+    def test_fn():
+        PostgresConfig(
+            db_name="postgres",
+            db_user="admin",
+            db_password="admin",
+            db_host="0.0.0.0",
+            db_port=5432,
+        )
+        inspector = PostgresInspector()
+        foreign_keys = inspector._get_foreign_keys(table_name)  # type: ignore
+        print("=============================")
+        print(foreign_keys)
+        print("=============================")
+        assert foreign_keys == expected_foreign_keys
+
+    test_fn()
