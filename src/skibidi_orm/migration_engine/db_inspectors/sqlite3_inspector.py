@@ -31,7 +31,6 @@ class PragmaForeignKeyListEntry:
     def from_tuple(
         cls,
         values: tuple[str, str, str, str, str, str, str, str],
-        # todo: better typing?
     ) -> PragmaForeignKeyListEntry:
         id, seq, table, from_column, to_column, on_update, on_delete, match = values
         return cls(
