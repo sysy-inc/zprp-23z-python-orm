@@ -21,6 +21,9 @@ class BaseColumn[TDataTypes]:
         default_factory=list, hash=False
     )
 
+    def __str__(self) -> str:
+        return f"{self.name.ljust(15)} {self.data_type}"
+
 
 @dataclass
 class BaseTable[TCol]:
@@ -31,6 +34,9 @@ class BaseTable[TCol]:
     name: str
     columns: list[TCol] = field(default_factory=list)
     foreign_keys: set[ForeignKeyConstraint] = field(default_factory=set)
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class BaseAdapter(ABC):

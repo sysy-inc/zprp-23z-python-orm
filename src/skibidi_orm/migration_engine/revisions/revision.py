@@ -44,6 +44,9 @@ class Revision:
         """Deserializes the data from the database."""
         return pickle.loads(data)
 
+    def __str__(self) -> str:
+        return f"{self.timestamp.strftime("%Y-%m-%d %H:%M:%S")} - {self.description} ({self.provider.value})"
+
 
 # register the converter function which deserializes the object
 sqlite3.register_converter("REVISION", Revision.deserialize)
