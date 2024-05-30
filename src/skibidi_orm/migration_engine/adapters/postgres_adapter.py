@@ -4,6 +4,9 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
     MigrationElement,
 )
 from skibidi_orm.migration_engine.adapters.postgres_typing import PostgresTyping
+from skibidi_orm.migration_engine.db_inspectors.postgres_inspector import (
+    PostgresInspector,
+)
 from skibidi_orm.migration_engine.state_manager.state_manager import StateManager
 
 
@@ -22,16 +25,16 @@ class PostgresAdapter(BaseAdapter):
     def execute_migration(self, preview: bool = False):
         """Execute the migration process on a full adapter."""
 
-        # self.inspector = SQLite3Inspector()
+        self.inspector = PostgresInspector()
 
-        # db_tables = self.inspector.get_tables()
+        db_tables = self.inspector.get_tables()
 
-        # state_manager = StateManager[PostgresTyping.Table](
-        #     db_tables=db_tables,
-        #     schema_tables=self.tables,
-        # )
+        state_manager = StateManager[PostgresTyping.Table](
+            db_tables=db_tables,
+            schema_tables=self.tables,
+        )
 
-        # MigrationElement.operations = state_manager.get_operations()
+        MigrationElement.operations = state_manager.get_operations()
 
         # if not preview:
         #     SQLite3Executor.execute_operations(MigrationElement.operations)
