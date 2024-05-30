@@ -12,11 +12,46 @@ from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
 from skibidi_orm.migration_engine.revisions.manager import RevisionManager
 from skibidi_orm.migration_engine.revisions.revision import Revision
 from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
-from pytest import MonkeyPatch
+import pytest
+
+sql_schema_with_fks = [
+    # todo: remove after merging main
+    """
+    CREATE TABLE users (
+        user_id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL UNIQUE,
+        email TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+""",
+    """
+    CREATE TABLE posts (
+        post_id INTEGER PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    );
+""",
+    """
+    CREATE TABLE comments (
+        comment_id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL,
+        user_idd INTEGER NOT NULL,
+        post_id INTEGER NOT NULL,
+        comment_text TEXT NOT NULL,
+        comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_idd, username) REFERENCES users(user_id, username),
+        FOREIGN KEY (post_id) REFERENCES posts(post_id)
+    );
+""",
+]
 
 
 def test_create_and_find_revision_table_sqlite(
-    make_database: str, monkeypatch: MonkeyPatch
+    make_database: str, monkeypatch: pytest.MonkeyPatch
 ):
     """Tests whether the revision table is found if it does not exist"""
     monkeypatch.setattr(RevisionManager, "create_revision_table", lambda _: None)  # type: ignore
@@ -106,9 +141,6 @@ def test_clear_database_sqlite(make_database: str):
     revision_ = revisions.values().__iter__().__next__()
     assert revision_ == revision
 
-    all_tables = SQLite3Inspector().get_tables_names()
-    assert len(all_tables) == 1
-
 
 def test_get_revision_SQL_sqlite(make_database: str):
     SQLite3Config(make_database)
@@ -151,6 +183,7 @@ def test_go_to_revision_from_empty_db_sqlite(make_database: str):
     """Tests whether the go_to_revision method works when the database is empty"""
     SQLite3Config(make_database)
 
+    # todo: parametrize via pytest
     table_1 = SQLite3Typing.Table(
         "test_table",
         [SQLite3Typing.Column("id", "INTEGER"), SQLite3Typing.Column("name", "TEXT")],
@@ -182,3 +215,36 @@ def test_go_to_revision_from_empty_db_sqlite(make_database: str):
     assert len(all_tables) == 2
     assert table_1 in all_tables
     assert table_2 in all_tables
+
+
+@pytest.mark.parametrize("make_database", [sql_schema_with_fks], indirect=True)
+def test_go_to_revision_from_non_empty_db_sqlite(make_database: str):
+    SQLite3Config(make_database)
+    inspector = SQLite3Inspector()
+    assert len(inspector.get_tables()) == 3
+    table_1 = SQLite3Typing.Table(
+        "test_table",
+        [SQLite3Typing.Column("id", "INTEGER"), SQLite3Typing.Column("name", "TEXT")],
+    )
+
+    table_2 = SQLite3Typing.Table(
+        "test_table_2",
+        [
+            SQLite3Typing.Column("idd", "INTEGER"),
+            SQLite3Typing.Column("count_", "INTEGER"),
+        ],
+        {ForeignKeyConstraint("test_table_2", "test_table", {"idd": "id"})},
+    )
+
+    revision = Revision(
+        "test description",
+        "test schema repr",
+        DatabaseProvider.SQLITE3,
+        [table_1, table_2],
+    )
+    manager = RevisionManager()
+    manager.go_to_revision(revision)
+    new_tables = inspector.get_tables()
+    assert table_1 in new_tables
+    assert table_2 in new_tables
+    assert len(new_tables) == 2

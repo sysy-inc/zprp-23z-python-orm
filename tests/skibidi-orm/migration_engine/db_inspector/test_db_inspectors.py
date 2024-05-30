@@ -202,7 +202,7 @@ def test_get_tables(tmp_database: str):
     ]
 
 
-@pytest.mark.parametrize("tmp_database", [[*sql_schema_with_fks]], indirect=True)
+@pytest.mark.parametrize("tmp_database", [sql_schema_with_fks], indirect=True)
 def test_get_foreign_keys(tmp_database: str):
     SQLite3Config(db_path=tmp_database)
     inspector = SQLite3Inspector()
@@ -218,7 +218,7 @@ def test_get_foreign_keys(tmp_database: str):
     assert correct_fk_set.intersection(foreign_keys) == foreign_keys
 
 
-@pytest.mark.parametrize("tmp_database", [[*sql_simple_schema_with_fks]], indirect=True)
+@pytest.mark.parametrize("tmp_database", [sql_simple_schema_with_fks], indirect=True)
 def test_get_tables_fk_schema(tmp_database: str):
     SQLite3Config(db_path=tmp_database)
     inspector = SQLite3Inspector()
@@ -316,3 +316,11 @@ def test_get_tables_fk_schema(tmp_database: str):
     assert table_2 in tables
     assert table_3 in tables
 
+
+def test_revision_table_hidden_from_inspector_sqlite(make_database: str):
+    """Tests whether the revision table is hidden from the sqlite inspector"""
+    SQLite3Config(db_path=make_database)
+    inspector = SQLite3Inspector()
+    RevisionManager()  # creates the revision table in init
+    tables = inspector.get_tables_names()
+    assert len(tables) == 0

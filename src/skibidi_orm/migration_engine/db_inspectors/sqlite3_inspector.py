@@ -9,6 +9,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing impor
     SQLite3Typing,
 )
 import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
+from skibidi_orm.migration_engine.revisions.constants import get_revision_table_name
 
 type SQLite3PragmaTableInfo = list[
     tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]]
@@ -78,7 +79,9 @@ class SQLite3Inspector(BaseDbInspector):
         tables = self._sqlite_execute(
             "SELECT name FROM sqlite_master WHERE type='table';"
         )
-        return [table[0] for table in tables]
+        return [
+            name for table in tables if (name := table[0]) != get_revision_table_name()
+        ]
 
     @staticmethod
     def foreign_keys_from_pragma_entries(
