@@ -1,3 +1,4 @@
+import os
 from typing import cast
 from fastapi import FastAPI, Body
 from fastapi.responses import FileResponse
@@ -32,7 +33,9 @@ app.add_middleware(
 app.mount(
     "/assets",
     StaticFiles(
-        directory="src/skibidi_orm/migration_engine/studio/skibidi-orm-studio-frontend/dist/assets"
+        directory=os.path.join(
+            os.path.dirname(__file__), "./skibidi-orm-studio-frontend/dist/assets"
+        )
     ),
     name="static",
 )
@@ -49,7 +52,9 @@ def run_server(schema_file: str):
 @app.get("/")
 def read_index():
     return FileResponse(
-        "src/skibidi_orm/migration_engine/studio/skibidi-orm-studio-frontend/dist/index.html"
+        os.path.join(
+            os.path.dirname(__file__), "./skibidi-orm-studio-frontend/dist/index.html"
+        )
     )
 
 
