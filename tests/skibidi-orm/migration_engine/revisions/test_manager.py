@@ -145,3 +145,40 @@ def test_get_revision_SQL_sqlite(make_database: str):
         "CREATE TABLE test_table_2 (idd INTEGER, count_ INTEGER, FOREIGN KEY (idd) "
         "REFERENCES test_table (id));"
     )
+
+
+def test_go_to_revision_from_empty_db_sqlite(make_database: str):
+    """Tests whether the go_to_revision method works when the database is empty"""
+    SQLite3Config(make_database)
+
+    table_1 = SQLite3Typing.Table(
+        "test_table",
+        [SQLite3Typing.Column("id", "INTEGER"), SQLite3Typing.Column("name", "TEXT")],
+    )
+
+    table_2 = SQLite3Typing.Table(
+        "test_table_2",
+        [
+            SQLite3Typing.Column("idd", "INTEGER"),
+            SQLite3Typing.Column("count_", "INTEGER"),
+        ],
+        {ForeignKeyConstraint("test_table_2", "test_table", {"idd": "id"})},
+    )
+
+    revision = Revision(
+        "test description",
+        "test schema repr",
+        DatabaseProvider.SQLITE3,
+        [table_1, table_2],
+    )
+    manager = RevisionManager()
+    manager.save_revision(revision)
+    revision_id = manager.get_all_revisions().keys().__iter__().__next__()
+    assert manager.get_revision_by_id(revision_id) == revision
+    manager.go_to_revision(revision)
+
+    all_tables = SQLite3Inspector().get_tables()
+
+    assert len(all_tables) == 2
+    assert table_1 in all_tables
+    assert table_2 in all_tables

@@ -11,7 +11,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
 
 class SQLite3Typing:
 
-    DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]
+    DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL", "TIMESTAMP"]
     Constraints = Constraint
     Column = BaseColumn[DataTypes]
     Table = BaseTable[Column]

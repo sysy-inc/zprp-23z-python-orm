@@ -62,9 +62,15 @@ class SQLite3Inspector(BaseDbInspector):
     ) -> list[SQLite3Typing.Table]:
         tables: list[SQLite3Typing.Table] = []
         tables_names = self.get_tables_names()
+        foreign_keys = self.get_foreign_key_constraints()
         for table_name in tables_names:
             table_columns = self.get_table_columns(table_name)
-            tables.append(SQLite3Typing.Table(name=table_name, columns=table_columns))
+            related_fks = {fk for fk in foreign_keys if fk.table_name == table_name}
+            tables.append(
+                SQLite3Typing.Table(
+                    name=table_name, columns=table_columns, foreign_keys=related_fks
+                )
+            )
 
         return tables
 

@@ -34,7 +34,6 @@ class RevisionManager:
         """Used to find the revision table with the name
         specified by the user. Returns True if found,
         False otherwise"""
-        # todo: maybe do one query instead of two for finding and fetching data
         try:
             revision_data_query = (
                 self.converter.get_query_converter().get_revision_data_query()
@@ -43,7 +42,7 @@ class RevisionManager:
             return True
         except (
             sqlite3.OperationalError  # more exceptions can be added here for each provider
-        ):  # todo: change to a more general exception type or inherit
+        ):
             return False
 
     def create_revision_table(self) -> None:
@@ -64,10 +63,12 @@ class RevisionManager:
         }
         return self.revisions
 
-    def go_to_revision(self, revision_id: int) -> None:
+    def go_to_revision(self, revision: Revision) -> None:
         """Checkouts the user to a given revision.
         THIS SHOULD BE ONLY PERFORMED ON AN EMPTY TABLE!"""
-        raise NotImplementedError()
+        self.clear_database()
+        sql_to_execute = self.get_revision_SQL(revision)
+        self.executor.execute_sql(sql_to_execute)
 
     def get_revision_by_id(self, revision_id: int) -> Revision:
         """Returns a revision object by its id. If not found,
