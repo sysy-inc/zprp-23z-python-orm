@@ -156,6 +156,16 @@ class PostgresTablesData:
             bigserial BIGSERIAL
         );
 """
+    SQL_TABLE_DEFAULTS = """
+        CREATE TABLE table_defaults (
+            primary_key INTEGER PRIMARY KEY,
+            integer_default INTEGER DEFAULT 1,
+            text_default TEXT DEFAULT 'default',
+            date_default DATE DEFAULT CURRENT_DATE,
+            timestamp_default TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            timestamp_default_lowercase TIMESTAMP DEFAULT current_timestamp
+        );
+    """
     SQL_TABLE_SIMPLE_FOREIGN_KEYS = [
         """
         CREATE TABLE authors (
