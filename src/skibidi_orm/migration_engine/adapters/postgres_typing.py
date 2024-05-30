@@ -49,6 +49,7 @@ class PostgresTyping:
         "TIME WITH TIME ZONE",
         "TIMESTAMP",
         "TIMESTAMP WITH TIME ZONE",
+        "TIMESTAMP WITHOUT TIME ZONE",
         "TSQUERY",
         "TSVECTOR",
         "TXID_SNAPSHOT",
