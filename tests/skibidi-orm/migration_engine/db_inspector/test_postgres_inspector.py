@@ -21,6 +21,7 @@ Notice about postgres constraints and types:
 """
 
 import pytest
+from skibidi_orm.migration_engine.adapters.postgres_typing import PostgresTyping
 from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
 from skibidi_orm.migration_engine.db_inspectors.postgres_inspector import (
     PostgresInspector,
@@ -581,5 +582,316 @@ def test__get_column_constraints(query, table_name, column_name, expected_constr
         inspector = PostgresInspector()
         constraints = inspector._get_column_constraints(table_name, column_name)  # type: ignore
         assert sorted(constraints) == sorted(expected_constraints)  # type: ignore
+
+    test_fn()
+
+
+@pytest.mark.parametrize(
+    "query, table_name, expected_columns",
+    [
+        (  # 0
+            [PostgresTablesData.SQL_TABLE_MANY_COLUMNS1],
+            "table_many_columns1",
+            [
+                PostgresTyping.Column(
+                    name="primary_key",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.NotNullConstraint("table_many_columns1", "primary_key"),
+                        c.PrimaryKeyConstraint("table_many_columns1", "primary_key"),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="text_not_null",
+                    data_type="TEXT",
+                    column_constraints=[
+                        c.NotNullConstraint("table_many_columns1", "text_not_null"),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="text_nullabe",
+                    data_type="TEXT",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="integer_not_null",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.NotNullConstraint("table_many_columns1", "integer_not_null"),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="integer_nullable",
+                    data_type="INTEGER",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="date_not_null",
+                    data_type="DATE",
+                    column_constraints=[
+                        c.NotNullConstraint("table_many_columns1", "date_not_null"),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="date_nullable",
+                    data_type="DATE",
+                    column_constraints=[],
+                ),
+            ],
+        ),
+        (  # 1
+            [PostgresTablesData.SQL_TABLE_DIFFICULT_TYPES],
+            "table_difficult_types",
+            [
+                PostgresTyping.Column(
+                    name="big_primary_key_alias",
+                    data_type="BIGINT",
+                    column_constraints=[
+                        c.DefaultConstraint(
+                            "table_difficult_types",
+                            "big_primary_key_alias",
+                            "nextval('table_difficult_types_big_primary_key_alias_seq'::regclass)",
+                        ),
+                        c.NotNullConstraint(
+                            "table_difficult_types", "big_primary_key_alias"
+                        ),
+                        c.PrimaryKeyConstraint(
+                            "table_difficult_types",
+                            "big_primary_key_alias",
+                        ),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="bit_varying_alias",
+                    data_type="BIT VARYING",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="bit_varying_alias_arg",
+                    data_type="BIT VARYING",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="double_precision",
+                    data_type="DOUBLE PRECISION",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="timestamp",
+                    data_type="TIMESTAMP WITHOUT TIME ZONE",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="timestamp_arg",
+                    data_type="TIMESTAMP WITHOUT TIME ZONE",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="timestamp_without_time_zone",
+                    data_type="TIMESTAMP WITHOUT TIME ZONE",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="timestamp_without_time_zone_arg",
+                    data_type="TIMESTAMP WITHOUT TIME ZONE",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="timestamp_with_time_zone_alias",
+                    data_type="TIMESTAMP WITH TIME ZONE",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="timestamp_with_time_zone_arg_alias",
+                    data_type="TIMESTAMP WITH TIME ZONE",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="charachter_varying",
+                    data_type="CHARACTER VARYING",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="charachter_varying_arg",
+                    data_type="CHARACTER VARYING",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="charachter_varying_alias",
+                    data_type="CHARACTER VARYING",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="charachter_varying_alias_args",
+                    data_type="CHARACTER VARYING",
+                    column_constraints=[],
+                ),
+            ],
+        ),
+        (  # 2
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            [
+                PostgresTyping.Column(
+                    name="primary_key",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.NotNullConstraint(
+                            "table_different_constraints", "primary_key"
+                        ),
+                        c.PrimaryKeyConstraint(
+                            "table_different_constraints", "primary_key"
+                        ),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="integer_not_nullable",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.NotNullConstraint(
+                            "table_different_constraints", "integer_not_nullable"
+                        ),
+                        c.CheckConstraint(
+                            "table_different_constraints",
+                            "integer_not_nullable",
+                            "((integer_not_nullable > 100))",
+                        ),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="text_nullable",
+                    data_type="TEXT",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="unique_column",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.UniqueConstraint(
+                            "table_different_constraints", "unique_column"
+                        ),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="unique_not_nullable",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.UniqueConstraint(
+                            "table_different_constraints", "unique_not_nullable"
+                        ),
+                        c.NotNullConstraint(
+                            "table_different_constraints", "unique_not_nullable"
+                        ),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="check_other_column",
+                    data_type="INTEGER",
+                    column_constraints=[],
+                ),
+                PostgresTyping.Column(
+                    name="default_column",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.DefaultConstraint(
+                            "table_different_constraints", "default_column", "1"
+                        ),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="not_null_unique_check_column",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.NotNullConstraint(
+                            "table_different_constraints",
+                            "not_null_unique_check_column",
+                        ),
+                        c.UniqueConstraint(
+                            "table_different_constraints",
+                            "not_null_unique_check_column",
+                        ),
+                        c.CheckConstraint(
+                            "table_different_constraints",
+                            "not_null_unique_check_column",
+                            "((not_null_unique_check_column > 100))",
+                        ),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="not_null_unique",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.NotNullConstraint(
+                            "table_different_constraints", "not_null_unique"
+                        ),
+                        c.UniqueConstraint(
+                            "table_different_constraints", "not_null_unique"
+                        ),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="not_null_default",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.NotNullConstraint(
+                            "table_different_constraints", "not_null_default"
+                        ),
+                        c.DefaultConstraint(
+                            "table_different_constraints", "not_null_default", "1"
+                        ),
+                    ],
+                ),
+                PostgresTyping.Column(
+                    name="not_null_unique_check_default",
+                    data_type="INTEGER",
+                    column_constraints=[
+                        c.NotNullConstraint(
+                            "table_different_constraints",
+                            "not_null_unique_check_default",
+                        ),
+                        c.UniqueConstraint(
+                            "table_different_constraints",
+                            "not_null_unique_check_default",
+                        ),
+                        c.DefaultConstraint(
+                            "table_different_constraints",
+                            "not_null_unique_check_default",
+                            "1",
+                        ),
+                        c.CheckConstraint(
+                            "table_different_constraints",
+                            "not_null_unique_check_default",
+                            "((not_null_unique_check_default > 100))",
+                        ),
+                    ],
+                ),
+            ],
+        ),
+    ],
+)
+def test_get_table_columns(query, table_name, expected_columns):  # type: ignore
+    @postgres_db_fixture(
+        db_name="postgres",
+        db_user="admin",
+        db_password="admin",
+        db_host="0.0.0.0",
+        db_port=5432,
+        queries=query,  # type: ignore
+    )
+    def test_fn():
+        PostgresConfig(
+            db_name="postgres",
+            db_user="admin",
+            db_password="admin",
+            db_host="0.0.0.0",
+            db_port=5432,
+        )
+        inspector = PostgresInspector()
+        columns = inspector.get_table_columns(table_name)  # type: ignore
+        for column in columns:
+            column.column_constraints = sorted(column.column_constraints)
+        for column in expected_columns:  # type: ignore
+            column.column_constraints = sorted(column.column_constraints)  # type: ignore
+        assert sorted(columns) == sorted(expected_columns)  # type: ignore
 
     test_fn()
