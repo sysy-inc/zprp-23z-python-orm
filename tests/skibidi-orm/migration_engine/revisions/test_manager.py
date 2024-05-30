@@ -12,17 +12,18 @@ from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
 from skibidi_orm.migration_engine.revisions.manager import RevisionManager
 from skibidi_orm.migration_engine.revisions.revision import Revision
 from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
+from pytest import MonkeyPatch
 
 
-# TODO: test this somehow even though it's done in init
-# def test_create_and_find_revision_table_sqlite(make_database: str):
-#     """Tests whether the revision table is found if it does not exist"""
-#     SQLite3Config(make_database)
-#     manager = RevisionManager()
-#     assert not manager.find_revision_table()
-#     manager.create_revision_table()
-#     assert manager.find_revision_table()
-#
+def test_create_and_find_revision_table_sqlite(
+    make_database: str, monkeypatch: MonkeyPatch
+):
+    """Tests whether the revision table is found if it does not exist"""
+    monkeypatch.setattr(RevisionManager, "create_revision_table", lambda _: None)  # type: ignore
+    monkeypatch.setattr(RevisionManager, "get_all_revisions", lambda _: [])  # type: ignore
+    SQLite3Config(make_database)
+    manager = RevisionManager()
+    assert not manager.find_revision_table()
 
 
 def test_save_revision_sqlite(make_database: str):
