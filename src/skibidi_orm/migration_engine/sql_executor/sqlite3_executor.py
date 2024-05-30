@@ -8,9 +8,30 @@ from skibidi_orm.migration_engine.converters.sqlite3.all import SQLite3Converter
 
 
 class SQLite3Executor(BaseSQLExecutor):
+    """
+    Executes SQL statements and operations on a SQLite3 database.
+
+    This class provides methods to execute SQL statements and operations on a SQLite3 database.
+    It inherits from the BaseSQLExecutor class.
+
+    Methods:
+        execute_sql: Executes a single SQL statement.
+        execute_operations: Executes a list of table or column operations.
+
+    """
 
     @staticmethod
     def execute_sql(sql: str):
+        """
+        Executes a single SQL statement.
+
+        Args:
+            sql (str): The SQL statement to be executed.
+
+        Returns:
+            None
+
+        """
         sqlite_config = SQLite3Config.get_instance()
         with sqlite3.connect(sqlite_config.db_path) as conn:
             cursor = conn.cursor()
@@ -23,6 +44,16 @@ class SQLite3Executor(BaseSQLExecutor):
 
     @staticmethod
     def execute_operations(operations: list[TableOperation | ColumnOperation]):
+        """
+        Executes a list of table or column operations.
+
+        Args:
+            operations (list[TableOperation | ColumnOperation]): The list of table or column operations to be executed.
+
+        Returns:
+            None
+
+        """
         for operation in operations:
             if isinstance(operation, TableOperation):
                 SQLite3Executor.execute_sql(

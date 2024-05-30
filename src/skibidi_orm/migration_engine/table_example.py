@@ -1,6 +1,6 @@
 # Example of how Table class and classes modeling DB schema can be implemented
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseAdapter
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
     SQLite3Typing,
 )
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter
