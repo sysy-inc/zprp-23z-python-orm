@@ -13,6 +13,7 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "freezegun>=1.5.1",
     "fastapi>=0.111.0",
+    "prompt-toolkit>=3.0.45",
 ]
 requires-python = ">=3.12"
 readme = "README.md"

@@ -16,6 +16,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
     MigrationElement,
 )
 from skibidi_orm.migration_engine.studio.server import run_server
+from skibidi_orm.cli.revision_inspection import revision_app  # type: ignore
 from colorama import Fore
 
 sys.path.insert(0, os.getcwd())
@@ -56,13 +57,12 @@ def preview_migration():
     pass
 
 
-@app.command(name="list-migrations")
+@app.command(name="log")
 def migrate_list():
     """
-    List all made migrations with their descriptions and ID.
+    List all migration revisions with their descriptions and ID.
     """
-    print("Listing all migrations")
-    pass
+    revision_app.run()
 
 
 @app.command()
