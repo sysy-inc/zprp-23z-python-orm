@@ -1,6 +1,8 @@
 from abc import ABC
 import enum
 from dataclasses import dataclass, field
+from functools import total_ordering
+from typing import Any
 
 
 class ConstraintType(enum.Enum):
@@ -22,11 +24,19 @@ class Constraint(ABC):
     table_name: str
 
 
+@total_ordering
 @dataclass(frozen=True)
 class ColumnSpecificConstraint(Constraint):
     """Base class for constraints that apply to a column instead of multiple (e.g. composite foreign keys)"""
 
     column_name: str
+
+    def __lt__(self, other: Any):
+        if isinstance(other, ColumnSpecificConstraint):
+            return (self.column_name + self.__class__.__name__) < (
+                other.column_name + other.__class__.__name__
+            )
+        return NotImplemented
 
 
 @dataclass(frozen=True)
