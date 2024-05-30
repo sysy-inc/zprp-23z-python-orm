@@ -135,6 +135,38 @@ class PostgresTablesData:
             charachter_varying_alias_args VARCHAR(40)
         );
 """
+    SQL_TABLE_DIFFERECT_CONSTRAINTS = """
+        CREATE TABLE table_different_constraints (
+            primary_key INTEGER PRIMARY KEY,
+            integer_not_nullable INTEGER NOT NULL,
+            text_nullable TEXT,
+            unique_column INTEGER UNIQUE,
+            unique_not_nullable INTEGER NOT NULL UNIQUE,
+            check_other_column INTEGER CHECK (integer_not_nullable > 100),
+            default_column INTEGER DEFAULT 1,
+            not_null_unique_check_column INTEGER NOT NULL UNIQUE CHECK (not_null_unique_check_column > 100),
+            not_null_unique INTEGER NOT NULL UNIQUE,
+            not_null_default INTEGER NOT NULL DEFAULT 1,
+            not_null_unique_check_default INTEGER NOT NULL UNIQUE DEFAULT 1 CHECK (not_null_unique_check_default > 100)
+        );
+"""
+    SQL_TABLE_SIMPLE_FOREIGN_KEYS = [
+        """
+        CREATE TABLE authors (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(100) NOT NULL
+        );
+        """,
+        """
+        CREATE TABLE books (
+            id SERIAL PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            year INT,
+            author_id_foreign_key INT,
+            FOREIGN KEY (author_id_foreign_key) REFERENCES authors (id)
+        );
+        """,
+    ]
 
 
 class SQLite3InsertData:
