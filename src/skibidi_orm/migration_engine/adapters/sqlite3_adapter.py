@@ -16,7 +16,7 @@ from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Ex
 
 class SQLite3Adapter(BaseAdapter):
     """
-    This is a adapter that will select the proper functionality of the whole migration engine to accomodate a SQLite3 database.
+    This is an adapter that will select the proper functionality of the whole migration engine to accommodate a SQLite3 database.
     """
 
     tables: list[SQLite3Typing.Table]
