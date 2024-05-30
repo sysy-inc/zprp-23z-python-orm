@@ -8,25 +8,37 @@ from skibidi_orm.query_engine.adapter.sqlite_compiler import SQLiteCompiler
 
 class SQLiteAdapter(Adapter):
     """
-    Adapter for sqlite database
+    Adapter for SQLite database
     """
     def __init__(self) -> None:
+        """
+        Initializes an SQLiteAdapter instance.
+
+        Sets up the SQLite-specific SQL compiler.
+        """
         super().__init__()
         self._compiler = SQLiteCompiler()
 
     def _import_connector(self):
         """
-        Import sqlite3, connector for SQLite databse
+        Imports sqlite3, the connector for SQLite databases.
         """
-        # TODO maybe add checking for ImportError
         import sqlite3
         self._connector = sqlite3
 
     def make_connection(self, **kwargs: str):
         """
-        Creates connection to SQLite database
-        :param kwargs: keyword arguments for configuring the database connection
-            - path(str): path to sqlite database
+        Creates a connection to the SQLite database.
+
+        Args:
+            **kwargs: Keyword arguments for configuring the database connection.
+                - path (str): Path to the SQLite database.
+
+        Returns:
+            sqlite3.Connection: A connection object to the SQLite database.
+
+        Examples:
+            make_connection(path="database.db")
         """
         self._import_connector()
         return self._connector.connect(str(kwargs.get('path')))
