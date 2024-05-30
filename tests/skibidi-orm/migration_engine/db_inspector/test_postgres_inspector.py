@@ -5,6 +5,7 @@ from skibidi_orm.migration_engine.db_inspectors.postgres_inspector import (
 )
 from ..conftest import postgres_db_fixture
 from ..sql_data import PostgresTablesData, SQLite3TablesData
+import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
 
 
 @pytest.mark.parametrize(
@@ -304,5 +305,169 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
         )
         inspector = PostgresInspector()
         assert inspector._is_column_nullable(table_name, column_name) is expected_nullable  # type: ignore
+
+    test_fn()
+
+
+@pytest.mark.parametrize(
+    "query, table_name, column_name, expected_constraints",
+    [
+        (  # 0
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "primary_key",
+            [
+                c.NotNullConstraint("table_different_constraints", "primary_key"),
+                c.PrimaryKeyConstraint("table_different_constraints", "primary_key"),
+            ],
+        ),
+        (  # 1
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "text_nullable",
+            [],
+        ),
+        (  # 2
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "integer_not_nullable",
+            [
+                c.NotNullConstraint(
+                    "table_different_constraints", "integer_not_nullable"
+                ),
+                c.CheckConstraint(
+                    "table_different_constraints",
+                    "integer_not_nullable",
+                    "((integer_not_nullable > 100))",
+                ),
+            ],
+        ),
+        (  # 3
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "unique_column",
+            [c.UniqueConstraint("table_different_constraints", "unique_column")],
+        ),
+        (  # 4
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "unique_not_nullable",
+            [
+                c.UniqueConstraint(
+                    "table_different_constraints", "unique_not_nullable"
+                ),
+                c.NotNullConstraint(
+                    "table_different_constraints", "unique_not_nullable"
+                ),
+            ],
+        ),
+        (  # 4
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "check_other_column",
+            [],
+        ),
+        (  # 5
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "default_column",
+            [c.DefaultConstraint("table_different_constraints", "default_column", "1")],
+        ),
+        (  # 6
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "not_null_unique_check_column",
+            [
+                c.NotNullConstraint(
+                    "table_different_constraints", "not_null_unique_check_column"
+                ),
+                c.UniqueConstraint(
+                    "table_different_constraints", "not_null_unique_check_column"
+                ),
+                c.CheckConstraint(
+                    "table_different_constraints",
+                    "not_null_unique_check_column",
+                    "((not_null_unique_check_column > 100))",
+                ),
+            ],
+        ),
+        (  # 7
+            PostgresTablesData.SQL_TABLE_SIMPLE_FOREIGN_KEYS,
+            "authors",
+            "id",
+            [
+                c.NotNullConstraint("authors", "id"),
+                c.PrimaryKeyConstraint("authors", "id"),
+            ],
+        ),
+        (  # 8
+            PostgresTablesData.SQL_TABLE_SIMPLE_FOREIGN_KEYS,
+            "books",
+            "author_id_foreign_key",
+            [],
+        ),
+        (  # 9
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "not_null_unique",
+            [
+                c.NotNullConstraint("table_different_constraints", "not_null_unique"),
+                c.UniqueConstraint("table_different_constraints", "not_null_unique"),
+            ],
+        ),
+        (  # 10
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "not_null_default",
+            [
+                c.NotNullConstraint("table_different_constraints", "not_null_default"),
+                c.DefaultConstraint(
+                    "table_different_constraints", "not_null_default", "1"
+                ),
+            ],
+        ),
+        (  # 10
+            [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
+            "table_different_constraints",
+            "not_null_unique_check_default",
+            [
+                c.NotNullConstraint(
+                    "table_different_constraints", "not_null_unique_check_default"
+                ),
+                c.UniqueConstraint(
+                    "table_different_constraints", "not_null_unique_check_default"
+                ),
+                c.DefaultConstraint(
+                    "table_different_constraints", "not_null_unique_check_default", "1"
+                ),
+                c.CheckConstraint(
+                    "table_different_constraints",
+                    "not_null_unique_check_default",
+                    "((not_null_unique_check_default > 100))",
+                ),
+            ],
+        ),
+    ],
+)
+def test__get_column_constraints(query, table_name, column_name, expected_constraints):  # type: ignore
+    @postgres_db_fixture(
+        db_name="postgres",
+        db_user="admin",
+        db_password="admin",
+        db_host="0.0.0.0",
+        db_port=5432,
+        queries=query,  # type: ignore
+    )
+    def test_fn():
+        PostgresConfig(
+            db_name="postgres",
+            db_user="admin",
+            db_password="admin",
+            db_host="0.0.0.0",
+            db_port=5432,
+        )
+        inspector = PostgresInspector()
+        constraints = inspector._get_column_constraints(table_name, column_name)  # type: ignore
+        assert sorted(constraints) == sorted(expected_constraints)  # type: ignore
 
     test_fn()
