@@ -1,3 +1,17 @@
+"""
+Notice about postgres constraints and types:
+
+1. SERIAL/BIGSERIAL:
+    - expands to INTEGER or BIGINT, respectively with a default set to nextval('table_name_column_name_seq'::regclass)
+    - Using SERIAL or BIGSERIAL automatically makes the column NOT NULL.
+2. Aliases:
+    - There are many aliases such as VARCHAR for CHARACTER VARYING, TIMESTAMPTZ for TIMESTAMP WITH TIME ZONE, etc.
+    - Postgres internally stores expanded versions, so PostgresInspector should return the expanded version of the type.
+3. CHECK constraints:
+    - CHECK constraints are internally stored as strings for every column referenced in the CHECK constraint.
+    - Thus, PostgresInspector returns CHECK constaint for every column that is referenced in the CHECK constraint.
+"""
+
 import pytest
 from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
 from skibidi_orm.migration_engine.db_inspectors.postgres_inspector import (
@@ -361,19 +375,19 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
                 ),
             ],
         ),
-        (  # 4
+        (  # 5
             [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
             "table_different_constraints",
             "check_other_column",
             [],
         ),
-        (  # 5
+        (  # 6
             [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
             "table_different_constraints",
             "default_column",
             [c.DefaultConstraint("table_different_constraints", "default_column", "1")],
         ),
-        (  # 6
+        (  # 7
             [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
             "table_different_constraints",
             "not_null_unique_check_column",
@@ -391,22 +405,25 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
                 ),
             ],
         ),
-        (  # 7
+        (  # 8
             PostgresTablesData.SQL_TABLE_SIMPLE_FOREIGN_KEYS,
             "authors",
             "id",
             [
                 c.NotNullConstraint("authors", "id"),
                 c.PrimaryKeyConstraint("authors", "id"),
+                c.DefaultConstraint(
+                    "authors", "id", "nextval('authors_id_seq'::regclass)"
+                ),
             ],
         ),
-        (  # 8
+        (  # 9
             PostgresTablesData.SQL_TABLE_SIMPLE_FOREIGN_KEYS,
             "books",
             "author_id_foreign_key",
             [],
         ),
-        (  # 9
+        (  # 10
             [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
             "table_different_constraints",
             "not_null_unique",
@@ -415,7 +432,7 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
                 c.UniqueConstraint("table_different_constraints", "not_null_unique"),
             ],
         ),
-        (  # 10
+        (  # 11
             [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
             "table_different_constraints",
             "not_null_default",
@@ -426,7 +443,7 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
                 ),
             ],
         ),
-        (  # 10
+        (  # 12
             [PostgresTablesData.SQL_TABLE_DIFFERECT_CONSTRAINTS],
             "table_different_constraints",
             "not_null_unique_check_default",
@@ -445,6 +462,33 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
                     "not_null_unique_check_default",
                     "((not_null_unique_check_default > 100))",
                 ),
+            ],
+        ),
+        (  # 13
+            [PostgresTablesData.SQL_TABLE_SERIALS],
+            "table_serials",
+            "serial_pk",
+            [
+                c.DefaultConstraint(
+                    "table_serials",
+                    "serial_pk",
+                    "nextval('table_serials_serial_pk_seq'::regclass)",
+                ),
+                c.NotNullConstraint("table_serials", "serial_pk"),
+                c.PrimaryKeyConstraint("table_serials", "serial_pk"),
+            ],
+        ),
+        (  # 14
+            [PostgresTablesData.SQL_TABLE_SERIALS],
+            "table_serials",
+            "bigserial",
+            [
+                c.DefaultConstraint(
+                    "table_serials",
+                    "bigserial",
+                    "nextval('table_serials_bigserial_seq'::regclass)",
+                ),
+                c.NotNullConstraint("table_serials", "bigserial"),
             ],
         ),
     ],
