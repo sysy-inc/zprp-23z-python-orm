@@ -224,9 +224,9 @@ class Session:
             for row in rows:
                 model_class = statement.model
                 obj = model_class(**row)
-                if obj in self._map:
+                obj_map = self._map.get(("test_model", 1), None)      # TOCHANGE
+                if obj_map is not None:
                     # if object in identity map return one from map to avoid duplicates
-                    obj_map = self._map.get(("test_model", 1))      # TOCHANGE
                     result.append(obj_map)
                 else:
                     self._map.add(obj)  # add object to identity map
