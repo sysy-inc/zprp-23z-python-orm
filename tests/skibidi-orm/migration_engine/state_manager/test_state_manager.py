@@ -20,7 +20,6 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
     MigrationElement,
 )
 
-# from tmp.mock_schema import Table
 
 from pathlib import Path
 import pytest
@@ -51,41 +50,6 @@ sql_table_primary_key_not_null = """
         id INTEGER PRIMARY KEY NOT NULL
     );
 """
-
-
-# TODO: what is this?
-# sql_schema_with_fks = [
-#     """
-#     CREATE TABLE users (
-#         user_id INTEGER PRIMARY KEY,
-#         username TEXT NOT NULL UNIQUE,
-#         email TEXT NOT NULL UNIQUE,
-#         password_hash TEXT NOT NULL,
-#         registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-#     );
-# """,
-#     """
-#     CREATE TABLE posts (
-#         post_id INTEGER PRIMARY KEY,
-#         user_id INTEGER NOT NULL,
-#         title TEXT NOT NULL,
-#         content TEXT NOT NULL,
-#         post_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-#         FOREIGN KEY (user_id) REFERENCES users(user_id)
-#     );
-# """,
-#     """
-#     CREATE TABLE comments (
-#         comment_id INTEGER PRIMARY KEY,
-#         user_idd INTEGER NOT NULL,
-#         post_id INTEGER NOT NULL,
-#         comment_text TEXT NOT NULL,
-#         comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-#         FOREIGN KEY (user_idd) REFERENCES users(user_id),
-#         FOREIGN KEY (post_id) REFERENCES posts(post_id)
-#     );
-# """,
-# ]
 
 
 def execute_sqlite3_commands(db_path: str, commands: list[str]):
