@@ -65,47 +65,63 @@ class PostgresInspector(BaseDbInspector):
             cursor.execute(
                 f"""
                 SELECT
-                    tc.constraint_name,
-                    tc.table_name,
+                    col.table_name,
+                    col.column_name,
                     tc.constraint_type,
-                    c.column_name,
-                    c.is_nullable
+                    tc.constraint_name,
+                    cc.check_clause,
+                    col.column_default
                 FROM
-                    information_schema.table_constraints AS tc
-                JOIN
+                    information_schema.columns AS col
+                LEFT JOIN
                     information_schema.constraint_column_usage AS ccu
-                ON
-                    tc.constraint_catalog = ccu.constraint_catalog
-                    AND tc.constraint_schema = ccu.constraint_schema
-                    AND tc.constraint_name = ccu.constraint_name
-                JOIN
-                    information_schema.columns AS c
-                ON
-                    c.table_catalog = ccu.table_catalog
-                    AND c.table_schema = ccu.table_schema
-                    AND c.table_name = ccu.table_name
-                    AND c.column_name = ccu.column_name
+                    ON col.table_schema = ccu.table_schema
+                    AND col.table_name = ccu.table_name
+                    AND col.column_name = ccu.column_name
+                LEFT JOIN
+                    information_schema.table_constraints AS tc
+                    ON ccu.table_schema = tc.table_schema
+                    AND ccu.table_name = tc.table_name
+                    AND ccu.constraint_name = tc.constraint_name
+                LEFT JOIN
+                    information_schema.check_constraints AS cc
+                    ON tc.constraint_name = cc.constraint_name
                 WHERE
-                    tc.table_name = '{table_name}'
-                    AND c.column_name = '{column_name}';
+                    col.table_name = '{table_name}'
+                    AND col.column_name = '{column_name}'
+                ORDER BY
+                    col.table_name,
+                    col.ordinal_position;
                 """
             )
 
-            constraints = cursor.fetchall()
-
-        typed_results = [
-            PostgresInformationSchemaColumnsRowSelected.from_tuple(constraint)
-            for constraint in constraints
-        ]
+            rows = cursor.fetchall()
+            if len(rows) == 0:
+                raise ValueError(
+                    f"Column '{column_name}' does not exist in table '{table_name}'"
+                )
 
         res: list[c.ColumnSpecificConstraint] = []
-        for result in typed_results:
-            if result.is_nullable == "NO":
-                res.append(c.NotNullConstraint(table_name, column_name))
-            if result.constraint_type == "PRIMARY KEY":
+        for row in rows:  # loop because we can have many constraints for one column
+            _, _, constraint_type, _, check_clause, column_default = row
+
+            if check_clause:
+                res.append(c.CheckConstraint(table_name, column_name, check_clause))
+            if constraint_type == "PRIMARY KEY":
                 res.append(c.PrimaryKeyConstraint(table_name, column_name))
-            if result.constraint_type == "UNIQUE":
+            if constraint_type == "UNIQUE":
                 res.append(c.UniqueConstraint(table_name, column_name))
+            if not self._is_column_nullable(
+                table_name, column_name
+            ) and not self.__holds_instance(res, c.NotNullConstraint):
+                res.append(c.NotNullConstraint(table_name, column_name))
+            if (
+                column_default
+                and constraint_type != "PRIMARY KEY"
+                and not self.__holds_instance(res, c.PrimaryKeyConstraint)
+                and not self.__holds_instance(res, c.DefaultConstraint)
+            ):
+                res.append(c.DefaultConstraint(table_name, column_name, column_default))
 
         return res
 
