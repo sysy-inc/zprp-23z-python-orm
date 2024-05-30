@@ -10,6 +10,9 @@ from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
 
 
 class SQLite3Typing:
+    """
+    Class defining the typing for SQLite3 database objects.
+    """
 
     DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL", "TIMESTAMP"]
     Constraints = Constraint

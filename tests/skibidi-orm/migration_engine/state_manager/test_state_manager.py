@@ -1,4 +1,4 @@
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
     SQLite3Typing,
 )
 from skibidi_orm.migration_engine.adapters.sqlite3_adapter import SQLite3Adapter

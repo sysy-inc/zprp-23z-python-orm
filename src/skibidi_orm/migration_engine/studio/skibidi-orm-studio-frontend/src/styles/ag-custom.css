@@ -1,0 +1,37 @@
+#ag-results .ag-header {
+    height: 0px !important;
+    min-height: 0px !important;
+    border: none !important;
+}
+
+#ag-results .ag-root-wrapper {
+    border-radius: 0px !important;
+}
+
+.ag-theme-quartz-dark {
+    --bg-zinc-800s50: rgb(39 39 42 / 0.5);
+    --bg-zinc-800s10: rgba(39, 39, 42, 0.1);
+    --bg-zinc-900: rgb(24, 24, 27);
+    --bg-zinc-850: rgb(31, 31, 34);
+    --bg-zinc-800: rgb(39, 39, 42);
+    --bg-zinc-700: rgb(63 63 70);
+    --bg-zinc-900s50: rgb(24 24 27 / 0.5);
+    --bg-zinc-900s30: rgb(24 24 27 / 0.3);
+    --bg-zinc-900s20: rgb(24 24 27 / 0.2);
+
+    /* @apply bg-zinc-700; */
+    /* --ag-foreground-color: rgb(126, 46, 132) !important; */
+    --ag-background-color: var(--bg-zinc-800) !important;
+    /* --ag-header-foreground-color: rgb(204, 245, 172) !important; */
+    --ag-header-background-color: var(--bg-zinc-900) !important;
+    --ag-odd-row-background-color: var(--bg-zinc-900s20) !important;
+    /* --ag-header-column-resize-handle-color: rgb(126, 46, 132) !important; */
+    --ag-border-color: var(--bg-zinc-800) !important;
+
+    /* --ag-font-size: 17px !important; */
+    /* --ag-font-family: monospace !important; */
+}
+
+/* :not([data-status="active"]){
+    color: red;
+} */

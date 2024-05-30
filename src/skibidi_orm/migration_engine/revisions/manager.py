@@ -82,7 +82,7 @@ class RevisionManager:
         # initialize the statemanager with an empty list, so that
         # everything is considered as a new table
         state_manager = StateManager([], tables)
-        operations = state_manager.get_operations()
+        operations = state_manager.operations
         return "\n".join(
             (
                 self.converter.convert_operation_to_SQL(operation)

@@ -1,7 +1,9 @@
 from pytest import raises
 from skibidi_orm.exceptions.operations import UnsupportedOperationError
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import SQLite3Typing
-from skibidi_orm.migration_engine.converters.sqlite3.columns import SQLite3ColumnOperationConverter
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.converters.sqlite3.columns import (
+    SQLite3ColumnOperationConverter,
+)
 from skibidi_orm.migration_engine.operations.column_operations import (
     AddColumnOperation,
     ChangeDataTypeOperation,

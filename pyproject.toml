@@ -12,6 +12,7 @@ dependencies = [
     "colorama>=0.4.6",
     "python-dotenv>=1.0.1",
     "freezegun>=1.5.1",
+    "fastapi>=0.111.0",
 ]
 requires-python = ">=3.12"
 readme = "README.md"
@@ -31,7 +32,7 @@ dev = [
 ]
 
 [tool.pdm.scripts]
-tests = "pytest --verbose --color=yes"
+tests = "pytest --verbose --color=yes --ignore ./tmp"
 
 [project.entry-points."console_scripts"]
 skibidi-orm = "skibidi_orm.cli.run:main"

@@ -1,7 +1,7 @@
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     ForeignKeyConstraint,
 )
-from skibidi_orm.migration_engine.adapters.database_objects.sqlite3_typing import (
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
     SQLite3Typing,
 )
 from skibidi_orm.migration_engine.adapters.providers import DatabaseProvider
