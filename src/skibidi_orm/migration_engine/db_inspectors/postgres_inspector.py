@@ -36,7 +36,18 @@ class PostgresInspector(BaseDbInspector):
         return [table[0] for table in tables]
 
     def get_tables(self) -> list[PostgresTyping.Table]:
-        return super().get_tables()
+        """
+        Get all tables from the database.
+        """
+
+        return [
+            PostgresTyping.Table(
+                name=table_name,
+                columns=self.get_table_columns(table_name),
+                foreign_keys=self._get_foreign_keys(table_name),
+            )
+            for table_name in self.get_tables_names()
+        ]
 
     def get_table_columns(self, table_name: str) -> list[PostgresTyping.Column]:
         """
@@ -53,6 +64,56 @@ class PostgresInspector(BaseDbInspector):
             )
             for column_name in self._get_table_columns_names(table_name)
         ]
+
+    def _get_foreign_keys(self, table_name: str) -> set[c.ForeignKeyConstraint]:
+        """
+        Get all foreign keys from the table.
+        """
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f"""
+                SELECT
+                    tc.constraint_name,
+                    tc.table_name,
+                    kcu.column_name,
+                    ccu.table_name AS foreign_table_name,
+                    ccu.column_name AS foreign_column_name
+                FROM
+                    information_schema.table_constraints AS tc
+                JOIN
+                    information_schema.key_column_usage AS kcu
+                    ON tc.constraint_name = kcu.constraint_name
+                JOIN
+                    information_schema.constraint_column_usage AS ccu
+                    ON tc.constraint_name = ccu.constraint_name
+                WHERE
+                    tc.constraint_type = 'FOREIGN KEY'
+                    AND tc.table_name = '{table_name}';
+                """
+            )
+
+            rows = cursor.fetchall()
+
+        res: set[c.ForeignKeyConstraint] = set()
+        for row in rows:
+            (
+                _,
+                table_name,
+                column_name,
+                foreign_table_name,
+                foreign_column_name,
+            ) = row
+
+            res.add(
+                c.ForeignKeyConstraint(
+                    table_name=table_name,
+                    referenced_table=foreign_table_name,
+                    column_mapping={column_name: foreign_column_name},
+                )
+            )
+
+        return res
 
     def _get_column_constraints(
         self, table_name: str, column_name: str
