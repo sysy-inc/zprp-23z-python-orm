@@ -1,5 +1,6 @@
 """
-Module handels executing orm operations like inserting to database, selecting from data
+Module provides Session class, that handels executing orm operations like inserting to database,
+selecting from database, etc.
 """
 
 from skibidi_orm.query_engine.connection.engine import Engine
@@ -14,19 +15,23 @@ from types import TracebackType
 
 class Session:
     """
-    Session is context manager and executes CRUD operations
+    Session is context manager and executes CRUD operations or selects
     on objects of our models
 
     Attributes:
-    _engine(Engine): object of class Engine that opens and stores connection to database
-    _connection(Connection|None): stores opened connection to database
+        _engine (Engine): An object of class Engine that opens and stores connection to the database.
+        _connection (Connection|None): Stores opened connection to the database.
+        _new (list[Model]): A list of model instances to be inserted into the database.
+        _dirty (list[Model]): A list of model instances with pending updates in the database.
+        _delete (list[Model]): A list of model instances to be deleted from the database.
+        _map (IdentityMap): An instance of IdentityMap to keep track of model instances and prevent duplicates.
     """
     def __init__(self, engine: Engine):
         """
-        Initializes Session and binds it with given engine.
+        Initializes a Session and binds it with a given engine.
 
-        :param engine(Engine): object of class Engine that distributes
-                               connection to database
+        Args:
+            engine (Engine): An object of class Engine that distributes connection to the database.
         """
         self._engine = engine
         self._connection: Any = None
@@ -37,7 +42,7 @@ class Session:
 
     def __enter__(self):
         """
-        Takes database connection from engine when entering a 'with' block.
+        Takes a database connection from the engine when entering a 'with' block.
         """
         self._connection = self._engine.connect()
         return self
@@ -46,21 +51,21 @@ class Session:
                  exc_value: Optional[BaseException],
                  traceback: Optional[TracebackType]):
         """
-        Releases database connection when exiting a 'with' block.
-        Rolls back any uncommited changes
+        Releases the database connection when exiting a 'with' block.
+        Rolls back any uncommitted changes.
 
-        :param exc_type: The type of the exception (if any) that caused the exit.
-        :param exc_value: The exception instance (if any) that caused the exit.
-        :param traceback: The traceback object (if any) that caused the exit.
+        Args:
+            exc_type (Optional[Type[BaseException]]): The type of the exception (if any) that caused the exit.
+            exc_value (Optional[BaseException]): The exception instance (if any) that caused the exit.
+            traceback (Optional[TracebackType]): The traceback object (if any) that caused the exit.
         """
         self.close()
 
     def commit(self):
         """
-        Commit any changes made to database
+        Commits any changes made to the database.
 
-        In future it will also execute any pending operations
-        that where stored in given session (lazy execution)
+        Execute any pending operations that were stored in the given session (lazy execution).
         """
         self.flush()
         self._connection.commit()
@@ -76,9 +81,6 @@ class Session:
         Ends session. Releases database connection to engine.
         Rolls back any uncommited changes, user needs to commit
         changes before closing session or they will be lost.
-
-        In future it will also remove any pending operations
-        that where stored in given session (lazy execution)
         """
         if self._connection:
             self.rollback()
@@ -92,6 +94,13 @@ class Session:
         return self._connection
 
     def add(self, obj: Model):
+        """
+        Adds a model instance to the session and database.
+        INSERT isn't executed right away (lazy execution concept)
+
+        Args:
+            obj (Model): The model instance to add.
+        """
         if obj in self._map:
             # already added
             return
@@ -99,6 +108,12 @@ class Session:
         self._new.append(obj)
 
     def _check_clear(self) -> bool:
+        """
+        Checks if there are any pending changes in the session.
+
+        Returns:
+            bool: True if there are no pending changes, False otherwise.
+        """
         if self._new or self._delete or self._dirty:
             # not clear
             return False
@@ -106,6 +121,13 @@ class Session:
             return True
 
     def changed(self, obj: Model):
+        """
+        Marks a model instance as changed in the session.
+        UPDATE isn't executed right away (lazy execution concept)
+
+        Args:
+            obj (Model): The model instance that has changed.
+        """
         # o = self._map.get(obj.key(), obj) TOCHANGE
         o = self._map.get(("test_model", 1), obj)
         if o in self._dirty or o is None or o in self._delete:
@@ -116,11 +138,22 @@ class Session:
         self._dirty.append(o)
 
     def delete(self, obj: Model):
+        """
+        Deletes a model instance from the session and database.
+        DELETE isn't executed right away (lazy execution concept)
+
+        Args:
+            obj (Model): The model instance to delete.
+
+        Raises:
+            ValueError: if given object isn't part of a session (hasn't been added)
+        """
         # o = self._map.get(obj.key(), None) TOCHANGE
         if obj in self._new:
             # object wasn't yet inserted so only delete from list to be inserted
             self._new.remove(obj)
             if obj in self._dirty:
+                # remove from changed list
                 self._dirty.remove(obj)
             return
 
@@ -135,6 +168,9 @@ class Session:
             self._delete.append(o)
 
     def flush(self):
+        """
+        Flushes any pending changes in the session to the database.
+        """
         if not self._check_clear():
             # there are some pending changes
             config = self._engine.config
@@ -144,13 +180,9 @@ class Session:
                 # TODO adjust for relations, order matters
                 trans.register_insert(o)
                 self._map.add(o)
-            # for o in self._new:
-            #     # TODO maybe add function register_pending that adds to map and cleans _new
-            #     self._map.add(o)
 
             # UPDATE
             for o in self._dirty:
-                # TODO check if in delete, no need to update if
                 trans.register_update(o)
 
             # DELETE
@@ -163,6 +195,16 @@ class Session:
             self._delete = []
 
     def select(self, statement: Select):
+        """
+        Executes a select query and returns the results.
+        Before execution flushes any pending changes to database.
+
+        Args:
+            statement (Select): The select query statement.
+
+        Returns:
+            list[Model | Result]: A list of model instances or result objects retrieved from the database.
+        """
         self.flush()    # flush all pending changes
         comp = self._engine.config.compiler
         sql = comp.select(statement)
@@ -170,7 +212,7 @@ class Session:
         cur.execute(sql)
         ret = cur.fetchall()
 
-        result: list[Model | Result] = []     # TODO make class for this
+        result: list[Model | Result] = []
         column_names: list[str] = [description[0] for description in cur.description]
         rows: list[dict[str, Any]] = []
         for row in ret:
@@ -181,9 +223,14 @@ class Session:
             # select returns model
             for row in rows:
                 model_class = statement.model
-                print(row)
-                result.append(model_class(**row))
-                # TODO add to identity map
+                obj = model_class(**row)
+                if obj in self._map:
+                    # if object in identity map return one from map to avoid duplicates
+                    obj_map = self._map.get(("test_model", 1))      # TOCHANGE
+                    result.append(obj_map)
+                else:
+                    self._map.add(obj)  # add object to identity map
+                    result.append(obj)
         else:
             # return named tuple
             for row in rows:
@@ -191,6 +238,16 @@ class Session:
         return result
 
     def get(self, model: Type[Model], primary_key: Any):
+        """
+        Retrieves a model instance from the database based on the provided primary key.
+
+        Args:
+            model (Type[Model]): The model class representing the type of object to retrieve.
+            primary_key (Any): The primary key value of the object to retrieve.
+
+        Returns:
+            Model: The retrieved model instance from the database.
+        """
         primary_key_name = "id"     # TOCHANGE function from Model
         st = Select(model).filter(**{primary_key_name: primary_key})
         ret = self.select(st)
