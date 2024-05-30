@@ -21,10 +21,11 @@ from skibidi_orm.migration_engine.state_manager.i_state_manager import IStateMan
 
 class StateManager[TTable: BaseTable[BaseColumn[Any]]](IStateManager):
     """
-    Class that will analyze the diffrences between ta database schema and a class structure defined schema
+    Class that will analyze the differences between the database schema and the class structure defined schema
     when instantiated.
 
-    It can provide a list of operations needed to transform the first database into the second one
+    It can provide a list of operations needed to transform the schema of the database to be equivalent with the
+    one defined via python objects and migration files.
     """
 
     def __init__(
@@ -43,7 +44,7 @@ class StateManager[TTable: BaseTable[BaseColumn[Any]]](IStateManager):
 
     def _analyze_schemas(self):
         """
-        Call helper functions to retrive all operations needed for database transformation.
+        Call helper functions to retrieve all operations needed for database transformation.
         """
         self._get_delete_tables_operations()
         self._get_create_tables_operations()
@@ -54,7 +55,7 @@ class StateManager[TTable: BaseTable[BaseColumn[Any]]](IStateManager):
         self,
     ) -> list[TableOperation | ColumnOperation]:
         """
-        Return operations required for transforming the database calculated by the schema analysys.
+        Return operations required for transforming the database calculated by the schema analysis.
         """
         return self.operations
 
@@ -147,4 +148,4 @@ class StateManager[TTable: BaseTable[BaseColumn[Any]]](IStateManager):
     #     # TODO: implement using foreign keys
     #     for relation in self.schema_relations:
     #         if relation not in self.db_relations:
-    #             pass  # add crea
+    #             pass
