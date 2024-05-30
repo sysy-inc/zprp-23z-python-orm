@@ -1,27 +1,11 @@
 from __future__ import annotations
-from dataclasses import dataclass
-from typing import Any, Literal, cast
+
+from typing import Any, cast
+
+import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
 from skibidi_orm.migration_engine.adapters.postgres_typing import PostgresTyping
 from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
-import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
-
-
-@dataclass
-class PostgresInformationSchemaColumnsRowSelected:
-    constraint_type: str
-    column_name: str
-    is_nullable: Literal["YES", "NO"]
-    data_type: str
-
-    @staticmethod
-    def from_tuple(row: tuple[Any, ...]) -> PostgresInformationSchemaColumnsRowSelected:
-        return PostgresInformationSchemaColumnsRowSelected(
-            constraint_type=row[0],
-            column_name=row[0],
-            is_nullable=row[1],
-            data_type=row[2],
-        )
 
 
 class PostgresInspector(BaseDbInspector):
@@ -190,3 +174,9 @@ class PostgresInspector(BaseDbInspector):
                 )
 
         return is_nullable[0] == "YES"
+
+    def __holds_instance(self, array: list[Any], class_type: Any) -> bool:
+        """
+        Helper function to check if the array holds the instance of a class.
+        """
+        return any(isinstance(x, class_type) for x in array)
