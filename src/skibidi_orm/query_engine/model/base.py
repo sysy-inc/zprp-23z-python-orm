@@ -52,11 +52,21 @@ class MetaModel(ModelMetaclass):
         """
         super_new: Any = super().__new__ # type: ignore
 
+        field_attrs = {}
+
         # Ensure initialization is only performed for subclasses of Model
         # (excluding Model class itself).
         parents = [b for b in bases if isinstance(b, MetaModel)]
         if not parents:
             return super_new(cls, name, bases, attrs)
+
+        # add parents' local field
+        else:
+            for parent in parents:
+                if hasattr(parent, '_meta'):
+                    meta = getattr(parent, '_meta')
+                    for field in meta.local_fields:
+                        field_attrs[field.name] = field
 
         metadata: dict[str, Any] = {}
         new_attrs: dict[str, Any] = {}
@@ -64,7 +74,6 @@ class MetaModel(ModelMetaclass):
         db_table_name = attrs.pop("__db_table__", name.lower())
         metadata["db_table"] = db_table_name
 
-        field_attrs = {}
         for obj_name, obj in attrs.items():
             if _is_field(obj):
                 field_attrs[obj_name] = obj
@@ -123,8 +132,12 @@ class Model(BaseModel, metaclass=MetaModel):
             raise IndexError("Number of args exceeds number of fields")
 
         fields_iter = iter(opts.local_fields)
+
+        # args
         for val, field in zip(args, fields_iter):
             kwargs[field.name] = val
+
+        # kwargs
         for field in fields_iter:
             if field.is_relation and field.column in kwargs:
                 kwargs[field.name] = None   # add none to have attr value
@@ -212,13 +225,20 @@ class Model(BaseModel, metaclass=MetaModel):
             Any: The value of the attribute.
         """
         value = super().__getattribute__(name)
+
+        # if atrr is relation and it is object
         if value is None and name in self._meta.relation_fields_name():
             field = self._meta.get_relation_field(name)
             if object.__getattribute__(self, field.column):
-                # if id select obj from db
-                # TODO add select if is id
+                # if object.__getattribute__(self, '_session', None):
+                #     value = self._session.get(field.related_model, self.pk)
+                #     setattr(self, field.name, value)
+                # else:
+                #     raise ValueError("First add object to session!")
                 value = 5
-            # return none if not id
+            # do not change if not id
+
+        # if atrr is relation and it is id
         elif value is None and name in self._meta.relation_fields_column():
             field = self._meta.get_relation_field(name)
             if object.__getattribute__(self, field.name):

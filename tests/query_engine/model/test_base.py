@@ -200,3 +200,15 @@ def test_not_equal():
     bolek = Owner(1, 'Bolek')
     lolek = Owner(2, 'Lolek')
     assert bolek != lolek
+
+
+def test_inheritance():
+    class Item(Model):
+        id : Optional[int | IntegerField] = IntegerField(primary_key=True)
+        name: Optional[str | CharField] = CharField()
+
+    class Box(Item):
+        weight: Optional[int | IntegerField] = IntegerField()
+
+    box = Box()
+    assert len(box._meta.local_fields) == 3

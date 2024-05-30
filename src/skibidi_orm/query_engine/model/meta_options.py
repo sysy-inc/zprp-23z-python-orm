@@ -83,7 +83,7 @@ class MetaOptions:
                 field is marked as the primary key.
         """
         if self.primary_key and field.primary_key:
-            raise ValueError('Model cannot have two pk!')
+            raise ValueError('Model cannot have two primary key!')
         elif not self.primary_key and field.primary_key:
             self.primary_key = field
 
