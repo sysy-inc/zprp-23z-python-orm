@@ -117,8 +117,8 @@ class PostgresInspector(BaseDbInspector):
                 res.append(c.NotNullConstraint(table_name, column_name))
             if (
                 column_default
-                and constraint_type != "PRIMARY KEY"
-                and not self.__holds_instance(res, c.PrimaryKeyConstraint)
+                # and constraint_type != "PRIMARY KEY"
+                # and not self.__holds_instance(res, c.PrimaryKeyConstraint)
                 and not self.__holds_instance(res, c.DefaultConstraint)
             ):
                 res.append(c.DefaultConstraint(table_name, column_name, column_default))

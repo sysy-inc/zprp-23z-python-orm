@@ -150,6 +150,12 @@ class PostgresTablesData:
             not_null_unique_check_default INTEGER NOT NULL UNIQUE DEFAULT 1 CHECK (not_null_unique_check_default > 100)
         );
 """
+    SQL_TABLE_SERIALS = """
+        CREATE TABLE table_serials (
+            serial_pk SERIAL PRIMARY KEY,
+            bigserial BIGSERIAL
+        );
+"""
     SQL_TABLE_SIMPLE_FOREIGN_KEYS = [
         """
         CREATE TABLE authors (
