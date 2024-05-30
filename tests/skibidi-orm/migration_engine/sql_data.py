@@ -183,6 +183,32 @@ class PostgresTablesData:
         );
         """,
     ]
+    SQL_TABLE_FKS_MORE_COMPLEX = [
+        """
+        CREATE TABLE departments (
+            department_id SERIAL PRIMARY KEY
+        );
+        """,
+        """
+        CREATE TABLE employees (
+            employee_id SERIAL PRIMARY KEY,
+            department_id INTEGER NOT NULL,
+            CONSTRAINT fk_department
+                FOREIGN KEY (department_id)
+                REFERENCES Departments(department_id)
+        );
+        """,
+        """
+        CREATE TABLE projects (
+            project_id SERIAL PRIMARY KEY,
+            project_name VARCHAR(255) NOT NULL,
+            lead_employee_id INTEGER NOT NULL,
+            support_department_id INTEGER NOT NULL,
+            FOREIGN KEY (lead_employee_id) REFERENCES Employees(employee_id),
+            FOREIGN KEY (support_department_id) REFERENCES Departments(department_id)
+        );
+        """,
+    ]
 
 
 class SQLite3InsertData:
