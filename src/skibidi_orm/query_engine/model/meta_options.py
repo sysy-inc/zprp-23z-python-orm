@@ -64,7 +64,6 @@ class MetaOptions:
         if field.is_relation:
             bisect.insort(self.relation_fields, field)
 
-
     def setup_pk(self, field: Any):
         """Sets up the primary key for the model.
 
@@ -86,6 +85,13 @@ class MetaOptions:
             raise ValueError('Model cannot have two primary key!')
         elif not self.primary_key and field.primary_key:
             self.primary_key = field
+
+    def get_field_name(self, name: str):
+        for field in self.local_fields:
+            if field.name == name or field.column == name:
+                return field
+        return None
+
 
     def _prepare(self, model: Any):
         """Prepares the model for database interaction.

@@ -207,15 +207,22 @@ class Model(BaseModel, metaclass=MetaModel):
         if name not in self.__fields__: # type: ignore
             self.__fields__[name] = Field(default=None) # type: ignore
         super().__setattr__(name, value)
-        if hasattr(self, '_changes') and name != '_changes' and name != '_session':
-            self._changes[name] = value
-            if hasattr(self, '_session'):
-                self._session.changed(self) # type: ignore
+
+        field = self._meta.get_field_name(name)
+        # self is in the session and set value is db field
+        if hasattr(self, '_session') and self._session is not None and field is not None:
+            if field.is_relation:
+                self._changes[field.column] = getattr(self, field.column)
+            else:
+                self._changes[field.column] = value
+            self._session.changed(self)
+
+        # if set attr is a relation obj
         if name in self._meta.relation_fields_name():
-            field = self._meta.get_relation_field(name)
             object.__setattr__(self, field.column, None)
+
+        # if set attr is a id of relation obj
         elif name in self._meta.relation_fields_column():
-            field = self._meta.get_relation_field(name)
             object.__setattr__(self, field.name, None)
 
     def __getattribute__(self, name: str) -> Any:
@@ -233,9 +240,10 @@ class Model(BaseModel, metaclass=MetaModel):
         if value is None and name in self._meta.relation_fields_name():
             field = self._meta.get_relation_field(name)
             if object.__getattribute__(self, field.column):
-                if hasattr(self, '_session') and getattr(self, '_session'):
-                    value = self._session.get(field.related_model, self.pk)
-                    setattr(self, field.name, value)
+                if hasattr(self, '_session') and getattr(self, '_session') is not None:
+                    value = self._session.get(field.related_model, self.pk) # type: ignore
+                    object.__setattr__(self, field.name, value)
+                    object.__setattr__(self, field.column, None)
                 else:
                     raise ValueError("First add object to session!")
             # do not change if not id
@@ -264,11 +272,11 @@ class Model(BaseModel, metaclass=MetaModel):
         atrr_values : list[Any] = []
         for field in self._meta.local_fields:
             if field.is_relation:
-                atrr_values.append((field.column, getattr(self, field.column)))
+                atrr_values.append((field.column, getattr(self, field.column)))     # TODO
             else:
                 value = getattr(self, field.name)
                 if value is not None:
-                    atrr_values.append((field.name, value))
+                    atrr_values.append((field.column, value))
         return atrr_values
 
     def _update_changes_db(self) -> dict[str, str]:
@@ -316,3 +324,9 @@ class Model(BaseModel, metaclass=MetaModel):
     @classmethod
     def _get_columns_names(cls) -> list[str]:
         return [field.column for field in cls._meta.local_fields] # type: ignore
+
+    def _has_relation_obj(self) -> int:
+        return len(self._meta.relation_fields) > 0
+
+    def _get_ralation_obj(self):
+        return [ (field.related_model, getattr(self, field.column)) for field in self._meta.relation_fields]

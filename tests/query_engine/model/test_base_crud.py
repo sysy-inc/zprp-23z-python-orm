@@ -116,3 +116,15 @@ def test_get_primary_key_column():
 
 def test_get_columns_names():
     assert PersonWithId._get_columns_names() == ['id', 'age']
+
+def test_has_relation_obj_false():
+    person = PersonWithId(1, 22)
+    assert person._has_relation_obj() == False
+
+def test_has_realtion_obj_true():
+    person = PersonWithoutId(1)
+    assert person._has_relation_obj() == True
+
+def test_get_ralation_obj():
+    person = PersonWithoutId(1)
+    assert person._get_ralation_obj() == [(PersonWithId, None)]

@@ -148,7 +148,7 @@ def test_set_foreign_key_obj_id():
     assert dog.owner_id == 1
     dog.owner_id = 2
     with pytest.raises(ValueError):
-        dog.owner 
+        dog.owner
 
 def test_set_foreign_key_from_none():
     adam = Owner(1, "Adam")
@@ -190,10 +190,10 @@ def test_set_foreign_key_pk():
     assert dog.owner == adam
     assert dog.owner_id == 2
 
-def test_changes():
+def test_changes_without_session():
     adam = Owner(1, "Adam")
     adam.name = 'Jurek'
-    assert adam._update_changes_db() == {'name': 'Jurek'}
+    assert adam._update_changes_db() == {}
 
 def test_not_equal():
     bolek = Owner(1, 'Bolek')
