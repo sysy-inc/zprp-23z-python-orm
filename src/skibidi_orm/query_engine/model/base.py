@@ -351,7 +351,7 @@ class Model(BaseModel, metaclass=MetaModel):
         """
         return len(self._meta.relation_fields) > 0
 
-    def _get_relation_obj(self) -> list[tuple['Model', str]]:
+    def _get_relation_obj(self) -> list[tuple['Model', Any]]:
         """
         Retrieve related objects and their values.
 
@@ -360,4 +360,10 @@ class Model(BaseModel, metaclass=MetaModel):
         Returns:
             list[tuple]: A list of tuples, where each tuple contains a related model and the value of the related field.
         """
-        return [ (field.related_model, getattr(self, field.column)) for field in self._meta.relation_fields]
+        relation_obj: list[tuple['Model', Any]] = []
+        for field in self._meta.relation_fields:
+            value = object.__getattribute__(self, field.name)
+            if value is None:
+                value = object.__getattribute__(self, field.column)
+            relation_obj.append((field.related_model, value))
+        return relation_obj
