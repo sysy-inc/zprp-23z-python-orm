@@ -233,7 +233,7 @@ class Model(BaseModel, metaclass=MetaModel):
             field = self._meta.get_relation_field(name)
             if object.__getattribute__(self, field.column):
                 if hasattr(self, '_session') and getattr(self, '_session'):
-                    value = self._session.get(field.related_model, self.pk)
+                    value = self._session.get(field.related_model, self.pk)     # type: ignore
                     setattr(self, field.name, value)
                 else:
                     raise ValueError("First add object to session!")

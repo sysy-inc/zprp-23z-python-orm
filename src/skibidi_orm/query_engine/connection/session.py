@@ -223,7 +223,7 @@ class Session:
             for row in rows:
                 model_class = statement.model
                 obj = model_class(**row)
-                obj_map = self._map.get(obj._get_name_and_pk(), None)      # TOCHANGE
+                obj_map = self._map.get(obj._get_name_and_pk(), None)      # type: ignore
                 if obj_map is not None:
                     # if object in identity map return one from map to avoid duplicates
                     result.append(obj_map)
