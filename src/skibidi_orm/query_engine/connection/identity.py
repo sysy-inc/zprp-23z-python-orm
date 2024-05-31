@@ -58,7 +58,6 @@ class IdentityMap:
         Returns:
             bool: True if the model instance is in the identity map, False otherwise.
         """
-        # return item.key() in self._dict     # TOCHANGE
         return item._get_name_and_pk() in self._dict    # type: ignore
 
     def add(self, obj: Model) -> bool:
@@ -74,8 +73,6 @@ class IdentityMap:
         Raises:
             Exception: If a different instance with the same key is already present.
         """
-        # key = obj.key()   this function needs to be made in Model, returns (model_name, primary_key)
-        # key = ("test_model", 1)     # temporarly TOCHANGE
         key = obj._get_name_and_pk()    # type: ignore
         if key in self._dict:
             # this key is already present
@@ -116,8 +113,6 @@ class IdentityMap:
         Args:
             obj (Model): The model instance to remove.
         """
-        # key = obj.key()   this function needs to be made in Model, returns (model_name, primary_key)
-        key = ("test_model", 1)     # temporarly TOCHANGE
         key = obj._get_name_and_pk()    # type: ignore
         if key in self._dict:
             o = self._dict[key]

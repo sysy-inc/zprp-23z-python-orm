@@ -118,7 +118,6 @@ class SQLCompiler:
         if statement.returns:
             text += self._prepare_returning(statement.returning_col)
         text += ";"
-        print(text)
         return text
 
     def _col_val(self, attributes: list[tuple[str, Any]]) -> str:
@@ -170,7 +169,6 @@ class SQLCompiler:
         text += " "
         text += self._prepare_where(statement.where_clause())
         text += ";"
-        print(text)
         return text
 
     def delete(self, statement: Delete) -> str:
@@ -188,7 +186,6 @@ class SQLCompiler:
         text += " "
         text += self._prepare_where(statement.where_clause())
         text += ";"
-        print(text)
         return text
 
     def _agregate_function(self, func: Function) -> str:
@@ -276,5 +273,4 @@ class SQLCompiler:
                 text += " DESC"
             text += " "
         text += ";"
-        print(text)
         return text

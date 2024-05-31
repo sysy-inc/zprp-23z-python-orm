@@ -30,14 +30,14 @@ class Select:
         Args:
             model_class (Type[Model]): The model class representing the database table.
         """
-        self._table: str = model_class._meta.db_table      # type: ignore # TODO change it to function
+        self._table: str = model_class._meta.db_table      # type: ignore
         self._model = model_class
-        self._fields: list[str | Function] = model_class._get_columns_names()     # type: ignore # TODO function in model
+        self._fields: list[str | Function] = model_class._get_columns_names()     # type: ignore
         self._where_clauses: list[Clause] = []
         self._group_by_col: list[str] = []
         self._order_by_col: list[str] = []
         self._order_by_desc: bool = False
-        self._returns_model: bool = True    # if it returns model or only specific columns
+        self._returns_model: bool = True
         self._annotations: dict[str | Function, str] = {}
 
     @property
