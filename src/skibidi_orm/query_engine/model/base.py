@@ -9,10 +9,10 @@ import inspect
 from skibidi_orm.query_engine.model.meta_options import MetaOptions
 from skibidi_orm.query_engine.field.field import AutoField
 
-# from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-# if TYPE_CHECKING:
-#     from skibidi_orm.query_engine.connection.session import Session
+if TYPE_CHECKING:
+    from skibidi_orm.query_engine.connection.session import Session
 
 
 def _is_field(value: Any):
@@ -282,7 +282,7 @@ class Model(BaseModel, metaclass=MetaModel):
         self._changes = {}
         return changes
 
-    def _add_session(self, session) -> None:
+    def _add_session(self, session: 'Session') -> None:
         """Add a session to the instance.
 
         Args:
