@@ -8,7 +8,6 @@ from typing import Any, TYPE_CHECKING
 import inspect
 from skibidi_orm.query_engine.model.meta_options import MetaOptions
 from skibidi_orm.query_engine.field.field import AutoField
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from skibidi_orm.query_engine.connection.session import Session

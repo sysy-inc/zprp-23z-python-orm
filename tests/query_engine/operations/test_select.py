@@ -3,16 +3,18 @@ from skibidi_orm.query_engine.model.base import Model
 from skibidi_orm.query_engine.field.field import IntegerField
 from skibidi_orm.query_engine.operations import clauses as c
 import pytest
+from typing import Optional
 
 
 class TestModel(Model):
-    id: int = IntegerField()  # type: ignore
+    id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+    age: Optional[int | IntegerField] = IntegerField()
 
 
 def test_creat():
     st = Select(TestModel)
     assert st.model == TestModel
-    assert st.fields == ["id", "atr1", "atr2"]
+    assert st.fields == ["id", "age"]
     assert len(st.where_clauses) == 0
     assert len(st.group_by_col) == 0
     assert len(st.order_by_col[0]) == 0
@@ -100,12 +102,12 @@ def test_group_by():
 
 
 def test_group_by_with_annotations():
-    st = Select(TestModel).annotate(my_name="atr1").group_by("id")
+    st = Select(TestModel).annotate(my_name="age").group_by("id")
     assert len(st.annotations) != 0
     assert len(st.group_by_col) == 1
     assert st.group_by_col[0] == "id"
     assert len(st.fields) == 2
-    assert "atr1" in st.fields
+    assert "age" in st.fields
     assert "id" in st.fields
     assert st.returning_model is False
 
@@ -123,14 +125,14 @@ def test_group_by_annotate_group_by_col():
 def test_annotate():
     st = Select(TestModel).annotate(my_id="id")
     assert len(st.annotations) == 1
-    assert len(st.fields) == 3
+    assert len(st.fields) == 2
     assert st.annotations["id"] == "my_id"
 
 
 def test_annotate_new_col():
     st = Select(TestModel).annotate(my_name="name")
     assert len(st.annotations) == 1
-    assert len(st.fields) == 4
+    assert len(st.fields) == 3
     assert st.annotations["name"] == "my_name"
 
 

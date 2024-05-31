@@ -32,7 +32,7 @@ class Select:
         """
         self._table: str = model_class._meta.db_table      # type: ignore # TODO change it to function
         self._model = model_class
-        self._fields: list[str | Function] = ["id", "atr1", "atr2"]     # type: ignore # TODO function in model
+        self._fields: list[str | Function] = model_class._get_columns_names()     # type: ignore # TODO function in model
         self._where_clauses: list[Clause] = []
         self._group_by_col: list[str] = []
         self._order_by_col: list[str] = []
