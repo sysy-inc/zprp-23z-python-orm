@@ -11,7 +11,6 @@ from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
 )
 from skibidi_orm.migration_engine.revisions.manager import RevisionManager
 from skibidi_orm.migration_engine.revisions.revision import Revision
-from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
 import pytest
 
 sql_schema_with_fks = [

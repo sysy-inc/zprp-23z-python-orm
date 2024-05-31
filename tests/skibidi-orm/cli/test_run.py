@@ -1,4 +1,3 @@
-from typing import Callable
 from typer.testing import CliRunner
 import typer
 import pytest

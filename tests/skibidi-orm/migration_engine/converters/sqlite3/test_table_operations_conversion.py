@@ -20,6 +20,8 @@ from skibidi_orm.migration_engine.operations.table_operations import (
 )
 from itertools import chain
 
+from skibidi_orm.migration_engine.revisions.constants import get_revision_table_name
+
 
 simple_table_no_constraints = SQLite3Typing.Table(
     "users", columns=[SQLite3Typing.Column("name", "TEXT")]
@@ -156,5 +158,5 @@ def test_rename_table_conversion_simple():
 def test_correct_revision_table_SQL_conversion():
     """Tests whether the query used to create the internal revision table is correct"""
     assert SQLite3TableOperationConverter.get_revision_table_creation_query() == (
-        "CREATE TABLE __revisions (rev REVISION NOT NULL);"
+        f"CREATE TABLE {get_revision_table_name()} (rev REVISION NOT NULL);"
     )
