@@ -1,4 +1,3 @@
-import pytest
 from skibidi_orm.query_engine.field.related_field import ForeignKey
 from skibidi_orm.query_engine.model.base import Model
 from skibidi_orm.query_engine.field.field import CharField

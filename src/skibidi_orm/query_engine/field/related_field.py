@@ -1,4 +1,4 @@
-from skibidi_orm.query_engine.field.field import Field, Error
+from skibidi_orm.query_engine.field.field import Field
 from skibidi_orm.query_engine.field.relation_objects import RelationObject
 from typing import Any, Union, Optional
 from typing import TYPE_CHECKING
@@ -21,7 +21,7 @@ class ForeignKey(Field):
         """
         Args:
             to (Model): The target model of the foreign key.
-            rel (Optional[RelationObject]): The relation object associated with the foreign key.
+            rel (Union[RelationObject, None], optional): The relation object associated with the foreign key.
                 Defaults to None.
             related_name (str, optional): The related name for the relation. Defaults to "".
             **kwargs (Any): Additional keyword arguments passed to the Field constructor.
@@ -29,16 +29,10 @@ class ForeignKey(Field):
         Attributes:
             related_name (str): The related name for the relation.
         """
-        if isinstance(to, str):
-            try:
-                to = self.get_instance_by_name(to)
-            except NameError:
-                raise Error("The target model was not initialized!")
-
-        if isinstance(to, Model) and rel is None:
+        if rel is None:
             rel = RelationObject(
                 self,
-                to,
+                to,                             # type: ignore
                 related_name=related_name,
             )
 
@@ -60,7 +54,7 @@ class ForeignKey(Field):
         if self.remote_field is not None:
             return self.remote_field.model
     
-    def contribute_to_class(self, cls: Model, name: str):
+    def contribute_to_class(self, cls: 'Model', name: str):
         super().contribute_to_class(cls, name)
         self.set_attributes_from_rel()
 
