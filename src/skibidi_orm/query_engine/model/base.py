@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from skibidi_orm.query_engine.connection.session import Session
 
 
-def _is_field(value: Any):
+def _is_field(value: Any) -> bool:
     """Check if a value is a field in a model.
 
     This function determines if a given value is a field in model by
@@ -91,7 +91,7 @@ class MetaModel(ModelMetaclass):
         new_class._meta._prepare(new_class)
         return new_class
 
-    def add_to_class(cls, obj_name: str, obj: Any):
+    def add_to_class(cls, obj_name: str, obj: Any) -> None:
         """Add an attribute to the class.
 
         This method adds a specified attribute to the class.
@@ -115,7 +115,7 @@ class Model(BaseModel, metaclass=MetaModel):
         arbitrary_types_allowed = True
         allow_population_by_field_name = True
 
-    def __init__(self, *args: Any, **kwargs: Any):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize a new instance of the model.
 
         This method sets up the fields and attributes for the model instance,
@@ -178,7 +178,7 @@ class Model(BaseModel, metaclass=MetaModel):
 
     pk = property(_get_pk_val, _set_pk_val)
 
-    def __eq__(self, other: object):
+    def __eq__(self, other: object) -> bool:
         """Check equality between two model instances.
 
         Args:
@@ -254,7 +254,7 @@ class Model(BaseModel, metaclass=MetaModel):
                 value = object.__getattribute__(self, field.name).pk
         return value
 
-    def _get_name_and_pk(self):
+    def _get_name_and_pk(self) -> tuple[str, Any]:
         """Get the table name and primary key value.
 
         Returns:
@@ -308,7 +308,7 @@ class Model(BaseModel, metaclass=MetaModel):
         """
         return self.pk is None and isinstance(self._meta.primary_key, AutoField)
 
-    def _get_db_pk(self):
+    def _get_db_pk(self) -> tuple[str, Any]:
         """Get the database primary key value.
 
         Returns:
@@ -351,7 +351,7 @@ class Model(BaseModel, metaclass=MetaModel):
         """
         return len(self._meta.relation_fields) > 0
 
-    def _get_relation_obj(self):
+    def _get_relation_obj(self) -> list[tuple['Model', str]]:
         """
         Retrieve related objects and their values.
 

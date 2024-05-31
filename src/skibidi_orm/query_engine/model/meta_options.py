@@ -2,7 +2,7 @@
 Module handles managing additional information for the database model.
 """
 
-from typing import Any, Dict, List
+from typing import Any
 from pydantic import Field
 import bisect
 from skibidi_orm.query_engine.field.field import AutoField
@@ -15,7 +15,7 @@ class MetaOptions:
     table name, primary key, local fields, and relation fields.
     """
 
-    def __init__(self, meta: Dict[str, Any]):
+    def __init__(self, meta: dict[str, Any]) -> None:
         """Initializes a MetaOptions instance.
 
         Args:
@@ -24,8 +24,8 @@ class MetaOptions:
         self.db_table = ''
         self.meta = meta
         self.primary_key: Any = None
-        self.local_fields: List[Any] = []
-        self.relation_fields: List[Any] = []
+        self.local_fields: list[Any] = []
+        self.relation_fields: list[Any] = []
 
     def contribute_to_class(self, cls: Any, obj_name: str) -> None:
         """Adds attributes to classes.
@@ -47,7 +47,7 @@ class MetaOptions:
         db_table = self.meta['db_table'] if self.meta else cls.__name__.lower()
         self.db_table = db_table
 
-    def add_field(self, field: Any):
+    def add_field(self, field: Any) -> None:
         """Adds a database column.
 
         This method inserts the given field into the `local_fields` list
@@ -64,7 +64,7 @@ class MetaOptions:
         if field.is_relation:
             bisect.insort(self.relation_fields, field)
 
-    def setup_pk(self, field: Any):
+    def setup_pk(self, field: Any) -> None:
         """Sets up the primary key for the model.
 
         This method ensures that the model has only one primary key. If the
@@ -86,14 +86,25 @@ class MetaOptions:
         elif not self.primary_key and field.primary_key:
             self.primary_key = field
 
-    def get_field_name(self, name: str):
+    def get_field_name(self, name: str) -> Any:
+        """
+        Retrieve a field by its name or column name.
+
+        This method searches through the local fields of the instance to find a field that matches the given name
+        or column name.
+
+        Args:
+            name (str): The name or column name of the field to search for.
+
+        Returns:
+            The field if found, otherwise None.
+        """
         for field in self.local_fields:
             if field.name == name or field.column == name:
                 return field
         return None
 
-
-    def _prepare(self, model: Any):
+    def _prepare(self, model: Any) -> None:
         """Prepares the model for database interaction.
 
         This method checks if the model has a primary key defined. If not,
@@ -108,7 +119,7 @@ class MetaOptions:
             model.add_to_class(obj_name, AutoField(primary_key=True))
             model.__fields__[obj_name] = Field(default=None)
 
-    def relation_fields_name(self):
+    def relation_fields_name(self) -> list[Any]:
         """Returns the names of the fields representing relationships.
 
         This method retrieves the names of the fields in the `relation_fields`
@@ -139,7 +150,7 @@ class MetaOptions:
                 return field
         return None
 
-    def relation_fields_column(self):
+    def relation_fields_column(self) -> list[Any]:
         """Returns the column names of the fields representing relationships.
 
         This method retrieves the column names of the fields in the
