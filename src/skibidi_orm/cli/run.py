@@ -59,7 +59,7 @@ def schema_callback(
 
     else:
         try:
-            import schema  # type: ignore
+            import schema as schema  # type: ignore
 
             print("\nSchema file successfully loaded.\n")
 
