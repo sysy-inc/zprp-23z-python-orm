@@ -9,7 +9,7 @@ from skibidi_orm.migration_engine.converters.sqlite3.constraints import (
     SQLite3ConstraintConverter,
 )
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
-    ColumnSpecificConstraint,
+    ColumnWideConstraint,
     ConstraintType,
 )
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
@@ -74,7 +74,7 @@ class SQLite3TableOperationConverter(TableOperationSQLConverter):
                 f"{SQLite3ConstraintConverter.convert_constraint_to_SQL(constraint)}, "
             )
 
-        for key in operation.table.foreign_keys:
+        for key in operation.table.table_constraints:
             definition_string += (
                 f"{SQLite3ConstraintConverter.convert_constraint_to_SQL(key)}, "
             )
@@ -104,7 +104,8 @@ class SQLite3TableOperationConverter(TableOperationSQLConverter):
     @staticmethod
     def split_constraints(
         table: SQLite3Typing.Table,
-    ) -> tuple[set[ColumnSpecificConstraint], set[ColumnSpecificConstraint]]:
+    ) -> tuple[set[ColumnWideConstraint], set[ColumnWideConstraint]]:
+        # TODO: remove this method completely
         """Split the constraints of a table into those that have to be added at the end of the
         table definition and those that have to be added in the definitions of their resective columns
         """
@@ -117,7 +118,11 @@ class SQLite3TableOperationConverter(TableOperationSQLConverter):
         constraints_at_end = set(
             filter(
                 lambda c: c.constraint_type
-                not in [ConstraintType.PRIMARY_KEY, ConstraintType.UNIQUE, ConstraintType.NOT_NULL],
+                not in [
+                    ConstraintType.PRIMARY_KEY,
+                    ConstraintType.UNIQUE,
+                    ConstraintType.NOT_NULL,
+                ],
                 all_constraints,
             )
         )

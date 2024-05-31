@@ -55,14 +55,14 @@ complex_table_with_constraints = SQLite3Typing.Table(
         SQLite3Typing.Column(
             "age",
             "INTEGER",
-            column_constraints=[CheckConstraint("users", "age", "> 18")],
         ),
     ],
-    foreign_keys={
+    table_constraints=[
         ForeignKeyConstraint(
             "admin_users", "users", {"active": "active", "name": "name"}
-        )
-    },
+        ),
+        CheckConstraint("admin_users", "age > 18"),
+    ],
 )
 
 
@@ -130,8 +130,8 @@ def test_create_table_conversion_complex_with_constraints():
     assert (
         SQLite3TableOperationConverter.convert_table_operation_to_SQL(operation)
         == "CREATE TABLE admin_users (user_id INTEGER PRIMARY KEY NOT NULL, name TEXT, "
-        "email TEXT UNIQUE, active BLOB, age INTEGER, CHECK (age > 18), FOREIGN KEY (active, name) REFERENCES users ("
-        "active, name));"
+        "email TEXT UNIQUE, active BLOB, age INTEGER, FOREIGN KEY (active, name) REFERENCES users ("
+        "active, name), CHECK (age > 18));"
     )
 
 

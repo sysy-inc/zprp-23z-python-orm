@@ -36,16 +36,17 @@ class Table(MigrationElement):
                 columns: list[SQLite3Typing.Column] = []
                 all_constraints = cls.__dict__["constraints"]
 
-                fks: set[c.ForeignKeyConstraint] = set(
+                # todo: add check constraints
+                fks: set[c.TableWideConstraint] = set(
                     constraint
                     for constraint in all_constraints
-                    if isinstance(constraint, c.ForeignKeyConstraint)
+                    if isinstance(constraint, c.TableWideConstraint)
                 )
 
                 column_constraints = [
                     constraint
                     for constraint in all_constraints
-                    if isinstance(constraint, c.ColumnSpecificConstraint)
+                    if isinstance(constraint, c.ColumnWideConstraint)
                 ]
 
                 if cls.__dict__["data_type"] == "my_definition_of_data_type":
@@ -65,7 +66,7 @@ class Table(MigrationElement):
                     )
                 )
                 table = SQLite3Typing.Table(
-                    name=cls.__name__, columns=columns, foreign_keys=fks
+                    name=cls.__name__, columns=columns, table_constraints=fks
                 )
 
                 # Table, for each instance should properly inform the adapter about being created

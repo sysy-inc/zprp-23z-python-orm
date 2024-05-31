@@ -157,10 +157,10 @@ class SQLite3Inspector(BaseDbInspector):
 
     def get_column_constraints(
         self, table_name: str, entry: PragmaTableInfoEntry
-    ) -> list[c.ColumnSpecificConstraint]:
+    ) -> list[c.ColumnWideConstraint]:
         """Get all constraints for a column determined by the pragma table info entry.
         and a name of the table."""
-        constraints: list[c.ColumnSpecificConstraint] = []
+        constraints: list[c.ColumnWideConstraint] = []
         column_name = entry.name
         if entry.pk:
             constraints.append(

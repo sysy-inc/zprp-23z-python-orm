@@ -23,28 +23,33 @@ class Constraint(ABC):
 
 
 @dataclass(frozen=True)
-class ColumnSpecificConstraint(Constraint):
+class ColumnWideConstraint(Constraint):
     """Base class for constraints that apply to a column instead of multiple (e.g. composite foreign keys)"""
 
     column_name: str
 
 
 @dataclass(frozen=True)
-class NotNullConstraint(ColumnSpecificConstraint):
+class TableWideConstraint(Constraint):
+    """Base class for constraints that apply to a table - foreign keys and check constraints"""
+
+
+@dataclass(frozen=True)
+class NotNullConstraint(ColumnWideConstraint):
     """Class for the NOT NULL constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.NOT_NULL)
 
 
 @dataclass(frozen=True)
-class UniqueConstraint(ColumnSpecificConstraint):
+class UniqueConstraint(ColumnWideConstraint):
     """Class for the UNIQUE constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.UNIQUE)
 
 
 @dataclass(frozen=True)
-class PrimaryKeyConstraint(ColumnSpecificConstraint):
+class PrimaryKeyConstraint(ColumnWideConstraint):
     """Class for the PRIMARY KEY constraint"""
 
     constraint_type: ConstraintType = field(
@@ -53,7 +58,7 @@ class PrimaryKeyConstraint(ColumnSpecificConstraint):
 
 
 @dataclass(frozen=True, unsafe_hash=True)
-class ForeignKeyConstraint(Constraint):
+class ForeignKeyConstraint(TableWideConstraint):
     """Class for the FOREIGN KEY constraint"""
 
     constraint_type: ConstraintType = field(
@@ -66,7 +71,7 @@ class ForeignKeyConstraint(Constraint):
 
 
 @dataclass(frozen=True)
-class CheckConstraint(ColumnSpecificConstraint):
+class CheckConstraint(TableWideConstraint):
     """Class for the CHECK constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.CHECK)
@@ -74,7 +79,7 @@ class CheckConstraint(ColumnSpecificConstraint):
 
 
 @dataclass(frozen=True)
-class DefaultConstraint(ColumnSpecificConstraint):
+class DefaultConstraint(ColumnWideConstraint):
     """Class for the DEFAULT constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.DEFAULT)

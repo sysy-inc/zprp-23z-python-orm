@@ -4,8 +4,8 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
-    ColumnSpecificConstraint,
-    ForeignKeyConstraint,
+    ColumnWideConstraint,
+    TableWideConstraint,
 )
 
 
@@ -17,7 +17,7 @@ class BaseColumn[TDataTypes]:
 
     name: str
     data_type: TDataTypes
-    column_constraints: list[ColumnSpecificConstraint] = field(
+    column_constraints: list[ColumnWideConstraint] = field(
         default_factory=list, hash=False
     )
 
@@ -30,7 +30,7 @@ class BaseTable[TCol]:
 
     name: str
     columns: list[TCol] = field(default_factory=list)
-    foreign_keys: set[ForeignKeyConstraint] = field(default_factory=set)
+    table_constraints: list[TableWideConstraint] = field(default_factory=list)
 
 
 class BaseAdapter(ABC):
