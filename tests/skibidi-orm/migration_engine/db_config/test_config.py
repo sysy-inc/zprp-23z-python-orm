@@ -1,6 +1,7 @@
 import pytest
 from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
+import os
 
 
 def test_should_raise_error_on_invalid_insantiation():
@@ -34,7 +35,7 @@ def test_accessing_through_instance_method_should_throw_error_when_instance_does
 
 def test_check_argument_saving():
     """
-    Shoud raise error when arugments are not saved
+    Should raise error when arguments are not saved
     """
     config = SQLite3Config(db_path="first_path")
-    assert config.db_path == "first_path"
+    assert config.db_path == os.path.join(os.getcwd(), "first_path")
