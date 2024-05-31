@@ -11,6 +11,7 @@ import os
 
 # import shutil
 import sys
+from skibidi_orm.cli.migration_file_creator import create_migration_file
 from skibidi_orm.cli.utils import find_schema_file, load_schema_from_path
 from skibidi_orm.exceptions.cli_exceptions import MultipleSchemaFilesError
 from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
@@ -75,15 +76,26 @@ def migrate(
         "--message",
         "-m",
         help="Description of migration",
-    )
+    ),
+    direct: bool = typer.Option(
+        False,
+        "--direct",
+        "-d",
+        help="Use --direct to run the migration directly. Without the flag, it will create a python migration file.",
+    ),
 ):
     """
     Used to run migration for current schema file. Can accept an optional message as a description of the migration.
     """
-    m = MigrationElement()
-    m.migrate(preview=False)
 
-    print("\nMigration complete. \n")
+    if direct:
+        m = MigrationElement()
+        m.migrate(preview=False)
+        print("\nMigration complete. \n")
+    else:
+        m = MigrationElement()
+        create_migration_file(m)
+        print("\nMigration file created. \n")
 
     pass
 
