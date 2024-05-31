@@ -55,24 +55,11 @@ class SQLite3TableOperationConverter(TableOperationSQLConverter):
     def _convert_create_table_operation_to_SQL(operation: CreateTableOperation) -> str:
         """Convert a given create table operation to a SQLite3 SQL string"""
         definition_string = f"CREATE TABLE {operation.table.name} "
-        constraints_at_end, constraints_at_columns = (
-            SQLite3TableOperationConverter.split_constraints(operation.table)
-        )
 
         definition_string += "("
         for column in operation.table.columns:
-            constraints_at_column = [
-                constraint
-                for constraint in column.column_constraints
-                if constraint in constraints_at_columns
-            ]
             definition_string += f"{SQLite3ColumnOperationConverter.convert_column_definition_to_SQL(
-                    column, constraints_at_column)}, "
-
-        for constraint in constraints_at_end:
-            definition_string += (
-                f"{SQLite3ConstraintConverter.convert_constraint_to_SQL(constraint)}, "
-            )
+                    column, column.column_constraints)}, "
 
         for key in operation.table.table_constraints:
             definition_string += (
@@ -100,34 +87,3 @@ class SQLite3TableOperationConverter(TableOperationSQLConverter):
             + " "
             + SQLite3TableOperationConverter.convert_table_operation_to_SQL(create_op)
         )
-
-    @staticmethod
-    def split_constraints(
-        table: SQLite3Typing.Table,
-    ) -> tuple[set[ColumnWideConstraint], set[ColumnWideConstraint]]:
-        # TODO: remove this method completely
-        """Split the constraints of a table into those that have to be added at the end of the
-        table definition and those that have to be added in the definitions of their resective columns
-        """
-        all_constraints = set(
-            chain.from_iterable(column.column_constraints for column in table.columns)
-        )
-
-        """These constraints have to be added at the end of the table definition, not by the
-        columns they correspond to"""
-        constraints_at_end = set(
-            filter(
-                lambda c: c.constraint_type
-                not in [
-                    ConstraintType.PRIMARY_KEY,
-                    ConstraintType.UNIQUE,
-                    ConstraintType.NOT_NULL,
-                ],
-                all_constraints,
-            )
-        )
-
-        # These constraints have to be added in the column definition
-        constraints_at_columns = all_constraints - constraints_at_end
-
-        return set(constraints_at_end), set(constraints_at_columns)
