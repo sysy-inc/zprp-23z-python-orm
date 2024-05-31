@@ -4,8 +4,13 @@ from skibidi_orm.query_engine.model.base import Model
 from skibidi_orm.query_engine.field.field import IntegerField, AutoField
 from skibidi_orm.query_engine.operations.select import Select
 from skibidi_orm.query_engine.operations.functions import Count
+from skibidi_orm.query_engine.connection.engine import Engine
+from skibidi_orm.query_engine.connection.session import Session
+from skibidi_orm.query_engine.config import SQLiteConfig, SQLiteAdapter
+from skibidi_orm.query_engine import config
 import pytest
 from typing import Optional
+from unittest.mock import MagicMock
 
 @pytest.fixture
 def model_instance() -> Model:
@@ -15,6 +20,20 @@ def model_instance() -> Model:
 
     return Person(1, 12)
 
+@pytest.fixture
+def mock_get_configuration(monkeypatch):
+    def mock_config_data():
+        return SQLiteConfig(path='test.db')
+
+    mock_sqlite3 = MagicMock()
+
+    def mock_import_connector(self):
+        self._connector = mock_sqlite3
+
+    monkeypatch.setattr(config, 'get_configuration', mock_config_data)
+    monkeypatch.setattr(SQLiteAdapter, '_import_connector', mock_import_connector)
+
+    return mock_sqlite3
 
 def test_insert_no_returning(model_instance: Model):
     st = Insert(model_instance)
@@ -35,12 +54,16 @@ def test_insert_returning():
     assert compiler.insert(st) == correct_sql
 
 
-def test_update(model_instance: Model):
-    model_instance.age = 4
-    st = Update(model_instance)
-    compiler = SQLCompiler()
-    correct_sql = "UPDATE person SET age=4 WHERE id=1;"
-    assert compiler.update(st) == correct_sql
+def test_update(model_instance: Model, mock_get_configuration):
+    engine = Engine()
+    session = Session(engine)
+    with Session(engine) as session:
+        session.add(model_instance)
+        model_instance.age = 4
+        st = Update(model_instance)
+        compiler = SQLCompiler()
+        correct_sql = "UPDATE person SET age=4 WHERE id=1;"
+        assert compiler.update(st) == correct_sql
 
 
 def test_delete(model_instance: Model):
