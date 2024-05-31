@@ -1,12 +1,15 @@
 import pytest
 import math
 import decimal
+from datetime import datetime, date
 from skibidi_orm.query_engine.field.field import (
     BooleanField,
     IntegerField,
     FloatField,
     DecimalField,
     CharField,
+    DateField,
+    DateTimeField,
     Error,
 )
 
@@ -261,4 +264,78 @@ def test_BooleanField_char_number():
 
 def test_BooleanField_char():
     field = BooleanField()
-    assert field.to_python('f') is None
+    assert field.to_python('f') is False
+
+
+# DateField to_python
+
+def test_DateField_date():
+    date1 = date(2002, 10, 28)
+    field = DateField()
+    date2 = field.to_python(date1)
+    assert date2 == date1
+
+
+def test_DateField_datetime():
+    date1 = datetime(2002, 10, 28, 12, 54, 00)
+    field = DateField()
+    date2 = field.to_python(date1)
+    assert date2 == date(2002, 10, 28)
+
+
+def test_DateField_str_valid():
+    date1 = '2002-10-28'
+    field = DateField()
+    date2 = field.to_python(date1)
+    assert date2 == date(2002, 10, 28)
+
+
+def test_DateField_str_invalid():
+    date1 = '2002-10-k8'
+    field = DateField()
+    with pytest.raises(Error):
+        field.to_python(date1)
+
+# DatetimeField to_python
+
+
+def test_DatetimeField_date():
+    date1 = date(2002, 10, 28)
+    field = DateTimeField()
+    date2 = field.to_python(date1)
+    assert date2 == datetime(2002, 10, 28, 00, 00)
+
+
+def test_DatetimeField_datetime():
+    date1 = datetime(2002, 10, 28, 10, 14, 6)
+    field = DateTimeField()
+    date2 = field.to_python(date1)
+    assert date2 == date1
+
+
+def test_DatetimeField_strDate_valid():
+    date1 = '2002-10-28'
+    field = DateTimeField()
+    date2 = field.to_python(date1)
+    assert date2 == datetime(2002, 10, 28, 00, 00)
+
+
+def test_DatetimeField_strDate_invalid():
+    date1 = '2002-10-k8'
+    field = DateTimeField()
+    with pytest.raises(Error):
+        field.to_python(date1)
+
+
+def test_DatetimeField_strDatetime_valid():
+    date1 = '2002-10-28 13:15:22'
+    field = DateTimeField()
+    date2 = field.to_python(date1)
+    assert date2 == datetime(2002, 10, 28, 13, 15, 22)
+
+
+def test_DatetimeField_strDatetime_invalid():
+    date1 = '2002-10-k8-00-45'
+    field = DateTimeField()
+    with pytest.raises(Error):
+        field.to_python(date1)
