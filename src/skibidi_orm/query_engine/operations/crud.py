@@ -22,7 +22,7 @@ class CRUDBase:
         Args:
             obj (Model): The model object to create CRUD operation.
         """
-        self._obj = None
+        self._obj: Model = obj
 
     def table(self) -> str:
         """
@@ -32,8 +32,9 @@ class CRUDBase:
             str: The table name.
         """
         # table_name = self._obj.table() need to be implemented in Model
-        table_name = "test_model"   # temporarly TOCHANGE
-        return table_name
+        # table_name = "test_model"   # temporarly TOCHANGE
+        table_name: str = self._obj._get_name_and_pk()[0]   # type: ignore
+        return table_name   # type: ignore
 
 
 class ValueBase(CRUDBase):
@@ -45,7 +46,8 @@ class ValueBase(CRUDBase):
     """
     def __init__(self, obj: Model) -> None:
         # self._attributes = obj.attributes() need to be implemented in Model
-        self._attributes: list[tuple[str, Any]] = [("id", 1), ("atr1", 1), ("atr2", "a")]  # temporarly TOCHANGE
+        self._attributes: list[tuple[str, Any]] = obj._get_attr_values()    # type: ignore
+        # self._attributes: list[tuple[str, Any]] = [("id", 1), ("atr1", 1), ("atr2", "a")]  # temporarly TOCHANGE
         super().__init__(obj)
 
     def values(self) -> list[Any]:
@@ -92,9 +94,13 @@ class Insert(ValueBase):
             obj (Model): The model object associated with the Insert statement.
         """
         # self._returns: bool = obj.check_primary_key() to be implemented in Model
-        self._returns: bool = True  # temporarly TOCHANGE
+        # self._returns: bool = True  # temporarly TOCHANGE
+        self._returns: bool = obj._is_pk_none()     # type: ignore
         # self._returning: list[str] = obj.primary_key() to be implemented in Model
-        self._returning_col: list[str] = ["id"]  # temporarly TOCHANGE
+        # self._returning_col: list[str] = ["id"]  # temporarly TOCHANGE
+        self._returning_col: list[str] = []
+        if self._returns:
+            self._returning_col: list[str] = [obj._get_db_pk()[0]]      # type: ignore
         super().__init__(obj)
 
     @property
@@ -131,7 +137,10 @@ class Update(ValueBase):
         """
         super().__init__(obj)
         # TODO get attributes that are changed
-        self._attributes = [("atr1", 4)]
+        # self._attributes = [("atr1", 4)]
+        atr = obj._update_changes_db()     # type: ignore
+        atr_list = list(zip(atr.keys(), atr.values()))
+        self._attributes = atr_list
 
     def where_clause(self) -> tuple[Eq]:
         """
@@ -141,7 +150,8 @@ class Update(ValueBase):
             tuple[Eq]: The tuple containing the WHERE clause.
         """
         # primary_key = self._obj.primary_key() to be implementd in Model
-        clause = Eq("id", 1)  # temporarly TOCHANGE
+        pk_name, pk_value = self._obj._get_db_pk()      # type: ignore
+        clause = Eq(pk_name, pk_value)  # type: ignore
         return (clause, )
 
 
@@ -166,5 +176,6 @@ class Delete(CRUDBase):
             tuple[Eq]: The tuple containing the WHERE clause.
         """
         # primary_key = self._obj.primary_key() to be implementd in Model
-        clause = Eq("id", 1)  # temporarly TOCHANGE
+        pk_name, pk_value = self._obj._get_db_pk()      # type: ignore
+        clause = Eq(pk_name, pk_value)  # type: ignore
         return (clause, )

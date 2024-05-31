@@ -4,11 +4,14 @@ Module handles managing database model instances with attributes and relationshi
 
 from pydantic import BaseModel, Field
 from pydantic._internal._model_construction import ModelMetaclass
-from typing import Any
+from typing import Any, TYPE_CHECKING
 import inspect
 from skibidi_orm.query_engine.model.meta_options import MetaOptions
 from skibidi_orm.query_engine.field.field import AutoField
-from skibidi_orm.query_engine.connection.session import Session
+# from skibidi_orm.query_engine.connection.session import Session
+
+if TYPE_CHECKING:
+    from skibidi_orm.query_engine.connection.session import Session
 
 
 def _is_field(value: Any):
@@ -279,7 +282,7 @@ class Model(BaseModel, metaclass=MetaModel):
         self._changes = {}
         return changes
 
-    def _add_session(self, session: Session) -> None:
+    def _add_session(self, session: 'Session') -> None:
         """Add a session to the instance.
 
         Args:

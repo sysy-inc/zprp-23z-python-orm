@@ -9,7 +9,7 @@ def test_create_SQLiteAdapter():
 
 def test_make_connection():
     adapter = SQLiteAdapter()
-    connection = adapter.make_connection(path='test.db')
+    connection = adapter.make_connection(path=':memory:')
     assert connection is not None
     assert isinstance(connection, sqlite3.Connection)
 
@@ -19,5 +19,5 @@ def test_import_connector():
     assert adapter.connector is None
     # import_connector is private so it can't be used here directly
     # it is used during making connection
-    adapter.make_connection(path='test.db')
+    adapter.make_connection(path=':memory:')
     assert adapter.connector == sqlite3

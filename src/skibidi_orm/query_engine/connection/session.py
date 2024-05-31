@@ -104,7 +104,7 @@ class Session:
         if obj in self._map:
             # already added
             return
-        # TODO register this session to model, model.add_session()
+        obj._add_session(self)  # type: ignore
         self._new.append(obj)
 
     def _check_clear(self) -> bool:
@@ -128,12 +128,11 @@ class Session:
         Args:
             obj (Model): The model instance that has changed.
         """
-        # o = self._map.get(obj.key(), obj) TOCHANGE
-        o = self._map.get(("test_model", 1), obj)
+        o = self._map.get(obj._get_name_and_pk(), obj)  # type: ignore
         if o in self._dirty or o is None or o in self._delete:
             return
         if o not in self._map and o not in self._new:
-            # object hasn't been add to this session
+            # object hasn't been added to this session
             return
         self._dirty.append(o)
 
@@ -157,14 +156,14 @@ class Session:
                 self._dirty.remove(obj)
             return
 
-        o = self._map.get(("test_model", 1), None)
+        o = self._map.get(obj._get_name_and_pk(), None)     # type: ignore
         if o is None:
             raise ValueError("Given object is not part of session")
         else:
             if o in self._dirty:
                 # if pending update, delete it, no need to update if it is deleted
                 self._dirty.remove(o)
-            # TODO tell model to remove session from attributes
+            o._remove_session()     # type: ignore
             self._delete.append(o)
 
     def flush(self):
@@ -224,7 +223,7 @@ class Session:
             for row in rows:
                 model_class = statement.model
                 obj = model_class(**row)
-                obj_map = self._map.get(("test_model", 1), None)      # TOCHANGE
+                obj_map = self._map.get(obj._get_name_and_pk(), None)      # TOCHANGE
                 if obj_map is not None:
                     # if object in identity map return one from map to avoid duplicates
                     result.append(obj_map)
@@ -249,6 +248,7 @@ class Session:
             Model: The retrieved model instance from the database.
         """
         primary_key_name = "id"     # TOCHANGE function from Model
+        # model._get_db_pk()
         st = Select(model).filter(**{primary_key_name: primary_key})
         ret = self.select(st)
         return ret[0]
