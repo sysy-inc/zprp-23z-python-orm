@@ -15,6 +15,8 @@ from skibidi_orm.exceptions.cli_exceptions import MultipleSchemaFilesError
 from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
     MigrationElement,
 )
+from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
+from skibidi_orm.migration_engine.revisions.manager import RevisionManager
 from skibidi_orm.migration_engine.studio.server import run_server
 from skibidi_orm.cli.revision_inspection import revision_app  # type: ignore
 from colorama import Fore
@@ -66,16 +68,22 @@ def migrate_list():
 
 
 @app.command()
-def go(migration_id: Union[str, None] = typer.Argument(None, help="Migration ID")):
+def go(migration_id: str = typer.Argument(help="Migration ID")):
     """
     Go back (and forward) to specific migration.
     """
+    SQLite3Config("cli_test.db")
 
-    if migration_id is None:
-        migration_id = typer.prompt("Please enter the migration ID:")
-
-    print(f"Going to migration with ID: {migration_id}")
-    pass
+    manager = RevisionManager()
+    revision = manager.get_revision_by_id(int(migration_id))
+    print()
+    confirmation: str = typer.prompt(
+        Fore.RED
+        + "THIS OPERATION WILL DELETE ALL DATA IN THE DATABASE.\nARE YOU SURE YOU WANT TO CONTINUE? (y/n)"
+    )
+    if confirmation.lower() == "y":
+        manager.go_to_revision(revision)
+    return
 
 
 @app.command()
