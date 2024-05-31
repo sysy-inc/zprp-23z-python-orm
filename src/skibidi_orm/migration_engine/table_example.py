@@ -37,7 +37,7 @@ class Table(MigrationElement):
                 all_constraints = cls.__dict__["constraints"]
 
                 # todo: add check constraints
-                fks: set[c.TableWideConstraint] = set(
+                fks: list[c.TableWideConstraint] = list(
                     constraint
                     for constraint in all_constraints
                     if isinstance(constraint, c.TableWideConstraint)

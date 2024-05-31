@@ -8,10 +8,6 @@ from skibidi_orm.migration_engine.converters.sqlite3.columns import (
 from skibidi_orm.migration_engine.converters.sqlite3.constraints import (
     SQLite3ConstraintConverter,
 )
-from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
-    ColumnWideConstraint,
-    ConstraintType,
-)
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
 from skibidi_orm.migration_engine.operations.table_operations import (
     DeleteTableOperation,
@@ -21,7 +17,6 @@ from skibidi_orm.migration_engine.operations.table_operations import (
 )
 from skibidi_orm.exceptions.operations import UnsupportedOperationError
 from typing import cast
-from itertools import chain
 
 
 class SQLite3TableOperationConverter(TableOperationSQLConverter):
