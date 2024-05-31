@@ -211,9 +211,10 @@ class Model(BaseModel, metaclass=MetaModel):
         # self is in the session and set value is db field
         if hasattr(self, '_session') and self._session is not None and field is not None:
             if field.is_relation:
-                self._changes[field.column] = getattr(self, field.column)
-            else:
-                self._changes[field.column] = value
+                value = object.__getattribute__(self, field.name)
+                if value is None:
+                    value = object.__getattribute__(self, field.column)
+            self._changes[field.column] = value
             self._session.changed(self)
 
         # if set attr is a relation obj
