@@ -12,9 +12,9 @@ from skibidi_orm.query_engine.connection.session import Session
 
 
 def _is_field(value: Any):
-    """Check if a value is a field in a Django model.
+    """Check if a value is a field in a model.
 
-    This function determines if a given value is a field in a Django model by
+    This function determines if a given value is a field in model by
     checking if it has the `contribute_to_class` attribute and is not a class.
 
     Args:
@@ -30,7 +30,7 @@ class MetaModel(ModelMetaclass):
     """A metaclass for model.
 
     This metaclass is responsible for setting up the metadata and attributes
-    for Django-like models. It handles the initialization of fields, table
+    for models. It handles the initialization of fields, table
     names, and other metadata.
     """
 
@@ -103,7 +103,7 @@ class MetaModel(ModelMetaclass):
 
 
 class Model(BaseModel, metaclass=MetaModel):
-    """A metaclass to create your own database table.
+    """A class to create your own database table.
 
     This class represents a database model, handling initialization of fields,
     setting primary keys, and managing relationships and attributes.
