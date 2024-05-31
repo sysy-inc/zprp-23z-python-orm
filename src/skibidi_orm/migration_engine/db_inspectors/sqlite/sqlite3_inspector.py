@@ -1,6 +1,8 @@
-from __future__ import annotations
-from dataclasses import dataclass
-from typing import Any, Literal, cast
+from typing import cast
+from skibidi_orm.migration_engine.db_inspectors.sqlite.supporting_objects import (
+    PragmaTableInfoEntry,
+    PragmaForeignKeyListEntry,
+)
 import sqlite3
 
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
@@ -9,54 +11,6 @@ from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
     SQLite3Typing,
 )
 import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
-
-
-@dataclass(frozen=True)
-class PragmaTableInfoEntry:
-    cid: int
-    name: str
-    data_type: str
-    notnull: Literal[0, 1]
-    dflt_value: Any
-    pk: Literal[0, 1]
-
-    @classmethod
-    def from_tuple(
-        cls,
-        values: tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]],
-    ) -> PragmaTableInfoEntry:
-        cid, name, type, notnull, dflt_value, pk = values
-        return cls(int(cid), name, type, notnull, dflt_value, pk)
-
-
-@dataclass(frozen=True)
-class PragmaForeignKeyListEntry:
-    id: int
-    seq: int
-    table: str
-    from_column: str
-    to_column: str
-    on_update: str
-    on_delete: str
-    match: str
-
-    @classmethod
-    def from_tuple(
-        cls,
-        values: tuple[str, str, str, str, str, str, str, str],
-        # todo: better typing?
-    ) -> PragmaForeignKeyListEntry:
-        id, seq, table, from_column, to_column, on_update, on_delete, match = values
-        return cls(
-            int(id),
-            int(seq),
-            table,
-            from_column,
-            to_column,
-            on_update,
-            on_delete,
-            match,
-        )
 
 
 type SQLite3PragmaForeignKeyList = list[PragmaForeignKeyListEntry]

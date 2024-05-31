@@ -3,7 +3,7 @@ from skibidi_orm.migration_engine.data_mutator.sqlite3_data_mutatorr import (
     SQLite3DataMutator,
 )
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+from skibidi_orm.migration_engine.db_inspectors.sqlite.sqlite3_inspector import (
     SQLite3Inspector,
 )
 

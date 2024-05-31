@@ -1,4 +1,4 @@
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+from skibidi_orm.migration_engine.db_inspectors.sqlite.sqlite3_inspector import (
     SQLite3Inspector,
 )
 from skibidi_orm.migration_engine.studio.utils.get_db_inspector import get_db_inspector
