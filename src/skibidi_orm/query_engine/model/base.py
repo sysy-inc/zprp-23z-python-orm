@@ -8,7 +8,7 @@ from typing import Any, TYPE_CHECKING
 import inspect
 from skibidi_orm.query_engine.model.meta_options import MetaOptions
 from skibidi_orm.query_engine.field.field import AutoField
-# from skibidi_orm.query_engine.connection.session import Session
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from skibidi_orm.query_engine.connection.session import Session
@@ -233,12 +233,11 @@ class Model(BaseModel, metaclass=MetaModel):
         if value is None and name in self._meta.relation_fields_name():
             field = self._meta.get_relation_field(name)
             if object.__getattribute__(self, field.column):
-                # if object.__getattribute__(self, '_session', None):
-                #     value = self._session.get(field.related_model, self.pk)
-                #     setattr(self, field.name, value)
-                # else:
-                #     raise ValueError("First add object to session!")
-                value = 5
+                if hasattr(self, '_session') and getattr(self, '_session'):
+                    value = self._session.get(field.related_model, self.pk)
+                    setattr(self, field.name, value)
+                else:
+                    raise ValueError("First add object to session!")
             # do not change if not id
 
         # if atrr is relation and it is id
@@ -309,3 +308,11 @@ class Model(BaseModel, metaclass=MetaModel):
             tuple: The primary key column name and value.
         """
         return self._meta.primary_key.column, self.pk
+
+    @classmethod
+    def _get_primary_key_column(cls) -> str:
+        return cls._meta.primary_key.column # type: ignore
+
+    @classmethod
+    def _get_columns_names(cls) -> list[str]:
+        return [field.column for field in cls._meta.local_fields] # type: ignore

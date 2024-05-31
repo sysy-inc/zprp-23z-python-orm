@@ -17,7 +17,7 @@ class PersonWithId(Model):
 
 class PersonWithoutId(Model):
     age: Optional[int | IntegerField ] = IntegerField()
-    person: Optional[PersonWithId | ForeignKey] = ForeignKey(to=PersonWithId, on_delete='cos')
+    person: Optional[PersonWithId | ForeignKey] = ForeignKey(to=PersonWithId)
 
 @pytest.fixture
 def mock_get_configuration(monkeypatch):
@@ -45,7 +45,7 @@ def mock_get_configuration(monkeypatch):
 def test_create_model_foreign_key_the_same_model():
     StudentType: Optional['Student'] = ForwardRef('Student')
     class Student(Model):
-        friend: Optional[StudentType | ForeignKey] = ForeignKey(to=PersonWithoutId, on_delete='cos')
+        friend: Optional[StudentType | ForeignKey] = ForeignKey(to=PersonWithoutId)
     student1 = Student()
     student2 = Student(student1)
     assert student2.friend == student1
@@ -108,3 +108,11 @@ def test_is_pk_none_true():
 def test_get_db_pk():
     person = PersonWithId(1, 22)
     assert person._get_db_pk() == ('id', 1)
+
+def test_get_primary_key_column():
+    person = PersonWithId(1, 22)
+    assert PersonWithId._get_primary_key_column() == 'id'
+    assert person._get_primary_key_column() == 'id'
+
+def test_get_columns_names():
+    assert PersonWithId._get_columns_names() == ['id', 'age']
