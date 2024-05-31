@@ -7,6 +7,7 @@ from skibidi_orm.query_engine.operations import clauses as c
 from skibidi_orm.query_engine.operations.select import Select
 from skibidi_orm.query_engine.operations.functions import Function, Count
 from typing import Any, Type
+from datetime import date, datetime
 
 
 class SQLCompiler:
@@ -58,8 +59,8 @@ class SQLCompiler:
             str: The formatted value.
         """
         text = ""
-        if val:
-            text = f"'{val}'" if isinstance(val, str) else str(val)
+        if val is not None:
+            text = f"'{val}'" if isinstance(val, str) or isinstance(val, date) or isinstance(val, datetime) else str(val)
         return text
 
     def _prepare_values(self, statement: ValueBase) -> str:
