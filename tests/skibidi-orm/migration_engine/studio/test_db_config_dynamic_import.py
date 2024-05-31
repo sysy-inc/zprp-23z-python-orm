@@ -28,7 +28,7 @@ SQLite3Config(db_path="some/path/to/db.db")"""
     db_config = db_config_dynamic_import(schema_file_path=str(schema_file))
 
     assert isinstance(db_config, SQLite3Config)
-    assert db_config.db_path == "some/path/to/db.db"
+    assert db_config.db_path == os.path.join(os.getcwd(), "some/path/to/db.db")
     assert BaseDbConfig.get_instance() == db_config
 
 
@@ -41,7 +41,7 @@ SQLite3Config(db_path="some/path/to/db.db")"""
     db_config = db_config_dynamic_import(schema_file_path=str(schema_file))
 
     assert isinstance(db_config, SQLite3Config)
-    assert db_config.db_path == "some/path/to/db.db"
+    assert db_config.db_path == os.path.join(os.getcwd(), "some/path/to/db.db")
     assert BaseDbConfig.get_instance() == db_config
 
 
