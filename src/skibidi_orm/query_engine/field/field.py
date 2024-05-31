@@ -155,7 +155,7 @@ class Field:
         self.name = self.name or name
         self.column = self.db_column or self.name
 
-    def contribute_to_class(self, cls: Model, name: str):
+    def contribute_to_class(self, cls: 'Model', name: str):
         """
         Contributes this field to the given class.
 
