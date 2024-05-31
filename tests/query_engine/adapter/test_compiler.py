@@ -56,7 +56,7 @@ def test_select_no_options():
         age: Optional[int | IntegerField] = IntegerField()
     st = Select(Person)
     compiler = SQLCompiler()
-    correct_sql = "SELECT id, atr1, atr2 FROM person ;"
+    correct_sql = "SELECT id, age FROM person ;"
     assert compiler.select(st) == correct_sql
 
 
@@ -66,7 +66,7 @@ def test_select_where_one_clause():
         age: Optional[int | IntegerField] = IntegerField()
     st = Select(Person).filter(id=1)
     compiler = SQLCompiler()
-    correct_sql = "SELECT id, atr1, atr2 FROM person WHERE id=1 ;"
+    correct_sql = "SELECT id, age FROM person WHERE id=1 ;"
     assert compiler.select(st) == correct_sql
 
 
@@ -76,7 +76,7 @@ def test_select_where_multiple_clause():
         age: Optional[int | IntegerField] = IntegerField()
     st = Select(Person).filter(id=1, atr1=2)
     compiler = SQLCompiler()
-    correct_sql = "SELECT id, atr1, atr2 FROM person WHERE id=1 AND atr1=2 ;"
+    correct_sql = "SELECT id, age FROM person WHERE id=1 AND atr1=2 ;"
     assert compiler.select(st) == correct_sql
 
 
@@ -96,7 +96,7 @@ def test_select_order_by():
         age: Optional[int | IntegerField] = IntegerField()
     st = Select(Person).order_by("id")
     compiler = SQLCompiler()
-    correct_sql = "SELECT id, atr1, atr2 FROM person ORDER BY id ;"
+    correct_sql = "SELECT id, age FROM person ORDER BY id ;"
     assert compiler.select(st) == correct_sql
 
 
@@ -106,7 +106,7 @@ def test_select_order_by_desc():
         age: Optional[int | IntegerField] = IntegerField()
     st = Select(Person).order_by("id", desc=True)
     compiler = SQLCompiler()
-    correct_sql = "SELECT id, atr1, atr2 FROM person ORDER BY id DESC ;"
+    correct_sql = "SELECT id, age FROM person ORDER BY id DESC ;"
     assert compiler.select(st) == correct_sql
 
 
@@ -116,7 +116,7 @@ def test_select_alias():
         age: Optional[int | IntegerField] = IntegerField()
     st = Select(Person).annotate(my_id="id")
     compiler = SQLCompiler()
-    correct_sql = "SELECT id AS my_id, atr1, atr2 FROM person ;"
+    correct_sql = "SELECT id AS my_id, age FROM person ;"
     assert compiler.select(st) == correct_sql
 
 

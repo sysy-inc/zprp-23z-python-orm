@@ -147,7 +147,6 @@ class Session:
         Raises:
             ValueError: if given object isn't part of a session (hasn't been added)
         """
-        # o = self._map.get(obj.key(), None) TOCHANGE
         if obj in self._new:
             # object wasn't yet inserted so only delete from list to be inserted
             self._new.remove(obj)
@@ -223,7 +222,7 @@ class Session:
             for row in rows:
                 model_class = statement.model
                 obj = model_class(**row)
-                obj_map = self._map.get(obj._get_name_and_pk(), None)      # TOCHANGE
+                obj_map = self._map.get(obj._get_name_and_pk(), None)      # type: ignore
                 if obj_map is not None:
                     # if object in identity map return one from map to avoid duplicates
                     result.append(obj_map)
@@ -247,8 +246,7 @@ class Session:
         Returns:
             Model: The retrieved model instance from the database.
         """
-        primary_key_name = "id"     # TOCHANGE function from Model
-        # model._get_db_pk()
+        primary_key_name = model._get_primary_key_column()      # type: ignore
         st = Select(model).filter(**{primary_key_name: primary_key})
         ret = self.select(st)
         return ret[0]
