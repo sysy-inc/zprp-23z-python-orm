@@ -6,6 +6,7 @@ from skibidi_orm.migration_engine.db_inspectors.sqlite.supporting_objects import
     PragmaForeignKeyListEntry,
 )
 import sqlite3
+import re
 
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
@@ -132,6 +133,47 @@ class SQLite3Inspector(BaseDbInspector):
             # casting since indices created by UNIQUE can't contain null as the column name
             for entry in valid_indices.values()
         ]
+
+    def _get_all_check_conditions(self, table_creation_sql: str) -> list[str]:
+        """Get all check conditions from the table creation SQL."""
+        pattern = re.compile(r"CHECK\s*\(", re.IGNORECASE)
+
+        # Find all the positions of 'CHECK' statements
+        check_positions = [
+            match.start() for match in pattern.finditer(table_creation_sql)
+        ]
+
+        conditions: list[str] = []
+
+        for pos in check_positions:
+            # Start position of the constraint
+            start = pos + len("CHECK(") + 1  # move past the opening parenthesis
+            balance = 1
+            end = start
+
+            while balance > 0 and end < len(table_creation_sql):
+                if table_creation_sql[end] == "(":
+                    balance += 1
+                elif table_creation_sql[end] == ")":
+                    balance -= 1
+                end += 1
+
+            # Extracting the constraint without the outer parentheses
+            end -= 1
+            condition = table_creation_sql[start:end].strip()
+            conditions.append(condition)
+
+        return conditions
+
+    def get_all_check_constraints(self, table_name: str) -> list[c.CheckConstraint]:
+        """Get all check constraints from the database."""
+        query = f"SELECT * from sqlite_master where tbl_name = '{table_name}' and type = 'table';"
+        query_result = self._sqlite_execute(query).pop()
+
+        sql = query_result[4]
+
+        check_conditions = self._get_all_check_conditions(sql)
+        return [c.CheckConstraint(table_name, content) for content in check_conditions]
 
     def get_foreign_key_constraints(self) -> set[c.ForeignKeyConstraint]:
         """Get all foreign key constraints from the database."""

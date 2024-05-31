@@ -73,6 +73,20 @@ sql_table_with_unique_constraint_and_artificial_indices = [
     """,
 ]
 
+sql_table_with_multiple_check_constraints = [
+    """
+    CREATE TABLE test_table (
+        id INTEGER PRIMARY KEY,
+        age INTEGER CHECK (age >= 18 AND age <= 65),
+        salary REAL CHECK (salary > 0 AND salary < 1000000),
+        email TEXT CHECK (email LIKE '%@%.%'),
+        start_date DATE CHECK (start_date >= '2020-01-01'),
+        end_date DATE CHECK (end_date > start_date),
+        status TEXT CHECK (status IN ('active', 'inactive') OR status = 'pending')
+    );
+    """
+]
+
 
 def execute_sqlite3_commands(db_path: str, commands: list[str]):
     """Executes the given commands in a SQLite DB living under db_path"""
@@ -222,7 +236,7 @@ def test_get_column_constraints_default(tmp_database: str):
 
 @pytest.mark.parametrize(
     "tmp_database",
-    [[*sql_table_with_unique_constraint_and_artificial_indices]],
+    [sql_table_with_unique_constraint_and_artificial_indices],
     indirect=True,
 )
 def test_detects_unique_indices(tmp_database: str):
@@ -236,3 +250,32 @@ def test_detects_unique_indices(tmp_database: str):
         c.NotNullConstraint("users", "username"),
         c.UniqueConstraint("users", "username"),
     ]
+
+
+@pytest.mark.parametrize(
+    "tmp_database", [sql_table_with_multiple_check_constraints], indirect=True
+)
+def test_get_all_check_constraints(tmp_database: str):
+    SQLite3Config(db_path=tmp_database)
+    inspector = SQLite3Inspector()
+    check_constraints = inspector.get_all_check_constraints("test_table")
+    assert len(check_constraints) == 6
+    assert (
+        c.CheckConstraint("test_table", "age >= 18 AND age <= 65") in check_constraints
+    )
+    assert (
+        c.CheckConstraint("test_table", "salary > 0 AND salary < 1000000")
+        in check_constraints
+    )
+    assert c.CheckConstraint("test_table", "email LIKE '%@%.%'") in check_constraints
+    assert (
+        c.CheckConstraint("test_table", "start_date >= '2020-01-01'")
+        in check_constraints
+    )
+    assert c.CheckConstraint("test_table", "end_date > start_date")
+    assert (
+        c.CheckConstraint(
+            "test_table", "status IN ('active', 'inactive') OR status = 'pending'"
+        )
+        in check_constraints
+    )
