@@ -1,6 +1,6 @@
 from skibidi_orm.query_engine.field.field import Field, Error
 from skibidi_orm.query_engine.field.relation_objects import RelationObject
-from typing import Any, Type, Union, Optional
+from typing import Any, Union, Optional
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -35,7 +35,7 @@ class ForeignKey(Field):
             except NameError:
                 raise Error("The target model was not initialized!")
 
-        if rel is None:
+        if isinstance(to, Model) and rel is None:
             rel = RelationObject(
                 self,
                 to,
@@ -57,9 +57,10 @@ class ForeignKey(Field):
         Returns:
             (Model): The related model.
         """
-        return self.remote_field.model
+        if self.remote_field is not None:
+            return self.remote_field.model
     
-    def contribute_to_class(self, cls: Type[BaseException], name: str):
+    def contribute_to_class(self, cls: Model, name: str):
         super().contribute_to_class(cls, name)
         self.set_attributes_from_rel()
 
@@ -72,17 +73,18 @@ class ForeignKey(Field):
         if not already set.
 
         """
-        self.name = self.name or (
-            self.remote_field.model._meta.model_name
-            + "_"
-            + self.remote_field.model._meta.pk.name
-        )
-        self.column = self.name + "_id" or (
-            self.remote_field.model._meta.model_name
-            + "_"
-            + self.remote_field.model._meta.pk.name
-            + "_id"
-        )
+        if self.remote_field is not None:
+            self.name = self.name or (
+                self.remote_field.model._meta.model_name
+                + "_"
+                + self.remote_field.model._meta.pk.name
+            )
+            self.column = self.name + "_id" or (
+                self.remote_field.model._meta.model_name
+                + "_"
+                + self.remote_field.model._meta.pk.name
+                + "_id"
+            )
 
     @staticmethod
     def get_instance_by_name(name: str):
