@@ -39,6 +39,9 @@ def load_schema_from_path(path: str):
     Load the schema file from the given path into the workspace.
 
     If schema file is not found, raise FileNotFoundError, if it cannot be imported, raise ImportError.
+    It changes the current working directory to the specified path. Then it loads the schema file, and as a result,
+    the absolute path of the database is relative to the schema file. After loading the schema file, it changes the
+    current working directory back to the original one.
     """
 
     path = os.path.abspath(path)
