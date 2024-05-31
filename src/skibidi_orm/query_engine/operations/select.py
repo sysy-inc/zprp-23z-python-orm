@@ -1,6 +1,7 @@
 """
 Module describing SELECT statement.
 """
+
 from skibidi_orm.query_engine.model.base import Model
 from skibidi_orm.query_engine.operations import clauses as c
 from skibidi_orm.query_engine.operations.clauses import Clause
@@ -123,14 +124,16 @@ class Select:
     def filter(self, **kwargs: Any):
         """
         Adds filter conditions to the query.
+
         Possible options for filter conditions:
-            - no option: equal
-            - __gt: greater than
-            - __gte: greater than or equal
-            - __lt: lower than
-            - __lte: lower than or equal
-            - __not: not equal
-            - __isnull: if True is Null, if False is not Null
+
+        - no option: equal
+        - __gt: greater than
+        - __gte: greater than or equal
+        - __lt: less than
+        - __lte: less than or equal
+        - __not: not equal
+        - __isnull: if True, is Null; if False, is not Null
 
         Args:
             **kwargs: Keyword arguments representing filter conditions.

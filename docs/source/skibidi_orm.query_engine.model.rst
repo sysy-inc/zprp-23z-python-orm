@@ -2,7 +2,7 @@ skibidi\_orm.query\_engine.model package
 ========================================
 
 skibidi\_orm.query\_engine.model.base module
---------------------------------------------
+---------------------------------------------
 
 .. automodule:: skibidi_orm.query_engine.model.base
    :members:
@@ -10,7 +10,7 @@ skibidi\_orm.query\_engine.model.base module
    :show-inheritance:
 
 skibidi\_orm.query\_engine.model.meta\_options module
------------------------------------------------------
+------------------------------------------------------
 
 .. automodule:: skibidi_orm.query_engine.model.meta_options
    :members:
