@@ -9,6 +9,7 @@ from skibidi_orm.query_engine.operations.select import Select
 from skibidi_orm.query_engine.connection.result import Result
 import pytest
 from unittest.mock import MagicMock
+from typing import Optional
 
 
 @pytest.fixture
@@ -77,9 +78,11 @@ def test_commit(mock_get_configuration):
 def test_add(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
         assert len(session._new) == 1
@@ -88,26 +91,30 @@ def test_add(mock_get_configuration):
 def test_changed(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
-        session.changed(obj)
+        session.changed(obj)        # TODO change
         assert len(session._new) == 1
 
 
 def test_changed_already_marked_changed(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
-        session.changed(obj)
+        session.changed(obj)    # TODO change
         assert len(session._new) == 1
-        session.changed(obj)
+        session.changed(obj)    # TODO
         # nothing happens
         assert len(session._new) == 1
 
@@ -115,13 +122,15 @@ def test_changed_already_marked_changed(mock_get_configuration):
 def test_changed_marked_delete(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
         session.delete(obj)
-        session.changed(obj)
+        session.changed(obj)    # TODO
         # nothing happens
         assert len(session._new) == 0
 
@@ -129,11 +138,13 @@ def test_changed_marked_delete(mock_get_configuration):
 def test_changed_not_added_to_session(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
-        session.changed(obj)
+        session.changed(obj)    # TODO
         # nothing happens
         assert len(session._new) == 0
 
@@ -141,9 +152,11 @@ def test_changed_not_added_to_session(mock_get_configuration):
 def test_delete_object_not_in_new(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
         session.commit()
@@ -155,9 +168,11 @@ def test_delete_object_not_in_new(mock_get_configuration):
 def test_delete_object_in_new(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
         assert len(session._new) == 1
@@ -170,14 +185,16 @@ def test_delete_object_in_new(mock_get_configuration):
 def test_delete_object_in_new_in_dirty(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
         assert len(session._new) == 1
         # object not inserted yet
-        session.changed(obj)
+        session.changed(obj)    # TODO
         assert len(session._dirty) == 1
         session.delete(obj)
         assert len(session._delete) == 0
@@ -188,14 +205,16 @@ def test_delete_object_in_new_in_dirty(mock_get_configuration):
 def test_delete_object_not_in_new_in_dirty(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
         session.commit()
         # object added to databes and to IdentityMap
-        session.changed(obj)
+        session.changed(obj)    # TODO
         assert len(session._dirty) == 1
         session.delete(obj)
         assert len(session._delete) == 1
@@ -205,9 +224,11 @@ def test_delete_object_not_in_new_in_dirty(mock_get_configuration):
 def test_delete_object_not_in_session(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         with pytest.raises(ValueError):
             session.delete(obj)
@@ -225,9 +246,11 @@ def test_flush_clear(mock_get_configuration):
 def test_flush_insert_pending(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
         assert len(session._new) == 1
@@ -240,14 +263,16 @@ def test_flush_insert_pending(mock_get_configuration):
 def test_flush_update_pending(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
         assert len(session._new) == 1
         session.flush()
-        session.changed(obj)
+        session.changed(obj)    # TODO
         assert len(session._dirty) == 1
         session.flush()
         assert len(session._dirty) == 0
@@ -257,9 +282,11 @@ def test_flush_update_pending(mock_get_configuration):
 def test_flush_delete_pending(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
         assert len(session._new) == 1
@@ -274,11 +301,13 @@ def test_flush_delete_pending(mock_get_configuration):
 def test_select_return_model(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    st = Select(TestModel)
-    obj = TestModel(1)
-    mock_get_configuration[2].fetchall.return_value = [(1,)]
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
+    st = Select(Person)
+    mock_get_configuration[2].fetchall.return_value = [(1, 12)]
     mock_get_configuration[2].description = [["id"]]
 
     with Session(engine) as session:
@@ -288,16 +317,18 @@ def test_select_return_model(mock_get_configuration):
         mock_get_configuration[2].execute.assert_called()
         assert len(ret) == 1
         assert ret[0].id == 1
-        assert isinstance(ret[0], TestModel)
+        assert isinstance(ret[0], Person)
 
 
 def test_select_return_result(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    st = Select(TestModel).group_by("id")
-    obj = TestModel(1)
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
+    st = Select(Person).group_by("id")
     mock_get_configuration[2].fetchall.return_value = [(1,)]
     mock_get_configuration[2].description = [["id"]]
 
@@ -314,17 +345,19 @@ def test_select_return_result(mock_get_configuration):
 def test_get(mock_get_configuration):
     engine = Engine()
 
-    class TestModel(Model):
-        id: int = IntegerField()  # type: ignore
-    st = Select(TestModel)
-    obj = TestModel(1)
-    mock_get_configuration[2].fetchall.return_value = [(1,)]
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    obj = Person(1, 12)
+    st = Select(Person)
+    mock_get_configuration[2].fetchall.return_value = [(1, 12)]
     mock_get_configuration[2].description = [["id"]]
 
     with Session(engine) as session:
         session.add(obj)
         assert len(session._new) == 1
-        ret = session.get(TestModel, 1)
+        ret = session.get(Person, 1)
         mock_get_configuration[2].execute.assert_called()
         assert ret.id == 1
-        assert isinstance(ret, TestModel)
+        assert isinstance(ret, Person)
