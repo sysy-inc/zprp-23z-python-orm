@@ -127,4 +127,4 @@ def test_has_realtion_obj_true():
 
 def test_get_ralation_obj():
     person = PersonWithoutId(1)
-    assert person._get_ralation_obj() == [(PersonWithId, None)]
+    assert person._get_relation_obj() == [(PersonWithId, None)]

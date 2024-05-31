@@ -54,7 +54,7 @@ class MetaModel(ModelMetaclass):
         """
         super_new: Any = super().__new__ # type: ignore
 
-        field_attrs = {}
+        field_attrs: dict[str, Any] = {}
 
         # Ensure initialization is only performed for subclasses of Model
         # (excluding Model class itself).
@@ -85,7 +85,7 @@ class MetaModel(ModelMetaclass):
         new_class = super_new(cls, name, bases, new_attrs)
         new_class.add_to_class("_meta", MetaOptions(metadata))
 
-        for obj_name, obj in field_attrs.items(): # type: ignore
+        for obj_name, obj in field_attrs.items():
             new_class.add_to_class(obj_name, obj)
 
         new_class._meta._prepare(new_class)
@@ -271,11 +271,11 @@ class Model(BaseModel, metaclass=MetaModel):
         atrr_values : list[Any] = []
         for field in self._meta.local_fields:
             if field.is_relation:
-                atrr_values.append((field.column, getattr(self, field.column)))     # TODO
+                value = getattr(self, field.column)
             else:
                 value = getattr(self, field.name)
-                if value is not None:
-                    atrr_values.append((field.column, value))
+            if value is not None:
+                atrr_values.append((field.column, value))
         return atrr_values
 
     def _update_changes_db(self) -> dict[str, str]:
@@ -318,14 +318,46 @@ class Model(BaseModel, metaclass=MetaModel):
 
     @classmethod
     def _get_primary_key_column(cls) -> str:
+        """
+        Retrieve the primary key column name for the class.
+
+        This method accesses the class's metadata to fetch the name of the primary key column.
+
+        Returns:
+            str: The name of the primary key column.
+        """
         return cls._meta.primary_key.column # type: ignore
 
     @classmethod
     def _get_columns_names(cls) -> list[str]:
+        """
+        Retrieve the names of all columns in the class.
+
+        This method accesses the class's metadata to fetch the names of all columns defined in the local fields.
+
+        Returns:
+            list[str]: A list of column names.
+        """
         return [field.column for field in cls._meta.local_fields] # type: ignore
 
     def _has_relation_obj(self) -> int:
+        """
+        Determine if the instance has any related objects.
+
+        This method checks the class's metadata to see if there are any relation fields defined.
+
+        Returns:
+            bool: True if there are related objects, False otherwise.
+        """
         return len(self._meta.relation_fields) > 0
 
-    def _get_ralation_obj(self):
+    def _get_relation_obj(self):
+        """
+        Retrieve related objects and their values.
+
+        This method accesses the class's metadata to fetch related models and their corresponding field values.
+
+        Returns:
+            list[tuple]: A list of tuples, where each tuple contains a related model and the value of the related field.
+        """
         return [ (field.related_model, getattr(self, field.column)) for field in self._meta.relation_fields]
