@@ -111,7 +111,7 @@ class Owner(Model):
 class Dog(Model):
     id: Optional[int | IntegerField] = IntegerField(primary_key=True)
     name: Optional[str | CharField] = CharField('Reksio')
-    owner: Optional[Owner | ForeignKey] = ForeignKey(to=Owner, on_delete='cos')
+    owner: Optional[Owner | ForeignKey] = ForeignKey(to=Owner)
 
 def test_create_foreign_key():
     adam = Owner(1, 'Adam')

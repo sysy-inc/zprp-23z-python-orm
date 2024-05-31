@@ -23,7 +23,7 @@ class MetaOptions:
         """
         self.db_table = ''
         self.meta = meta
-        self.primary_key = None
+        self.primary_key: Any = None
         self.local_fields: List[Any] = []
         self.relation_fields: List[Any] = []
 
