@@ -126,8 +126,8 @@ def test_create_foreign_key_none():
 
 def test_create_foreign_key_by_id():
     dog = Dog(1, "Reksio", owner_id=2)
-    assert dog.owner_id == 2
-    assert dog.owner == 5       # TODO correct
+    with pytest.raises(ValueError):
+        dog.owner
 
 def test_set_foreign_key_obj():
     adam = Owner(1, "Adam")
@@ -146,10 +146,9 @@ def test_set_foreign_key_obj_id():
     dog = Dog(1, "Reksio", adam)
     assert dog.owner == adam
     assert dog.owner_id == 1
-
     dog.owner_id = 2
-    assert dog.owner == 5
-    assert dog.owner_id == 2
+    with pytest.raises(ValueError):
+        dog.owner 
 
 def test_set_foreign_key_from_none():
     adam = Owner(1, "Adam")
