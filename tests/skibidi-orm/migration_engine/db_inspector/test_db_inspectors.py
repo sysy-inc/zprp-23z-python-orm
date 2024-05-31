@@ -61,6 +61,18 @@ sql_schema_with_fks = [
 """,
 ]
 
+sql_table_with_unique_constraint_and_artificial_indices = [
+    """
+    CREATE TABLE users (
+        user_id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL UNIQUE,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+    """,
+    """
+    CREATE INDEX idx_timestamp ON users(timestamp);
+    """,
+]
+
 
 def execute_sqlite3_commands(db_path: str, commands: list[str]):
     """Executes the given commands in a SQLite DB living under db_path"""
@@ -206,3 +218,21 @@ def test_get_column_constraints_default(tmp_database: str):
         "comments", "comment_date", "CURRENT_TIMESTAMP"
     )
     assert expected_constraint in comments_timestamp.column_constraints
+
+
+@pytest.mark.parametrize(
+    "tmp_database",
+    [[*sql_table_with_unique_constraint_and_artificial_indices]],
+    indirect=True,
+)
+def test_detects_unique_indices(tmp_database: str):
+    SQLite3Config(db_path=tmp_database)
+    inspector = SQLite3Inspector()
+    all_unique_constraints = inspector.get_all_unique_constraints("users")
+    assert c.UniqueConstraint("users", "username") in all_unique_constraints
+    assert len(all_unique_constraints) == 1
+    username_column = inspector.get_tables().pop().columns[1]
+    assert username_column.column_constraints == [
+        c.NotNullConstraint("users", "username"),
+        c.UniqueConstraint("users", "username"),
+    ]

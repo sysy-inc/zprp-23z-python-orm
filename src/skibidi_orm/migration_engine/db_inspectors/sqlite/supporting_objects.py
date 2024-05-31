@@ -49,3 +49,51 @@ class PragmaForeignKeyListEntry:
             on_delete,
             match,
         )
+
+
+@dataclass(frozen=True)
+class PragmaIndexListEntry:
+    id: int
+    name: str
+    unique: Literal[0, 1]
+    creation_method: Literal["c", "u", "pk"]
+    partial: Literal[0, 1]
+
+    @classmethod
+    def from_tuple(
+        cls,
+        values: tuple[int, str, Literal[0, 1], Literal["c", "u", "pk"], Literal[0, 1]],
+    ) -> PragmaIndexListEntry:
+        id, name, unique, creation_method, partial = values
+        return cls(int(id), name, unique, creation_method, partial)
+
+
+@dataclass(frozen=True)
+class PragmaIndexInfoEntry:
+    """Class representing the information about a column's
+    role in an index. From the SQLite3 docs:
+    This pragma returns one row for each key column in the named index.
+    A key column is a column that is actually named in the CREATE INDEX
+    index statement or UNIQUE constraint or PRIMARY KEY constraint that
+    created the index. Index entries also usually contain auxiliary columns
+    that point back to the table row being indexed. The auxiliary index-columns
+    are not shown by the index_info pragma, but they are listed by the index_xinfo pragma.
+
+    Output columns from the index_info pragma are as follows:
+
+    The rank of the column within the index. (0 means left-most.)
+    The rank of the column within the table being indexed.
+    The name of the column being indexed. This columns is NULL if the column is the rowid or an expression.
+    """
+
+    column_rank_within_index: int
+    column_rank_wihtin_table: int
+    column_name: str | None
+
+    @classmethod
+    def from_tuple(
+        cls,
+        values: tuple[int, int, str],
+    ) -> PragmaIndexInfoEntry:
+        column_rank_within_index, column_rank_wihtin_table, column_name = values
+        return cls(column_rank_within_index, column_rank_wihtin_table, column_name)

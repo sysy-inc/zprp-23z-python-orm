@@ -1,5 +1,7 @@
 from typing import cast
 from skibidi_orm.migration_engine.db_inspectors.sqlite.supporting_objects import (
+    PragmaIndexInfoEntry,
+    PragmaIndexListEntry,
     PragmaTableInfoEntry,
     PragmaForeignKeyListEntry,
 )
@@ -80,6 +82,57 @@ class SQLite3Inspector(BaseDbInspector):
 
         return return_value
 
+    def get_index_details(
+        self, index: PragmaIndexListEntry
+    ) -> list[PragmaIndexInfoEntry]:
+        """Get all details regarding a specific index"""
+        raw_pragma_index_info = self._sqlite_execute(
+            f"PRAGMA index_info({index.name});"
+        )
+        return [
+            PragmaIndexInfoEntry.from_tuple(entry) for entry in raw_pragma_index_info
+        ]
+
+    def get_all_indices_and_details(
+        self, table_name: str
+    ) -> dict[PragmaIndexListEntry, list[PragmaIndexInfoEntry]]:
+        """Get all indices regarding a specific table and their details."""
+
+        raw_pragma_index_list = self._sqlite_execute(
+            f"PRAGMA index_list({table_name});"
+        )
+        indices = [
+            PragmaIndexListEntry.from_tuple(entry) for entry in raw_pragma_index_list
+        ]
+        details = [self.get_index_details(index) for index in indices]
+        return {index: detail for index, detail in zip(indices, details)}
+
+    def get_all_unique_non_composite_indices(
+        self, table_name: str
+    ) -> dict[PragmaIndexListEntry, PragmaIndexInfoEntry]:
+        """Get all non-composite indices created by the UNIQUE keyword from a table
+        as well as their info entry objects."""
+        indices_with_details = self.get_all_indices_and_details(table_name)
+        # filter out only the indices created by the UNIQUE keyword, skip primary keys and artificial indices
+        return {
+            index: details.pop()
+            for index, details in indices_with_details.items()
+            if index.creation_method == "u" and len(details) == 1
+        }
+
+    # todo: could refactor for this to only return column names instead
+    def get_all_unique_constraints(self, table_name: str) -> list[c.UniqueConstraint]:
+        """Get all unique constraints from a given table. This only detects the unique constraints
+        based on non-composite indices explicitly created from the UNIQUE keyword."""
+        valid_indices = self.get_all_unique_non_composite_indices(table_name)
+        if not valid_indices:
+            return []
+        return [
+            c.UniqueConstraint(table_name, cast(str, entry.column_name))
+            # casting since indices created by UNIQUE can't contain null as the column name
+            for entry in valid_indices.values()
+        ]
+
     def get_foreign_key_constraints(self) -> set[c.ForeignKeyConstraint]:
         """Get all foreign key constraints from the database."""
 
@@ -102,10 +155,11 @@ class SQLite3Inspector(BaseDbInspector):
         )
         return constraints
 
-    @staticmethod
     def get_column_constraints(
-        table_name: str, entry: PragmaTableInfoEntry
+        self, table_name: str, entry: PragmaTableInfoEntry
     ) -> list[c.ColumnSpecificConstraint]:
+        """Get all constraints for a column determined by the pragma table info entry.
+        and a name of the table."""
         constraints: list[c.ColumnSpecificConstraint] = []
         column_name = entry.name
         if entry.pk:
@@ -124,6 +178,10 @@ class SQLite3Inspector(BaseDbInspector):
                     value=entry.dflt_value,
                 )
             )
+        unique_constraints_for_table = self.get_all_unique_constraints(table_name)
+        constraints.extend(
+            [c for c in unique_constraints_for_table if c.column_name == column_name]
+        )
         return constraints
 
     def get_table_columns(self, table_name: str) -> list[SQLite3Typing.Column]:
@@ -141,9 +199,7 @@ class SQLite3Inspector(BaseDbInspector):
             SQLite3Typing.Column(
                 name=entry.name,
                 data_type=cast(SQLite3Typing.DataTypes, entry.data_type),
-                column_constraints=SQLite3Inspector.get_column_constraints(
-                    table_name, entry
-                ),
+                column_constraints=self.get_column_constraints(table_name, entry),
             )
             for entry in pragma_entries
         ]
