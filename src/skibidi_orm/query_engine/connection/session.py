@@ -105,7 +105,8 @@ class Session:
             # already added
             return
         obj._add_session(self)  # type: ignore
-        self._new.append(obj)
+        if obj not in self._new:
+            self._new.append(obj)
 
     def _check_clear(self) -> bool:
         """
@@ -168,14 +169,61 @@ class Session:
     def flush(self):
         """
         Flushes any pending changes in the session to the database.
+        If object has foreign key, adjusts insert order.
         """
         if not self._check_clear():
             # there are some pending changes
             config = self._engine.config
             trans = Transaction(config.compiler, self._connection)
             # INSERT
+            processed: list[Model] = []
             for o in self._new:
-                # TODO adjust for relations, order matters
+                if o in processed:
+                    # was already processed
+                    continue
+                # process relations and adjust insert order
+                if o._has_relation_obj():    # type: ignore
+                    # object has foreign key
+                    for rel in o._get_relation_obj():   # type: ignore
+                        foreign_class, key_value = rel
+                        foreign_class = foreign_class._meta.db_table    # type: ignore
+                        if key_value is None:
+                            # user didn't give id or object for relation
+                            raise Exception("There is no id value or model object present for foreign key.")
+                        if isinstance(key_value, Model):
+                            print("is model")
+                            # foreign key as model object
+                            if key_value not in self._map:
+                                # object isn't yet in map
+                                print("not in map")
+                                if key_value not in processed:
+                                    print("not in processed")
+                                    # object hasn't been processed
+                                    # now need to ensure to be inserted earlier
+                                    trans.register_insert(key_value)
+                                    processed.append(key_value)
+                                    self._map.add(key_value)
+                        else:
+                            print("is id")
+                            # foreign key is just id not a model object
+                            foreign_object = self._map.get((foreign_class, key_value), None)
+                            if foreign_object is None:
+                                # foreign key isn't yet in map
+                                # check if there is object with this id in new
+                                print("is None")
+                                new_without_processed = [item for item in self._new if item not in processed]   # remaining from new
+                                print("new without processed ", new_without_processed)
+                                for obj in new_without_processed:
+                                    obj_class, obj_pk = obj._get_name_and_pk()  # type: ignore
+                                    print("class ", obj_class, "pk ", obj_pk)
+                                    if obj_class == foreign_class and obj_pk == key_value:
+                                        print("in new without processed")
+                                        # it is in new, insert earlier
+                                        trans.register_insert(obj)
+                                        processed.append(obj)
+                                        self._map.add(obj)
+
+                processed.append(o)
                 trans.register_insert(o)
                 self._map.add(o)
 
