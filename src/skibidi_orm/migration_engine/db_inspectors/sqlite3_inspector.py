@@ -10,9 +10,23 @@ from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
 )
 import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
 
-type SQLite3PragmaTableInfo = list[
-    tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]]
-]
+
+@dataclass(frozen=True)
+class PragmaTableInfoEntry:
+    cid: int
+    name: str
+    data_type: str
+    notnull: Literal[0, 1]
+    dflt_value: Any
+    pk: Literal[0, 1]
+
+    @classmethod
+    def from_tuple(
+        cls,
+        values: tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]],
+    ) -> PragmaTableInfoEntry:
+        cid, name, type, notnull, dflt_value, pk = values
+        return cls(int(cid), name, type, notnull, dflt_value, pk)
 
 
 @dataclass(frozen=True)
@@ -134,38 +148,50 @@ class SQLite3Inspector(BaseDbInspector):
         )
         return constraints
 
+    @staticmethod
+    def get_column_constraints(
+        table_name: str, entry: PragmaTableInfoEntry
+    ) -> list[c.ColumnSpecificConstraint]:
+        constraints: list[c.ColumnSpecificConstraint] = []
+        column_name = entry.name
+        if entry.pk:
+            constraints.append(
+                c.PrimaryKeyConstraint(table_name=table_name, column_name=column_name)
+            )
+        if entry.notnull:
+            constraints.append(
+                c.NotNullConstraint(table_name=table_name, column_name=column_name)
+            )
+        if entry.dflt_value is not None:
+            constraints.append(
+                c.DefaultConstraint(
+                    table_name=table_name,
+                    column_name=column_name,
+                    value=entry.dflt_value,
+                )
+            )
+        return constraints
+
     def get_table_columns(self, table_name: str) -> list[SQLite3Typing.Column]:
-        columns: SQLite3PragmaTableInfo = self._sqlite_execute(
+        raw_pragma_table_info = self._sqlite_execute(
             f"PRAGMA table_info({table_name});"
         )
+        pragma_entries = [
+            PragmaTableInfoEntry.from_tuple(entry) for entry in raw_pragma_table_info
+        ]
         """
         When given a table name, returns a list of Column objects inside it.
         """
 
         return [
             SQLite3Typing.Column(
-                name=name,
-                data_type=cast(SQLite3Typing.DataTypes, data_type),
-                column_constraints=[
-                    cast(c.ColumnSpecificConstraint, constraint)
-                    for constraint in [
-                        (
-                            c.PrimaryKeyConstraint(
-                                table_name=table_name, column_name=name
-                            )
-                            if pk
-                            else None
-                        ),
-                        (
-                            c.NotNullConstraint(table_name=table_name, column_name=name)
-                            if notnull
-                            else None
-                        ),
-                    ]
-                    if constraint is not None
-                ],
+                name=entry.name,
+                data_type=cast(SQLite3Typing.DataTypes, entry.data_type),
+                column_constraints=SQLite3Inspector.get_column_constraints(
+                    table_name, entry
+                ),
             )
-            for _, name, data_type, notnull, _, pk in columns
+            for entry in pragma_entries
         ]
 
     def _sqlite_execute(self, query: str):

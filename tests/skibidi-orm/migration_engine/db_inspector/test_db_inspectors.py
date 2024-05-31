@@ -177,3 +177,31 @@ def test_get_foreign_keys(tmp_database: str):
         c.ForeignKeyConstraint("comments", "posts", {"post_id": "post_id"}),
     }
     assert correct_fk_set.intersection(foreign_keys) == foreign_keys
+
+
+@pytest.mark.parametrize("tmp_database", [[*sql_schema_with_fks]], indirect=True)
+def test_get_column_constraints_default(tmp_database: str):
+    SQLite3Config(db_path=tmp_database)
+    inspector = SQLite3Inspector()
+    tables = inspector.get_tables()
+
+    users_table, posts_table, comments_table = tables
+
+    users_columns = users_table.columns
+    users_timestamp = users_columns[4]
+    expected_constraint = c.DefaultConstraint(
+        "users", "registration_date", "CURRENT_TIMESTAMP"
+    )
+    assert expected_constraint in users_timestamp.column_constraints
+
+    posts_columns = posts_table.columns
+    posts_timestamp = posts_columns[4]
+    expected_constraint = c.DefaultConstraint("posts", "post_date", "CURRENT_TIMESTAMP")
+    assert expected_constraint in posts_timestamp.column_constraints
+
+    comments_columns = comments_table.columns
+    comments_timestamp = comments_columns[5]
+    expected_constraint = c.DefaultConstraint(
+        "comments", "comment_date", "CURRENT_TIMESTAMP"
+    )
+    assert expected_constraint in comments_timestamp.column_constraints
