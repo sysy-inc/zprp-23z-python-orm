@@ -4,7 +4,8 @@ from skibidi_orm.query_engine.connection.session import Session
 from skibidi_orm.query_engine import config
 from skibidi_orm.query_engine.adapter.sqlite_adapter import SQLiteAdapter
 from skibidi_orm.query_engine.model.base import Model
-from skibidi_orm.query_engine.field.field import IntegerField
+from skibidi_orm.query_engine.field.field import IntegerField, AutoField
+from skibidi_orm.query_engine.field.related_field import ForeignKey
 from skibidi_orm.query_engine.operations.select import Select
 from skibidi_orm.query_engine.connection.result import Result
 import pytest
@@ -295,6 +296,144 @@ def test_flush_delete_pending(mock_get_configuration):
         assert len(session._delete) == 1
         session.flush()
         assert len(session._delete) == 0
+        mock_get_configuration[2].execute.assert_called()
+
+
+def test_flush_insert_pending_relation_no_key(mock_get_configuration):
+    engine = Engine()
+
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    class Dog(Model):
+        id_dog: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        owner: Optional[Person | ForeignKey] = ForeignKey(to=Person)
+
+    p = Person(1, 12)
+    d = Dog(1)
+
+    with Session(engine) as session:
+        session.add(d)
+        session.add(p)
+        with pytest.raises(Exception):
+            session.flush()
+
+
+def test_flush_insert_pending_relation_object_not_in_map_processed(mock_get_configuration):
+    engine = Engine()
+
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    class Dog(Model):
+        id_dog: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        owner: Optional[Person | ForeignKey] = ForeignKey(to=Person)
+
+    p = Person(1, 12)
+    d = Dog(1, owner=p)
+    with Session(engine) as session:
+        session.add(p)
+        session.add(d)
+        assert len(session._new) == 2
+        session.flush()
+        assert len(session._new) == 0
+        assert len(session._map) == 2
+        mock_get_configuration[2].execute.assert_called()
+
+
+def test_flush_insert_pending_relation_object_not_in_map_not_processed(mock_get_configuration):
+    engine = Engine()
+
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    class Dog(Model):
+        id_dog: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        owner: Optional[Person | ForeignKey] = ForeignKey(to=Person)
+
+    p = Person(1, 12)
+    d = Dog(1, owner=p)
+    with Session(engine) as session:
+        session.add(d)
+        session.add(p)
+        assert len(session._new) == 2
+        session.flush()
+        assert len(session._new) == 0
+        assert len(session._map) == 2
+        mock_get_configuration[2].execute.assert_called()
+
+
+def test_flush_insert_pending_relation_object_in_map(mock_get_configuration):
+    engine = Engine()
+
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    class Dog(Model):
+        id_dog: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        owner: Optional[Person | ForeignKey] = ForeignKey(to=Person)
+
+    p = Person(1, 12)
+    d = Dog(1, owner=p)
+    with Session(engine) as session:
+        session.add(p)
+        session.commit()
+        session.add(d)
+        assert len(session._new) == 1
+        session.flush()
+        assert len(session._new) == 0
+        assert len(session._map) == 2
+        mock_get_configuration[2].execute.assert_called()
+
+
+def test_flush_insert_pending_relation_id_in_map(mock_get_configuration):
+    engine = Engine()
+
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    class Dog(Model):
+        id_dog: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        owner: Optional[Person | ForeignKey] = ForeignKey(to=Person)
+
+    p = Person(1, 12)
+    d = Dog(1, owner_id=1)
+    with Session(engine) as session:
+        session.add(p)
+        session.commit()
+        session.add(d)
+        assert len(session._new) == 1
+        session.flush()
+        assert len(session._new) == 0
+        assert len(session._map) == 2
+        mock_get_configuration[2].execute.assert_called()
+
+
+def test_flush_insert_pending_relation_id_not_in_map_in_new(mock_get_configuration):
+    engine = Engine()
+
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    class Dog(Model):
+        id_dog: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        owner: Optional[Person | ForeignKey] = ForeignKey(to=Person)
+
+    p = Person(1, 12)
+    d = Dog(1, owner_id=1)
+    with Session(engine) as session:
+        session.add(d)
+        session.add(p)
+        assert len(session._new) == 2
+        session.flush()
+        assert len(session._new) == 0
+        assert len(session._map) == 2
         mock_get_configuration[2].execute.assert_called()
 
 
