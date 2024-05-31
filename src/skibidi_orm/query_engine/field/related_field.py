@@ -1,40 +1,45 @@
-from skibidi_orm.query_engine.field.field import Field, IntegerField
+from skibidi_orm.query_engine.field.field import Field, Error
 from skibidi_orm.query_engine.field.relation_objects import RelationObject
-from typing import Any, Type, Union
+from typing import Any, Type, Union, Optional
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from skibidi_orm.query_engine.model.base import Model
 
 
-def get_field(x: str):
-    return Field()
-
-
 class ForeignKey(Field):
-    """Base class that all relational fields inherit from."""
-
-    one_to_many = False
-    one_to_one = False
-    many_to_many = False
-    many_to_one = False
-
+    """
+    Represents a foreign key field.
+    """
     def __init__(
         self,
-        to: 'Model',
-        on_delete: str,
-        # to_fields: list[str],
-        rel: Union[RelationObject, None] = None,
+        to: Union['Model', str],
+        rel: Optional[RelationObject] = None,
         related_name: str = "",
         **kwargs: Any
     ):
+        """
+        Args:
+            to (Model): The target model of the foreign key.
+            rel (Optional[RelationObject]): The relation object associated with the foreign key.
+                Defaults to None.
+            related_name (str, optional): The related name for the relation. Defaults to "".
+            **kwargs (Any): Additional keyword arguments passed to the Field constructor.
+
+        Attributes:
+            related_name (str): The related name for the relation.
+        """
+        if isinstance(to, str):
+            try:
+                to = self.get_instance_by_name(to)
+            except NameError:
+                raise Error("The target model was not initialized!")
 
         if rel is None:
             rel = RelationObject(
                 self,
                 to,
                 related_name=related_name,
-                on_delete=on_delete,
             )
 
         super().__init__(
@@ -42,27 +47,56 @@ class ForeignKey(Field):
             **kwargs
         )
 
-        self.related_name = related_name,
-        # self.to_fields = to_fields
+        self.related_name = related_name
 
     @property
     def related_model(self):
+        """
+        Returns the related model associated with the remote field.
+
+        Returns:
+            (Model): The related model.
+        """
         return self.remote_field.model
     
-    # TODO add checks
-
     def contribute_to_class(self, cls: Type[BaseException], name: str):
         super().contribute_to_class(cls, name)
-        # TODO what needs to be added here?
+        self.set_attributes_from_rel()
 
     def set_attributes_from_rel(self):
+        """
+        Sets attributes based on the related model.
+
+        Sets the name attribute to a combination of the related model's model name and primary key name, 
+        if not already set. Sets the column attribute to the name attribute appended with '_id', 
+        if not already set.
+
+        """
         self.name = self.name or (
             self.remote_field.model._meta.model_name
             + "_"
             + self.remote_field.model._meta.pk.name
         )
-        self.remote_field.set_field_name()
+        self.column = self.name + "_id" or (
+            self.remote_field.model._meta.model_name
+            + "_"
+            + self.remote_field.model._meta.pk.name
+            + "_id"
+        )
 
-
-field1 = IntegerField()
-field2 = ForeignKey(to='nazwamodelu', on_delete='cos')
+    @staticmethod
+    def get_instance_by_name(name: str):
+        """
+        Retrieves an instance by its name from the global namespace.
+        Args:
+            name (str): The name of the instance to retrieve.
+        Returns:
+            Any: The instance associated with the given name.
+        Raises:
+            NameError: If an instance with the specified name does not exist in the global namespace.
+        """
+        if name in globals():
+            return globals()[name]
+        else:
+            raise NameError(f"Instance with name '{name}' does not exist.")
+    
