@@ -247,8 +247,9 @@ class Session:
         Returns:
             Model: The retrieved model instance from the database.
         """
-        primary_key_name = "id"     # TOCHANGE function from Model
+        # primary_key_name = "id"     # TOCHANGE function from Model
         # model._get_db_pk()
+        primary_key_name = model._get_primary_key_column()      # type: ignore
         st = Select(model).filter(**{primary_key_name: primary_key})
         ret = self.select(st)
         return ret[0]
