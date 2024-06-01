@@ -9,6 +9,7 @@ from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
     SQLite3Typing,
 )
 import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
+from skibidi_orm.migration_engine.revisions.constants import get_revision_table_name
 
 type SQLite3PragmaTableInfo = list[
     tuple[int, str, str, Literal[0, 1], Any, Literal[0, 1]]
@@ -30,7 +31,6 @@ class PragmaForeignKeyListEntry:
     def from_tuple(
         cls,
         values: tuple[str, str, str, str, str, str, str, str],
-        # todo: better typing?
     ) -> PragmaForeignKeyListEntry:
         id, seq, table, from_column, to_column, on_update, on_delete, match = values
         return cls(
@@ -66,9 +66,15 @@ class SQLite3Inspector(BaseDbInspector):
 
         tables: list[SQLite3Typing.Table] = []
         tables_names = self.get_tables_names()
+        foreign_keys = self.get_foreign_key_constraints()
         for table_name in tables_names:
             table_columns = self.get_table_columns(table_name)
-            tables.append(SQLite3Typing.Table(name=table_name, columns=table_columns))
+            related_fks = {fk for fk in foreign_keys if fk.table_name == table_name}
+            tables.append(
+                SQLite3Typing.Table(
+                    name=table_name, columns=table_columns, foreign_keys=related_fks
+                )
+            )
 
         return tables
 
@@ -80,7 +86,9 @@ class SQLite3Inspector(BaseDbInspector):
         tables = self._sqlite_execute(
             "SELECT name FROM sqlite_master WHERE type='table';"
         )
-        return [table[0] for table in tables]
+        return [
+            name for table in tables if (name := table[0]) != get_revision_table_name()
+        ]
 
     @staticmethod
     def foreign_keys_from_pragma_entries(

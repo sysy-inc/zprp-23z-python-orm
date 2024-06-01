@@ -1,5 +1,6 @@
 import psycopg2
 from skibidi_orm.exceptions.config_exceptions import DbConnectionError
+from skibidi_orm.migration_engine.adapters.providers import DatabaseProvider
 from skibidi_orm.migration_engine.db_config.base_config import (
     BaseDbConfig,
 )
@@ -7,6 +8,9 @@ from psycopg2.extensions import connection as Connection
 
 
 class PostgresConfig(BaseDbConfig):
+
+    database_provider = DatabaseProvider.POSTGRESQL
+
     """
     Configuration class for Postgres database.
     Instantiating it means choosing Postgres as the database.
