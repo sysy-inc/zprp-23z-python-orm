@@ -41,6 +41,7 @@ cd docs
 ```bash
 pdm run make html
 ```
+Already built documentation is in `docs/build/html`, open `index.html` file
 
 ## Running tests with Tox and Pytest
 1. **Run all tests with Tox**
