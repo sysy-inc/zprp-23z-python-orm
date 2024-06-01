@@ -44,7 +44,9 @@ class PostgresInspector(BaseDbInspector):
             PostgresTyping.Table(
                 name=table_name,
                 columns=self.get_table_columns(table_name),
-                foreign_keys=self._get_foreign_keys(table_name),
+                table_constraints=cast(
+                    set[c.TableWideConstraint], self._get_foreign_keys(table_name)
+                ),
             )
             for table_name in self.get_tables_names()
         ]
@@ -164,7 +166,7 @@ class PostgresInspector(BaseDbInspector):
 
         res: list[c.ColumnWideConstraint] = []
         for row in rows:  # loop because we can have many constraints for one column
-            _, _, constraint_type, _, check_clause, column_default = row
+            _, _, constraint_type, _, _, column_default = row
 
             if constraint_type == "PRIMARY KEY":
                 res.append(c.PrimaryKeyConstraint(table_name, column_name))

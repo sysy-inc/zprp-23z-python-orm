@@ -43,12 +43,13 @@ class SQLite3Inspector(BaseDbInspector):
             related_fks = {fk for fk in foreign_keys if fk.table_name == table_name}
             tables.append(
                 SQLite3Typing.Table(
-                    name=table_name, columns=table_columns, table_constraints=related_fks
+                    name=table_name,
+                    columns=table_columns,
+                    table_constraints=cast(set[c.TableWideConstraint], related_fks),
                 )
             )
 
         return tables
-
 
     def get_tables_names(self) -> list[str]:
         """
@@ -61,6 +62,7 @@ class SQLite3Inspector(BaseDbInspector):
         return [
             name for table in tables if (name := table[0]) != get_revision_table_name()
         ]
+
     @staticmethod
     def foreign_keys_from_pragma_entries(
         table_entry_mapping: dict[str, list[PragmaForeignKeyListEntry]]

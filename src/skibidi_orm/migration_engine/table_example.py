@@ -36,7 +36,7 @@ class Table(MigrationElement):
                 columns: list[SQLite3Typing.Column] = []
                 all_constraints = cls.__dict__["constraints"]
 
-                table_constraints: list[c.TableWideConstraint] = list(
+                table_constraints: set[c.TableWideConstraint] = set(
                     constraint
                     for constraint in all_constraints
                     if isinstance(constraint, c.TableWideConstraint)

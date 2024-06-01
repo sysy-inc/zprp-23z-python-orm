@@ -44,6 +44,7 @@ class ColumnWideConstraint(Constraint):
             )
         return NotImplemented
 
+
 @dataclass(frozen=True, repr=False)
 class TableWideConstraint(Constraint):
     """Base class for constraints that apply to a table - foreign keys and check constraints"""
@@ -96,7 +97,7 @@ class CheckConstraint(TableWideConstraint):
     condition: str
 
     def __repr__(self):
-        return f"{self.__class__.__name__}('{self.constraint_type.value}', '{self.column_name}', '{self.condition}')"
+        return f"{self.__class__.__name__}('{self.constraint_type.value}', '{self.condition}')"
 
 
 @dataclass(frozen=True, repr=False)
