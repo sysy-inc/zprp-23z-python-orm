@@ -7,7 +7,7 @@ How to create your own model?
 
 Welcome to skibidi project! With our library, you can create a database model!
 
-Every model should inherit from the class 'Model'.
+Every model you create should inherit from the class 'Model'.
 
 Example
 -------
@@ -118,5 +118,31 @@ Example for models 'Owner' and 'Dog'
 Fields
 ==========
 
-To możesz coś dać o atrybutach i rodzajach fieldów
+You can create fields of multiple types for your model. For every one of them, you can specify a default value, if it is nullable or is it a primary key.
+ - *IntegerField* 
+ - *BigIntegerField*
+ - *SmallIntegerField*
+ - *PositiveIntegerField*
+ - *PositiveBigIntegerField*
+ - *PositiveSmallIntegerField*
+ - *DecimalField*
+ - *FloatField*
+ - *CharField* - you can set a *max_length* attribute to set the maximum text length
+ - *TextField*
+ - *BooleanField*
+ - *DateField*
+ - *DateTimeField*
+ - *ForeignKey*
+
+Examples of creating different fields
+
+.. code-block:: python
+
+  from skibidi_orm.query_engine.field.field import CharField, IntegerField, DateField
+  import datetime
+
+  IntegerField(primary_key=True)
+  CharField(nullable=False, default='Maks')
+  DateField()
+
 
