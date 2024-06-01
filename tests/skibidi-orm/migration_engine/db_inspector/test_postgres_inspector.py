@@ -963,9 +963,6 @@ def test__get_foreign_keys(query, table_name, expected_foreign_keys):  # type: i
         )
         inspector = PostgresInspector()
         foreign_keys = inspector._get_foreign_keys(table_name)  # type: ignore
-        print("=============================")
-        print(foreign_keys)
-        print("=============================")
         assert foreign_keys == expected_foreign_keys
 
     test_fn()
