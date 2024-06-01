@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Any, Self
+from skibidi_orm.migration_engine.adapters.providers import DatabaseProvider
 
 
 class BaseDbConfig:
@@ -9,6 +10,7 @@ class BaseDbConfig:
     """
 
     __instance: Any = None
+    database_provider: DatabaseProvider
 
     @classmethod
     def get_instance(cls) -> Self:

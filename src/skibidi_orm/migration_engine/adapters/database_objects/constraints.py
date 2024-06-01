@@ -1,6 +1,9 @@
+from __future__ import annotations
 from abc import ABC
 import enum
 from dataclasses import dataclass, field
+from functools import total_ordering
+from typing import Any
 
 
 class ConstraintType(enum.Enum):
@@ -25,6 +28,7 @@ class Constraint(ABC):
         return f"{self.__class__.__name__}('{self.constraint_type.value}', '{self.table_name}')"
 
 
+@total_ordering
 @dataclass(frozen=True, repr=False)
 class ColumnSpecificConstraint(Constraint):
     """Base class for constraints that apply to a column instead of multiple (e.g. composite foreign keys)"""
@@ -33,6 +37,13 @@ class ColumnSpecificConstraint(Constraint):
 
     def __repr__(self):
         return f"{self.__class__.__name__}('{self.constraint_type.value}', '{self.column_name}')"
+
+    def __lt__(self, other: Any):
+        if isinstance(other, ColumnSpecificConstraint):
+            return (self.column_name + self.__class__.__name__ + str(self.__dict__)) < (
+                other.column_name + other.__class__.__name__ + str(other.__dict__)
+            )
+        return NotImplemented
 
 
 @dataclass(frozen=True, repr=False)

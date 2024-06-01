@@ -1,18 +1,21 @@
+from functools import wraps
 import sqlite3
-from typing import Any
+from typing import Any, Callable
 from colorama import Style
+import psycopg2
 import pytest
 
 from skibidi_orm.migration_engine.db_config.base_config import (
     BaseDbConfig,
 )
-import py  # type: ignore
+import py
+
+from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
+from skibidi_orm.migration_engine.db_inspectors.postgres_inspector import PostgresInspector  # type: ignore
 
 
 @pytest.fixture(autouse=True)
 def reset_config_singleton(monkeypatch: pytest.MonkeyPatch):
-    # monkeypatch.setattr(ConfigSingleton, "_instances", {})
-    # monkeypatch.setattr(BaseDbConfig, "_BaseDbConfig__instances_count", 0)
     monkeypatch.setattr(BaseDbConfig, "_BaseDbConfig__instance", None)
 
 
@@ -52,3 +55,78 @@ def make_database(request: pytest.FixtureRequest, tmpdir: py.path.local):
         )
     yield p
     tmpdir.remove()
+
+
+def create_postgres_database(
+    db_name: str,
+    db_user: str,
+    db_password: str,
+    db_host: str,
+    db_port: int,
+    queries: list[str],
+):
+    connection = psycopg2.connect(
+        user=db_user,
+        password=db_password,
+        host=db_host,
+        port=db_port,
+        database=db_name,
+    )
+    cursor = connection.cursor()
+    for query in queries:
+        cursor.execute(query)
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
+def clear_postgres_database(
+    db_name: str,
+    db_user: str,
+    db_password: str,
+    db_host: str,
+    db_port: int,
+):
+    connection = psycopg2.connect(
+        user=db_user,
+        password=db_password,
+        host=db_host,
+        port=db_port,
+        database=db_name,
+    )
+    cursor = connection.cursor()
+    cursor.execute("DROP SCHEMA public CASCADE;")
+    cursor.execute("CREATE SCHEMA public;")
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
+def postgres_db_fixture(
+    db_name: str,
+    db_user: str,
+    db_password: str,
+    db_host: str,
+    db_port: int,
+    queries: list[str],
+):
+    def decorator(func: Callable[[PostgresConfig, PostgresInspector], Any]):
+        @wraps(func)
+        def wrapper():
+            config = PostgresConfig(
+                db_name=db_name,
+                db_user=db_user,
+                db_password=db_password,
+                db_host=db_host,
+                db_port=db_port,
+            )
+            inspector = PostgresInspector()
+            clear_postgres_database(db_name, db_user, db_password, db_host, db_port)
+            create_postgres_database(
+                db_name, db_user, db_password, db_host, db_port, queries
+            )
+            func(config, inspector)
+
+        return wrapper
+
+    return decorator
