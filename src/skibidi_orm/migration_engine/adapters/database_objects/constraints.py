@@ -24,13 +24,19 @@ class Constraint(ABC):
     constraint_type: ConstraintType = field(init=False)
     table_name: str
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.constraint_type.value}', '{self.table_name}')"
+
 
 @total_ordering
-@dataclass(frozen=True)
+@dataclass(frozen=True, repr=False)
 class ColumnSpecificConstraint(Constraint):
     """Base class for constraints that apply to a column instead of multiple (e.g. composite foreign keys)"""
 
     column_name: str
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.constraint_type.value}', '{self.column_name}')"
 
     def __lt__(self, other: Any):
         if isinstance(other, ColumnSpecificConstraint):
@@ -40,21 +46,21 @@ class ColumnSpecificConstraint(Constraint):
         return NotImplemented
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, repr=False)
 class NotNullConstraint(ColumnSpecificConstraint):
     """Class for the NOT NULL constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.NOT_NULL)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, repr=False)
 class UniqueConstraint(ColumnSpecificConstraint):
     """Class for the UNIQUE constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.UNIQUE)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, repr=False)
 class PrimaryKeyConstraint(ColumnSpecificConstraint):
     """Class for the PRIMARY KEY constraint"""
 
@@ -63,7 +69,7 @@ class PrimaryKeyConstraint(ColumnSpecificConstraint):
     )
 
 
-@dataclass(frozen=True, unsafe_hash=True)
+@dataclass(frozen=True, unsafe_hash=True, repr=False)
 class ForeignKeyConstraint(Constraint):
     """Class for the FOREIGN KEY constraint"""
 
@@ -75,18 +81,27 @@ class ForeignKeyConstraint(Constraint):
         hash=False
     )  # maps the corresponding column names: {referencing_column1: referenced_column1, ...}
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.constraint_type.value}', '{self.table_name}', '{self.referenced_table}', {self.column_mapping})"
 
-@dataclass(frozen=True)
+
+@dataclass(frozen=True, repr=False)
 class CheckConstraint(ColumnSpecificConstraint):
     """Class for the CHECK constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.CHECK)
     condition: str
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.constraint_type.value}', '{self.column_name}', '{self.condition}')"
 
-@dataclass(frozen=True)
+
+@dataclass(frozen=True, repr=False)
 class DefaultConstraint(ColumnSpecificConstraint):
     """Class for the DEFAULT constraint"""
 
     constraint_type: ConstraintType = field(init=False, default=ConstraintType.DEFAULT)
     value: str
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.constraint_type.value}', '{self.column_name}', '{self.value}')"
