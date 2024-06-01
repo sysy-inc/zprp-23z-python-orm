@@ -2,11 +2,10 @@ name: Python Package Test with Tox
 
 on:
   push:
-    branches:
-      - main
+    branches: ["**"]
+
   pull_request:
-    branches:
-      - main
+    branches: ["**"]
 
 jobs:
   tox-tests:
