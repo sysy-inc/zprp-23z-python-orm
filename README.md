@@ -64,7 +64,7 @@ Normally `Table` class would be abstracted away by proprietary library, but for 
 
 When he have defined our schema all interactions of end-user with the migration engine are done through CLI.
 
-# `skibidi-orm CLI`
+# `skibidi-orm`
 
 CLI tool for managing schema creations and migrations in Skibidi ORM.
 
@@ -84,7 +84,7 @@ $ skibidi-orm [OPTIONS] COMMAND [ARGS]...
 **Commands**:
 
 * `go`: Go back (and forward) to specific migration.
-* `list-migrations`: List all made migrations with their...
+* `log`: List all migration revisions with their...
 * `migrate`: Used to run migration for current schema...
 * `preview-migration`: Preview the migration that will be executed.
 * `studio`: Run web UI for CRUD operations on current DB.
@@ -96,25 +96,25 @@ Go back (and forward) to specific migration.
 **Usage**:
 
 ```console
-$ skibidi-orm go [OPTIONS] [MIGRATION_ID]
+$ skibidi-orm go [OPTIONS] MIGRATION_ID
 ```
 
 **Arguments**:
 
-* `[MIGRATION_ID]`: Migration ID
+* `MIGRATION_ID`: Migration ID  [required]
 
 **Options**:
 
 * `--help`: Show this message and exit.
 
-## `skibidi-orm list-migrations`
+## `skibidi-orm log`
 
-List all made migrations with their descriptions and ID.
+List all migration revisions with their descriptions and ID.
 
 **Usage**:
 
 ```console
-$ skibidi-orm list-migrations [OPTIONS]
+$ skibidi-orm log [OPTIONS]
 ```
 
 **Options**:

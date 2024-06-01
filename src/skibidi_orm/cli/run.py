@@ -144,6 +144,7 @@ def migrate_list():
     run_revision_app(list(revisions.values()))
 
 
+@app.command(name="go")
 def go(migration_id: str = typer.Argument(help="Migration ID")):
     """
     Go back (and forward) to specific migration.
