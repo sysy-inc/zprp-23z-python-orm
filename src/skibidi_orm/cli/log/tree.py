@@ -210,7 +210,7 @@ class Leaf(Node):
     A leaf is not selectable and does not have children nodes."""
 
     def __str__(self):
-        return self.value
+        return f"  {self.value}"
 
     @classmethod
     def from_column(
@@ -223,3 +223,13 @@ class Leaf(Node):
         cls, index: int, parent: FoldableTree, table: BaseTable[BaseColumn[Any]]
     ) -> Leaf:
         return cls(index, str(table), parent)
+
+
+def setup_tree(revisions: list[Revision]) -> tuple[FoldableTree, FoldableTree]:
+    """Create a foldable tree structure from a list of revisions.
+    Returns the main tree and the tree to be first selected on the screen"""
+    tree = FoldableTree.from_revision_list(revisions)
+    tree.unfold()
+    first_child = cast(FoldableTree, tree.children[0])
+    first_child.select()
+    return tree, first_child

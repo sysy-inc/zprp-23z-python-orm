@@ -5,7 +5,7 @@ from prompt_toolkit.layout import Layout, HSplit
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.containers import Window, DynamicContainer
 
-from skibidi_orm.cli.log.tree import FoldableTree, Leaf
+from skibidi_orm.cli.log.tree import FoldableTree, setup_tree
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable
 from skibidi_orm.migration_engine.adapters.providers import DatabaseProvider
 from skibidi_orm.migration_engine.revisions.revision import Revision
@@ -58,7 +58,8 @@ revisions = [
 ]
 
 # Current position and expanded states
-current_index = 0
+main_tree: FoldableTree = FoldableTree(0, "", None, [])
+selected_tree: FoldableTree = FoldableTree(0, "", None, [])
 expanded_revisions: set[int] = set()
 expanded_tables: set[tuple[int, int]] = set()
 
@@ -66,101 +67,46 @@ expanded_tables: set[tuple[int, int]] = set()
 def get_display_text() -> str:
     """Generate the display text for the application based on the current state."""
     display: list[str] = []
-    index = 0
-    for rev_index, revision in enumerate(revisions):
-        # Add revision to display
-        display.append(f"{'> ' if index == current_index else '  '}{revision}")
-        index += 1
-        if rev_index in expanded_revisions:
-            for table_index, table in enumerate(revision.tables):
-                # Add table to display
-                display.append(
-                    f"{'    > ' if index == current_index else '      '}{table}"
-                )
-                index += 1
-                if (rev_index, table_index) in expanded_tables:
-                    for column in table.columns:
-                        # Add column to display
-                        display.append(
-                            f"{'        > ' if index == current_index else '        '}{column}"
-                        )
-                        index += 1
+    for child in main_tree.children:
+        display.append(str(child))
+
     return "\n".join(display)
-
-
-def calculate_max_index() -> int:
-    """Calculate the maximum index based on the current state of expanded revisions and tables."""
-    index = 0
-    for rev_index, revision in enumerate(revisions):
-        index += 1
-        if rev_index in expanded_revisions:
-            for table_index, table in enumerate(revision.tables):
-                index += 1
-                if (rev_index, table_index) in expanded_tables:
-                    index += len(table.columns)
-    return index
 
 
 @kb.add("down")
 @kb.add("j")
-def move_down(event: Any):
+def move_down(_: Any):
     """Move the cursor down the list."""
-    global current_index
-    current_index = (current_index + 1) % calculate_max_index()
+    global selected_tree
+    selected_tree.unselect()
+    selected_tree = selected_tree.next()
+    selected_tree.select()
 
 
 @kb.add("up")
 @kb.add("k")
-def move_up(event: Any):
+def move_up(_: Any):
     """Move the cursor up the list."""
-    global current_index
-    current_index = (
-        current_index - 1 if current_index != 0 else calculate_max_index() - 1
-    )
+    global selected_tree
+    selected_tree.unselect()
+    selected_tree = selected_tree.previous()
+    selected_tree.select()
 
 
 @kb.add("h")
 @kb.add("left")
-def collapse_item(event: Any):
+def collapse_item(_: Any):
     """Collapse the current item (column list if viewing columns, table list if viewing tables, or the revision if viewing tables)."""
-    global current_index, expanded_revisions, expanded_tables
-    index = 0
-    for rev_index, revision in enumerate(revisions):
-        if index == current_index:
-            if rev_index in expanded_revisions:
-                expanded_revisions.discard(rev_index)
-            return
-        index += 1
-        if rev_index in expanded_revisions:
-            for table_index, table in enumerate(revision.tables):
-                if index == current_index:
-                    if (rev_index, table_index) in expanded_tables:
-                        expanded_tables.discard((rev_index, table_index))
-                    return
-                index += 1
-                if (rev_index, table_index) in expanded_tables:
-                    index += len(table.columns)
+    global selected_tree
+    selected_tree.fold()
 
 
 @kb.add("l")
 @kb.add("right")
-def expand_item(event: Any):
+def expand_item(_: Any):
     """Expand the current item (table list if viewing revisions, column list if viewing tables)."""
-    global current_index, expanded_revisions, expanded_tables
-    index = 0
-    for rev_index, revision in enumerate(revisions):
-        if index == current_index:
-            expanded_revisions.add(rev_index)
-            return
-        index += 1
-        if rev_index in expanded_revisions:
-            for table_index, table in enumerate(revision.tables):
-                if index == current_index:
-                    expanded_tables.add((rev_index, table_index))
-                    return
-                index += 1
-                if (rev_index, table_index) in expanded_tables:
-                    index += len(table.columns)
+    global selected_tree
+    selected_tree.unfold()
 
 
 @kb.add("q")
@@ -181,7 +127,12 @@ revision_app = Application(layout=layout, key_bindings=kb, full_screen=True)  # 
 
 
 def run_revision_app(revision_list: list[Revision]):
+    """Main entry point for the revision inspection app."""
     global revisions
+    global main_tree
+    global selected_tree
+
+    main_tree, selected_tree = setup_tree(revisions)
+
     # revisions = revision_list
-    # print(revision_list)
     revision_app.run()
