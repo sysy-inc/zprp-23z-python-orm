@@ -1,6 +1,6 @@
 [project]
 name = "SkiBiDi-ORM"
-version = "0.1.31"
+version = "0.1.35"
 description = "Python ORM"
 authors = [
     {name = "xDepcio", email = "olek.drwal@gmail.com"},
