@@ -1,6 +1,6 @@
 # Skibidi Query Engine - User Instruction
 
-Hi! Welcome to the skibidi project. This is where you can acknowledge how to use our library. We work with **pdm**, so firstly you need to install it.
+Hi! Welcome to the skibidi project. This is where you can get to know how to use our library. We work with **pdm**, so firstly you need to install it.
 ```bash
 pip install pdm
 ```
