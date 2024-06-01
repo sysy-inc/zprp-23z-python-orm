@@ -52,7 +52,9 @@ def create_migration_file(migration_element: MigrationElement):
                 file.write(
                     f"\n\t{executor}.execute_sql({converter}.convert_column_operation_to_SQL({method}))"
                 )
-
+        if not operation_methods:
+            file.write("\n\t# No operations to execute\n")
+            file.write("\n\tpass")
         file.write("\n\n")
 
         file.write("if __name__ == '__main__':\n")
@@ -111,25 +113,15 @@ def write_sqlite3_configuration(file: TextIO):
     config = SQLite3Config.get_instance()
 
     file.write(
-        "from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config\n"
-    )
-    file.write(
-        "from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor\n"
-    )
-    file.write(
-        "from skibidi_orm.migration_engine.converters.sqlite3.all import SQLite3Converter\n"
-    )
-    file.write(
-        "from skibidi_orm.migration_engine.adapters.database_objects import constraints as c\n"
-    )
-    file.write(
-        "from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing\n"
-    )
-    file.write(
-        "from skibidi_orm.migration_engine.operations import table_operations as TO\n"
-    )
-    file.write(
-        "from skibidi_orm.migration_engine.operations import column_operations as CO\n"
+        """
+from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
+from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
+from skibidi_orm.migration_engine.converters.sqlite3.all import SQLite3Converter
+from skibidi_orm.migration_engine.adapters.database_objects import constraints as c
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.operations import table_operations as TO
+from skibidi_orm.migration_engine.operations import column_operations as CO
+"""
     )
 
     file.write("# Database: SQLite3\n")
