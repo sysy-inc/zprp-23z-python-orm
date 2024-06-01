@@ -5,9 +5,9 @@ Model
 How to create your own model?
 ===============================
 
-Welcome to skibidi project! You can create a database model with our library with us.
+Welcome to skibidi project! With our library, you can create a database model!
 
-Every model should enherit from 'Model'.
+Every model should inherit from the class 'Model'.
 
 Example
 -------
@@ -27,7 +27,7 @@ Example
   person = Person('Ada', 23)
 
 
-Attribut *__db_table__* is a name of table in database. It is not neccesary. Another attributs are mapping to the column of table. You can add attributs in this way: *'attr_name: Optional[python_type | Field] = Field()'*. You can define primary key, use the *AutoField* or do not define it, because skibidi can do this for you.
+*__db_table__* is an optional attribute, representing the name of a table in your database. The rest of the attributes are mapped to the database columns. You can add new attributes using the following pattern: *'attr_name: Optional[python_type | FieldType] = FieldType()'*. You can define the primary key by yourself, using the *AutoField*, but skibidi can also do this for you automatically.
 
 Inheritance
 -----------
@@ -51,11 +51,12 @@ You can inherit after your own models.
 Foreign Key
 ------------
 
-You can also create your foreign key.
+You can create your foreign key.
 
 .. code-block:: python
 
-  from skibidi_orm.query_engine.field.field import CharField, IntegerField, ForeignKey
+  from skibidi_orm.query_engine.field.field import CharField, IntegerField
+  from skibidi_orm.query_engine.field.related_field import ForeignKey
   from skibidi_orm.query_engine.model.base import Model
   from typing import Optional
 
@@ -73,28 +74,23 @@ You can also create your foreign key.
   reksio = Dog(1, "Reksio", bolek)
   lessie = Dog(2, "Lessie", owner_id=2)
 
-You can give foreign key by object or by object id.
-And you can use foreign key by itself.
-*Podmienić kod*
+You can provide foreign key by object or by object id.
+You can also create an recursive foreign key.
 .. code-block:: python
 
-  from skibidi_orm.query_engine.field.field import CharField, IntegerField, ForeignKey
+  from skibidi_orm.query_engine.field.field import CharField, IntegerField
+  from skibidi_orm.query_engine.field.related_field import ForeignKey
   from skibidi_orm.query_engine.model.base import Model
-  from typing import Optional
+  from typing import Optional, ForwardRef
 
-  class Owner(Model):
-    id: Optional[int | IntegerField] = IntegerField(primary_key=True)
-    name: Optional[str | CharField] = CharField()
-
+  DogType: Optional['Dog'] = ForwardRef('Dog')
   class Dog(Model):
-    id: Optional[int | IntegerField] = IntegerField(primary_key=True)
-    name: Optional[str | CharField] = CharField('Reksio')
-    owner: Optional[Owner | ForeignKey] = ForeignKey(to=Owner)
+      id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+      name: Optional[str | CharField] = CharField('Reksio')
+      friend: Optional[DogType | ForeignKey] = ForeignKey(to='self')
 
-  bolek = Owner(1, "Bolek")
-  lolek = Owner(2, "Lolek")
-  reksio = Dog(1, "Reksio", bolek)
-  lessie = Dog(2, "Lessie", owner_id=2)
+  maks = Dog(1, 'Maks')
+  reks = Dog(2, "Reks", maks)
 
 
 Fields

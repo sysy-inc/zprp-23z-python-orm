@@ -29,19 +29,10 @@ class ForeignKey(Field):
         Attributes:
             related_name (str): The related name for the relation.
         """
-        if rel is None:
-            rel = RelationObject(
-                self,
-                to,                             # type: ignore
-                related_name=related_name,
-            )
-
-        super().__init__(
-            related=rel,
-            **kwargs
-        )
-
+        self.to = to
+        self.rel = rel
         self.related_name = related_name
+        super().__init__(**kwargs)
 
     @property
     def related_model(self):
@@ -51,10 +42,24 @@ class ForeignKey(Field):
         Returns:
             (Model): The related model.
         """
-        if self.remote_field is not None:
-            return self.remote_field.model
+        return self.remote_field.model
     
     def contribute_to_class(self, cls: 'Model', name: str):
+        """
+        Contributes the field to the class.
+        """
+        if self.to == 'self':
+            self.to = cls  # Referencing the current class
+        self.is_relation = True
+        if self.rel is None:
+            self.remote_field = RelationObject(
+                self,
+                self.to,  # type: ignore
+                related_name=self.related_name
+            )
+        else:
+            self.remote_field = self.rel
+
         super().contribute_to_class(cls, name)
         self.set_attributes_from_rel()
 
@@ -67,18 +72,17 @@ class ForeignKey(Field):
         if not already set.
 
         """
-        if self.remote_field is not None:
-            self.name = self.name or (
-                self.remote_field.model._meta.model_name
-                + "_"
-                + self.remote_field.model._meta.pk.name
-            )
-            self.column = self.name + "_id" or (
-                self.remote_field.model._meta.model_name
-                + "_"
-                + self.remote_field.model._meta.pk.name
-                + "_id"
-            )
+        self.name = self.name or (
+            self.remote_field.model._meta.model_name
+            + "_"
+            + self.remote_field.model._meta.pk.name
+        )
+        self.column = self.name + "_id" or (
+            self.remote_field.model._meta.model_name
+            + "_"
+            + self.remote_field.model._meta.pk.name
+            + "_id"
+        )
 
     @staticmethod
     def get_instance_by_name(name: str):

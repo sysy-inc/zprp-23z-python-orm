@@ -42,7 +42,7 @@ def connection_instance() -> MagicMock:
     mock_connection = MagicMock()
     mock_cursor = MagicMock()
     mock_connection.cursor.return_value = mock_cursor
-    mock_cursor.fetchone.return_value = 1
+    mock_cursor.fetchone.return_value = (1,)
     return (mock_connection, mock_cursor)
 
 

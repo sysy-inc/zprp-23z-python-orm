@@ -8,6 +8,7 @@ from skibidi_orm.query_engine.operations.select import Select
 from skibidi_orm.query_engine.operations.functions import Function, Count
 from typing import Any, Type
 from datetime import date, datetime
+from skibidi_orm.query_engine.model.base import Model
 
 
 class SQLCompiler:
@@ -166,7 +167,10 @@ class SQLCompiler:
         text = "UPDATE "
         text += statement.table()
         text += " SET "
-        text += self._col_val(statement.attributes())
+        atr_list = statement.attributes()
+        # to get pk info from Autofield
+        atr_list = [(item[0], item[1].pk) if isinstance(item[1], Model) else item for item in atr_list]
+        text += self._col_val(atr_list)
         text += " "
         text += self._prepare_where(statement.where_clause())
         text += ";"

@@ -99,8 +99,8 @@ def test_changed(mock_get_configuration):
     obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
-        session.changed(obj)        # TODO change
-        assert len(session._new) == 1
+        session.changed(obj)
+        assert len(session._dirty) == 1
 
 
 def test_changed_already_marked_changed(mock_get_configuration):
@@ -113,11 +113,11 @@ def test_changed_already_marked_changed(mock_get_configuration):
     obj = Person(1, 12)
     with Session(engine) as session:
         session.add(obj)
-        session.changed(obj)    # TODO change
-        assert len(session._new) == 1
-        session.changed(obj)    # TODO
+        session.changed(obj)
+        assert len(session._dirty) == 1
+        session.changed(obj)
         # nothing happens
-        assert len(session._new) == 1
+        assert len(session._dirty) == 1
 
 
 def test_changed_marked_delete(mock_get_configuration):
@@ -131,9 +131,9 @@ def test_changed_marked_delete(mock_get_configuration):
     with Session(engine) as session:
         session.add(obj)
         session.delete(obj)
-        session.changed(obj)    # TODO
+        session.changed(obj)
         # nothing happens
-        assert len(session._new) == 0
+        assert len(session._dirty) == 0
 
 
 def test_changed_not_added_to_session(mock_get_configuration):
@@ -145,9 +145,74 @@ def test_changed_not_added_to_session(mock_get_configuration):
 
     obj = Person(1, 12)
     with Session(engine) as session:
-        session.changed(obj)    # TODO
+        session.changed(obj)
         # nothing happens
+        assert len(session._dirty) == 0
+
+
+def test_changed_realtion_no_key(mock_get_configuration):
+    engine = Engine()
+
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    class Dog(Model):
+        id_dog: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        owner: Optional[Person | ForeignKey] = ForeignKey(to=Person)
+
+    p = Person(1, 12)
+    d = Dog(1)
+    with Session(engine) as session:
+        session.add(p)
+        session.add(d)
+        with pytest.raises(Exception):
+            session.changed(d)
+
+
+def test_changed_realtion_model_obj_in_map(mock_get_configuration):
+    engine = Engine()
+
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    class Dog(Model):
+        id_dog: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        owner: Optional[Person | ForeignKey] = ForeignKey(to=Person)
+
+    p = Person(1, 12)
+    d = Dog(1, owner=p)
+    with Session(engine) as session:
+        session.add(p)
+        session.add(d)
+        session.commit()
+        session.changed(d)
+        assert len(session._dirty) == 1
         assert len(session._new) == 0
+
+
+def test_changed_realtion_model_obj_not_in_map(mock_get_configuration):
+    engine = Engine()
+
+    class Person(Model):
+        id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        age: Optional[int | IntegerField] = IntegerField()
+
+    class Dog(Model):
+        id_dog: Optional[int | IntegerField] = IntegerField(primary_key=True)
+        owner: Optional[Person | ForeignKey] = ForeignKey(to=Person)
+
+    p = Person(1, 12)
+    p2 = Person(2, 13)
+    d = Dog(1, owner=p)
+    with Session(engine) as session:
+        session.add(d)
+        session.commit()
+        d.owner = p2
+        session.changed(d)
+        assert len(session._dirty) == 1
+        assert len(session._new) == 1
 
 
 def test_delete_object_not_in_new(mock_get_configuration):

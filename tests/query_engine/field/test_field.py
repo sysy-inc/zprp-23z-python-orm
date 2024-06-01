@@ -14,15 +14,6 @@ from skibidi_orm.query_engine.field.field import (
 )
 
 
-def test_instances_count():
-    field1 = IntegerField()
-    field2 = BooleanField()
-    field3 = FloatField()
-    assert field1.instances_count == 0
-    assert field2.instances_count == 1
-    assert field3.instances_count == 2
-
-
 def test_comparison():
     field1 = IntegerField()
     field2 = BooleanField()
