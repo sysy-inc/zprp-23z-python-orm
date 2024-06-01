@@ -37,7 +37,7 @@ class BaseTable[TCol]:
 
     name: str
     columns: list[TCol] = field(default_factory=list)
-    table_constraints: list[TableWideConstraint] = field(default_factory=list)
+    table_constraints: set[TableWideConstraint] = field(default_factory=set)
 
 
 class BaseAdapter(ABC):
