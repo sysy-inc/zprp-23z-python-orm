@@ -149,7 +149,7 @@ class Model(BaseModel, metaclass=MetaModel):
         super().__init__(*args, **kwargs)
 
         # if primary key is AutoField change it to None
-        if isinstance(self._meta.primary_key, AutoField):
+        if isinstance(self._meta.primary_key, AutoField) and self._meta.primary_key.name not in kwargs:
             self.pk = None
 
         # if foreign key is given by id set it correct
