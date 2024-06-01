@@ -15,6 +15,7 @@ dependencies = [
     "fastapi>=0.111.0",
     "black>=24.4.2",
     "psycopg2-binary>=2.9.9",
+    "pdoc3>=0.10.0",
 ]
 requires-python = ">=3.12"
 readme = "README.md"

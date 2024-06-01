@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>skibidi_orm.cli.migration_file_creator API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>skibidi_orm.cli.migration_file_creator</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import os
+from typing import Literal, TextIO, Any
+from pathlib import Path
+import black
+from skibidi_orm.migration_engine.adapters.base_adapter import BaseColumn, BaseTable
+from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
+    MigrationElement,
+)
+from skibidi_orm.migration_engine.db_config.base_config import BaseDbConfig
+from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
+from skibidi_orm.migration_engine.operations import table_operations as TO
+from skibidi_orm.migration_engine.operations import column_operations as CO
+
+type Typing = Literal[&#34;SQLite3Typing&#34;]
+
+
+def create_migration_file(migration_element: MigrationElement):
+    &#34;&#34;&#34;
+    Inspect a migration element and create a Python file that can be executed to apply the migration.
+    &#34;&#34;&#34;
+    migration_file_path = os.path.join(*[os.getcwd(), &#34;migrations&#34;, &#34;migration.py&#34;])
+
+    if not os.path.isdir(os.path.join(*[os.getcwd(), &#34;migrations&#34;])):
+        os.mkdir(os.path.join(*[os.getcwd(), &#34;migrations&#34;]))
+
+    config = BaseDbConfig.get_instance()
+
+    migration_element.migrate(preview=True)
+
+    operations = migration_element.operations
+
+    if isinstance(config, SQLite3Config):
+        executor = &#34;SQLite3Executor&#34;
+        converter = &#34;SQLite3Converter&#34;
+        typing = &#34;SQLite3Typing&#34;
+    else:
+        raise NotImplementedError
+
+    operation_methods = extract_operation_methods(operations, typing)
+
+    with open(migration_file_path, &#34;w&#34;) as file:
+        write_configuration(file)
+
+        file.write(&#34;def migrate():\n&#34;)
+        for method in operation_methods:
+
+            if &#34;TableOperation&#34; in method:
+                file.write(
+                    f&#34;\n\t{executor}.execute_sql(\n\t\t{converter}.convert_table_operation_to_SQL(\n\t\t\t{method}\n\t\t)\n\t)&#34;
+                )
+            elif &#34;ColumnOperation&#34; in method:
+                file.write(
+                    f&#34;\n\t{executor}.execute_sql({converter}.convert_column_operation_to_SQL({method}))&#34;
+                )
+        if not operation_methods:
+            file.write(&#34;\n\t# No operations to execute\n&#34;)
+            file.write(&#34;\n\tpass&#34;)
+        file.write(&#34;\n\n&#34;)
+
+        file.write(&#34;if __name__ == &#39;__main__&#39;:\n&#34;)
+        file.write(&#34;\tmigrate()\n&#34;)
+
+    black.format_file_in_place(
+        Path(migration_file_path),
+        fast=True,
+        mode=black.FileMode(),
+        write_back=black.WriteBack.YES,
+    )
+
+
+def extract_operation_methods(
+    operations: list[CO.ColumnOperation | TO.TableOperation],
+    typing: Typing,
+) -&gt; list[str]:
+    &#34;&#34;&#34;
+    From a list of operations, extract proper strings of methods that can be executed in the migration file.
+    &#34;&#34;&#34;
+
+    operation_methods: list[str] = []
+
+    for operation in operations:
+        if isinstance(operation, TO.TableOperation):
+            operation_methods.append(parse_table_operation(operation, typing))
+        else:
+            operation_methods.append(parse_column_operation(operation, typing))
+
+    return operation_methods
+
+
+def write_configuration(file: TextIO):
+    &#34;&#34;&#34;
+    Write the configuration for the migration file.
+    &#34;&#34;&#34;
+
+    config = BaseDbConfig.get_instance()
+
+    if isinstance(config, SQLite3Config):
+        write_sqlite3_configuration(file)
+    else:
+        raise NotImplementedError
+
+    file.write(&#34;# This is an auto-generated migration file.\n&#34;)
+    file.write(
+        &#34;# Executing this file will result in executing the proposed migration.\n\n&#34;
+    )
+
+
+def write_sqlite3_configuration(file: TextIO):
+    &#34;&#34;&#34;
+    Write database specific configuration for SQLite3.
+    &#34;&#34;&#34;
+
+    config = SQLite3Config.get_instance()
+
+    file.write(
+        &#34;&#34;&#34;
+from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
+from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
+from skibidi_orm.migration_engine.converters.sqlite3.all import SQLite3Converter
+from skibidi_orm.migration_engine.adapters.database_objects import constraints as c
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.operations import table_operations as TO
+from skibidi_orm.migration_engine.operations import column_operations as CO
+&#34;&#34;&#34;
+    )
+
+    file.write(&#34;# Database: SQLite3\n&#34;)
+    file.write(f&#34;# Path: {config.db_path}\n\n&#34;)
+
+    file.write(&#34;\n\n\n&#34;)
+    file.write(f&#39;SQLite3Config(&#34;{config.db_path}&#34;)&#39;)
+    file.write(&#34;\n\n\n&#34;)
+
+
+def parse_column_operation(operation: CO.ColumnOperation, typing: Typing) -&gt; str:
+    &#34;&#34;&#34;
+    Parse a ColumnOperation object to get a creatable string
+    &#34;&#34;&#34;
+    operation_str = &#34;&#34;
+
+    column = operation.column
+
+    column_str = return_column_string(column, typing)
+
+    table_str = return_table_string(operation.table, typing)
+
+    if isinstance(operation, CO.RenameColumnOperation):
+        operation_str = f&#34;CO.{operation.__class__.__name__}(table={table_str}, column={column_str}, new_name=&#39;{operation.new_name}&#39;)&#34;
+    else:
+        operation_str = (
+            f&#34;CO.{operation.__class__.__name__}(table={table_str}, column={column_str})&#34;
+        )
+
+    return operation_str
+
+
+def parse_table_operation(operation: TO.TableOperation, typing: Typing) -&gt; str:
+    &#34;&#34;&#34;
+    Parse a TableOperation object to get a creatable string
+    &#34;&#34;&#34;
+    operation_str = &#34;&#34;
+    table_str = &#34;&#34;
+
+    table_str = return_table_string(operation.table, typing)
+
+    if isinstance(operation, TO.RenameTableOperation):
+        operation_str = f&#34;TO.{operation.__class__.__name__}(table={table_str}, new_name=&#39;{operation.new_name}&#39;)&#34;
+    else:
+        operation_str = f&#34;TO.{operation.__class__.__name__}(table={table_str})&#34;
+
+    return operation_str
+
+
+def return_column_string(column: BaseColumn[Any], typing: Typing) -&gt; str:
+    &#34;&#34;&#34;
+    Return a string that can construct a column object.
+    &#34;&#34;&#34;
+
+    constraints_str = return_constraint_list_string(column, typing)
+
+    return f&#34;{typing}.Column(name=&#39;{column.name}&#39;, data_type=&#39;{column.data_type}&#39;, column_constraints={constraints_str},),&#34;
+
+
+def return_constraint_list_string(column: BaseColumn[Any], typing: Typing) -&gt; str:
+    &#34;&#34;&#34;
+    Return a string representation of a list of constraints.
+    &#34;&#34;&#34;
+    constraints_str = &#34;[&#34;
+
+    for constraint in column.column_constraints:
+        constraints_str += f&#34;c.{constraint}, &#34;
+    constraints_str = constraints_str[:-2] + &#34;]&#34;
+
+    return constraints_str
+
+
+def return_table_string(table: BaseTable[BaseColumn[Any]], typing: Typing) -&gt; str:
+    &#34;&#34;&#34;
+    Return a string that can create a table object.
+    &#34;&#34;&#34;
+    columns_str = &#34;[&#34;
+    for column in table.columns:
+        columns_str += return_column_string(column, typing)
+    columns_str += &#34;]&#34;
+
+    return f&#34;{typing}.Table(name=&#39;{table.name}&#39;, columns={columns_str})&#34;</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="skibidi_orm.cli.migration_file_creator.create_migration_file"><code class="name flex">
+<span>def <span class="ident">create_migration_file</span></span>(<span>migration_element: <a title="skibidi_orm.migration_engine.adapters.database_objects.migration_element.MigrationElement" href="../migration_engine/adapters/database_objects/migration_element.html#skibidi_orm.migration_engine.adapters.database_objects.migration_element.MigrationElement">MigrationElement</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Inspect a migration element and create a Python file that can be executed to apply the migration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_migration_file(migration_element: MigrationElement):
+    &#34;&#34;&#34;
+    Inspect a migration element and create a Python file that can be executed to apply the migration.
+    &#34;&#34;&#34;
+    migration_file_path = os.path.join(*[os.getcwd(), &#34;migrations&#34;, &#34;migration.py&#34;])
+
+    if not os.path.isdir(os.path.join(*[os.getcwd(), &#34;migrations&#34;])):
+        os.mkdir(os.path.join(*[os.getcwd(), &#34;migrations&#34;]))
+
+    config = BaseDbConfig.get_instance()
+
+    migration_element.migrate(preview=True)
+
+    operations = migration_element.operations
+
+    if isinstance(config, SQLite3Config):
+        executor = &#34;SQLite3Executor&#34;
+        converter = &#34;SQLite3Converter&#34;
+        typing = &#34;SQLite3Typing&#34;
+    else:
+        raise NotImplementedError
+
+    operation_methods = extract_operation_methods(operations, typing)
+
+    with open(migration_file_path, &#34;w&#34;) as file:
+        write_configuration(file)
+
+        file.write(&#34;def migrate():\n&#34;)
+        for method in operation_methods:
+
+            if &#34;TableOperation&#34; in method:
+                file.write(
+                    f&#34;\n\t{executor}.execute_sql(\n\t\t{converter}.convert_table_operation_to_SQL(\n\t\t\t{method}\n\t\t)\n\t)&#34;
+                )
+            elif &#34;ColumnOperation&#34; in method:
+                file.write(
+                    f&#34;\n\t{executor}.execute_sql({converter}.convert_column_operation_to_SQL({method}))&#34;
+                )
+        if not operation_methods:
+            file.write(&#34;\n\t# No operations to execute\n&#34;)
+            file.write(&#34;\n\tpass&#34;)
+        file.write(&#34;\n\n&#34;)
+
+        file.write(&#34;if __name__ == &#39;__main__&#39;:\n&#34;)
+        file.write(&#34;\tmigrate()\n&#34;)
+
+    black.format_file_in_place(
+        Path(migration_file_path),
+        fast=True,
+        mode=black.FileMode(),
+        write_back=black.WriteBack.YES,
+    )</code></pre>
+</details>
+</dd>
+<dt id="skibidi_orm.cli.migration_file_creator.extract_operation_methods"><code class="name flex">
+<span>def <span class="ident">extract_operation_methods</span></span>(<span>operations: list[<a title="skibidi_orm.migration_engine.operations.column_operations.ColumnOperation" href="../migration_engine/operations/column_operations.html#skibidi_orm.migration_engine.operations.column_operations.ColumnOperation">ColumnOperation</a> | <a title="skibidi_orm.migration_engine.operations.table_operations.TableOperation" href="../migration_engine/operations/table_operations.html#skibidi_orm.migration_engine.operations.table_operations.TableOperation">TableOperation</a>], typing: Typing) ‑> list[str]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>From a list of operations, extract proper strings of methods that can be executed in the migration file.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extract_operation_methods(
+    operations: list[CO.ColumnOperation | TO.TableOperation],
+    typing: Typing,
+) -&gt; list[str]:
+    &#34;&#34;&#34;
+    From a list of operations, extract proper strings of methods that can be executed in the migration file.
+    &#34;&#34;&#34;
+
+    operation_methods: list[str] = []
+
+    for operation in operations:
+        if isinstance(operation, TO.TableOperation):
+            operation_methods.append(parse_table_operation(operation, typing))
+        else:
+            operation_methods.append(parse_column_operation(operation, typing))
+
+    return operation_methods</code></pre>
+</details>
+</dd>
+<dt id="skibidi_orm.cli.migration_file_creator.parse_column_operation"><code class="name flex">
+<span>def <span class="ident">parse_column_operation</span></span>(<span>operation: <a title="skibidi_orm.migration_engine.operations.column_operations.ColumnOperation" href="../migration_engine/operations/column_operations.html#skibidi_orm.migration_engine.operations.column_operations.ColumnOperation">ColumnOperation</a>, typing: Typing) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parse a ColumnOperation object to get a creatable string</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse_column_operation(operation: CO.ColumnOperation, typing: Typing) -&gt; str:
+    &#34;&#34;&#34;
+    Parse a ColumnOperation object to get a creatable string
+    &#34;&#34;&#34;
+    operation_str = &#34;&#34;
+
+    column = operation.column
+
+    column_str = return_column_string(column, typing)
+
+    table_str = return_table_string(operation.table, typing)
+
+    if isinstance(operation, CO.RenameColumnOperation):
+        operation_str = f&#34;CO.{operation.__class__.__name__}(table={table_str}, column={column_str}, new_name=&#39;{operation.new_name}&#39;)&#34;
+    else:
+        operation_str = (
+            f&#34;CO.{operation.__class__.__name__}(table={table_str}, column={column_str})&#34;
+        )
+
+    return operation_str</code></pre>
+</details>
+</dd>
+<dt id="skibidi_orm.cli.migration_file_creator.parse_table_operation"><code class="name flex">
+<span>def <span class="ident">parse_table_operation</span></span>(<span>operation: <a title="skibidi_orm.migration_engine.operations.table_operations.TableOperation" href="../migration_engine/operations/table_operations.html#skibidi_orm.migration_engine.operations.table_operations.TableOperation">TableOperation</a>, typing: Typing) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parse a TableOperation object to get a creatable string</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse_table_operation(operation: TO.TableOperation, typing: Typing) -&gt; str:
+    &#34;&#34;&#34;
+    Parse a TableOperation object to get a creatable string
+    &#34;&#34;&#34;
+    operation_str = &#34;&#34;
+    table_str = &#34;&#34;
+
+    table_str = return_table_string(operation.table, typing)
+
+    if isinstance(operation, TO.RenameTableOperation):
+        operation_str = f&#34;TO.{operation.__class__.__name__}(table={table_str}, new_name=&#39;{operation.new_name}&#39;)&#34;
+    else:
+        operation_str = f&#34;TO.{operation.__class__.__name__}(table={table_str})&#34;
+
+    return operation_str</code></pre>
+</details>
+</dd>
+<dt id="skibidi_orm.cli.migration_file_creator.return_column_string"><code class="name flex">
+<span>def <span class="ident">return_column_string</span></span>(<span>column: <a title="skibidi_orm.migration_engine.adapters.base_adapter.BaseColumn" href="../migration_engine/adapters/base_adapter.html#skibidi_orm.migration_engine.adapters.base_adapter.BaseColumn">BaseColumn</a>[typing.Any], typing: Typing) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return a string that can construct a column object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def return_column_string(column: BaseColumn[Any], typing: Typing) -&gt; str:
+    &#34;&#34;&#34;
+    Return a string that can construct a column object.
+    &#34;&#34;&#34;
+
+    constraints_str = return_constraint_list_string(column, typing)
+
+    return f&#34;{typing}.Column(name=&#39;{column.name}&#39;, data_type=&#39;{column.data_type}&#39;, column_constraints={constraints_str},),&#34;</code></pre>
+</details>
+</dd>
+<dt id="skibidi_orm.cli.migration_file_creator.return_constraint_list_string"><code class="name flex">
+<span>def <span class="ident">return_constraint_list_string</span></span>(<span>column: <a title="skibidi_orm.migration_engine.adapters.base_adapter.BaseColumn" href="../migration_engine/adapters/base_adapter.html#skibidi_orm.migration_engine.adapters.base_adapter.BaseColumn">BaseColumn</a>[typing.Any], typing: Typing) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return a string representation of a list of constraints.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def return_constraint_list_string(column: BaseColumn[Any], typing: Typing) -&gt; str:
+    &#34;&#34;&#34;
+    Return a string representation of a list of constraints.
+    &#34;&#34;&#34;
+    constraints_str = &#34;[&#34;
+
+    for constraint in column.column_constraints:
+        constraints_str += f&#34;c.{constraint}, &#34;
+    constraints_str = constraints_str[:-2] + &#34;]&#34;
+
+    return constraints_str</code></pre>
+</details>
+</dd>
+<dt id="skibidi_orm.cli.migration_file_creator.return_table_string"><code class="name flex">
+<span>def <span class="ident">return_table_string</span></span>(<span>table: <a title="skibidi_orm.migration_engine.adapters.base_adapter.BaseTable" href="../migration_engine/adapters/base_adapter.html#skibidi_orm.migration_engine.adapters.base_adapter.BaseTable">BaseTable</a>[<a title="skibidi_orm.migration_engine.adapters.base_adapter.BaseColumn" href="../migration_engine/adapters/base_adapter.html#skibidi_orm.migration_engine.adapters.base_adapter.BaseColumn">BaseColumn</a>[typing.Any]], typing: Typing) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return a string that can create a table object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def return_table_string(table: BaseTable[BaseColumn[Any]], typing: Typing) -&gt; str:
+    &#34;&#34;&#34;
+    Return a string that can create a table object.
+    &#34;&#34;&#34;
+    columns_str = &#34;[&#34;
+    for column in table.columns:
+        columns_str += return_column_string(column, typing)
+    columns_str += &#34;]&#34;
+
+    return f&#34;{typing}.Table(name=&#39;{table.name}&#39;, columns={columns_str})&#34;</code></pre>
+</details>
+</dd>
+<dt id="skibidi_orm.cli.migration_file_creator.write_configuration"><code class="name flex">
+<span>def <span class="ident">write_configuration</span></span>(<span>file: <class 'TextIO'>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Write the configuration for the migration file.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_configuration(file: TextIO):
+    &#34;&#34;&#34;
+    Write the configuration for the migration file.
+    &#34;&#34;&#34;
+
+    config = BaseDbConfig.get_instance()
+
+    if isinstance(config, SQLite3Config):
+        write_sqlite3_configuration(file)
+    else:
+        raise NotImplementedError
+
+    file.write(&#34;# This is an auto-generated migration file.\n&#34;)
+    file.write(
+        &#34;# Executing this file will result in executing the proposed migration.\n\n&#34;
+    )</code></pre>
+</details>
+</dd>
+<dt id="skibidi_orm.cli.migration_file_creator.write_sqlite3_configuration"><code class="name flex">
+<span>def <span class="ident">write_sqlite3_configuration</span></span>(<span>file: <class 'TextIO'>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Write database specific configuration for SQLite3.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_sqlite3_configuration(file: TextIO):
+    &#34;&#34;&#34;
+    Write database specific configuration for SQLite3.
+    &#34;&#34;&#34;
+
+    config = SQLite3Config.get_instance()
+
+    file.write(
+        &#34;&#34;&#34;
+from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
+from skibidi_orm.migration_engine.sql_executor.sqlite3_executor import SQLite3Executor
+from skibidi_orm.migration_engine.converters.sqlite3.all import SQLite3Converter
+from skibidi_orm.migration_engine.adapters.database_objects import constraints as c
+from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.operations import table_operations as TO
+from skibidi_orm.migration_engine.operations import column_operations as CO
+&#34;&#34;&#34;
+    )
+
+    file.write(&#34;# Database: SQLite3\n&#34;)
+    file.write(f&#34;# Path: {config.db_path}\n\n&#34;)
+
+    file.write(&#34;\n\n\n&#34;)
+    file.write(f&#39;SQLite3Config(&#34;{config.db_path}&#34;)&#39;)
+    file.write(&#34;\n\n\n&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="skibidi_orm.cli" href="index.html">skibidi_orm.cli</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="skibidi_orm.cli.migration_file_creator.create_migration_file" href="#skibidi_orm.cli.migration_file_creator.create_migration_file">create_migration_file</a></code></li>
+<li><code><a title="skibidi_orm.cli.migration_file_creator.extract_operation_methods" href="#skibidi_orm.cli.migration_file_creator.extract_operation_methods">extract_operation_methods</a></code></li>
+<li><code><a title="skibidi_orm.cli.migration_file_creator.parse_column_operation" href="#skibidi_orm.cli.migration_file_creator.parse_column_operation">parse_column_operation</a></code></li>
+<li><code><a title="skibidi_orm.cli.migration_file_creator.parse_table_operation" href="#skibidi_orm.cli.migration_file_creator.parse_table_operation">parse_table_operation</a></code></li>
+<li><code><a title="skibidi_orm.cli.migration_file_creator.return_column_string" href="#skibidi_orm.cli.migration_file_creator.return_column_string">return_column_string</a></code></li>
+<li><code><a title="skibidi_orm.cli.migration_file_creator.return_constraint_list_string" href="#skibidi_orm.cli.migration_file_creator.return_constraint_list_string">return_constraint_list_string</a></code></li>
+<li><code><a title="skibidi_orm.cli.migration_file_creator.return_table_string" href="#skibidi_orm.cli.migration_file_creator.return_table_string">return_table_string</a></code></li>
+<li><code><a title="skibidi_orm.cli.migration_file_creator.write_configuration" href="#skibidi_orm.cli.migration_file_creator.write_configuration">write_configuration</a></code></li>
+<li><code><a title="skibidi_orm.cli.migration_file_creator.write_sqlite3_configuration" href="#skibidi_orm.cli.migration_file_creator.write_sqlite3_configuration">write_sqlite3_configuration</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
