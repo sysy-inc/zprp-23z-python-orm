@@ -4,13 +4,14 @@
 # `skibidi-orm go <MIGRATION_ID>`
 
 
+from pathlib import Path
 import typer
 from typing import Union
 import os
 
 # import shutil
 import sys
-from skibidi_orm.cli.utils import find_schema_file
+from skibidi_orm.cli.utils import find_schema_file, load_schema_from_path
 from skibidi_orm.exceptions.cli_exceptions import MultipleSchemaFilesError
 from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
     MigrationElement,
@@ -24,12 +25,56 @@ sys.path.insert(0, os.getcwd())
 app = typer.Typer(
     help="CLI tool for managing schema creations and migrations in Skibidi ORM."
 )
+state = {"schema_path": Path()}
+
+
+@app.callback()
+def schema_callback(
+    schema_path: Union[None, Path] = typer.Option(
+        None,
+        "--schema-file",
+        "-s",
+        help="Specify an external schema file path",
+        show_default=False,
+    )
+):
+    """
+    Specify a path to the schema file to use.
+    """
+
+    if schema_path is not None:
+        state["schema_path"] = schema_path
+
+        try:
+            load_schema_from_path(str(schema_path))
+            print("\nSchema file successfully loaded.\n")
+
+        except FileNotFoundError:
+            print("\nSchema file could not be found. Aborting.\n")
+            raise typer.Exit(code=1)
+
+        except ImportError:
+            print("\nSchema file could not be loaded. Aborting.\n")
+            raise typer.Exit(code=1)
+
+    else:
+        try:
+            import schema as schema  # type: ignore
+
+            print("\nSchema file successfully loaded.\n")
+
+        except ImportError:
+            print("\nSchema file could not be loaded. Aborting.\n")
+            raise typer.Exit(code=1)
 
 
 @app.command()
 def migrate(
     message: str = typer.Option(
-        None, "--message", "-m", help="Description of migration"
+        None,
+        "--message",
+        "-m",
+        help="Description of migration",
     )
 ):
     """
@@ -37,6 +82,9 @@ def migrate(
     """
     m = MigrationElement()
     m.migrate(preview=False)
+
+    print("\nMigration complete. \n")
+
     pass
 
 
@@ -45,14 +93,16 @@ def preview_migration():
     """
     Preview the migration that will be executed.
     """
+
     m = MigrationElement()
     m.migrate(preview=True)
 
     if not m.operations:
         print("No changes to be made.")
     else:
+        print("Migration preview:")
         for i, operation in enumerate(m.operations):
-            print(f"{i+1}) {operation}")
+            print(f"\t{i+1}) {operation}")
     pass
 
 
@@ -87,18 +137,21 @@ def studio(
     """
     Run web UI for CRUD operations on current DB.
     """
-    if schema_file is not None:
-        run_server(schema_file=schema_file)
-        return
 
     try:
-        schema_file = find_schema_file()
-        run_server(schema_file=schema_file)
+        if schema_file is None:
+            schema_file = find_schema_file()
     except MultipleSchemaFilesError:
         print(
             Fore.RED
             + "Multiple schema files found. Please specify the schema file to use: --schema-file <PATH>"
         )
+        raise typer.Exit(code=1)
+
+    try:
+        run_server(schema_file=schema_file)
+    except Exception as e:
+        print(Fore.RED + f"Error: {e}")
         raise typer.Exit(code=1)
 
 

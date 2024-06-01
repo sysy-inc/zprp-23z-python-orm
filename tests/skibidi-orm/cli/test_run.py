@@ -66,5 +66,5 @@ def test_studio_one_schema_option(monkeypatch: pytest.MonkeyPatch, tmpdir: py.pa
         app, ["studio", "--schema-file", file_path.strpath]  # type: ignore
     )
 
-    assert "Success test" == result.stdout
+    assert "Success test" in result.stdout
     tmpdir.remove()

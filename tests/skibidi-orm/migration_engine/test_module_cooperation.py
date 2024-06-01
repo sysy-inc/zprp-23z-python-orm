@@ -11,39 +11,13 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
     MigrationElement,
 )
 from skibidi_orm.migration_engine.adapters.database_objects import constraints as c
-
-
-sql_table_user = """
-    CREATE TABLE User (
-        user_id INTEGER PRIMARY KEY,
-        user_name TEXT NOT NULL
-    );
-"""
-sql_table_post = """
-    CREATE TABLE Post (
-        post_id INTEGER PRIMARY KEY,
-        post_name TEXT NOT NULL
-    );
-"""
-
-sql_table_comment = """
-    CREATE TABLE Comment (
-        comment_id INTEGER PRIMARY KEY,
-        comment_name TEXT NOT NULL
-    );
-"""
-
-sql_table_primary_key_not_null = """
-    CREATE TABLE table_primary_key_not_null (
-        id INTEGER PRIMARY KEY NOT NULL
-    );
-"""
+from .sql_data import SQLite3TablesData
 
 
 def test_adding_table_to_database(make_database: str):
     SQLite3Config(make_database)
-    SQLite3Executor.execute_sql(sql_table_user)
-    SQLite3Executor.execute_sql(sql_table_post)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_user)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_post)
 
     class Table(MigrationElement):
         def __init__(self) -> None:
@@ -124,9 +98,9 @@ def test_adding_table_to_database(make_database: str):
 
 def test_removing_table_from_database(make_database: str):
     SQLite3Config(make_database)
-    SQLite3Executor.execute_sql(sql_table_user)
-    SQLite3Executor.execute_sql(sql_table_post)
-    SQLite3Executor.execute_sql(sql_table_comment)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_user)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_post)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_comment)
 
     class Table(MigrationElement):
 
@@ -205,8 +179,8 @@ def test_removing_table_from_database(make_database: str):
 
 def test_add_column_to_database(make_database: str):
     SQLite3Config(make_database)
-    SQLite3Executor.execute_sql(sql_table_user)
-    SQLite3Executor.execute_sql(sql_table_post)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_user)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_post)
 
     class Table(MigrationElement):
 
@@ -295,8 +269,8 @@ def test_add_column_to_database(make_database: str):
 
 def test_removing_column_from_database(make_database: str):
     SQLite3Config(make_database)
-    SQLite3Executor.execute_sql(sql_table_user)
-    SQLite3Executor.execute_sql(sql_table_post)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_user)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_post)
 
     class Table(MigrationElement):
         def __init__(self) -> None:
@@ -365,8 +339,8 @@ def test_removing_column_from_database(make_database: str):
 
 def test_renaming_table_in_database(make_database: str):
     SQLite3Config(make_database)
-    SQLite3Executor.execute_sql(sql_table_user)
-    SQLite3Executor.execute_sql(sql_table_post)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_user)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_post)
 
     class Table(MigrationElement):
 
@@ -443,9 +417,9 @@ def test_renaming_table_in_database(make_database: str):
 
 def test_add_column_to_database_and_remove_table_from_database(make_database: str):
     SQLite3Config(make_database)
-    SQLite3Executor.execute_sql(sql_table_user)
-    SQLite3Executor.execute_sql(sql_table_post)
-    SQLite3Executor.execute_sql(sql_table_comment)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_user)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_post)
+    SQLite3Executor.execute_sql(SQLite3TablesData.sql_table_comment)
 
     class Table(MigrationElement):
 

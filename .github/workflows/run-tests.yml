@@ -1,4 +1,4 @@
-name: run-tests 
+name: run-tests
 
 on:
   push:
@@ -25,5 +25,8 @@ jobs:
         pip install pdm
         pdm install
 
+    - name: Start postgres container
+      run: docker compose -f .containers/postgres-container/docker-compose.yml up -d
+
     - name: Run tests using pdm
-      run: pdm tests 
+      run: pdm tests
