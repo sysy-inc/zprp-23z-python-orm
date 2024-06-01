@@ -50,3 +50,62 @@ def test_raw_query(create_query, query, expected):  # type: ignore
         assert result == expected
 
     test_fn()
+
+
+@pytest.mark.parametrize(
+    "create_query, table_name, limit, offset, expected",
+    [
+        (
+            ["CREATE TABLE test (id SERIAL PRIMARY KEY, name TEXT);"],
+            "test",
+            100,
+            0,
+            [],
+        ),
+        (
+            [
+                "CREATE TABLE test (id SERIAL PRIMARY KEY, name TEXT);",
+                "INSERT INTO test (name) VALUES ('test');",
+            ],
+            "test",
+            100,
+            0,
+            [(1, "test")],
+        ),
+        (
+            [
+                "CREATE TABLE test (id SERIAL PRIMARY KEY, name TEXT);",
+                "INSERT INTO test (name) VALUES ('test');",
+            ],
+            "test",
+            1,
+            1,
+            [],
+        ),
+        (
+            [
+                "CREATE TABLE test (id SERIAL PRIMARY KEY, name TEXT);",
+                "INSERT INTO test (name) VALUES ('test');",
+            ],
+            "test",
+            0,
+            0,
+            [],
+        ),
+    ],
+)
+def test_get_rows(create_query, table_name, limit, offset, expected):  # type: ignore
+    @postgres_db_fixture(
+        db_name="postgres",
+        db_user="admin",
+        db_password="admin",
+        db_host="0.0.0.0",
+        db_port=5432,
+        queries=create_query,  # type: ignore
+    )
+    def test_fn(config: PostgresConfig, inspector: PostgresInspector):
+        mutator = PostgresDataMutator()
+        results = mutator.get_rows(table_name=table_name, limit=limit, offset=offset)  # type: ignore
+        assert sorted(results) == sorted(expected)  # type: ignore
+
+    test_fn()
