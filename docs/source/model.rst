@@ -75,7 +75,8 @@ You can create your foreign key.
   lessie = Dog(2, "Lessie", owner_id=2)
 
 You can provide foreign key by object or by object id.
-You can also create an recursive foreign key.
+You can also create a recursive foreign key.
+
 .. code-block:: python
 
   from skibidi_orm.query_engine.field.field import CharField, IntegerField
@@ -84,10 +85,11 @@ You can also create an recursive foreign key.
   from typing import Optional, ForwardRef
 
   DogType: Optional['Dog'] = ForwardRef('Dog')
+
   class Dog(Model):
-      id: Optional[int | IntegerField] = IntegerField(primary_key=True)
-      name: Optional[str | CharField] = CharField('Reksio')
-      friend: Optional[DogType | ForeignKey] = ForeignKey(to='self')
+    id: Optional[int | IntegerField] = IntegerField(primary_key=True)
+    name: Optional[str | CharField] = CharField('Reksio')
+    friend: Optional[DogType | ForeignKey] = ForeignKey(to='self')
 
   maks = Dog(1, 'Maks')
   reks = Dog(2, "Reks", maks)
