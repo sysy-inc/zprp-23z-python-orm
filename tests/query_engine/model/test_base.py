@@ -211,5 +211,5 @@ def test_inheritance():
     class Box(Item):
         weight: Optional[int | IntegerField] = IntegerField()
 
-    box = Box()
+    box = Box(1)
     assert len(box._meta.local_fields) == 3

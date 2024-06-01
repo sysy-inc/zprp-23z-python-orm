@@ -205,9 +205,14 @@ class Model(BaseModel, metaclass=MetaModel):
         """
         if name not in self.__fields__: # type: ignore
             self.__fields__[name] = Field(default=None) # type: ignore
-        super().__setattr__(name, value)
 
         field = self._meta.get_field_name(name)
+        if field is not None:
+            for valid in field.validators:
+                valid(value)
+
+        super().__setattr__(name, value)
+
         # self is in the session and set value is db field
         if hasattr(self, '_session') and self._session is not None and field is not None:
             if field.is_relation:
