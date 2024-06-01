@@ -9,14 +9,11 @@ from skibidi_orm.cli.log.tree import FoldableTree, setup_tree
 from skibidi_orm.migration_engine.revisions.revision import Revision
 
 kb = KeyBindings()
-revisions: list[Revision] = []
 
 
 # Current position and expanded states
 main_tree: FoldableTree = FoldableTree(0, "", None, [])
 selected_tree: FoldableTree = FoldableTree(0, "", None, [])
-expanded_revisions: set[int] = set()
-expanded_tables: set[tuple[int, int]] = set()
 
 
 def get_display_text() -> str:
@@ -83,10 +80,9 @@ revision_app = Application(layout=layout, key_bindings=kb, full_screen=True)  # 
 
 def run_revision_app(revision_list: list[Revision]):
     """Main entry point for the revision inspection app."""
-    global revisions
     global main_tree
     global selected_tree
 
-    main_tree, selected_tree = setup_tree(revisions)
+    main_tree, selected_tree = setup_tree(revision_list)
 
     revision_app.run()

@@ -33,7 +33,7 @@ class Node:
         """Create a node from a table object. If the table has no columns, return a leaf node.
         Otherwise, return a foldable tree node with leaf nodes as children."""
 
-        if not table.columns:
+        if not table.__dict__.get("columns", False):
             return Leaf.from_table(index, parent, table)
         return FoldableTree.from_table(index, parent, table)
 
@@ -90,10 +90,10 @@ class FoldableTree(Node):
     def from_revision(
         cls, index: int, parent: FoldableTree, revision: Revision
     ) -> FoldableTree:
-        return_value = cls(index, f"{index}) {revision}", parent, [])
+        return_value = cls(index, f"{index + 1}) {revision}", parent, []) # todo
         # create a list of children nodes
         nodes: list[Node] = [
-            FoldableTree.from_table(i, return_value, table)
+            Node.from_table(i, return_value, table)
             for i, table in enumerate(revision.tables)
         ]
         # set the children of the root node
