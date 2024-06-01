@@ -2,7 +2,7 @@
 Module handles managing database model instances with attributes and relationships.
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from pydantic._internal._model_construction import ModelMetaclass
 from typing import Any, TYPE_CHECKING
 import inspect
@@ -111,9 +111,7 @@ class Model(BaseModel, metaclass=MetaModel):
     setting primary keys, and managing relationships and attributes.
 
     """
-    class Config:
-        arbitrary_types_allowed = True
-        allow_population_by_field_name = True
+    model_config = ConfigDict(arbitrary_types_allowed=True, populate_by_name=True)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize a new instance of the model.
@@ -203,8 +201,8 @@ class Model(BaseModel, metaclass=MetaModel):
             name (str): The name of the attribute.
             value (Any): The value to set.
         """
-        if name not in self.__fields__: # type: ignore
-            self.__fields__[name] = Field(default=None) # type: ignore
+        if name not in self.model_fields: # type: ignore
+            self.model_fields[name] = Field(default=None) # type: ignore
 
         field = self._meta.get_field_name(name)
         if field is not None:

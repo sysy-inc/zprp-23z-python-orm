@@ -117,7 +117,7 @@ class MetaOptions:
         if not self.primary_key:
             obj_name = model.__name__.lower() + '_id'
             model.add_to_class(obj_name, AutoField(primary_key=True))
-            model.__fields__[obj_name] = Field(default=None)
+            model.model_fields[obj_name] = Field(default=None)
 
     def relation_fields_name(self) -> list[Any]:
         """Returns the names of the fields representing relationships.
