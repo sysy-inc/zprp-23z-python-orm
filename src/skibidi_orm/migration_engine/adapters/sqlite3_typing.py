@@ -14,7 +14,7 @@ class SQLite3Typing:
     Class defining the typing for SQLite3 database objects.
     """
 
-    DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL"]
+    DataTypes = Literal["TEXT", "INTEGER", "REAL", "BLOB", "NULL", "TIMESTAMP"]
     Constraints = Constraint
     Column = BaseColumn[DataTypes]
     Table = BaseTable[Column]

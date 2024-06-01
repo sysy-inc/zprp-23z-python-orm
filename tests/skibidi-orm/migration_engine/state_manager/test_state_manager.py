@@ -20,7 +20,6 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
     MigrationElement,
 )
 
-# from tmp.mock_schema import Table
 
 from pathlib import Path
 import pytest
