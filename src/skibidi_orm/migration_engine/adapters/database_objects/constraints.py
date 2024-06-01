@@ -32,7 +32,7 @@ class ColumnSpecificConstraint(Constraint):
 
     column_name: str
 
-    def __lt__(self, other: ColumnSpecificConstraint):
+    def __lt__(self, other: Any):
         if isinstance(other, ColumnSpecificConstraint):
             return (self.column_name + self.__class__.__name__) < (
                 other.column_name + other.__class__.__name__
