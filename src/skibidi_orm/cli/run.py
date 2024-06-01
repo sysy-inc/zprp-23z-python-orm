@@ -6,18 +6,20 @@
 
 from pathlib import Path
 import typer
-from typing import Union
+from typing import Union, Any
 import os
 
 # import shutil
 import sys
 from skibidi_orm.cli.utils import find_schema_file, load_schema_from_path
 from skibidi_orm.exceptions.cli_exceptions import MultipleSchemaFilesError
+from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable
 from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
     MigrationElement,
 )
-from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
+from skibidi_orm.migration_engine.db_config.base_config import BaseDbConfig
 from skibidi_orm.migration_engine.revisions.manager import RevisionManager
+from skibidi_orm.migration_engine.revisions.revision import Revision
 from skibidi_orm.migration_engine.studio.server import run_server
 from skibidi_orm.cli.log.revision_inspection import run_revision_app  # type: ignore
 from colorama import Fore
@@ -86,6 +88,16 @@ def migrate(
     m = MigrationElement()
     m.migrate(preview=False)
 
+    tables: list[BaseTable[Any]] = m.adapter.tables  # type: ignore todo
+    manager = RevisionManager()
+    revision = Revision(
+        "No message provided" if message is None else message,  # type: ignore
+        "",  # this field is deprecated and to be removed in future versions
+        BaseDbConfig.get_instance().database_provider,
+        tables,  # type: ignore todo
+    )
+    manager.save_revision(revision)
+
     print("\nMigration complete. \n")
 
     pass
@@ -124,12 +136,10 @@ def migrate_list():
     run_revision_app(list(revisions.values()))
 
 
-@app.command()
 def go(migration_id: str = typer.Argument(help="Migration ID")):
     """
     Go back (and forward) to specific migration.
     """
-    SQLite3Config("cli_test.db")
 
     manager = RevisionManager()
     revision = manager.get_revision_by_id(int(migration_id))
@@ -140,7 +150,9 @@ def go(migration_id: str = typer.Argument(help="Migration ID")):
     )
     if confirmation.lower() == "y":
         manager.go_to_revision(revision)
-    return
+        print(Fore.GREEN + "Operation complete.")
+    else:
+        print(Fore.RED + "Operation aborted.")
 
 
 @app.command()

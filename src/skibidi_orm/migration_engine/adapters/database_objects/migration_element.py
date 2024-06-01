@@ -19,6 +19,7 @@ class MigrationElement:
 
         """
         table = MigrationElement.__subclasses__()
+        self.adapter = table[0]().adapter # todo: do this in a nicer way
 
         for cls in table:
             table_instance = cls()
