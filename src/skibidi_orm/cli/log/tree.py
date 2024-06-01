@@ -90,7 +90,7 @@ class FoldableTree(Node):
     def from_revision(
         cls, index: int, parent: FoldableTree, revision: Revision
     ) -> FoldableTree:
-        return_value = cls(index, str(revision), parent, [])
+        return_value = cls(index, f"{index}) {revision}", parent, [])
         # create a list of children nodes
         nodes: list[Node] = [
             FoldableTree.from_table(i, return_value, table)

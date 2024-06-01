@@ -6,56 +6,11 @@ from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.containers import Window, DynamicContainer
 
 from skibidi_orm.cli.log.tree import FoldableTree, setup_tree
-from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable
-from skibidi_orm.migration_engine.adapters.providers import DatabaseProvider
 from skibidi_orm.migration_engine.revisions.revision import Revision
-from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
-
 
 kb = KeyBindings()
 revisions: list[Revision] = []
 
-
-# Sample data for demonstration
-revisions = [
-    Revision(
-        description="Initial migration",
-        schema_repr="Schema v1",
-        provider=DatabaseProvider.SQLITE3,
-        tables=[
-            SQLite3Typing.Table(
-                name="Users",
-                columns=[
-                    SQLite3Typing.Column("id", "INTEGER"),
-                    SQLite3Typing.Column("name", "TEXT"),
-                ],
-            ),
-            BaseTable(
-                name="Orders",
-                columns=[
-                    SQLite3Typing.Column("id", "INTEGER"),
-                    SQLite3Typing.Column("user_id", "INTEGER"),
-                    SQLite3Typing.Column("amount", "REAL"),
-                ],
-            ),
-        ],
-    ),
-    Revision(
-        description="Added products table",
-        schema_repr="Schema v2",
-        provider=DatabaseProvider.SQLITE3,
-        tables=[
-            BaseTable(
-                name="Products",
-                columns=[
-                    SQLite3Typing.Column("id", "INTEGER"),
-                    SQLite3Typing.Column("name", "TEXT"),
-                    SQLite3Typing.Column("price", "REAL"),
-                ],
-            )
-        ],
-    ),
-]
 
 # Current position and expanded states
 main_tree: FoldableTree = FoldableTree(0, "", None, [])
@@ -134,5 +89,4 @@ def run_revision_app(revision_list: list[Revision]):
 
     main_tree, selected_tree = setup_tree(revisions)
 
-    # revisions = revision_list
     revision_app.run()

@@ -19,7 +19,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.revisions.manager import RevisionManager
 from skibidi_orm.migration_engine.studio.server import run_server
-from skibidi_orm.cli.revision_inspection import revision_app  # type: ignore
+from skibidi_orm.cli.log.revision_inspection import run_revision_app  # type: ignore
 from colorama import Fore
 
 sys.path.insert(0, os.getcwd())
@@ -114,7 +114,14 @@ def migrate_list():
     """
     List all migration revisions with their descriptions and ID.
     """
-    revision_app.run()
+    manager = RevisionManager()
+    revisions = manager.get_all_revisions()
+
+    if not revisions:
+        print("No revisions found.")
+        return
+
+    run_revision_app(list(revisions.values()))
 
 
 @app.command()
