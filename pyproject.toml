@@ -13,6 +13,7 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "freezegun>=1.5.1",
     "fastapi>=0.111.0",
+    "prompt-toolkit>=3.0.45",
     "black>=24.4.2",
     "psycopg2-binary>=2.9.9",
     "pdoc3>=0.10.0",

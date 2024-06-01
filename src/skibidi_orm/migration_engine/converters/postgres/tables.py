@@ -5,7 +5,7 @@ from skibidi_orm.migration_engine.converters.base.interfaces import (
 from skibidi_orm.migration_engine.converters.postgres.columns import PostgresColumnOperationConverter
 from skibidi_orm.migration_engine.converters.postgres.constraints import PostgresConstraintConverter
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
-    ColumnSpecificConstraint,
+    ColumnWideConstraint,
     ConstraintType,
 )
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
@@ -70,7 +70,7 @@ class PostgresTableOperationConverter(TableOperationSQLConverter):
                 f"{PostgresConstraintConverter.convert_constraint_to_SQL(constraint)}, "
             )
 
-        for key in operation.table.foreign_keys:
+        for key in operation.table.table_constraints:
             definition_string += (
                 f"{PostgresConstraintConverter.convert_constraint_to_SQL(key)}, "
             )
@@ -100,7 +100,7 @@ class PostgresTableOperationConverter(TableOperationSQLConverter):
     @staticmethod
     def split_constraints(
         table: PostgresTyping.Table,
-    ) -> tuple[set[ColumnSpecificConstraint], set[ColumnSpecificConstraint]]:
+    ) -> tuple[set[ColumnWideConstraint], set[ColumnWideConstraint]]:
         """Split the constraints of a table into those that have to be added at the end of the
         table definition and those that have to be added in the definitions of their resective columns
         """

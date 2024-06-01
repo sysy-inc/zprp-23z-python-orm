@@ -1,6 +1,8 @@
 from pytest import raises
 from skibidi_orm.exceptions.constraints import UnsupportedConstraintError
-from skibidi_orm.migration_engine.converters.sqlite3.constraints import SQLite3ConstraintConverter
+from skibidi_orm.migration_engine.converters.sqlite3.constraints import (
+    SQLite3ConstraintConverter,
+)
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     PrimaryKeyConstraint,
     UniqueConstraint,
@@ -63,7 +65,7 @@ def test_composite_foreign_key_constraint_conversion():
 
 def test_check_constraint_conversion():
     """Test the conversion of a CheckConstraint to SQL.""" ""
-    constraint = CheckConstraint("users", "age", "> 18")
+    constraint = CheckConstraint("users", "age > 18")
     assert (
         SQLite3ConstraintConverter.convert_constraint_to_SQL(constraint)
         == "CHECK (age > 18)"

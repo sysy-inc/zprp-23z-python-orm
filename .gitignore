@@ -10,6 +10,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+develop-eggs/
 downloads/
 eggs/
 .eggs/
@@ -162,5 +163,9 @@ cython_debug/
 .vscode
 .pdm-python
 tmp/
+
+# testing schema and database
+schema.py
+test_database.db
 
 */migrations/migration.py

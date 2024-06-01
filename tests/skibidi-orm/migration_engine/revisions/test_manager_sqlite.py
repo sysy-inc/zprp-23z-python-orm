@@ -6,7 +6,7 @@ from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
 )
 from skibidi_orm.migration_engine.adapters.providers import DatabaseProvider
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+from skibidi_orm.migration_engine.db_inspectors.sqlite.sqlite3_inspector import (
     SQLite3Inspector,
 )
 from skibidi_orm.migration_engine.revisions.manager import RevisionManager

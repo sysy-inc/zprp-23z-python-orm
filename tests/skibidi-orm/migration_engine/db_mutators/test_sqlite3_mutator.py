@@ -17,7 +17,7 @@ from skibidi_orm.migration_engine.data_mutator.sqlite3_data_mutatorr import (
     SQLite3DataMutator,
 )
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+from skibidi_orm.migration_engine.db_inspectors.sqlite.sqlite3_inspector import (
     SQLite3Inspector,
 )
 from ..sql_data import SQLite3InsertData, SQLite3TablesData

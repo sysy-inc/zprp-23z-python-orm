@@ -52,10 +52,10 @@ complex_table_with_constraints = PostgresTyping.Table(
         PostgresTyping.Column(
             "age",
             "INTEGER",
-            column_constraints=[CheckConstraint("users", "age", "> 18")],
+            column_constraints=[CheckConstraint("users", "age > 18")],
         ),
     ],
-    foreign_keys={
+    table_constraints={
         ForeignKeyConstraint(
             "admin_users", "users", {"active": "active", "name": "name"}
         )

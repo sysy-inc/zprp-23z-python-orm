@@ -44,7 +44,9 @@ class PostgresInspector(BaseDbInspector):
             PostgresTyping.Table(
                 name=table_name,
                 columns=self.get_table_columns(table_name),
-                foreign_keys=self._get_foreign_keys(table_name),
+                table_constraints=cast(
+                    set[c.TableWideConstraint], self._get_foreign_keys(table_name)
+                ),
             )
             for table_name in self.get_tables_names()
         ]
@@ -117,7 +119,7 @@ class PostgresInspector(BaseDbInspector):
 
     def _get_column_constraints(
         self, table_name: str, column_name: str
-    ) -> list[c.ColumnSpecificConstraint]:
+    ) -> list[c.ColumnWideConstraint]:
         """
         Get all column constraints from the table.
         """
@@ -162,12 +164,10 @@ class PostgresInspector(BaseDbInspector):
                     f"Column '{column_name}' does not exist in table '{table_name}'"
                 )
 
-        res: list[c.ColumnSpecificConstraint] = []
+        res: list[c.ColumnWideConstraint] = []
         for row in rows:  # loop because we can have many constraints for one column
-            _, _, constraint_type, _, check_clause, column_default = row
+            _, _, constraint_type, _, _, column_default = row
 
-            if check_clause:
-                res.append(c.CheckConstraint(table_name, column_name, check_clause))
             if constraint_type == "PRIMARY KEY":
                 res.append(c.PrimaryKeyConstraint(table_name, column_name))
             if constraint_type == "UNIQUE":

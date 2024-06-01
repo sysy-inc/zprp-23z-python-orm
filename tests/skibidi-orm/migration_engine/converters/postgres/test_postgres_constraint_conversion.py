@@ -32,7 +32,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
             ),
             "FOREIGN KEY (user_id, address, group_id) REFERENCES users (id, address, group)",
         ),
-        (CheckConstraint("users", "age", "> 18"), "CHECK (age > 18)"),
+        (CheckConstraint("users", "age > 18"), "CHECK (age > 18)"),
     ],
 )
 def test_convert_constraint_to_SQL(constraint, expected):  # type: ignore

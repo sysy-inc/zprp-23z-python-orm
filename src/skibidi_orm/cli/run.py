@@ -6,7 +6,7 @@
 
 from pathlib import Path
 import typer
-from typing import Union
+from typing import Union, Any
 import os
 
 # import shutil
@@ -14,10 +14,15 @@ import sys
 from skibidi_orm.cli.migration_file_creator import create_migration_file
 from skibidi_orm.cli.utils import find_schema_file, load_schema_from_path
 from skibidi_orm.exceptions.cli_exceptions import MultipleSchemaFilesError
+from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable
 from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
     MigrationElement,
 )
+from skibidi_orm.migration_engine.db_config.base_config import BaseDbConfig
+from skibidi_orm.migration_engine.revisions.manager import RevisionManager
+from skibidi_orm.migration_engine.revisions.revision import Revision
 from skibidi_orm.migration_engine.studio.server import run_server
+from skibidi_orm.cli.log.revision_inspection import run_revision_app  # type: ignore
 from colorama import Fore
 
 sys.path.insert(0, os.getcwd())
@@ -87,16 +92,22 @@ def migrate(
     """
     Used to run migration for current schema file. Can accept an optional message as a description of the migration.
     """
-
+    m = MigrationElement()
     if direct:
-        m = MigrationElement()
         m.migrate(preview=False)
+        tables: list[BaseTable[Any]] = m.adapter.tables  # type: ignore todo
+        manager = RevisionManager()
+        revision = Revision(
+            "No message provided" if message is None else message,  # type: ignore
+            "",  # this field is deprecated and to be removed in future versions
+            BaseDbConfig.get_instance().database_provider,
+            tables,  # type: ignore todo
+        )
+        manager.save_revision(revision)
         print("\nMigration complete. \n")
     else:
-        m = MigrationElement()
         create_migration_file(m)
         print("\nMigration file created. \n")
-
     pass
 
 
@@ -118,26 +129,38 @@ def preview_migration():
     pass
 
 
-@app.command(name="list-migrations")
+@app.command(name="log")
 def migrate_list():
     """
-    List all made migrations with their descriptions and ID.
+    List all migration revisions with their descriptions and ID.
     """
-    print("Listing all migrations")
-    pass
+    manager = RevisionManager()
+    revisions = manager.get_all_revisions()
+
+    if not revisions:
+        print("No revisions found.")
+        return
+
+    run_revision_app(list(revisions.values()))
 
 
-@app.command()
-def go(migration_id: Union[str, None] = typer.Argument(None, help="Migration ID")):
+def go(migration_id: str = typer.Argument(help="Migration ID")):
     """
     Go back (and forward) to specific migration.
     """
 
-    if migration_id is None:
-        migration_id = typer.prompt("Please enter the migration ID:")
-
-    print(f"Going to migration with ID: {migration_id}")
-    pass
+    manager = RevisionManager()
+    revision = manager.get_revision_by_id(int(migration_id))
+    print()
+    confirmation: str = typer.prompt(
+        Fore.RED
+        + "THIS OPERATION WILL DELETE ALL DATA IN THE DATABASE.\nARE YOU SURE YOU WANT TO CONTINUE? (y/n)"
+    )
+    if confirmation.lower() == "y":
+        manager.go_to_revision(revision)
+        print(Fore.GREEN + "Operation complete.")
+    else:
+        print(Fore.RED + "Operation aborted.")
 
 
 @app.command()

@@ -35,7 +35,7 @@ class SQLite3ConstraintConverter(ConstraintSQLConverter):
                 f" {constraint.referenced_table} ({', '.join(constraint.column_mapping.values())})"
             )
         elif constraint.constraint_type == ConstraintType.CHECK:
-            return f"CHECK ({cast(CheckConstraint, constraint).column_name} {cast(CheckConstraint, constraint).condition})"
+            return f"CHECK ({cast(CheckConstraint, constraint).condition})"
         elif constraint.constraint_type == ConstraintType.NOT_NULL:
             return "NOT NULL"
         else:

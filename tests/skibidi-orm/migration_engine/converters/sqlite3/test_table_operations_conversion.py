@@ -57,54 +57,15 @@ complex_table_with_constraints = SQLite3Typing.Table(
         SQLite3Typing.Column(
             "age",
             "INTEGER",
-            column_constraints=[CheckConstraint("users", "age", "> 18")],
         ),
     ],
-    foreign_keys={
+    table_constraints=[
         ForeignKeyConstraint(
             "admin_users", "users", {"active": "active", "name": "name"}
-        )
-    },
+        ),
+        CheckConstraint("admin_users", "age > 18"),
+    ],
 )
-
-
-@pytest.fixture
-def non_random_constraint_order(monkeypatch: pytest.MonkeyPatch):
-    """Since the actual split_constraints method works on sets, so the
-    order of constraints is not guaranteed, we have to mock it using lists"""
-
-    def split_using_lists(
-        table: SQLite3Typing.Table,
-    ) -> tuple[list[Constraint], list[Constraint]]:
-        all_constraints = list(
-            chain.from_iterable(column.column_constraints for column in table.columns)
-        )
-
-        # TODO: make this dependent on the implementation of the TableOperationConverter instead of
-        #  doing it here
-        constraints_at_end = list(
-            filter(
-                lambda c: c.constraint_type
-                not in [
-                    ConstraintType.PRIMARY_KEY,
-                    ConstraintType.UNIQUE,
-                    ConstraintType.NOT_NULL,
-                ],
-                all_constraints,
-            )
-        )
-
-        constraints_at_columns = [
-            constraint
-            for constraint in all_constraints
-            if constraint not in constraints_at_end
-        ]
-
-        return list(constraints_at_end), list(constraints_at_columns)
-
-    monkeypatch.setattr(
-        SQLite3TableOperationConverter, "split_constraints", split_using_lists
-    )
 
 
 def test_create_table_conversion_simple():
@@ -125,15 +86,14 @@ def test_create_table_conversion_complex():
     )
 
 
-@pytest.mark.usefixtures("non_random_constraint_order")
 def test_create_table_conversion_complex_with_constraints():
     """Create a complex table with multiple constraints"""
     operation = CreateTableOperation(complex_table_with_constraints)
     assert (
         SQLite3TableOperationConverter.convert_table_operation_to_SQL(operation)
         == "CREATE TABLE admin_users (user_id INTEGER PRIMARY KEY NOT NULL, name TEXT, "
-        "email TEXT UNIQUE, active BLOB, age INTEGER, CHECK (age > 18), FOREIGN KEY (active, name) REFERENCES users ("
-        "active, name));"
+        "email TEXT UNIQUE, active BLOB, age INTEGER, FOREIGN KEY (active, name) REFERENCES users ("
+        "active, name), CHECK (age > 18));"
     )
 
 

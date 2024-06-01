@@ -12,7 +12,7 @@ from skibidi_orm.migration_engine.operations.column_operations import (
     RenameColumnOperation,
 )
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
-    ColumnSpecificConstraint,
+    ColumnWideConstraint,
 )
 from skibidi_orm.migration_engine.operations.operation_type import OperationType
 from skibidi_orm.exceptions.operations import UnsupportedOperationError
@@ -63,6 +63,11 @@ class PostgresColumnOperationConverter(ColumnOperationSQLConverter):
             fk_definition = f"REFERENCES {operation.related_foreign_key.referenced_table} ({referenced_column})"
             return_value += f" {fk_definition}"
 
+        if operation.related_check_constraint is not None:
+            check_definition = PostgresConstraintConverter.convert_constraint_to_SQL(
+                operation.related_check_constraint
+            )
+            return_value += f" {check_definition}"
         return f"{return_value};"
 
     @staticmethod
@@ -79,7 +84,7 @@ class PostgresColumnOperationConverter(ColumnOperationSQLConverter):
 
     @staticmethod
     def convert_column_definition_to_SQL(
-        column: PostgresTyping.Column, constraints: list[ColumnSpecificConstraint]
+        column: PostgresTyping.Column, constraints: list[ColumnWideConstraint]
     ) -> str:
         """Convert a given column definition to a Postgres SQL string"""
         return_value = f"{column.name} {column.data_type}"

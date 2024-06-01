@@ -4,6 +4,7 @@ from skibidi_orm.migration_engine.operations.operation_type import OperationType
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     Constraint,
     ForeignKeyConstraint,
+    CheckConstraint,
 )
 from skibidi_orm.exceptions.operations import IrreversibleOperationError
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable, BaseColumn
@@ -32,9 +33,10 @@ class ColumnOperation(ABC):
         it has to be taken into acount when removing and adding it back to the schema.
         """
         return [
-            fk
-            for fk in self.table.foreign_keys
-            if self.column.name in fk.column_mapping
+            c
+            for c in self.table.table_constraints
+            if isinstance(c, ForeignKeyConstraint)
+            and self.column.name in c.column_mapping
         ]
 
     @abstractmethod
@@ -49,8 +51,10 @@ class AddColumnOperation(ColumnOperation):
     operation_type: OperationType = field(init=False, default=OperationType.CREATE)
     is_reversible: bool = field(init=False, default=True)
 
-    # if the column to be added references another table, it has to be set here
+    # these fields serve as a way to add new table-level constraints to the table when
+    # adding the column after creating it. they can only reference the column to be added!
     related_foreign_key: Optional[ForeignKeyConstraint] = field(default=None)
+    related_check_constraint: Optional[CheckConstraint] = field(default=None)
 
     def reverse(self) -> ColumnOperation:
         return DeleteColumnOperation(table=self.table, column=self.column)

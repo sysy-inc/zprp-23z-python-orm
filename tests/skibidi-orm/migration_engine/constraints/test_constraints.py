@@ -14,11 +14,6 @@ def test_ColumnSpecificConstraint_sortable():
                     table_name="table_name",
                     column_name="column_name",
                 ),
-                c.CheckConstraint(
-                    table_name="table_name",
-                    column_name="column_name",
-                    condition="condition",
-                ),
             ]
         )
     except TypeError as e:

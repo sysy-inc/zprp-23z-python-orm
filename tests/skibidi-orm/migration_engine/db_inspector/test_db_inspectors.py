@@ -8,12 +8,39 @@ from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.adapters.database_objects import constraints as c
 import sqlite3
 
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+from skibidi_orm.migration_engine.db_inspectors.sqlite.sqlite3_inspector import (
     SQLite3Inspector,
 )
 from skibidi_orm.migration_engine.revisions.manager import RevisionManager
 
 from ..sql_data import SQLite3TablesData
+
+# TODO: MOVE
+sql_table_with_unique_constraint_and_artificial_indices = [
+    """
+    CREATE TABLE users (
+        user_id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL UNIQUE,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+    """,
+    """
+    CREATE INDEX idx_timestamp ON users(timestamp);
+    """,
+]
+
+sql_table_with_multiple_check_constraints = [
+    """
+    CREATE TABLE test_table (
+        id INTEGER PRIMARY KEY,
+        age INTEGER CHECK (age >= 18 AND age <= 65),
+        salary REAL CHECK (salary > 0 AND salary < 1000000),
+        email TEXT CHECK (email LIKE '%@%.%'),
+        start_date DATE CHECK (start_date >= '2020-01-01'),
+        end_date DATE CHECK (end_date > start_date),
+        status TEXT CHECK (status IN ('active', 'inactive') OR status = 'pending')
+    );
+    """
+]
 
 
 def execute_sqlite3_commands(db_path: str, commands: list[str]):
@@ -258,3 +285,78 @@ def test_revision_table_hidden_from_inspector_sqlite(make_database: str):
     RevisionManager()  # creates the revision table in init
     tables = inspector.get_tables_names()
     assert len(tables) == 0
+
+
+@pytest.mark.parametrize("tmp_database", [SQLite3TablesData.sql_schema_with_fks], indirect=True)
+def test_get_column_constraints_default(tmp_database: str):
+    SQLite3Config(db_path=tmp_database)
+    inspector = SQLite3Inspector()
+    tables = inspector.get_tables()
+
+    users_table, posts_table, comments_table = tables
+
+    users_columns = users_table.columns
+    users_timestamp = users_columns[4]
+    expected_constraint = c.DefaultConstraint(
+        "users", "registration_date", "CURRENT_TIMESTAMP"
+    )
+    assert expected_constraint in users_timestamp.column_constraints
+
+    posts_columns = posts_table.columns
+    posts_timestamp = posts_columns[4]
+    expected_constraint = c.DefaultConstraint("posts", "post_date", "CURRENT_TIMESTAMP")
+    assert expected_constraint in posts_timestamp.column_constraints
+
+    comments_columns = comments_table.columns
+    comments_timestamp = comments_columns[5]
+    expected_constraint = c.DefaultConstraint(
+        "comments", "comment_date", "CURRENT_TIMESTAMP"
+    )
+    assert expected_constraint in comments_timestamp.column_constraints
+
+
+@pytest.mark.parametrize(
+    "tmp_database",
+    [sql_table_with_unique_constraint_and_artificial_indices],
+    indirect=True,
+)
+def test_detects_unique_indices(tmp_database: str):
+    SQLite3Config(db_path=tmp_database)
+    inspector = SQLite3Inspector()
+    all_unique_constraints = inspector.get_all_unique_constraints("users")
+    assert c.UniqueConstraint("users", "username") in all_unique_constraints
+    assert len(all_unique_constraints) == 1
+    username_column = inspector.get_tables().pop().columns[1]
+    assert username_column.column_constraints == [
+        c.NotNullConstraint("users", "username"),
+        c.UniqueConstraint("users", "username"),
+    ]
+
+
+@pytest.mark.parametrize(
+    "tmp_database", [sql_table_with_multiple_check_constraints], indirect=True
+)
+def test_get_all_check_constraints(tmp_database: str):
+    SQLite3Config(db_path=tmp_database)
+    inspector = SQLite3Inspector()
+    check_constraints = inspector.get_all_check_constraints("test_table")
+    assert len(check_constraints) == 6
+    assert (
+        c.CheckConstraint("test_table", "age >= 18 AND age <= 65") in check_constraints
+    )
+    assert (
+        c.CheckConstraint("test_table", "salary > 0 AND salary < 1000000")
+        in check_constraints
+    )
+    assert c.CheckConstraint("test_table", "email LIKE '%@%.%'") in check_constraints
+    assert (
+        c.CheckConstraint("test_table", "start_date >= '2020-01-01'")
+        in check_constraints
+    )
+    assert c.CheckConstraint("test_table", "end_date > start_date")
+    assert (
+        c.CheckConstraint(
+            "test_table", "status IN ('active', 'inactive') OR status = 'pending'"
+        )
+        in check_constraints
+    )
