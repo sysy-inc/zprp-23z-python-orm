@@ -11,6 +11,9 @@ from skibidi_orm.migration_engine.data_mutator.base_data_mutator import (
 )
 from fastapi.middleware.cors import CORSMiddleware
 from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
+from skibidi_orm.migration_engine.studio.utils.db_config_dynamic_import import (
+    db_config_dynamic_import,
+)
 from skibidi_orm.migration_engine.studio.utils.get_db_inspector import get_db_inspector
 from skibidi_orm.migration_engine.studio.utils.get_db_seeder import get_db_mutator
 
@@ -44,8 +47,9 @@ app.mount(
 def run_server(schema_file: str):
     global db_inspector
     global db_mutator
-    db_inspector = get_db_inspector(schema_file=schema_file)
-    db_mutator = get_db_mutator(db_inspector)
+    db_config = db_config_dynamic_import(schema_file_path=schema_file)
+    db_inspector = get_db_inspector(db_config=db_config)
+    db_mutator = get_db_mutator(db_config=db_config)
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 

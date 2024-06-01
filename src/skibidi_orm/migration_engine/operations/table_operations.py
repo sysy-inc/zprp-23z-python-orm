@@ -21,8 +21,12 @@ class TableOperation(ABC):
         """Generates a table operation that reverses
         the calling instance if possible. Else, throws an exception"""
 
+    @abstractmethod
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(table={self.table}, is_reversible={self.is_reversible})"
 
-@dataclass(frozen=True)
+
+@dataclass(frozen=True, repr=False)
 class CreateTableOperation(TableOperation):
     """Class for creating a table"""
 
@@ -34,6 +38,9 @@ class CreateTableOperation(TableOperation):
 
     def __str__(self) -> str:
         return f"Create Table {self.table.name} with columns: {', '.join([col.name for col in self.table.columns])}"
+
+    def __repr__(self) -> str:
+        return super().__repr__()
 
 
 @dataclass(frozen=True)
@@ -51,6 +58,9 @@ class DeleteTableOperation(TableOperation):
     def __str__(self) -> str:
         return f"Delete Table {self.table.name}"
 
+    def __repr__(self) -> str:
+        return super().__repr__()
+
 
 @dataclass(frozen=True)
 class RenameTableOperation(TableOperation):
@@ -65,3 +75,8 @@ class RenameTableOperation(TableOperation):
 
     def __str__(self) -> str:
         return f"Rename Table {self.table.name} to {self.new_name}"
+
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__name__}(table={self.table}, new_name={self.new_name})"
+        )

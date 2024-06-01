@@ -39,6 +39,10 @@ class ColumnOperation(ABC):
             and self.column.name in c.column_mapping
         ]
 
+    @abstractmethod
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(table={self.table}, is_reversible={self.is_reversible})"
+
 
 @dataclass(frozen=True)
 class AddColumnOperation(ColumnOperation):
@@ -81,6 +85,9 @@ class AddColumnOperation(ColumnOperation):
     def __str__(self) -> str:
         return f"Add Column {self.column.name} to Table {self.table.name}"
 
+    def __repr__(self) -> str:
+        return super().__repr__()
+
 
 @dataclass(frozen=True)
 class DeleteColumnOperation(ColumnOperation):
@@ -96,6 +103,9 @@ class DeleteColumnOperation(ColumnOperation):
 
     def __str__(self) -> str:
         return f"Delete Column {self.column.name} from Table {self.table.name}"
+
+    def __repr__(self) -> str:
+        return super().__repr__()
 
 
 @dataclass(frozen=True)
@@ -116,6 +126,9 @@ class RenameColumnOperation(ColumnOperation):
 
     def __str__(self) -> str:
         return f"Rename Column {self.column.name} to {self.new_name} in Table {self.table.name}"
+
+    def __repr__(self) -> str:
+        return super().__repr__()
 
 
 @dataclass(frozen=True)
@@ -139,6 +152,9 @@ class AddConstraintOperation(ColumnOperation):
     def __str__(self) -> str:
         return f"Add Constraint {self.constraint.constraint_type.value} to Column {self.column.name} in Table {self.table.name}"
 
+    def __repr__(self) -> str:
+        return super().__repr__()
+
 
 @dataclass(frozen=True)
 class DeleteConstraintOperation(ColumnOperation):
@@ -161,6 +177,9 @@ class DeleteConstraintOperation(ColumnOperation):
     def __str__(self) -> str:
         return f"Delete Constraint {self.constraint.constraint_type.value} from Column {self.column.name} in Table {self.table.name}"
 
+    def __repr__(self) -> str:
+        return super().__repr__()
+
 
 @dataclass(frozen=True)
 class ChangeDataTypeOperation(ColumnOperation):
@@ -181,3 +200,6 @@ class ChangeDataTypeOperation(ColumnOperation):
 
     def __str__(self) -> str:
         return f"Change Data Type of Column {self.column.name} in Table {self.table.name} to {self.new_dtype}"
+
+    def __repr__(self) -> str:
+        return super().__repr__()

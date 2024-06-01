@@ -1,3 +1,4 @@
+develop-eggs/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -9,10 +10,10 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
-develop-eggs/
 downloads/
 eggs/
 .eggs/
+dist
 # lib/
 lib64/
 parts/
@@ -161,3 +162,5 @@ cython_debug/
 .vscode
 .pdm-python
 tmp/
+
+*/migrations/migration.py
