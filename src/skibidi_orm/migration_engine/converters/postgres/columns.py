@@ -1,9 +1,9 @@
-from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
+from skibidi_orm.migration_engine.adapters.postgres_typing import PostgresTyping
 from skibidi_orm.migration_engine.converters.base.interfaces import (
     ColumnOperationSQLConverter,
 )
-from skibidi_orm.migration_engine.converters.sqlite3.constraints import (
-    SQLite3ConstraintConverter,
+from skibidi_orm.migration_engine.converters.postgres.constraints import (
+    PostgresConstraintConverter,
 )
 from skibidi_orm.migration_engine.operations.column_operations import (
     AddColumnOperation,
@@ -19,37 +19,37 @@ from skibidi_orm.exceptions.operations import UnsupportedOperationError
 from typing import cast
 
 
-class SQLite3ColumnOperationConverter(ColumnOperationSQLConverter):
-    """Class responsible for converting column operation objects to raw SQLite3 SQL strings"""
+class PostgresColumnOperationConverter(ColumnOperationSQLConverter):
+    """Class responsible for converting column operation objects to raw Postgres SQL strings"""
 
     @staticmethod
     def convert_column_operation_to_SQL(operation: ColumnOperation) -> str:
-        """Convert a given column operation to a SQLite3 SQL string"""
+        """Convert a given column operation to a Postgres SQL string"""
         if operation.operation_type == OperationType.CREATE:
-            return SQLite3ColumnOperationConverter.convert_add_column_operation_to_SQL(
+            return PostgresColumnOperationConverter.convert_add_column_operation_to_SQL(
                 cast(AddColumnOperation, operation)
             )
         elif operation.operation_type == OperationType.DELETE:
             return (
-                SQLite3ColumnOperationConverter.convert_delete_column_operation_to_SQL(
+                PostgresColumnOperationConverter.convert_delete_column_operation_to_SQL(
                     cast(DeleteColumnOperation, operation)
                 )
             )
         elif operation.operation_type == OperationType.RENAME:
             return (
-                SQLite3ColumnOperationConverter.convert_rename_column_operation_to_SQL(
+                PostgresColumnOperationConverter.convert_rename_column_operation_to_SQL(
                     cast(RenameColumnOperation, operation)
                 )
             )
         raise UnsupportedOperationError(
-            "The given operation is not supported in SQLite3."
+            "The given operation is not supported in Postgres."
         )
 
     @staticmethod
     def convert_add_column_operation_to_SQL(operation: AddColumnOperation) -> str:
-        """Convert a given add column operation to a SQLite3 SQL string"""
+        """Convert a given add column operation to a Postgres SQL string"""
         column_definition = (
-            SQLite3ColumnOperationConverter.convert_column_definition_to_SQL(
+            PostgresColumnOperationConverter.convert_column_definition_to_SQL(
                 operation.column, operation.column.column_constraints
             )
         )
@@ -67,24 +67,24 @@ class SQLite3ColumnOperationConverter(ColumnOperationSQLConverter):
 
     @staticmethod
     def convert_delete_column_operation_to_SQL(operation: DeleteColumnOperation) -> str:
-        """Convert a given delete column operation to a SQLite3 SQL string"""
+        """Convert a given delete column operation to a Postgres SQL string"""
         return (
             f"ALTER TABLE {operation.table.name} DROP COLUMN {operation.column.name};"
         )
 
     @staticmethod
     def convert_rename_column_operation_to_SQL(operation: RenameColumnOperation) -> str:
-        """Convert a given rename column operation to a SQLite3 SQL string"""
+        """Convert a given rename column operation to a Postgres SQL string"""
         return f"ALTER TABLE {operation.table.name} RENAME COLUMN {operation.column.name} TO {operation.new_name};"
 
     @staticmethod
     def convert_column_definition_to_SQL(
-        column: SQLite3Typing.Column, constraints: list[ColumnSpecificConstraint]
+        column: PostgresTyping.Column, constraints: list[ColumnSpecificConstraint]
     ) -> str:
-        """Convert a given column definition to a SQLite3 SQL string"""
+        """Convert a given column definition to a Postgres SQL string"""
         return_value = f"{column.name} {column.data_type}"
         for constraint in constraints:
             return_value += (
-                f" {SQLite3ConstraintConverter.convert_constraint_to_SQL(constraint)}"
+                f" {PostgresConstraintConverter.convert_constraint_to_SQL(constraint)}"
             )
         return return_value
