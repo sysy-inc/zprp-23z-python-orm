@@ -1,6 +1,6 @@
 [project]
 name = "SkiBiDi-ORM"
-version = "0.1.26"
+version = "0.1.31"
 description = "Python ORM"
 authors = [
     {name = "xDepcio", email = "olek.drwal@gmail.com"},
@@ -16,6 +16,7 @@ dependencies = [
     "prompt-toolkit>=3.0.45",
     "black>=24.4.2",
     "psycopg2-binary>=2.9.9",
+    "pdoc3>=0.10.0",
 ]
 requires-python = ">=3.12"
 readme = "README.md"
@@ -32,6 +33,7 @@ distribution = true
 [tool.pdm.dev-dependencies]
 dev = [
     "pytest>=8.1.1",
+    "tox>=4.15.0",
 ]
 
 [tool.pdm.scripts]

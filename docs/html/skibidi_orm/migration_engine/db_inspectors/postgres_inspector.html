@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>skibidi_orm.migration_engine.db_inspectors.postgres_inspector API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>skibidi_orm.migration_engine.db_inspectors.postgres_inspector</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from __future__ import annotations
+
+from typing import Any, cast
+
+import skibidi_orm.migration_engine.adapters.database_objects.constraints as c
+from skibidi_orm.migration_engine.adapters.postgres_typing import PostgresTyping
+from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
+from skibidi_orm.migration_engine.db_inspectors.base_inspector import BaseDbInspector
+
+
+class PostgresInspector(BaseDbInspector):
+    &#34;&#34;&#34;
+    Used to get data from live Postgres database.
+    Should only be instantiated when Postgres is choosen as the database.
+    &#34;&#34;&#34;
+
+    def __init__(self) -&gt; None:
+        self.config = PostgresConfig.get_instance()
+
+    def get_tables_names(self) -&gt; list[str]:
+        &#34;&#34;&#34;
+        Get all tables names from the database.
+        &#34;&#34;&#34;
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                &#34;&#34;&#34;
+                SELECT table_name
+                FROM information_schema.tables
+                WHERE table_schema = &#39;public&#39;
+                &#34;&#34;&#34;
+            )
+
+            tables = cursor.fetchall()
+
+        return [table[0] for table in tables]
+
+    def get_tables(self) -&gt; list[PostgresTyping.Table]:
+        &#34;&#34;&#34;
+        Get all tables from the database.
+        &#34;&#34;&#34;
+
+        return [
+            PostgresTyping.Table(
+                name=table_name,
+                columns=self.get_table_columns(table_name),
+                foreign_keys=self._get_foreign_keys(table_name),
+            )
+            for table_name in self.get_tables_names()
+        ]
+
+    def get_table_columns(self, table_name: str) -&gt; list[PostgresTyping.Column]:
+        &#34;&#34;&#34;
+        Get all columns from the table.
+        &#34;&#34;&#34;
+
+        return [
+            PostgresTyping.Column(
+                name=column_name,
+                data_type=self._get_column_data_type(table_name, column_name),
+                column_constraints=self._get_column_constraints(
+                    table_name, column_name
+                ),
+            )
+            for column_name in self._get_table_columns_names(table_name)
+        ]
+
+    def _get_foreign_keys(self, table_name: str) -&gt; set[c.ForeignKeyConstraint]:
+        &#34;&#34;&#34;
+        Get all foreign keys from the table.
+        &#34;&#34;&#34;
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f&#34;&#34;&#34;
+                SELECT
+                    tc.constraint_name,
+                    tc.table_name,
+                    kcu.column_name,
+                    ccu.table_name AS foreign_table_name,
+                    ccu.column_name AS foreign_column_name
+                FROM
+                    information_schema.table_constraints AS tc
+                JOIN
+                    information_schema.key_column_usage AS kcu
+                    ON tc.constraint_name = kcu.constraint_name
+                JOIN
+                    information_schema.constraint_column_usage AS ccu
+                    ON tc.constraint_name = ccu.constraint_name
+                WHERE
+                    tc.constraint_type = &#39;FOREIGN KEY&#39;
+                    AND tc.table_name = &#39;{table_name}&#39;;
+                &#34;&#34;&#34;
+            )
+
+            rows = cursor.fetchall()
+
+        res: set[c.ForeignKeyConstraint] = set()
+        for row in rows:
+            (
+                _,
+                table_name,
+                column_name,
+                foreign_table_name,
+                foreign_column_name,
+            ) = row
+
+            res.add(
+                c.ForeignKeyConstraint(
+                    table_name=table_name,
+                    referenced_table=foreign_table_name,
+                    column_mapping={column_name: foreign_column_name},
+                )
+            )
+
+        return res
+
+    def _get_column_constraints(
+        self, table_name: str, column_name: str
+    ) -&gt; list[c.ColumnSpecificConstraint]:
+        &#34;&#34;&#34;
+        Get all column constraints from the table.
+        &#34;&#34;&#34;
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f&#34;&#34;&#34;
+                SELECT
+                    col.table_name,
+                    col.column_name,
+                    tc.constraint_type,
+                    tc.constraint_name,
+                    cc.check_clause,
+                    col.column_default
+                FROM
+                    information_schema.columns AS col
+                LEFT JOIN
+                    information_schema.constraint_column_usage AS ccu
+                    ON col.table_schema = ccu.table_schema
+                    AND col.table_name = ccu.table_name
+                    AND col.column_name = ccu.column_name
+                LEFT JOIN
+                    information_schema.table_constraints AS tc
+                    ON ccu.table_schema = tc.table_schema
+                    AND ccu.table_name = tc.table_name
+                    AND ccu.constraint_name = tc.constraint_name
+                LEFT JOIN
+                    information_schema.check_constraints AS cc
+                    ON tc.constraint_name = cc.constraint_name
+                WHERE
+                    col.table_name = &#39;{table_name}&#39;
+                    AND col.column_name = &#39;{column_name}&#39;
+                ORDER BY
+                    col.table_name,
+                    col.ordinal_position;
+                &#34;&#34;&#34;
+            )
+
+            rows = cursor.fetchall()
+            if len(rows) == 0:
+                raise ValueError(
+                    f&#34;Column &#39;{column_name}&#39; does not exist in table &#39;{table_name}&#39;&#34;
+                )
+
+        res: list[c.ColumnSpecificConstraint] = []
+        for row in rows:  # loop because we can have many constraints for one column
+            _, _, constraint_type, _, check_clause, column_default = row
+
+            if check_clause:
+                res.append(c.CheckConstraint(table_name, column_name, check_clause))
+            if constraint_type == &#34;PRIMARY KEY&#34;:
+                res.append(c.PrimaryKeyConstraint(table_name, column_name))
+            if constraint_type == &#34;UNIQUE&#34;:
+                res.append(c.UniqueConstraint(table_name, column_name))
+            if not self._is_column_nullable(
+                table_name, column_name
+            ) and not self.__holds_instance(res, c.NotNullConstraint):
+                res.append(c.NotNullConstraint(table_name, column_name))
+            if column_default and not self.__holds_instance(res, c.DefaultConstraint):
+                res.append(c.DefaultConstraint(table_name, column_name, column_default))
+
+        return res
+
+    def _get_table_columns_names(self, table_name: str) -&gt; list[str]:
+        &#34;&#34;&#34;
+        Get all columns names from the table.
+        &#34;&#34;&#34;
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f&#34;&#34;&#34;
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_name = &#39;{table_name}&#39;
+                &#34;&#34;&#34;
+            )
+
+            columns = cursor.fetchall()
+
+        return [column[0] for column in columns]
+
+    def _get_column_data_type(
+        self, table_name: str, column_name: str
+    ) -&gt; PostgresTyping.DataTypes:
+        &#34;&#34;&#34;
+        Get the data type of the column.
+        &#34;&#34;&#34;
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f&#34;&#34;&#34;
+                SELECT data_type
+                FROM information_schema.columns
+                WHERE table_name = &#39;{table_name}&#39;
+                AND column_name = &#39;{column_name}&#39;
+                &#34;&#34;&#34;
+            )
+
+            data_type = cursor.fetchone()
+            if not data_type:
+                raise ValueError(
+                    f&#34;Column &#39;{column_name}&#39; does not exist in table &#39;{table_name}&#39;&#34;
+                )
+
+        data_type_upper = cast(str, data_type[0]).upper()
+        return cast(PostgresTyping.DataTypes, data_type_upper)
+
+    def _is_column_nullable(self, table_name: str, column_name: str) -&gt; bool:
+        &#34;&#34;&#34;
+        Check if the column is nullable.
+        &#34;&#34;&#34;
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f&#34;&#34;&#34;
+                SELECT is_nullable
+                FROM information_schema.columns
+                WHERE table_name = &#39;{table_name}&#39;
+                AND column_name = &#39;{column_name}&#39;
+                &#34;&#34;&#34;
+            )
+
+            is_nullable = cursor.fetchone()
+            if not is_nullable:
+                raise ValueError(
+                    f&#34;Column &#39;{column_name}&#39; does not exist in table &#39;{table_name}&#39;&#34;
+                )
+
+        return is_nullable[0] == &#34;YES&#34;
+
+    def __holds_instance(self, array: list[Any], class_type: type) -&gt; bool:
+        &#34;&#34;&#34;
+        Helper function to check if the array holds the instance of a class.
+        &#34;&#34;&#34;
+        return any(isinstance(x, class_type) for x in array)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="skibidi_orm.migration_engine.db_inspectors.postgres_inspector.PostgresInspector"><code class="flex name class">
+<span>class <span class="ident">PostgresInspector</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Used to get data from live Postgres database.
+Should only be instantiated when Postgres is choosen as the database.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PostgresInspector(BaseDbInspector):
+    &#34;&#34;&#34;
+    Used to get data from live Postgres database.
+    Should only be instantiated when Postgres is choosen as the database.
+    &#34;&#34;&#34;
+
+    def __init__(self) -&gt; None:
+        self.config = PostgresConfig.get_instance()
+
+    def get_tables_names(self) -&gt; list[str]:
+        &#34;&#34;&#34;
+        Get all tables names from the database.
+        &#34;&#34;&#34;
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                &#34;&#34;&#34;
+                SELECT table_name
+                FROM information_schema.tables
+                WHERE table_schema = &#39;public&#39;
+                &#34;&#34;&#34;
+            )
+
+            tables = cursor.fetchall()
+
+        return [table[0] for table in tables]
+
+    def get_tables(self) -&gt; list[PostgresTyping.Table]:
+        &#34;&#34;&#34;
+        Get all tables from the database.
+        &#34;&#34;&#34;
+
+        return [
+            PostgresTyping.Table(
+                name=table_name,
+                columns=self.get_table_columns(table_name),
+                foreign_keys=self._get_foreign_keys(table_name),
+            )
+            for table_name in self.get_tables_names()
+        ]
+
+    def get_table_columns(self, table_name: str) -&gt; list[PostgresTyping.Column]:
+        &#34;&#34;&#34;
+        Get all columns from the table.
+        &#34;&#34;&#34;
+
+        return [
+            PostgresTyping.Column(
+                name=column_name,
+                data_type=self._get_column_data_type(table_name, column_name),
+                column_constraints=self._get_column_constraints(
+                    table_name, column_name
+                ),
+            )
+            for column_name in self._get_table_columns_names(table_name)
+        ]
+
+    def _get_foreign_keys(self, table_name: str) -&gt; set[c.ForeignKeyConstraint]:
+        &#34;&#34;&#34;
+        Get all foreign keys from the table.
+        &#34;&#34;&#34;
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f&#34;&#34;&#34;
+                SELECT
+                    tc.constraint_name,
+                    tc.table_name,
+                    kcu.column_name,
+                    ccu.table_name AS foreign_table_name,
+                    ccu.column_name AS foreign_column_name
+                FROM
+                    information_schema.table_constraints AS tc
+                JOIN
+                    information_schema.key_column_usage AS kcu
+                    ON tc.constraint_name = kcu.constraint_name
+                JOIN
+                    information_schema.constraint_column_usage AS ccu
+                    ON tc.constraint_name = ccu.constraint_name
+                WHERE
+                    tc.constraint_type = &#39;FOREIGN KEY&#39;
+                    AND tc.table_name = &#39;{table_name}&#39;;
+                &#34;&#34;&#34;
+            )
+
+            rows = cursor.fetchall()
+
+        res: set[c.ForeignKeyConstraint] = set()
+        for row in rows:
+            (
+                _,
+                table_name,
+                column_name,
+                foreign_table_name,
+                foreign_column_name,
+            ) = row
+
+            res.add(
+                c.ForeignKeyConstraint(
+                    table_name=table_name,
+                    referenced_table=foreign_table_name,
+                    column_mapping={column_name: foreign_column_name},
+                )
+            )
+
+        return res
+
+    def _get_column_constraints(
+        self, table_name: str, column_name: str
+    ) -&gt; list[c.ColumnSpecificConstraint]:
+        &#34;&#34;&#34;
+        Get all column constraints from the table.
+        &#34;&#34;&#34;
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f&#34;&#34;&#34;
+                SELECT
+                    col.table_name,
+                    col.column_name,
+                    tc.constraint_type,
+                    tc.constraint_name,
+                    cc.check_clause,
+                    col.column_default
+                FROM
+                    information_schema.columns AS col
+                LEFT JOIN
+                    information_schema.constraint_column_usage AS ccu
+                    ON col.table_schema = ccu.table_schema
+                    AND col.table_name = ccu.table_name
+                    AND col.column_name = ccu.column_name
+                LEFT JOIN
+                    information_schema.table_constraints AS tc
+                    ON ccu.table_schema = tc.table_schema
+                    AND ccu.table_name = tc.table_name
+                    AND ccu.constraint_name = tc.constraint_name
+                LEFT JOIN
+                    information_schema.check_constraints AS cc
+                    ON tc.constraint_name = cc.constraint_name
+                WHERE
+                    col.table_name = &#39;{table_name}&#39;
+                    AND col.column_name = &#39;{column_name}&#39;
+                ORDER BY
+                    col.table_name,
+                    col.ordinal_position;
+                &#34;&#34;&#34;
+            )
+
+            rows = cursor.fetchall()
+            if len(rows) == 0:
+                raise ValueError(
+                    f&#34;Column &#39;{column_name}&#39; does not exist in table &#39;{table_name}&#39;&#34;
+                )
+
+        res: list[c.ColumnSpecificConstraint] = []
+        for row in rows:  # loop because we can have many constraints for one column
+            _, _, constraint_type, _, check_clause, column_default = row
+
+            if check_clause:
+                res.append(c.CheckConstraint(table_name, column_name, check_clause))
+            if constraint_type == &#34;PRIMARY KEY&#34;:
+                res.append(c.PrimaryKeyConstraint(table_name, column_name))
+            if constraint_type == &#34;UNIQUE&#34;:
+                res.append(c.UniqueConstraint(table_name, column_name))
+            if not self._is_column_nullable(
+                table_name, column_name
+            ) and not self.__holds_instance(res, c.NotNullConstraint):
+                res.append(c.NotNullConstraint(table_name, column_name))
+            if column_default and not self.__holds_instance(res, c.DefaultConstraint):
+                res.append(c.DefaultConstraint(table_name, column_name, column_default))
+
+        return res
+
+    def _get_table_columns_names(self, table_name: str) -&gt; list[str]:
+        &#34;&#34;&#34;
+        Get all columns names from the table.
+        &#34;&#34;&#34;
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f&#34;&#34;&#34;
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_name = &#39;{table_name}&#39;
+                &#34;&#34;&#34;
+            )
+
+            columns = cursor.fetchall()
+
+        return [column[0] for column in columns]
+
+    def _get_column_data_type(
+        self, table_name: str, column_name: str
+    ) -&gt; PostgresTyping.DataTypes:
+        &#34;&#34;&#34;
+        Get the data type of the column.
+        &#34;&#34;&#34;
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f&#34;&#34;&#34;
+                SELECT data_type
+                FROM information_schema.columns
+                WHERE table_name = &#39;{table_name}&#39;
+                AND column_name = &#39;{column_name}&#39;
+                &#34;&#34;&#34;
+            )
+
+            data_type = cursor.fetchone()
+            if not data_type:
+                raise ValueError(
+                    f&#34;Column &#39;{column_name}&#39; does not exist in table &#39;{table_name}&#39;&#34;
+                )
+
+        data_type_upper = cast(str, data_type[0]).upper()
+        return cast(PostgresTyping.DataTypes, data_type_upper)
+
+    def _is_column_nullable(self, table_name: str, column_name: str) -&gt; bool:
+        &#34;&#34;&#34;
+        Check if the column is nullable.
+        &#34;&#34;&#34;
+
+        with self.config.connection.cursor() as cursor:
+            cursor.execute(
+                f&#34;&#34;&#34;
+                SELECT is_nullable
+                FROM information_schema.columns
+                WHERE table_name = &#39;{table_name}&#39;
+                AND column_name = &#39;{column_name}&#39;
+                &#34;&#34;&#34;
+            )
+
+            is_nullable = cursor.fetchone()
+            if not is_nullable:
+                raise ValueError(
+                    f&#34;Column &#39;{column_name}&#39; does not exist in table &#39;{table_name}&#39;&#34;
+                )
+
+        return is_nullable[0] == &#34;YES&#34;
+
+    def __holds_instance(self, array: list[Any], class_type: type) -&gt; bool:
+        &#34;&#34;&#34;
+        Helper function to check if the array holds the instance of a class.
+        &#34;&#34;&#34;
+        return any(isinstance(x, class_type) for x in array)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="skibidi_orm.migration_engine.db_inspectors.base_inspector.BaseDbInspector" href="base_inspector.html#skibidi_orm.migration_engine.db_inspectors.base_inspector.BaseDbInspector">BaseDbInspector</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="skibidi_orm.migration_engine.db_inspectors.postgres_inspector.PostgresInspector.get_table_columns"><code class="name flex">
+<span>def <span class="ident">get_table_columns</span></span>(<span>self, table_name: str) ‑> list[<a title="skibidi_orm.migration_engine.adapters.base_adapter.BaseColumn" href="../adapters/base_adapter.html#skibidi_orm.migration_engine.adapters.base_adapter.BaseColumn">BaseColumn</a>[typing.Literal['BIGINT', 'BIGSERIAL', 'BIT', 'BIT VARYING', 'BOOLEAN', 'BOX', 'BYTEA', 'CHARACTER', 'CHARACTER VARYING', 'CIDR', 'CIRCLE', 'DATE', 'DOUBLE PRECISION', 'INET', 'INTEGER', 'INTERVAL', 'JSON', 'JSONB', 'LINE', 'LSEG', 'MACADDR', 'MACADDR8', 'MONEY', 'NUMERIC', 'PATH', 'PG_LSN', 'POINT', 'POLYGON', 'REAL', 'SMALLINT', 'SMALLSERIAL', 'SERIAL', 'TEXT', 'TIME', 'TIME WITH TIME ZONE', 'TIMESTAMP', 'TIMESTAMP WITH TIME ZONE', 'TIMESTAMP WITHOUT TIME ZONE', 'TSQUERY', 'TSVECTOR', 'TXID_SNAPSHOT', 'UUID', 'XML']]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get all columns from the table.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_table_columns(self, table_name: str) -&gt; list[PostgresTyping.Column]:
+    &#34;&#34;&#34;
+    Get all columns from the table.
+    &#34;&#34;&#34;
+
+    return [
+        PostgresTyping.Column(
+            name=column_name,
+            data_type=self._get_column_data_type(table_name, column_name),
+            column_constraints=self._get_column_constraints(
+                table_name, column_name
+            ),
+        )
+        for column_name in self._get_table_columns_names(table_name)
+    ]</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="skibidi_orm.migration_engine.db_inspectors.base_inspector.BaseDbInspector" href="base_inspector.html#skibidi_orm.migration_engine.db_inspectors.base_inspector.BaseDbInspector">BaseDbInspector</a></b></code>:
+<ul class="hlist">
+<li><code><a title="skibidi_orm.migration_engine.db_inspectors.base_inspector.BaseDbInspector.get_tables" href="base_inspector.html#skibidi_orm.migration_engine.db_inspectors.base_inspector.BaseDbInspector.get_tables">get_tables</a></code></li>
+<li><code><a title="skibidi_orm.migration_engine.db_inspectors.base_inspector.BaseDbInspector.get_tables_names" href="base_inspector.html#skibidi_orm.migration_engine.db_inspectors.base_inspector.BaseDbInspector.get_tables_names">get_tables_names</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="skibidi_orm.migration_engine.db_inspectors" href="index.html">skibidi_orm.migration_engine.db_inspectors</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="skibidi_orm.migration_engine.db_inspectors.postgres_inspector.PostgresInspector" href="#skibidi_orm.migration_engine.db_inspectors.postgres_inspector.PostgresInspector">PostgresInspector</a></code></h4>
+<ul class="">
+<li><code><a title="skibidi_orm.migration_engine.db_inspectors.postgres_inspector.PostgresInspector.get_table_columns" href="#skibidi_orm.migration_engine.db_inspectors.postgres_inspector.PostgresInspector.get_table_columns">get_table_columns</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
