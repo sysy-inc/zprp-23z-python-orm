@@ -25,4 +25,7 @@ class PostgresDataMutator(BaseDataMutator):
 
     def get_rows(self, table_name: str, limit: int = 100, offset: int = 0) -> list[Any]:
         """Get paginated rows from the table."""
-        raise NotImplementedError
+        config = PostgresConfig.get_instance()
+        with config.connection.cursor() as cursor:
+            cursor.execute(f"SELECT * FROM {table_name} LIMIT {limit} OFFSET {offset}")
+            return cursor.fetchall()
