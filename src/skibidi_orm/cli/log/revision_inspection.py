@@ -5,12 +5,15 @@ from prompt_toolkit.layout import Layout, HSplit
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.layout.containers import Window, DynamicContainer
 
+from skibidi_orm.cli.log.tree import FoldableTree, Leaf
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable
 from skibidi_orm.migration_engine.adapters.providers import DatabaseProvider
 from skibidi_orm.migration_engine.revisions.revision import Revision
 from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
 
+
 kb = KeyBindings()
+revisions: list[Revision] = []
 
 
 # Sample data for demonstration
@@ -53,7 +56,6 @@ revisions = [
         ],
     ),
 ]
-
 
 # Current position and expanded states
 current_index = 0
@@ -176,3 +178,10 @@ layout = Layout(root_container)
 
 # Create and run the application
 revision_app = Application(layout=layout, key_bindings=kb, full_screen=True)  # type: ignore
+
+
+def run_revision_app(revision_list: list[Revision]):
+    global revisions
+    # revisions = revision_list
+    # print(revision_list)
+    revision_app.run()
