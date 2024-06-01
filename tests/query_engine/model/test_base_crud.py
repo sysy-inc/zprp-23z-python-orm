@@ -1,5 +1,5 @@
 from skibidi_orm.query_engine.field.related_field import ForeignKey
-from skibidi_orm.query_engine.field.field import IntegerField
+from skibidi_orm.query_engine.field.field import IntegerField, AutoField, CharField
 from skibidi_orm.query_engine.adapter.sqlite_adapter import SQLiteAdapter
 from skibidi_orm.query_engine.connection.session import Session
 from skibidi_orm.query_engine.connection.engine import Engine
@@ -128,3 +128,15 @@ def test_has_realtion_obj_true():
 def test_get_ralation_obj():
     person = PersonWithoutId(1)
     assert person._get_relation_obj() == [(PersonWithId, None)]
+
+
+
+def test_class_autofield():
+    class Test(Model):
+        id: Optional[int | AutoField] = AutoField(primary_key=True)
+        name : Optional[str | CharField] = CharField()
+
+    adam = Test(1, 'Adam')
+
+    assert adam.id == 1
+    assert adam.name == 'Adam'
