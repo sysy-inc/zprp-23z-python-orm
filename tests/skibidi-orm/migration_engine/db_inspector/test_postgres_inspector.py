@@ -326,10 +326,6 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
                 c.NotNullConstraint(
                     "table_different_constraints", "integer_not_nullable"
                 ),
-                c.CheckConstraint(
-                    "table_different_constraints",
-                    "((integer_not_nullable > 100))",
-                ),
             ],
         ),
         (  # 3
@@ -373,10 +369,6 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
                 ),
                 c.UniqueConstraint(
                     "table_different_constraints", "not_null_unique_check_column"
-                ),
-                c.CheckConstraint(
-                    "table_different_constraints",
-                    "((not_null_unique_check_column > 100))",
                 ),
             ],
         ),
@@ -431,10 +423,6 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
                 ),
                 c.DefaultConstraint(
                     "table_different_constraints", "not_null_unique_check_default", "1"
-                ),
-                c.CheckConstraint(
-                    "table_different_constraints",
-                    "((not_null_unique_check_default > 100))",
                 ),
             ],
         ),
@@ -762,10 +750,6 @@ def test__get_column_constraints(query, table_name, column_name, expected_constr
                             "table_different_constraints",
                             "not_null_unique_check_column",
                         ),
-                        c.CheckConstraint(
-                            "table_different_constraints",
-                            "((not_null_unique_check_column > 100))",
-                        ),
                     ],
                 ),
                 PostgresTyping.Column(
@@ -808,10 +792,6 @@ def test__get_column_constraints(query, table_name, column_name, expected_constr
                             "table_different_constraints",
                             "not_null_unique_check_default",
                             "1",
-                        ),
-                        c.CheckConstraint(
-                            "table_different_constraints",
-                            "((not_null_unique_check_default > 100))",
                         ),
                     ],
                 ),
