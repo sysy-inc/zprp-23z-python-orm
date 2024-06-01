@@ -27,7 +27,12 @@ Example
   person = Person('Ada', 23)
 
 
-*__db_table__* is an optional attribute, representing the name of a table in your database. The rest of the attributes are mapped to the database columns. You can add new attributes using the following pattern: *'attr_name: Optional[python_type | FieldType] = FieldType()'*. You can define the primary key by yourself, using the *AutoField*, but skibidi can also do this for you automatically.
+*__db_table__* is an optional attribute, representing the name of a table in your database.
+The rest of the attributes are mapped to the database columns. You can add new attributes using
+the following pattern: *'attr_name: Optional[python_type | FieldType] = FieldType()'*.
+You can define the primary key by yourself, using the *AutoField* so database will manage assigning value to it or
+any other field type with primary key option set to True (*FieldType(primary_key=True)*).
+If you don't create primary key field, skibidi will do this for you automatically.
 
 Inheritance
 -----------
@@ -119,7 +124,8 @@ Fields
 ==========
 
 You can create fields of multiple types for your model. For every one of them, you can specify a default value, if it is nullable or is it a primary key.
- - *IntegerField* 
+
+ - *IntegerField*
  - *BigIntegerField*
  - *SmallIntegerField*
  - *PositiveIntegerField*

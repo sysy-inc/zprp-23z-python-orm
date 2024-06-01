@@ -7,7 +7,7 @@ How to create your own model?
 
 Welcome to skibidi project! With our library, you can create a database model!
 
-Every model should inherit from the class 'Model'.
+Every model you create should inherit from the class 'Model'.
 
 Example
 -------
@@ -27,7 +27,12 @@ Example
   person = Person('Ada', 23)
 
 
-*__db_table__* is an optional attribute, representing the name of a table in your database. The rest of the attributes are mapped to the database columns. You can add new attributes using the following pattern: *'attr_name: Optional[python_type | FieldType] = FieldType()'*. You can define the primary key by yourself, using the *AutoField*, but skibidi can also do this for you automatically.
+*__db_table__* is an optional attribute, representing the name of a table in your database.
+The rest of the attributes are mapped to the database columns. You can add new attributes using
+the following pattern: *'attr_name: Optional[python_type | FieldType] = FieldType()'*.
+You can define the primary key by yourself, using the *AutoField* so database will manage assigning value to it or
+any other field type with primary key option set to True (*FieldType(primary_key=True)*).
+If you don't create primary key field, skibidi will do this for you automatically.
 
 Inheritance
 -----------
@@ -118,5 +123,32 @@ Example for models 'Owner' and 'Dog'
 Fields
 ==========
 
-To możesz coś dać o atrybutach i rodzajach fieldów
+You can create fields of multiple types for your model. For every one of them, you can specify a default value, if it is nullable or is it a primary key.
+
+ - *IntegerField*
+ - *BigIntegerField*
+ - *SmallIntegerField*
+ - *PositiveIntegerField*
+ - *PositiveBigIntegerField*
+ - *PositiveSmallIntegerField*
+ - *DecimalField*
+ - *FloatField*
+ - *CharField* - you can set a *max_length* attribute to set the maximum text length
+ - *TextField*
+ - *BooleanField*
+ - *DateField*
+ - *DateTimeField*
+ - *ForeignKey*
+
+Examples of creating different fields
+
+.. code-block:: python
+
+  from skibidi_orm.query_engine.field.field import CharField, IntegerField, DateField
+  import datetime
+
+  IntegerField(primary_key=True)
+  CharField(nullable=False, default='Maks')
+  DateField()
+
 

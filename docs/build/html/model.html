@@ -93,7 +93,7 @@
 <section id="how-to-create-your-own-model">
 <h2>How to create your own model?<a class="headerlink" href="#how-to-create-your-own-model" title="Link to this heading"></a></h2>
 <p>Welcome to skibidi project! With our library, you can create a database model!</p>
-<p>Every model should inherit from the class ‘Model’.</p>
+<p>Every model you create should inherit from the class ‘Model’.</p>
 <section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.field</span> <span class="kn">import</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">IntegerField</span>
@@ -108,7 +108,12 @@
 <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="s1">&#39;Ada&#39;</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><em>__db_table__</em> is an optional attribute, representing the name of a table in your database. The rest of the attributes are mapped to the database columns. You can add new attributes using the following pattern: <em>‘attr_name: Optional[python_type | FieldType] = FieldType()’</em>. You can define the primary key by yourself, using the <em>AutoField</em>, but skibidi can also do this for you automatically.</p>
+<p><em>__db_table__</em> is an optional attribute, representing the name of a table in your database.
+The rest of the attributes are mapped to the database columns. You can add new attributes using
+the following pattern: <em>‘attr_name: Optional[python_type | FieldType] = FieldType()’</em>.
+You can define the primary key by yourself, using the <em>AutoField</em> so database will manage assigning value to it or
+any other field type with primary key option set to True (<em>FieldType(primary_key=True)</em>).
+If you don’t create primary key field, skibidi will do this for you automatically.</p>
 </section>
 <section id="inheritance">
 <h3>Inheritance<a class="headerlink" href="#inheritance" title="Link to this heading"></a></h3>
@@ -190,7 +195,34 @@ retrieve data of related object by simply using its column name.</p>
 </section>
 <section id="fields">
 <h2>Fields<a class="headerlink" href="#fields" title="Link to this heading"></a></h2>
-<p>To możesz coś dać o atrybutach i rodzajach fieldów</p>
+<p>You can create fields of multiple types for your model. For every one of them, you can specify a default value, if it is nullable or is it a primary key.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>IntegerField</em></p></li>
+<li><p><em>BigIntegerField</em></p></li>
+<li><p><em>SmallIntegerField</em></p></li>
+<li><p><em>PositiveIntegerField</em></p></li>
+<li><p><em>PositiveBigIntegerField</em></p></li>
+<li><p><em>PositiveSmallIntegerField</em></p></li>
+<li><p><em>DecimalField</em></p></li>
+<li><p><em>FloatField</em></p></li>
+<li><p><em>CharField</em> - you can set a <em>max_length</em> attribute to set the maximum text length</p></li>
+<li><p><em>TextField</em></p></li>
+<li><p><em>BooleanField</em></p></li>
+<li><p><em>DateField</em></p></li>
+<li><p><em>DateTimeField</em></p></li>
+<li><p><em>ForeignKey</em></p></li>
+</ul>
+</div></blockquote>
+<p>Examples of creating different fields</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.field</span> <span class="kn">import</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">IntegerField</span><span class="p">,</span> <span class="n">DateField</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="n">IntegerField</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">CharField</span><span class="p">(</span><span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;Maks&#39;</span><span class="p">)</span>
+<span class="n">DateField</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 </section>
 
