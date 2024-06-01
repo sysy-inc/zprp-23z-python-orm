@@ -148,7 +148,7 @@ class Model(BaseModel, metaclass=MetaModel):
         args = ()
         super().__init__(*args, **kwargs)
 
-        # if primary key is AutoField change it to None
+        # correct primary key value due to pydanmic cast
         if kwargs[self._meta.primary_key.name] is None:
             self.pk = None
 

@@ -104,6 +104,9 @@ def test_create_person_both_default():
     assert person.name == 'Adam'
     assert person.age == 30
 
+
+# Foreign key
+
 class Owner(Model):
     id: Optional[int | IntegerField] = IntegerField(primary_key=True)
     name: Optional[str | CharField] = CharField()
@@ -141,7 +144,7 @@ def test_set_foreign_key_obj():
     assert dog.owner_id == 2
 
 def test_set_foreign_key_obj_id():
-    adam = Owner(1, "Adam")     # TODO correct
+    adam = Owner(1, "Adam")
     bolek = Owner(2, "Bolek")
     dog = Dog(1, "Reksio", adam)
     assert dog.owner == adam
@@ -199,7 +202,6 @@ def test_not_equal():
     bolek = Owner(1, 'Bolek')
     lolek = Owner(2, 'Lolek')
     assert bolek != lolek
-
 
 def test_inheritance():
     class Item(Model):
