@@ -1,14 +1,16 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from functools import total_ordering
 from typing import Any
 
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
-    ColumnSpecificConstraint,
-    ForeignKeyConstraint,
+    ColumnWideConstraint,
+    TableWideConstraint,
 )
 
 
+@total_ordering
 @dataclass(unsafe_hash=True)
 class BaseColumn[TDataTypes]:
     """
@@ -17,12 +19,17 @@ class BaseColumn[TDataTypes]:
 
     name: str
     data_type: TDataTypes
-    column_constraints: list[ColumnSpecificConstraint] = field(
+    column_constraints: list[ColumnWideConstraint] = field(
         default_factory=list, hash=False
     )
 
     def __str__(self) -> str:
         return f"{self.name.ljust(15)} {self.data_type}"
+
+    def __lt__(self, other: Any):
+        if isinstance(other, BaseColumn):
+            return self.name < other.name
+        return NotImplemented
 
 
 @dataclass
@@ -33,7 +40,7 @@ class BaseTable[TCol]:
 
     name: str
     columns: list[TCol] = field(default_factory=list)
-    foreign_keys: set[ForeignKeyConstraint] = field(default_factory=set)
+    table_constraints: set[TableWideConstraint] = field(default_factory=set)
 
     def __str__(self) -> str:
         return self.name

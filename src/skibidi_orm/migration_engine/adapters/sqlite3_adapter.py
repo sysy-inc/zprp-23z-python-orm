@@ -6,7 +6,7 @@ from skibidi_orm.migration_engine.adapters.database_objects.migration_element im
 from skibidi_orm.migration_engine.adapters.sqlite3_typing import (
     SQLite3Typing,
 )
-from skibidi_orm.migration_engine.db_inspectors.sqlite3_inspector import (
+from skibidi_orm.migration_engine.db_inspectors.sqlite.sqlite3_inspector import (
     SQLite3Inspector,
 )
 from skibidi_orm.migration_engine.state_manager.state_manager import StateManager

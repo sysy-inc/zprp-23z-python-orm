@@ -4,6 +4,7 @@ from skibidi_orm.migration_engine.operations.operation_type import OperationType
 from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
     Constraint,
     ForeignKeyConstraint,
+    CheckConstraint,
 )
 from skibidi_orm.exceptions.operations import IrreversibleOperationError
 from skibidi_orm.migration_engine.adapters.base_adapter import BaseTable, BaseColumn
@@ -32,10 +33,15 @@ class ColumnOperation(ABC):
         it has to be taken into acount when removing and adding it back to the schema.
         """
         return [
-            fk
-            for fk in self.table.foreign_keys
-            if self.column.name in fk.column_mapping
+            c
+            for c in self.table.table_constraints
+            if isinstance(c, ForeignKeyConstraint)
+            and self.column.name in c.column_mapping
         ]
+
+    @abstractmethod
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(table={self.table}, is_reversible={self.is_reversible})"
 
 
 @dataclass(frozen=True)
@@ -45,8 +51,10 @@ class AddColumnOperation(ColumnOperation):
     operation_type: OperationType = field(init=False, default=OperationType.CREATE)
     is_reversible: bool = field(init=False, default=True)
 
-    # if the column to be added references another table, it has to be set here
+    # these fields serve as a way to add new table-level constraints to the table when
+    # adding the column after creating it. they can only reference the column to be added!
     related_foreign_key: Optional[ForeignKeyConstraint] = field(default=None)
+    related_check_constraint: Optional[CheckConstraint] = field(default=None)
 
     def reverse(self) -> ColumnOperation:
         return DeleteColumnOperation(table=self.table, column=self.column)
@@ -73,8 +81,13 @@ class AddColumnOperation(ColumnOperation):
                     f"""Foreign key constraint initialized with invalid source table name: {self.related_foreign_key.table_name}.
                     Expected: {self.table.name}"""
                 )
+
     def __str__(self) -> str:
         return f"Add Column {self.column.name} to Table {self.table.name}"
+
+    def __repr__(self) -> str:
+        return super().__repr__()
+
 
 @dataclass(frozen=True)
 class DeleteColumnOperation(ColumnOperation):
@@ -90,6 +103,9 @@ class DeleteColumnOperation(ColumnOperation):
 
     def __str__(self) -> str:
         return f"Delete Column {self.column.name} from Table {self.table.name}"
+
+    def __repr__(self) -> str:
+        return super().__repr__()
 
 
 @dataclass(frozen=True)
@@ -110,6 +126,9 @@ class RenameColumnOperation(ColumnOperation):
 
     def __str__(self) -> str:
         return f"Rename Column {self.column.name} to {self.new_name} in Table {self.table.name}"
+
+    def __repr__(self) -> str:
+        return super().__repr__()
 
 
 @dataclass(frozen=True)
@@ -133,6 +152,9 @@ class AddConstraintOperation(ColumnOperation):
     def __str__(self) -> str:
         return f"Add Constraint {self.constraint.constraint_type.value} to Column {self.column.name} in Table {self.table.name}"
 
+    def __repr__(self) -> str:
+        return super().__repr__()
+
 
 @dataclass(frozen=True)
 class DeleteConstraintOperation(ColumnOperation):
@@ -155,6 +177,9 @@ class DeleteConstraintOperation(ColumnOperation):
     def __str__(self) -> str:
         return f"Delete Constraint {self.constraint.constraint_type.value} from Column {self.column.name} in Table {self.table.name}"
 
+    def __repr__(self) -> str:
+        return super().__repr__()
+
 
 @dataclass(frozen=True)
 class ChangeDataTypeOperation(ColumnOperation):
@@ -175,3 +200,6 @@ class ChangeDataTypeOperation(ColumnOperation):
 
     def __str__(self) -> str:
         return f"Change Data Type of Column {self.column.name} in Table {self.table.name} to {self.new_dtype}"
+
+    def __repr__(self) -> str:
+        return super().__repr__()

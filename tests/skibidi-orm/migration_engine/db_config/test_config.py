@@ -20,7 +20,13 @@ def test_should_raise_error_when_instantiating_other_config():
     """
     SQLite3Config(db_path="first_path")
     with pytest.raises(RuntimeError) as exc_info:
-        PostgresConfig(db_path="first_path")
+        PostgresConfig(
+            db_name="db_name",
+            db_user="db_user",
+            db_password="db_password",
+            db_host="db_host",
+            db_port=5432,
+        )
     assert str(exc_info.value) == "Only one instance of this class is allowed"
 
 

@@ -38,10 +38,9 @@ column_unique = SQLite3Typing.Column(
     ],
 )
 
-column_check_constraint = SQLite3Typing.Column(
+age_column = SQLite3Typing.Column(
     "age",
     "INTEGER",
-    column_constraints=[CheckConstraint("users", "age", "> 18")],
 )
 
 empty_users_table = SQLite3Typing.Table("users", columns=[])
@@ -71,15 +70,6 @@ def test_column_definition_unique():
             column_unique, column_unique.column_constraints
         )
         == "user_id INTEGER UNIQUE"
-    )
-
-
-def test_column_definition_with_check_constraint():
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_definition_to_SQL(
-            column_check_constraint, column_check_constraint.column_constraints
-        )
-        == "age INTEGER CHECK (age > 18)"
     )
 
 
@@ -114,7 +104,11 @@ def test_add_column_with_foreign_key_and_unique():
 
 
 def test_add_column_with_check_constraint():
-    operation = AddColumnOperation(empty_users_table, column_check_constraint)
+    operation = AddColumnOperation(
+        empty_users_table,
+        age_column,
+        related_check_constraint=CheckConstraint("users", "age > 18"),
+    )
     assert (
         SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
         == "ALTER TABLE users ADD COLUMN age INTEGER CHECK (age > 18);"
@@ -146,7 +140,7 @@ def test_drop_column_with_foreign_key_and_unique():
 
 
 def test_drop_column_with_check_constraint():
-    operation = DeleteColumnOperation(empty_users_table, column_check_constraint)
+    operation = DeleteColumnOperation(empty_users_table, age_column)
     assert (
         SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
         == "ALTER TABLE users DROP COLUMN age;"
@@ -182,9 +176,7 @@ def test_rename_column_with_foreign_key_and_unique():
 
 
 def test_rename_column_with_check_constraint():
-    operation = RenameColumnOperation(
-        empty_users_table, column_check_constraint, "age2"
-    )
+    operation = RenameColumnOperation(empty_users_table, age_column, "age2")
     assert (
         SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
         == "ALTER TABLE users RENAME COLUMN age TO age2;"
@@ -215,8 +207,6 @@ def test_change_data_type_column_with_foreign_key_and_unique():
 
 
 def test_change_data_type_column_with_check_constraint():
-    operation = ChangeDataTypeOperation(
-        empty_users_table, column_check_constraint, "TEXT"
-    )
+    operation = ChangeDataTypeOperation(empty_users_table, age_column, "TEXT")
     with raises(UnsupportedOperationError):
         SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
