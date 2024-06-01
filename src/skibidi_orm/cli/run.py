@@ -144,6 +144,26 @@ def migrate_list():
     run_revision_app(list(revisions.values()))
 
 
+@app.command(name="go")
+def go(migration_id: str = typer.Argument(help="Migration ID")):
+    """
+    Go back (and forward) to specific migration.
+    """
+
+    manager = RevisionManager()
+    revision = manager.get_revision_by_id(int(migration_id))
+    print()
+    confirmation: str = typer.prompt(
+        Fore.RED
+        + "THIS OPERATION WILL DELETE ALL DATA IN THE DATABASE.\nARE YOU SURE YOU WANT TO CONTINUE? (y/n)"
+    )
+    if confirmation.lower() == "y":
+        manager.go_to_revision(revision)
+        print(Fore.GREEN + "Operation complete.")
+    else:
+        print(Fore.RED + "Operation aborted.")
+
+
 @app.command()
 def studio(
     schema_file: Union[str, None] = typer.Option(
