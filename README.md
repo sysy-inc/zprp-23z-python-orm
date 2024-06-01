@@ -1,6 +1,6 @@
 # Skibidi Query Engine - User Instruction
 
-Hi! Welcome in skibidi project. This is where you can zapoznać się z działaniem library. We work with **pdm** so need to install it
+Hi! Welcome to the skibidi project. This is where you can acknowledge how to use our library. We work with **pdm**, so firstly you need to install it.
 ```bash
 pip install pdm
 ```
@@ -25,11 +25,10 @@ pdm install
 pdm build
 ```
 
-## Installing the Package
-
+## Installing the package
 1. **Install the package**
 ```bash
-pdm install -G :all  # tutaj to trzeba podmienić
+pip install skibidi_orm-0.1.0-py3-none-any.whl 
 ```
 
 ## Building Documentation with Sphinx
@@ -38,17 +37,17 @@ pdm install -G :all  # tutaj to trzeba podmienić
 ```bash
 cd docs
 ```
-2. **Make HTML documentation**
+2. **Create HTML documentation**
 ```bash
-make html
+pdm run make html
 ```
 
-## Running Tests with Tox and Pytest
+## Running tests with Tox and Pytest
 1. **Run all tests with Tox**
 ```bash
 tox
 ```
-2. **Run tests with Pytest**
+2. **Run all tests with Pytest**
 ```bash
-pytest
+pdm run pytest
 ```
