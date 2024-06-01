@@ -34,7 +34,9 @@ class PostgresAdapter(BaseAdapter):
             schema_tables=self.tables,
         )
 
-        MigrationElement.operations = state_manager.get_operations()
+        MigrationElement.operations = (
+            state_manager.get_operations_transforming_database_schema_into_class_hierarchy_schema()
+        )
 
         # if not preview:
         #     SQLite3Executor.execute_operations(MigrationElement.operations)
