@@ -43,6 +43,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">How to start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../skibidi_orm.html">skibidi_orm package</a></li>
 </ul>
 
@@ -112,7 +113,8 @@
 <div class="viewcode-block" id="MaxLengthValidator.compare">
 <a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.MaxLengthValidator.compare">[docs]</a>
     <span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span></div>
+        <span class="n">a</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">b</span></div>
 </div>
 
 
@@ -127,7 +129,8 @@
 <div class="viewcode-block" id="MinLengthValidator.compare">
 <a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.MinLengthValidator.compare">[docs]</a>
     <span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span></div>
+        <span class="n">a</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">&gt;=</span> <span class="n">b</span></div>
 </div>
 
 

@@ -94,6 +94,26 @@ You can also create a recursive foreign key.
   maks = Dog(1, 'Maks')
   reks = Dog(2, "Reks", maks)
 
+With session (to learn how to create connection to database see :ref:`ORM`), you can
+retrieve data of related object by simply using its column name.
+
+Example for models 'Owner' and 'Dog'
+
+.. code-block:: python
+
+  from skibidi_orm.query_engine.connection.engine import Engine
+  from skibidi_orm.query_engine.connection.session import Session
+  from skibidi_orm.query_engine.operations.select import Select
+
+  eng = Engine()	# create engine
+
+  with Session(eng) as session:
+    bolek = Owner(1, "Bolek")
+    reksio = Dog(1, "Reksio", bolek)
+    session.add(bolek)
+    session.add(reksio)
+    print(reksio.owner.name)  # output: Bolek
+
 
 Fields
 ==========
