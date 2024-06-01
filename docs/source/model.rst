@@ -139,7 +139,6 @@ Examples of creating different fields
 .. code-block:: python
 
   from skibidi_orm.query_engine.field.field import CharField, IntegerField, DateField
-  import datetime
 
   IntegerField(primary_key=True)
   CharField(nullable=False, default='Maks')
