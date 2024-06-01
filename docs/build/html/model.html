@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="skibidi_orm package" href="skibidi_orm.html" />
+    <link rel="next" title="ORM" href="orm.html" />
     <link rel="prev" title="How to start" href="tutorial.html" /> 
 </head>
 
@@ -57,6 +57,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#fields">Fields</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="orm.html">ORM</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="skibidi_orm.html">skibidi_orm package</a></li>
@@ -168,6 +169,23 @@ You can also create a recursive foreign key.</p>
 <span class="n">reks</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Reks&quot;</span><span class="p">,</span> <span class="n">maks</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>With session (to learn how to create connection to database see <a class="reference internal" href="orm.html#orm"><span class="std std-ref">ORM</span></a>), you can
+retrieve data of related object by simply using its column name.</p>
+<p>Example for models ‘Owner’ and ‘Dog’</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.select</span> <span class="kn">import</span> <span class="n">Select</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">bolek</span> <span class="o">=</span> <span class="n">Owner</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Bolek&quot;</span><span class="p">)</span>
+  <span class="n">reksio</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Reksio&quot;</span><span class="p">,</span> <span class="n">bolek</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">bolek</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">reksio</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">reksio</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># output: Bolek</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="fields">
@@ -181,7 +199,7 @@ You can also create a recursive foreign key.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="tutorial.html" class="btn btn-neutral float-left" title="How to start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="skibidi_orm.html" class="btn btn-neutral float-right" title="skibidi_orm package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="orm.html" class="btn btn-neutral float-right" title="ORM" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

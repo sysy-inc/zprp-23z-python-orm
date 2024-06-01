@@ -11,7 +11,7 @@ Step 1: Create Configuration
 ------------------------------
 In order to connect to database, you have to specify which database you want to use.
 In your working directory create file  **configuration.py** and in it specify variable
-*config_data* with data neede for chosen database.
+*config_data* with data needed for chosen database.
 
 Example for SQLite
 
