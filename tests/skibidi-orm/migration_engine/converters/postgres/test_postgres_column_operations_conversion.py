@@ -1,8 +1,9 @@
 from pytest import raises
+import pytest
 from skibidi_orm.exceptions.operations import UnsupportedOperationError
-from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
-from skibidi_orm.migration_engine.converters.sqlite3.columns import (
-    SQLite3ColumnOperationConverter,
+from skibidi_orm.migration_engine.adapters.postgres_typing import PostgresTyping
+from skibidi_orm.migration_engine.converters.postgres.columns import (
+    PostgresColumnOperationConverter,
 )
 from skibidi_orm.migration_engine.operations.column_operations import (
     AddColumnOperation,
@@ -19,8 +20,8 @@ from skibidi_orm.migration_engine.adapters.database_objects.constraints import (
 )
 
 
-simple_column_no_constraints = SQLite3Typing.Column("name", "TEXT")
-column_primary_key_unique = SQLite3Typing.Column(
+simple_column_no_constraints = PostgresTyping.Column("name", "TEXT")
+column_primary_key_unique = PostgresTyping.Column(
     "user_id",
     "INTEGER",
     column_constraints=[
@@ -30,7 +31,7 @@ column_primary_key_unique = SQLite3Typing.Column(
     ],
 )
 
-column_unique = SQLite3Typing.Column(
+column_unique = PostgresTyping.Column(
     "user_id",
     "INTEGER",
     column_constraints=[
@@ -38,185 +39,140 @@ column_unique = SQLite3Typing.Column(
     ],
 )
 
-column_check_constraint = SQLite3Typing.Column(
+column_check_constraint = PostgresTyping.Column(
     "age",
     "INTEGER",
     column_constraints=[CheckConstraint("users", "age", "> 18")],
 )
 
-empty_users_table = SQLite3Typing.Table("users", columns=[])
+empty_users_table = PostgresTyping.Table("users", columns=[])
 
 
-def test_simple_column_definition():
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_definition_to_SQL(
-            simple_column_no_constraints, list()
-        )
-        == "name TEXT"
-    )
-
-
-def test_column_definition_with_primary_key_unique_nn():
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_definition_to_SQL(
-            column_primary_key_unique, column_primary_key_unique.column_constraints
-        )
-        == "user_id INTEGER PRIMARY KEY UNIQUE NOT NULL"
-    )
-
-
-def test_column_definition_unique():
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_definition_to_SQL(
-            column_unique, column_unique.column_constraints
-        )
-        == "user_id INTEGER UNIQUE"
-    )
-
-
-def test_column_definition_with_check_constraint():
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_definition_to_SQL(
-            column_check_constraint, column_check_constraint.column_constraints
-        )
-        == "age INTEGER CHECK (age > 18)"
-    )
-
-
-def test_add_simple_column():
-    operation = AddColumnOperation(empty_users_table, simple_column_no_constraints)
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users ADD COLUMN name TEXT;"
-    )
-
-
-def test_add_column_with_primary_key_and_unique():
-    operation = AddColumnOperation(empty_users_table, column_primary_key_unique)
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users ADD COLUMN user_id INTEGER PRIMARY KEY UNIQUE NOT NULL;"
-    )
-
-
-def test_add_column_with_foreign_key_and_unique():
-    operation = AddColumnOperation(
-        empty_users_table,
-        column_unique,
-        related_foreign_key=ForeignKeyConstraint(
-            empty_users_table.name, "people", {"user_id": "person_id"}
+@pytest.mark.parametrize(
+    "column, constraints_list, expected",
+    [
+        (simple_column_no_constraints, [], "name TEXT"),
+        (
+            column_primary_key_unique,
+            column_primary_key_unique.column_constraints,
+            "user_id INTEGER PRIMARY KEY UNIQUE NOT NULL",
         ),
-    )
+        (
+            column_unique,
+            column_unique.column_constraints,
+            "user_id INTEGER UNIQUE",
+        ),
+        (
+            column_check_constraint,
+            column_check_constraint.column_constraints,
+            "age INTEGER CHECK (age > 18)",
+        ),
+    ],
+)
+def test_convert_column_definition_to_SQL(column, constraints_list, expected):  # type: ignore
     assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users ADD COLUMN user_id INTEGER UNIQUE REFERENCES people (person_id);"
+        PostgresColumnOperationConverter.convert_column_definition_to_SQL(
+            column, constraints_list  # type: ignore
+        )
+        == expected
     )
 
 
-def test_add_column_with_check_constraint():
-    operation = AddColumnOperation(empty_users_table, column_check_constraint)
+@pytest.mark.parametrize(
+    "operation, expected",
+    [
+        (
+            AddColumnOperation(empty_users_table, simple_column_no_constraints),
+            "ALTER TABLE users ADD COLUMN name TEXT;",
+        ),
+        (
+            AddColumnOperation(empty_users_table, column_primary_key_unique),
+            "ALTER TABLE users ADD COLUMN user_id INTEGER PRIMARY KEY UNIQUE NOT NULL;",
+        ),
+        (
+            AddColumnOperation(
+                empty_users_table,
+                column_unique,
+                related_foreign_key=ForeignKeyConstraint(
+                    empty_users_table.name, "people", {"user_id": "person_id"}
+                ),
+            ),
+            "ALTER TABLE users ADD COLUMN user_id INTEGER UNIQUE REFERENCES people (person_id);",
+        ),
+        (
+            AddColumnOperation(empty_users_table, column_check_constraint),
+            "ALTER TABLE users ADD COLUMN age INTEGER CHECK (age > 18);",
+        ),
+        (
+            DeleteColumnOperation(empty_users_table, simple_column_no_constraints),
+            "ALTER TABLE users DROP COLUMN name;",
+        ),
+        (
+            DeleteColumnOperation(empty_users_table, column_primary_key_unique),
+            "ALTER TABLE users DROP COLUMN user_id;",
+        ),
+        (
+            DeleteColumnOperation(empty_users_table, column_unique),
+            "ALTER TABLE users DROP COLUMN user_id;",
+        ),
+        (
+            DeleteColumnOperation(empty_users_table, column_check_constraint),
+            "ALTER TABLE users DROP COLUMN age;",
+        ),
+        (
+            RenameColumnOperation(
+                empty_users_table, simple_column_no_constraints, "name2"
+            ),
+            "ALTER TABLE users RENAME COLUMN name TO name2;",
+        ),
+        (
+            RenameColumnOperation(
+                empty_users_table, column_primary_key_unique, "user_id2"
+            ),
+            "ALTER TABLE users RENAME COLUMN user_id TO user_id2;",
+        ),
+        (
+            RenameColumnOperation(empty_users_table, column_unique, "user_id2"),
+            "ALTER TABLE users RENAME COLUMN user_id TO user_id2;",
+        ),
+        (
+            RenameColumnOperation(empty_users_table, column_check_constraint, "age2"),
+            "ALTER TABLE users RENAME COLUMN age TO age2;",
+        ),
+    ],
+)
+def test_convert_column_operation_to_SQL(operation, expected):  # type: ignore
     assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users ADD COLUMN age INTEGER CHECK (age > 18);"
+        PostgresColumnOperationConverter.convert_column_operation_to_SQL(operation)  # type: ignore
+        == expected
     )
 
 
-def test_drop_simple_column():
-    operation = DeleteColumnOperation(empty_users_table, simple_column_no_constraints)
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users DROP COLUMN name;"
-    )
-
-
-def test_drop_column_with_primary_key_and_unique():
-    operation = DeleteColumnOperation(empty_users_table, column_primary_key_unique)
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users DROP COLUMN user_id;"
-    )
-
-
-def test_drop_column_with_foreign_key_and_unique():
-    operation = DeleteColumnOperation(empty_users_table, column_unique)
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users DROP COLUMN user_id;"
-    )
-
-
-def test_drop_column_with_check_constraint():
-    operation = DeleteColumnOperation(empty_users_table, column_check_constraint)
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users DROP COLUMN age;"
-    )
-
-
-def test_rename_simple_column():
-    operation = RenameColumnOperation(
-        empty_users_table, simple_column_no_constraints, "name2"
-    )
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users RENAME COLUMN name TO name2;"
-    )
-
-
-def test_rename_column_with_primary_key_and_unique():
-    operation = RenameColumnOperation(
-        empty_users_table, column_primary_key_unique, "user_id2"
-    )
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users RENAME COLUMN user_id TO user_id2;"
-    )
-
-
-def test_rename_column_with_foreign_key_and_unique():
-    operation = RenameColumnOperation(empty_users_table, column_unique, "user_id2")
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users RENAME COLUMN user_id TO user_id2;"
-    )
-
-
-def test_rename_column_with_check_constraint():
-    operation = RenameColumnOperation(
-        empty_users_table, column_check_constraint, "age2"
-    )
-    assert (
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-        == "ALTER TABLE users RENAME COLUMN age TO age2;"
-    )
-
-
-def test_change_data_type_simple_column():
-    operation = ChangeDataTypeOperation(
-        empty_users_table, simple_column_no_constraints, "INTEGER"
-    )
-    with raises(UnsupportedOperationError):
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-
-
-def test_change_data_type_primary_key_unique_nn():
-    operation = ChangeDataTypeOperation(
-        empty_users_table, column_primary_key_unique, "TEXT"
-    )
-    with raises(UnsupportedOperationError):
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-
-
-def test_change_data_type_column_with_foreign_key_and_unique():
-    operation = ChangeDataTypeOperation(empty_users_table, column_unique, "TEXT")
-
-    with raises(UnsupportedOperationError):
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
-
-
-def test_change_data_type_column_with_check_constraint():
-    operation = ChangeDataTypeOperation(
-        empty_users_table, column_check_constraint, "TEXT"
-    )
-    with raises(UnsupportedOperationError):
-        SQLite3ColumnOperationConverter.convert_column_operation_to_SQL(operation)
+@pytest.mark.parametrize(
+    "operation, expected_error",
+    [
+        (
+            ChangeDataTypeOperation(
+                empty_users_table, simple_column_no_constraints, "INTEGER"
+            ),
+            UnsupportedOperationError,
+        ),
+        (
+            ChangeDataTypeOperation(
+                empty_users_table, column_primary_key_unique, "TEXT"
+            ),
+            UnsupportedOperationError,
+        ),
+        (
+            ChangeDataTypeOperation(empty_users_table, column_unique, "TEXT"),
+            UnsupportedOperationError,
+        ),
+        (
+            ChangeDataTypeOperation(empty_users_table, column_check_constraint, "TEXT"),
+            UnsupportedOperationError,
+        ),
+    ],
+)
+def test_convert_column_operation_to_SQL_errors(operation, expected_error):  # type: ignore
+    with raises(expected_error):  # type: ignore
+        PostgresColumnOperationConverter.convert_column_operation_to_SQL(operation)  # type: ignore
