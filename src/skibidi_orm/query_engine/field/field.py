@@ -5,15 +5,14 @@ from skibidi_orm.query_engine.field.validators import (
     DecimalValidator,
     BaseValidator
 )
-from typing import TYPE_CHECKING, Any, Type, Union, Optional, List, TypeVar
+from typing import TYPE_CHECKING, Any, Union, Optional, List
 import datetime
 import decimal
 
 
 if TYPE_CHECKING:
     from skibidi_orm.query_engine.field.relation_objects import RelationObject
-
-T = TypeVar('T', bound=BaseValidator)
+    from skibidi_orm.query_engine.model.base import Model
 
 
 class Error(Exception):
@@ -62,7 +61,7 @@ def integer_field_range(type: str) -> tuple[int, int]:
     """
     Function for mocking integer range from a database
     """
-    return (1, 10)
+    return (-2147483648, 2147483647)
 
 
 class Field:
@@ -113,7 +112,7 @@ class Field:
         self.primary_key = primary_key
         self.max_length = max_length
         self.default = default
-        self.validators: List[T] = []    # list of validators to validate a value
+        self.validators: List[Union[BaseValidator, DecimalValidator]] = []    # list of validators to validate a value
         self.field_type = field_type
         self.remote_field = related
         self.is_relation = self.remote_field is not None
@@ -156,7 +155,7 @@ class Field:
         self.name = self.name or name
         self.column = self.db_column or self.name
 
-    def contribute_to_class(self, cls: Type[BaseException], name: str):         # CHANGE CLASS AFTER MERGE
+    def contribute_to_class(self, cls: 'Model', name: str):
         """
         Contributes this field to the given class.
 
@@ -165,7 +164,7 @@ class Field:
         it sets an attribute on the class with the field's name.
 
         Args:
-            cls (Type[Model]): The class to which this field is being added.
+            cls (Model): The class to which this field is being added.
             name (str): The name of the field.
 
         """ 
@@ -449,11 +448,11 @@ class DateTimeField(DateField):
     def to_python(self, value: Union[str, datetime.date, datetime.datetime]) -> Optional[datetime.datetime]:
         if isinstance(value, datetime.datetime):
             return value
-        if isinstance(value, datetime.date):
+        elif isinstance(value, datetime.date):
             value = datetime.datetime(value.year, value.month, value.day)
             return value
 
-        if isinstance(value, str) and len(value) == 10:
+        elif len(value) == 10:
             try:
                 parsed = is_valid_date(value)
                 if parsed is not None:
@@ -471,5 +470,4 @@ class DateTimeField(DateField):
 
 class AutoField(Field):
     pass
-
 

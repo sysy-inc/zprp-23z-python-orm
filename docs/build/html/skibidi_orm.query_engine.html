@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skibidi_orm.query_engine package &mdash; SkiBiDi-ORM 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skibidi_orm.query_engine.adapter package" href="skibidi_orm.query_engine.adapter.html" />
+    <link rel="prev" title="skibidi_orm package" href="skibidi_orm.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SkiBiDi-ORM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">How to start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="skibidi_orm.html">skibidi_orm package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skibidi_orm.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">skibidi_orm.query_engine package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SkiBiDi-ORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="skibidi_orm.html">skibidi_orm package</a></li>
+      <li class="breadcrumb-item active">skibidi_orm.query_engine package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/skibidi_orm.query_engine.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="skibidi-orm-query-engine-package">
+<h1>skibidi_orm.query_engine package<a class="headerlink" href="#skibidi-orm-query-engine-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html">skibidi_orm.query_engine.adapter package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#module-skibidi_orm.query_engine.adapter.base_adapter">skibidi_orm.query_engine.adapter.base_adapter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_adapter.Adapter"><code class="docutils literal notranslate"><span class="pre">Adapter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_adapter.Adapter.compiler"><code class="docutils literal notranslate"><span class="pre">Adapter.compiler</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_adapter.Adapter.connector"><code class="docutils literal notranslate"><span class="pre">Adapter.connector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_adapter.Adapter.make_connection"><code class="docutils literal notranslate"><span class="pre">Adapter.make_connection()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#module-skibidi_orm.query_engine.adapter.sqlite_adapter">skibidi_orm.query_engine.adapter.sqlite_adapter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.sqlite_adapter.SQLiteAdapter"><code class="docutils literal notranslate"><span class="pre">SQLiteAdapter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.sqlite_adapter.SQLiteAdapter.make_connection"><code class="docutils literal notranslate"><span class="pre">SQLiteAdapter.make_connection()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#module-skibidi_orm.query_engine.adapter.base_compiler">skibidi_orm.query_engine.adapter.base_compiler module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler"><code class="docutils literal notranslate"><span class="pre">SQLCompiler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.CLAUSES"><code class="docutils literal notranslate"><span class="pre">SQLCompiler.CLAUSES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.FUNCTIONS"><code class="docutils literal notranslate"><span class="pre">SQLCompiler.FUNCTIONS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#id0"><code class="docutils literal notranslate"><span class="pre">SQLCompiler.CLAUSES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#id1"><code class="docutils literal notranslate"><span class="pre">SQLCompiler.FUNCTIONS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.delete"><code class="docutils literal notranslate"><span class="pre">SQLCompiler.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.insert"><code class="docutils literal notranslate"><span class="pre">SQLCompiler.insert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.select"><code class="docutils literal notranslate"><span class="pre">SQLCompiler.select()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.update"><code class="docutils literal notranslate"><span class="pre">SQLCompiler.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#module-skibidi_orm.query_engine.adapter.sqlite_compiler">skibidi_orm.query_engine.adapter.sqlite_compiler module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.sqlite_compiler.SQLiteCompiler"><code class="docutils literal notranslate"><span class="pre">SQLiteCompiler</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="skibidi_orm.query_engine.connection.html">skibidi_orm.query_engine.connection package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#module-skibidi_orm.query_engine.connection.engine">skibidi_orm.query_engine.connection.engine module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.engine.Engine"><code class="docutils literal notranslate"><span class="pre">Engine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.engine.Engine._config"><code class="docutils literal notranslate"><span class="pre">Engine._config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.engine.Engine._connection"><code class="docutils literal notranslate"><span class="pre">Engine._connection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.engine.Engine._is_connected"><code class="docutils literal notranslate"><span class="pre">Engine._is_connected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.engine.Engine._adapter"><code class="docutils literal notranslate"><span class="pre">Engine._adapter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.engine.Engine.close"><code class="docutils literal notranslate"><span class="pre">Engine.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.engine.Engine.config"><code class="docutils literal notranslate"><span class="pre">Engine.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.engine.Engine.connect"><code class="docutils literal notranslate"><span class="pre">Engine.connect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.engine.Engine.connected"><code class="docutils literal notranslate"><span class="pre">Engine.connected</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#module-skibidi_orm.query_engine.connection.session">skibidi_orm.query_engine.connection.session module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session._engine"><code class="docutils literal notranslate"><span class="pre">Session._engine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session._connection"><code class="docutils literal notranslate"><span class="pre">Session._connection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session._new"><code class="docutils literal notranslate"><span class="pre">Session._new</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session._dirty"><code class="docutils literal notranslate"><span class="pre">Session._dirty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session._delete"><code class="docutils literal notranslate"><span class="pre">Session._delete</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session._map"><code class="docutils literal notranslate"><span class="pre">Session._map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.add"><code class="docutils literal notranslate"><span class="pre">Session.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.changed"><code class="docutils literal notranslate"><span class="pre">Session.changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.close"><code class="docutils literal notranslate"><span class="pre">Session.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.commit"><code class="docutils literal notranslate"><span class="pre">Session.commit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.connection"><code class="docutils literal notranslate"><span class="pre">Session.connection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.delete"><code class="docutils literal notranslate"><span class="pre">Session.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.flush"><code class="docutils literal notranslate"><span class="pre">Session.flush()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.get"><code class="docutils literal notranslate"><span class="pre">Session.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.rollback"><code class="docutils literal notranslate"><span class="pre">Session.rollback()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.select"><code class="docutils literal notranslate"><span class="pre">Session.select()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#module-skibidi_orm.query_engine.connection.identity">skibidi_orm.query_engine.connection.identity module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.identity.IdentityMap"><code class="docutils literal notranslate"><span class="pre">IdentityMap</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.identity.IdentityMap._dict"><code class="docutils literal notranslate"><span class="pre">IdentityMap._dict</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.identity.IdentityMap.add"><code class="docutils literal notranslate"><span class="pre">IdentityMap.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.identity.IdentityMap.get"><code class="docutils literal notranslate"><span class="pre">IdentityMap.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.identity.IdentityMap.remove"><code class="docutils literal notranslate"><span class="pre">IdentityMap.remove()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#module-skibidi_orm.query_engine.connection.result">skibidi_orm.query_engine.connection.result module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.result.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.result.Result.data"><code class="docutils literal notranslate"><span class="pre">Result.data</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#module-skibidi_orm.query_engine.connection.transaction">skibidi_orm.query_engine.connection.transaction module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction"><code class="docutils literal notranslate"><span class="pre">Transaction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction._compiler"><code class="docutils literal notranslate"><span class="pre">Transaction._compiler</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction._conn"><code class="docutils literal notranslate"><span class="pre">Transaction._conn</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction._insert"><code class="docutils literal notranslate"><span class="pre">Transaction._insert</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction._update"><code class="docutils literal notranslate"><span class="pre">Transaction._update</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction._delete"><code class="docutils literal notranslate"><span class="pre">Transaction._delete</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction.delete_list"><code class="docutils literal notranslate"><span class="pre">Transaction.delete_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction.execute"><code class="docutils literal notranslate"><span class="pre">Transaction.execute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction.execute_delete"><code class="docutils literal notranslate"><span class="pre">Transaction.execute_delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction.execute_insert"><code class="docutils literal notranslate"><span class="pre">Transaction.execute_insert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction.execute_update"><code class="docutils literal notranslate"><span class="pre">Transaction.execute_update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction.insert_list"><code class="docutils literal notranslate"><span class="pre">Transaction.insert_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction.register_delete"><code class="docutils literal notranslate"><span class="pre">Transaction.register_delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction.register_insert"><code class="docutils literal notranslate"><span class="pre">Transaction.register_insert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction.register_update"><code class="docutils literal notranslate"><span class="pre">Transaction.register_update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.transaction.Transaction.update_list"><code class="docutils literal notranslate"><span class="pre">Transaction.update_list</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="skibidi_orm.query_engine.field.html">skibidi_orm.query_engine.field package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.field.html#module-skibidi_orm.query_engine.field.field">skibidi_orm.query_engine.field.field module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.AutoField"><code class="docutils literal notranslate"><span class="pre">AutoField</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.BigIntegerField"><code class="docutils literal notranslate"><span class="pre">BigIntegerField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.BigIntegerField.get_type"><code class="docutils literal notranslate"><span class="pre">BigIntegerField.get_type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.BooleanField"><code class="docutils literal notranslate"><span class="pre">BooleanField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.BooleanField.get_name"><code class="docutils literal notranslate"><span class="pre">BooleanField.get_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.BooleanField.to_python"><code class="docutils literal notranslate"><span class="pre">BooleanField.to_python()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.CharField"><code class="docutils literal notranslate"><span class="pre">CharField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.CharField.check"><code class="docutils literal notranslate"><span class="pre">CharField.check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.CharField.get_name"><code class="docutils literal notranslate"><span class="pre">CharField.get_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.CharField.to_python"><code class="docutils literal notranslate"><span class="pre">CharField.to_python()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateField"><code class="docutils literal notranslate"><span class="pre">DateField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateField.get_name"><code class="docutils literal notranslate"><span class="pre">DateField.get_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateField.to_python"><code class="docutils literal notranslate"><span class="pre">DateField.to_python()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateTimeField"><code class="docutils literal notranslate"><span class="pre">DateTimeField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateTimeField.get_name"><code class="docutils literal notranslate"><span class="pre">DateTimeField.get_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateTimeField.to_python"><code class="docutils literal notranslate"><span class="pre">DateTimeField.to_python()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DecimalField"><code class="docutils literal notranslate"><span class="pre">DecimalField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DecimalField.check"><code class="docutils literal notranslate"><span class="pre">DecimalField.check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DecimalField.get_name"><code class="docutils literal notranslate"><span class="pre">DecimalField.get_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DecimalField.to_python"><code class="docutils literal notranslate"><span class="pre">DecimalField.to_python()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Error"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field"><code class="docutils literal notranslate"><span class="pre">Field</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.check"><code class="docutils literal notranslate"><span class="pre">Field.check()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.contribute_to_class"><code class="docutils literal notranslate"><span class="pre">Field.contribute_to_class()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.db_type"><code class="docutils literal notranslate"><span class="pre">Field.db_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.get_type"><code class="docutils literal notranslate"><span class="pre">Field.get_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.instances_count"><code class="docutils literal notranslate"><span class="pre">Field.instances_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.set_attr_names"><code class="docutils literal notranslate"><span class="pre">Field.set_attr_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.to_python"><code class="docutils literal notranslate"><span class="pre">Field.to_python()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.FloatField"><code class="docutils literal notranslate"><span class="pre">FloatField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.FloatField.get_name"><code class="docutils literal notranslate"><span class="pre">FloatField.get_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.FloatField.to_python"><code class="docutils literal notranslate"><span class="pre">FloatField.to_python()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.IntegerField"><code class="docutils literal notranslate"><span class="pre">IntegerField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.IntegerField.add_validators"><code class="docutils literal notranslate"><span class="pre">IntegerField.add_validators()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.IntegerField.get_type"><code class="docutils literal notranslate"><span class="pre">IntegerField.get_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.IntegerField.to_python"><code class="docutils literal notranslate"><span class="pre">IntegerField.to_python()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveBigIntegerField"><code class="docutils literal notranslate"><span class="pre">PositiveBigIntegerField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveBigIntegerField.get_type"><code class="docutils literal notranslate"><span class="pre">PositiveBigIntegerField.get_type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveIntegerField"><code class="docutils literal notranslate"><span class="pre">PositiveIntegerField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveIntegerField.get_type"><code class="docutils literal notranslate"><span class="pre">PositiveIntegerField.get_type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveSmallIntegerField"><code class="docutils literal notranslate"><span class="pre">PositiveSmallIntegerField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveSmallIntegerField.get_type"><code class="docutils literal notranslate"><span class="pre">PositiveSmallIntegerField.get_type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.SmallIntegerField"><code class="docutils literal notranslate"><span class="pre">SmallIntegerField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.SmallIntegerField.get_type"><code class="docutils literal notranslate"><span class="pre">SmallIntegerField.get_type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.TextField"><code class="docutils literal notranslate"><span class="pre">TextField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.TextField.get_name"><code class="docutils literal notranslate"><span class="pre">TextField.get_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.TextField.to_python"><code class="docutils literal notranslate"><span class="pre">TextField.to_python()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.integer_field_range"><code class="docutils literal notranslate"><span class="pre">integer_field_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.is_valid_date"><code class="docutils literal notranslate"><span class="pre">is_valid_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.is_valid_datetime"><code class="docutils literal notranslate"><span class="pre">is_valid_datetime()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.field.html#module-skibidi_orm.query_engine.field.validators">skibidi_orm.query_engine.field.validators module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.BaseValidator"><code class="docutils literal notranslate"><span class="pre">BaseValidator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.BaseValidator.compare"><code class="docutils literal notranslate"><span class="pre">BaseValidator.compare()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.DecimalValidator"><code class="docutils literal notranslate"><span class="pre">DecimalValidator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.MaxLengthValidator"><code class="docutils literal notranslate"><span class="pre">MaxLengthValidator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.MaxLengthValidator.compare"><code class="docutils literal notranslate"><span class="pre">MaxLengthValidator.compare()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.MaxValueValidator"><code class="docutils literal notranslate"><span class="pre">MaxValueValidator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.MaxValueValidator.compare"><code class="docutils literal notranslate"><span class="pre">MaxValueValidator.compare()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.MinLengthValidator"><code class="docutils literal notranslate"><span class="pre">MinLengthValidator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.MinLengthValidator.compare"><code class="docutils literal notranslate"><span class="pre">MinLengthValidator.compare()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.MinValueValidator"><code class="docutils literal notranslate"><span class="pre">MinValueValidator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.MinValueValidator.compare"><code class="docutils literal notranslate"><span class="pre">MinValueValidator.compare()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.validators.ValidationError"><code class="docutils literal notranslate"><span class="pre">ValidationError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.field.html#module-skibidi_orm.query_engine.field.related_field">skibidi_orm.query_engine.field.related_field module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.related_field.ForeignKey"><code class="docutils literal notranslate"><span class="pre">ForeignKey</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.related_field.ForeignKey.contribute_to_class"><code class="docutils literal notranslate"><span class="pre">ForeignKey.contribute_to_class()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.related_field.ForeignKey.get_instance_by_name"><code class="docutils literal notranslate"><span class="pre">ForeignKey.get_instance_by_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.related_field.ForeignKey.related_model"><code class="docutils literal notranslate"><span class="pre">ForeignKey.related_model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.related_field.ForeignKey.set_attributes_from_rel"><code class="docutils literal notranslate"><span class="pre">ForeignKey.set_attributes_from_rel()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.field.html#module-skibidi_orm.query_engine.field.relation_objects">skibidi_orm.query_engine.field.relation_objects module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.relation_objects.RelationObject"><code class="docutils literal notranslate"><span class="pre">RelationObject</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.relation_objects.RelationObject.field"><code class="docutils literal notranslate"><span class="pre">RelationObject.field</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.relation_objects.RelationObject.model"><code class="docutils literal notranslate"><span class="pre">RelationObject.model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.relation_objects.RelationObject.related_name"><code class="docutils literal notranslate"><span class="pre">RelationObject.related_name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="skibidi_orm.query_engine.model.html">skibidi_orm.query_engine.model package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.model.html#module-skibidi_orm.query_engine.model.base">skibidi_orm.query_engine.model.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.MetaModel"><code class="docutils literal notranslate"><span class="pre">MetaModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.MetaModel.add_to_class"><code class="docutils literal notranslate"><span class="pre">MetaModel.add_to_class()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model.Config"><code class="docutils literal notranslate"><span class="pre">Model.Config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">Model.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model.model_config"><code class="docutils literal notranslate"><span class="pre">Model.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model.model_fields"><code class="docutils literal notranslate"><span class="pre">Model.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model.pk"><code class="docutils literal notranslate"><span class="pre">Model.pk</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.model.html#module-skibidi_orm.query_engine.model.meta_options">skibidi_orm.query_engine.model.meta_options module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.meta_options.MetaOptions"><code class="docutils literal notranslate"><span class="pre">MetaOptions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.meta_options.MetaOptions.add_field"><code class="docutils literal notranslate"><span class="pre">MetaOptions.add_field()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.meta_options.MetaOptions.contribute_to_class"><code class="docutils literal notranslate"><span class="pre">MetaOptions.contribute_to_class()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.meta_options.MetaOptions.get_field_name"><code class="docutils literal notranslate"><span class="pre">MetaOptions.get_field_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.meta_options.MetaOptions.get_relation_field"><code class="docutils literal notranslate"><span class="pre">MetaOptions.get_relation_field()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.meta_options.MetaOptions.relation_fields_column"><code class="docutils literal notranslate"><span class="pre">MetaOptions.relation_fields_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.meta_options.MetaOptions.relation_fields_name"><code class="docutils literal notranslate"><span class="pre">MetaOptions.relation_fields_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.meta_options.MetaOptions.setup_pk"><code class="docutils literal notranslate"><span class="pre">MetaOptions.setup_pk()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="skibidi_orm.query_engine.operations.html">skibidi_orm.query_engine.operations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#module-skibidi_orm.query_engine.operations.clauses">skibidi_orm.query_engine.operations.clauses module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.Clause"><code class="docutils literal notranslate"><span class="pre">Clause</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.Clause.col"><code class="docutils literal notranslate"><span class="pre">Clause.col</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.Clause.val"><code class="docutils literal notranslate"><span class="pre">Clause.val</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.Clause.type"><code class="docutils literal notranslate"><span class="pre">Clause.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#id0"><code class="docutils literal notranslate"><span class="pre">Clause.col</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#id1"><code class="docutils literal notranslate"><span class="pre">Clause.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#id2"><code class="docutils literal notranslate"><span class="pre">Clause.val</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.Eq"><code class="docutils literal notranslate"><span class="pre">Eq</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.Gt"><code class="docutils literal notranslate"><span class="pre">Gt</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.GtEq"><code class="docutils literal notranslate"><span class="pre">GtEq</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.Lt"><code class="docutils literal notranslate"><span class="pre">Lt</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.LtEq"><code class="docutils literal notranslate"><span class="pre">LtEq</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.NotEq"><code class="docutils literal notranslate"><span class="pre">NotEq</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.NotNull"><code class="docutils literal notranslate"><span class="pre">NotNull</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.Null"><code class="docutils literal notranslate"><span class="pre">Null</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#module-skibidi_orm.query_engine.operations.crud">skibidi_orm.query_engine.operations.crud module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.CRUDBase"><code class="docutils literal notranslate"><span class="pre">CRUDBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.CRUDBase._obj"><code class="docutils literal notranslate"><span class="pre">CRUDBase._obj</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.CRUDBase.table"><code class="docutils literal notranslate"><span class="pre">CRUDBase.table()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Delete"><code class="docutils literal notranslate"><span class="pre">Delete</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Delete.where_clause"><code class="docutils literal notranslate"><span class="pre">Delete.where_clause()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert"><code class="docutils literal notranslate"><span class="pre">Insert</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert._returns"><code class="docutils literal notranslate"><span class="pre">Insert._returns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert._returning_col"><code class="docutils literal notranslate"><span class="pre">Insert._returning_col</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert.returning_col"><code class="docutils literal notranslate"><span class="pre">Insert.returning_col</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert.returns"><code class="docutils literal notranslate"><span class="pre">Insert.returns</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Update"><code class="docutils literal notranslate"><span class="pre">Update</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Update.where_clause"><code class="docutils literal notranslate"><span class="pre">Update.where_clause()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.ValueBase"><code class="docutils literal notranslate"><span class="pre">ValueBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.ValueBase._attributes"><code class="docutils literal notranslate"><span class="pre">ValueBase._attributes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.ValueBase.attributes"><code class="docutils literal notranslate"><span class="pre">ValueBase.attributes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.ValueBase.columns"><code class="docutils literal notranslate"><span class="pre">ValueBase.columns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.ValueBase.values"><code class="docutils literal notranslate"><span class="pre">ValueBase.values()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#module-skibidi_orm.query_engine.operations.functions">skibidi_orm.query_engine.operations.functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.functions.Count"><code class="docutils literal notranslate"><span class="pre">Count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.functions.Function"><code class="docutils literal notranslate"><span class="pre">Function</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.functions.Function._col"><code class="docutils literal notranslate"><span class="pre">Function._col</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.functions.Function.column"><code class="docutils literal notranslate"><span class="pre">Function.column</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.functions.Function.type"><code class="docutils literal notranslate"><span class="pre">Function.type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#module-skibidi_orm.query_engine.operations.select">skibidi_orm.query_engine.operations.select module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select"><code class="docutils literal notranslate"><span class="pre">Select</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select._table"><code class="docutils literal notranslate"><span class="pre">Select._table</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select._model"><code class="docutils literal notranslate"><span class="pre">Select._model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select._fields"><code class="docutils literal notranslate"><span class="pre">Select._fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select._where_clauses"><code class="docutils literal notranslate"><span class="pre">Select._where_clauses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select._group_by_col"><code class="docutils literal notranslate"><span class="pre">Select._group_by_col</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select._order_by_col"><code class="docutils literal notranslate"><span class="pre">Select._order_by_col</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select._order_by_desc"><code class="docutils literal notranslate"><span class="pre">Select._order_by_desc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select._returns_model"><code class="docutils literal notranslate"><span class="pre">Select._returns_model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select._annotations"><code class="docutils literal notranslate"><span class="pre">Select._annotations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.annotate"><code class="docutils literal notranslate"><span class="pre">Select.annotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.annotations"><code class="docutils literal notranslate"><span class="pre">Select.annotations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.fields"><code class="docutils literal notranslate"><span class="pre">Select.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.filter"><code class="docutils literal notranslate"><span class="pre">Select.filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.group_by"><code class="docutils literal notranslate"><span class="pre">Select.group_by()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.group_by_col"><code class="docutils literal notranslate"><span class="pre">Select.group_by_col</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.model"><code class="docutils literal notranslate"><span class="pre">Select.model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.order_by"><code class="docutils literal notranslate"><span class="pre">Select.order_by()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.order_by_col"><code class="docutils literal notranslate"><span class="pre">Select.order_by_col</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.returning_model"><code class="docutils literal notranslate"><span class="pre">Select.returning_model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.table"><code class="docutils literal notranslate"><span class="pre">Select.table</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select.where_clauses"><code class="docutils literal notranslate"><span class="pre">Select.where_clauses</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="skibidi_orm.query_engine.config.html">skibidi_orm.query_engine.config module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.config.html#skibidi_orm.query_engine.config.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.config.html#skibidi_orm.query_engine.config.Config.adapter"><code class="docutils literal notranslate"><span class="pre">Config.adapter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.config.html#skibidi_orm.query_engine.config.Config.compiler"><code class="docutils literal notranslate"><span class="pre">Config.compiler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.config.html#skibidi_orm.query_engine.config.Config.connection_data"><code class="docutils literal notranslate"><span class="pre">Config.connection_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.config.html#skibidi_orm.query_engine.config.SQLiteConfig"><code class="docutils literal notranslate"><span class="pre">SQLiteConfig</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="skibidi_orm.query_engine.config.html#skibidi_orm.query_engine.config.SQLiteConfig.connection_data"><code class="docutils literal notranslate"><span class="pre">SQLiteConfig.connection_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="skibidi_orm.query_engine.config.html#skibidi_orm.query_engine.config.get_configuration"><code class="docutils literal notranslate"><span class="pre">get_configuration()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="skibidi_orm.html" class="btn btn-neutral float-left" title="skibidi_orm package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="skibidi_orm.query_engine.adapter.html" class="btn btn-neutral float-right" title="skibidi_orm.query_engine.adapter package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Marta Sobol, Magda Twarowska, Maria Polakowska.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skibidi_orm.query_engine.adapter.base_compiler &mdash; SkiBiDi-ORM 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SkiBiDi-ORM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skibidi_orm.html">skibidi_orm package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">How to start</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SkiBiDi-ORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">skibidi_orm.query_engine.adapter.base_compiler</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for skibidi_orm.query_engine.adapter.base_compiler</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides the `SQLCompiler` class, which is responsible for compiling</span>
+<span class="sd">various SQL statements such as SELECT, INSERT, UPDATE, and DELETE.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.crud</span> <span class="kn">import</span> <span class="n">Insert</span><span class="p">,</span> <span class="n">ValueBase</span><span class="p">,</span> <span class="n">Update</span><span class="p">,</span> <span class="n">Delete</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations</span> <span class="kn">import</span> <span class="n">clauses</span> <span class="k">as</span> <span class="n">c</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.select</span> <span class="kn">import</span> <span class="n">Select</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.functions</span> <span class="kn">import</span> <span class="n">Function</span><span class="p">,</span> <span class="n">Count</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.model.base</span> <span class="kn">import</span> <span class="n">Model</span>
+
+
+<div class="viewcode-block" id="SQLCompiler">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler">[docs]</a>
+<span class="k">class</span> <span class="nc">SQLCompiler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for compiling SQL statements.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        CLAUSES (dict): A dictionary mapping Clause types to their SQL representations.</span>
+<span class="sd">        FUNCTIONS (dict): A dictionary mapping Function types to their SQL representations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">CLAUSES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">Clause</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">Eq</span><span class="p">:</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">Gt</span><span class="p">:</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">GtEq</span><span class="p">:</span> <span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">Lt</span><span class="p">:</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">LtEq</span><span class="p">:</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">NotEq</span><span class="p">:</span> <span class="s2">&quot;!=&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">NotNull</span><span class="p">:</span> <span class="s2">&quot; IS NOT NULL&quot;</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">Null</span><span class="p">:</span> <span class="s2">&quot; IS NULL&quot;</span>
+    <span class="p">}</span>
+
+    <span class="n">FUNCTIONS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Function</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">Count</span><span class="p">:</span> <span class="s2">&quot;COUNT&quot;</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_prepare_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statement</span><span class="p">:</span> <span class="n">ValueBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepares a comma-separated string of column names.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            statement (ValueBase): The statement containing the columns.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: A comma-separated string of column names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">columns</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">text</span>
+
+    <span class="k">def</span> <span class="nf">_prep_val</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepares a value for SQL by formatting it appropriately.</span>
+<span class="sd">        For example, for string values adds extra &#39; &#39;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            val (Any): The value to be formatted.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The formatted value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">text</span>
+
+    <span class="k">def</span> <span class="nf">_prepare_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statement</span><span class="p">:</span> <span class="n">ValueBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepares a comma-separated string of values for SQL.</span>
+<span class="sd">        Usefull in INSERT.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            statement (ValueBase): The statement containing the values.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: A comma-separated string of values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="n">processed_values</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prep_val</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">val</span>
+        <span class="p">]</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">processed_values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">text</span>
+
+    <span class="k">def</span> <span class="nf">_prepare_returning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepares the RETURNING clause for an SQL statement.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            columns (list[Any]): The columns to be returned.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The RETURNING clause.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;RETURNING </span><span class="si">{</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;RETURNING &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SQLCompiler.insert">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.insert">[docs]</a>
+    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statement</span><span class="p">:</span> <span class="n">Insert</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiles an INSERT statement.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            statement (Insert): The INSERT statement to be compiled.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The compiled INSERT statement.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;INSERT INTO &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="n">statement</span><span class="o">.</span><span class="n">table</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; (&quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_columns</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;) &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;VALUES &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;(&quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_values</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;)&quot;</span>
+        <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">returns</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_returning</span><span class="p">(</span><span class="n">statement</span><span class="o">.</span><span class="n">returning_col</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;;&quot;</span>
+        <span class="k">return</span> <span class="n">text</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_col_val</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepares a comma-separated string of column-value pairs for SQL.</span>
+<span class="sd">        Usefull in UPDATE.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            attributes (list[tuple[str, Any]]): The column-value pairs.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: A comma-separated string of column-value pairs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_prep_val</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="si">}</span><span class="s1">, &#39;</span>
+        <span class="k">return</span> <span class="n">text</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_prepare_where</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clauses</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">Clause</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepares the WHERE clause for an SQL statement.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            clauses (tuple[c.Clause, ...]): The clauses to be included in the WHERE clause.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The prepared WHERE clause.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;WHERE &quot;</span>
+        <span class="k">for</span> <span class="n">clause</span> <span class="ow">in</span> <span class="n">clauses</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">clause</span><span class="o">.</span><span class="n">col</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">CLAUSES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">clause</span><span class="o">.</span><span class="n">type</span><span class="p">)</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_prep_val</span><span class="p">(</span><span class="n">clause</span><span class="o">.</span><span class="n">val</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; AND &quot;</span>
+        <span class="k">return</span> <span class="n">text</span><span class="p">[:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span>
+
+<div class="viewcode-block" id="SQLCompiler.update">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.update">[docs]</a>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statement</span><span class="p">:</span> <span class="n">Update</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiles an UPDATE statement.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            statement (Update): The UPDATE statement to be compiled.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The compiled UPDATE statement.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;UPDATE &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="n">statement</span><span class="o">.</span><span class="n">table</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; SET &quot;</span>
+        <span class="n">atr_list</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">attributes</span><span class="p">()</span>
+        <span class="c1"># to get pk info from Autofield</span>
+        <span class="n">atr_list</span> <span class="o">=</span> <span class="p">[(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Model</span><span class="p">)</span> <span class="k">else</span> <span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">atr_list</span><span class="p">]</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_col_val</span><span class="p">(</span><span class="n">atr_list</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_where</span><span class="p">(</span><span class="n">statement</span><span class="o">.</span><span class="n">where_clause</span><span class="p">())</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;;&quot;</span>
+        <span class="k">return</span> <span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="SQLCompiler.delete">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.delete">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statement</span><span class="p">:</span> <span class="n">Delete</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiles a DELETE statement.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            statement (Delete): The DELETE statement to be compiled.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The compiled DELETE statement.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="n">statement</span><span class="o">.</span><span class="n">table</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_where</span><span class="p">(</span><span class="n">statement</span><span class="o">.</span><span class="n">where_clause</span><span class="p">())</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;;&quot;</span>
+        <span class="k">return</span> <span class="n">text</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_agregate_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Function</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiles an aggregate function for SQL.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func (Function): The function to be compiled.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The compiled function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">FUNCTIONS</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">type</span><span class="p">]</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="n">column</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="n">text</span>
+
+    <span class="k">def</span> <span class="nf">_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alias</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepares an alias for column in SQL.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alias (str): The alias to be prepared.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The prepared alias.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; AS </span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">text</span>
+
+    <span class="k">def</span> <span class="nf">_select_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statement</span><span class="p">:</span> <span class="n">Select</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prepares the SELECT columns for an SQL statement.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            statement (Select): The SELECT statement.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The prepared SELECT columns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+            <span class="c1"># check if agregate function</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">Function</span><span class="p">):</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agregate_function</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+            <span class="c1"># just column name</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="n">field</span>
+
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">statement</span><span class="o">.</span><span class="n">annotations</span><span class="p">:</span>
+                <span class="c1"># there is an alias to be made</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alias</span><span class="p">(</span><span class="n">statement</span><span class="o">.</span><span class="n">annotations</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span>
+        <span class="k">return</span> <span class="n">text</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+<div class="viewcode-block" id="SQLCompiler.select">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.select">[docs]</a>
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statement</span><span class="p">:</span> <span class="n">Select</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compiles a SELECT statement.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            statement (Select): The SELECT statement to be compiled.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The compiled SELECT statement.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;SELECT &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_columns</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;FROM </span><span class="si">{</span><span class="n">statement</span><span class="o">.</span><span class="n">table</span><span class="si">}</span><span class="s2"> &quot;</span>
+        <span class="c1"># WHERE</span>
+        <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">where_clauses</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_where</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">statement</span><span class="o">.</span><span class="n">where_clauses</span><span class="p">))</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+        <span class="c1"># GROUP BY</span>
+        <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">group_by_col</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;GROUP BY &quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">statement</span><span class="o">.</span><span class="n">group_by_col</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+        <span class="c1"># ORDERE BY</span>
+        <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">order_by_col</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;ORDER BY &quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">statement</span><span class="o">.</span><span class="n">order_by_col</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">order_by_col</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="c1"># it is descend</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; DESC&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;;&quot;</span>
+        <span class="k">return</span> <span class="n">text</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Marta Sobol, Magda Twarowska, Maria Polakowska.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

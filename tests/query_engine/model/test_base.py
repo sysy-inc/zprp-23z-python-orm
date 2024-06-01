@@ -104,6 +104,9 @@ def test_create_person_both_default():
     assert person.name == 'Adam'
     assert person.age == 30
 
+
+# Foreign key
+
 class Owner(Model):
     id: Optional[int | IntegerField] = IntegerField(primary_key=True)
     name: Optional[str | CharField] = CharField()
@@ -111,7 +114,7 @@ class Owner(Model):
 class Dog(Model):
     id: Optional[int | IntegerField] = IntegerField(primary_key=True)
     name: Optional[str | CharField] = CharField('Reksio')
-    owner: Optional[Owner | ForeignKey] = ForeignKey(to=Owner, on_delete='cos')
+    owner: Optional[Owner | ForeignKey] = ForeignKey(to=Owner)
 
 def test_create_foreign_key():
     adam = Owner(1, 'Adam')
@@ -126,8 +129,8 @@ def test_create_foreign_key_none():
 
 def test_create_foreign_key_by_id():
     dog = Dog(1, "Reksio", owner_id=2)
-    assert dog.owner_id == 2
-    assert dog.owner == 5       # TODO correct
+    with pytest.raises(ValueError):
+        dog.owner
 
 def test_set_foreign_key_obj():
     adam = Owner(1, "Adam")
@@ -141,15 +144,14 @@ def test_set_foreign_key_obj():
     assert dog.owner_id == 2
 
 def test_set_foreign_key_obj_id():
-    adam = Owner(1, "Adam")     # TODO correct
+    adam = Owner(1, "Adam")
     bolek = Owner(2, "Bolek")
     dog = Dog(1, "Reksio", adam)
     assert dog.owner == adam
     assert dog.owner_id == 1
-
     dog.owner_id = 2
-    assert dog.owner == 5
-    assert dog.owner_id == 2
+    with pytest.raises(ValueError):
+        dog.owner
 
 def test_set_foreign_key_from_none():
     adam = Owner(1, "Adam")
@@ -191,16 +193,15 @@ def test_set_foreign_key_pk():
     assert dog.owner == adam
     assert dog.owner_id == 2
 
-def test_changes():
+def test_changes_without_session():
     adam = Owner(1, "Adam")
     adam.name = 'Jurek'
-    assert adam._update_changes_db() == {'name': 'Jurek'}
+    assert adam._update_changes_db() == {}
 
 def test_not_equal():
     bolek = Owner(1, 'Bolek')
     lolek = Owner(2, 'Lolek')
     assert bolek != lolek
-
 
 def test_inheritance():
     class Item(Model):
@@ -210,5 +211,5 @@ def test_inheritance():
     class Box(Item):
         weight: Optional[int | IntegerField] = IntegerField()
 
-    box = Box()
+    box = Box(1)
     assert len(box._meta.local_fields) == 3

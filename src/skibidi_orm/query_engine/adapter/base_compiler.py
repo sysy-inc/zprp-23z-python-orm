@@ -7,6 +7,8 @@ from skibidi_orm.query_engine.operations import clauses as c
 from skibidi_orm.query_engine.operations.select import Select
 from skibidi_orm.query_engine.operations.functions import Function, Count
 from typing import Any, Type
+from datetime import date, datetime
+from skibidi_orm.query_engine.model.base import Model
 
 
 class SQLCompiler:
@@ -58,8 +60,8 @@ class SQLCompiler:
             str: The formatted value.
         """
         text = ""
-        if val:
-            text = f"'{val}'" if isinstance(val, str) else str(val)
+        if val is not None:
+            text = f"'{val}'" if isinstance(val, str) or isinstance(val, date) or isinstance(val, datetime) else str(val)
         return text
 
     def _prepare_values(self, statement: ValueBase) -> str:
@@ -118,7 +120,6 @@ class SQLCompiler:
         if statement.returns:
             text += self._prepare_returning(statement.returning_col)
         text += ";"
-        print(text)
         return text
 
     def _col_val(self, attributes: list[tuple[str, Any]]) -> str:
@@ -166,11 +167,13 @@ class SQLCompiler:
         text = "UPDATE "
         text += statement.table()
         text += " SET "
-        text += self._col_val(statement.attributes())
+        atr_list = statement.attributes()
+        # to get pk info from Autofield
+        atr_list = [(item[0], item[1].pk) if isinstance(item[1], Model) else item for item in atr_list]
+        text += self._col_val(atr_list)
         text += " "
         text += self._prepare_where(statement.where_clause())
         text += ";"
-        print(text)
         return text
 
     def delete(self, statement: Delete) -> str:
@@ -188,7 +191,6 @@ class SQLCompiler:
         text += " "
         text += self._prepare_where(statement.where_clause())
         text += ";"
-        print(text)
         return text
 
     def _agregate_function(self, func: Function) -> str:
@@ -276,5 +278,4 @@ class SQLCompiler:
                 text += " DESC"
             text += " "
         text += ";"
-        print(text)
         return text

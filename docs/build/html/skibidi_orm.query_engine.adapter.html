@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skibidi_orm.query_engine.adapter package &mdash; SkiBiDi-ORM 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skibidi_orm.query_engine.connection package" href="skibidi_orm.query_engine.connection.html" />
+    <link rel="prev" title="skibidi_orm.query_engine package" href="skibidi_orm.query_engine.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SkiBiDi-ORM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">How to start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="skibidi_orm.html">skibidi_orm package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skibidi_orm.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skibidi_orm.query_engine.html">skibidi_orm.query_engine package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="skibidi_orm.query_engine.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SkiBiDi-ORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="skibidi_orm.html">skibidi_orm package</a></li>
+          <li class="breadcrumb-item"><a href="skibidi_orm.query_engine.html">skibidi_orm.query_engine package</a></li>
+      <li class="breadcrumb-item active">skibidi_orm.query_engine.adapter package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/skibidi_orm.query_engine.adapter.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="skibidi-orm-query-engine-adapter-package">
+<h1>skibidi_orm.query_engine.adapter package<a class="headerlink" href="#skibidi-orm-query-engine-adapter-package" title="Link to this heading"></a></h1>
+<section id="module-skibidi_orm.query_engine.adapter.base_adapter">
+<span id="skibidi-orm-query-engine-adapter-base-adapter-module"></span><h2>skibidi_orm.query_engine.adapter.base_adapter module<a class="headerlink" href="#module-skibidi_orm.query_engine.adapter.base_adapter" title="Link to this heading"></a></h2>
+<p>Base class for adapter. Used for managing making connection
+by different databases</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_adapter.Adapter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.adapter.base_adapter.</span></span><span class="sig-name descname"><span class="pre">Adapter</span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/adapter/base_adapter.html#Adapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_adapter.Adapter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class for database adapters.</p>
+<p>Subclasses must implement the <cite>_import_connector()</cite> method to import
+the appropriate database connector, and the <cite>make_connection()</cite> method
+to create a connection with the given parameters.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_adapter.Adapter.compiler">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compiler</span></span><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_adapter.Adapter.compiler" title="Link to this definition"></a></dt>
+<dd><p>The SQL compiler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The compiler used to compile SQL queries.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler" title="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler">SQLCompiler</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_adapter.Adapter.connector">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connector</span></span><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_adapter.Adapter.connector" title="Link to this definition"></a></dt>
+<dd><p>The database connector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The connector to the database.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_adapter.Adapter.make_connection">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/adapter/base_adapter.html#Adapter.make_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_adapter.Adapter.make_connection" title="Link to this definition"></a></dt>
+<dd><p>Creates a connection with the given parameters and returns it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – Keyword arguments for configuring the database connection.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A connection object for the specific database.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.adapter.sqlite_adapter">
+<span id="skibidi-orm-query-engine-adapter-sqlite-adapter-module"></span><h2>skibidi_orm.query_engine.adapter.sqlite_adapter module<a class="headerlink" href="#module-skibidi_orm.query_engine.adapter.sqlite_adapter" title="Link to this heading"></a></h2>
+<p>Adapter for SQLite database</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.sqlite_adapter.SQLiteAdapter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.adapter.sqlite_adapter.</span></span><span class="sig-name descname"><span class="pre">SQLiteAdapter</span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/adapter/sqlite_adapter.html#SQLiteAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.adapter.sqlite_adapter.SQLiteAdapter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.adapter.base_adapter.Adapter" title="skibidi_orm.query_engine.adapter.base_adapter.Adapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Adapter</span></code></a></p>
+<p>Adapter for SQLite database</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.sqlite_adapter.SQLiteAdapter.make_connection">
+<span class="sig-name descname"><span class="pre">make_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/adapter/sqlite_adapter.html#SQLiteAdapter.make_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.adapter.sqlite_adapter.SQLiteAdapter.make_connection" title="Link to this definition"></a></dt>
+<dd><p>Creates a connection to the SQLite database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – Keyword arguments for configuring the database connection.
+- path (str): Path to the SQLite database.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A connection object to the SQLite database.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sqlite3.Connection</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>make_connection(path=”database.db”)</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.adapter.base_compiler">
+<span id="skibidi-orm-query-engine-adapter-base-compiler-module"></span><h2>skibidi_orm.query_engine.adapter.base_compiler module<a class="headerlink" href="#module-skibidi_orm.query_engine.adapter.base_compiler" title="Link to this heading"></a></h2>
+<p>This module provides the <cite>SQLCompiler</cite> class, which is responsible for compiling
+various SQL statements such as SELECT, INSERT, UPDATE, and DELETE.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.adapter.base_compiler.</span></span><span class="sig-name descname"><span class="pre">SQLCompiler</span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/adapter/base_compiler.html#SQLCompiler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for compiling SQL statements.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.CLAUSES">
+<span class="sig-name descname"><span class="pre">CLAUSES</span></span><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.CLAUSES" title="Link to this definition"></a></dt>
+<dd><p>A dictionary mapping Clause types to their SQL representations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.FUNCTIONS">
+<span class="sig-name descname"><span class="pre">FUNCTIONS</span></span><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.FUNCTIONS" title="Link to this definition"></a></dt>
+<dd><p>A dictionary mapping Function types to their SQL representations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">CLAUSES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause"><span class="pre">Clause</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;class</span> <span class="pre">'skibidi_orm.query_engine.operations.clauses.Eq'&gt;:</span> <span class="pre">'=',</span> <span class="pre">&lt;class</span> <span class="pre">'skibidi_orm.query_engine.operations.clauses.Gt'&gt;:</span> <span class="pre">'&gt;',</span> <span class="pre">&lt;class</span> <span class="pre">'skibidi_orm.query_engine.operations.clauses.GtEq'&gt;:</span> <span class="pre">'&gt;=',</span> <span class="pre">&lt;class</span> <span class="pre">'skibidi_orm.query_engine.operations.clauses.Lt'&gt;:</span> <span class="pre">'&lt;',</span> <span class="pre">&lt;class</span> <span class="pre">'skibidi_orm.query_engine.operations.clauses.LtEq'&gt;:</span> <span class="pre">'&lt;=',</span> <span class="pre">&lt;class</span> <span class="pre">'skibidi_orm.query_engine.operations.clauses.NotEq'&gt;:</span> <span class="pre">'!=',</span> <span class="pre">&lt;class</span> <span class="pre">'skibidi_orm.query_engine.operations.clauses.NotNull'&gt;:</span> <span class="pre">'</span> <span class="pre">IS</span> <span class="pre">NOT</span> <span class="pre">NULL',</span> <span class="pre">&lt;class</span> <span class="pre">'skibidi_orm.query_engine.operations.clauses.Null'&gt;:</span> <span class="pre">'</span> <span class="pre">IS</span> <span class="pre">NULL'}</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">FUNCTIONS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.functions.Function" title="skibidi_orm.query_engine.operations.functions.Function"><span class="pre">Function</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;class</span> <span class="pre">'skibidi_orm.query_engine.operations.functions.Count'&gt;:</span> <span class="pre">'COUNT'}</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Delete" title="skibidi_orm.query_engine.operations.crud.Delete"><span class="pre">Delete</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/adapter/base_compiler.html#SQLCompiler.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.delete" title="Link to this definition"></a></dt>
+<dd><p>Compiles a DELETE statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>statement</strong> (<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Delete" title="skibidi_orm.query_engine.operations.crud.Delete"><em>Delete</em></a>) – The DELETE statement to be compiled.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The compiled DELETE statement.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert" title="skibidi_orm.query_engine.operations.crud.Insert"><span class="pre">Insert</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/adapter/base_compiler.html#SQLCompiler.insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.insert" title="Link to this definition"></a></dt>
+<dd><p>Compiles an INSERT statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>statement</strong> (<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert" title="skibidi_orm.query_engine.operations.crud.Insert"><em>Insert</em></a>) – The INSERT statement to be compiled.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The compiled INSERT statement.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select" title="skibidi_orm.query_engine.operations.select.Select"><span class="pre">Select</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/adapter/base_compiler.html#SQLCompiler.select"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.select" title="Link to this definition"></a></dt>
+<dd><p>Compiles a SELECT statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>statement</strong> (<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select" title="skibidi_orm.query_engine.operations.select.Select"><em>Select</em></a>) – The SELECT statement to be compiled.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The compiled SELECT statement.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Update" title="skibidi_orm.query_engine.operations.crud.Update"><span class="pre">Update</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/adapter/base_compiler.html#SQLCompiler.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler.update" title="Link to this definition"></a></dt>
+<dd><p>Compiles an UPDATE statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>statement</strong> (<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Update" title="skibidi_orm.query_engine.operations.crud.Update"><em>Update</em></a>) – The UPDATE statement to be compiled.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The compiled UPDATE statement.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.adapter.sqlite_compiler">
+<span id="skibidi-orm-query-engine-adapter-sqlite-compiler-module"></span><h2>skibidi_orm.query_engine.adapter.sqlite_compiler module<a class="headerlink" href="#module-skibidi_orm.query_engine.adapter.sqlite_compiler" title="Link to this heading"></a></h2>
+<p>Compiler for SQLite.</p>
+<p>This module defines the SQLiteCompiler class, which extends the base SQLCompiler
+to handle SQLite-specific SQL statement compilation.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.adapter.sqlite_compiler.SQLiteCompiler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.adapter.sqlite_compiler.</span></span><span class="sig-name descname"><span class="pre">SQLiteCompiler</span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/adapter/sqlite_compiler.html#SQLiteCompiler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.adapter.sqlite_compiler.SQLiteCompiler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler" title="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler"><code class="xref py py-class docutils literal notranslate"><span class="pre">SQLCompiler</span></code></a></p>
+<p>SQLite-specific SQL compiler.</p>
+<p>This class inherits from SQLCompiler and is designed to handle the
+specific syntax and requirements of SQLite databases.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="skibidi_orm.query_engine.html" class="btn btn-neutral float-left" title="skibidi_orm.query_engine package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="skibidi_orm.query_engine.connection.html" class="btn btn-neutral float-right" title="skibidi_orm.query_engine.connection package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Marta Sobol, Magda Twarowska, Maria Polakowska.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

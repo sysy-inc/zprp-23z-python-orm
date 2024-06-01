@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skibidi_orm.query_engine.field.field &mdash; SkiBiDi-ORM 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SkiBiDi-ORM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">How to start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skibidi_orm.html">skibidi_orm package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SkiBiDi-ORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">skibidi_orm.query_engine.field.field</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for skibidi_orm.query_engine.field.field</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.validators</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MaxLengthValidator</span><span class="p">,</span>
+    <span class="n">MaxValueValidator</span><span class="p">,</span>
+    <span class="n">MinValueValidator</span><span class="p">,</span>
+    <span class="n">DecimalValidator</span><span class="p">,</span>
+    <span class="n">BaseValidator</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">decimal</span>
+
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.relation_objects</span> <span class="kn">import</span> <span class="n">RelationObject</span>
+    <span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.model.base</span> <span class="kn">import</span> <span class="n">Model</span>
+
+
+<div class="viewcode-block" id="Error">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Error">[docs]</a>
+<span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Custom Error class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="is_valid_date">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.is_valid_date">[docs]</a>
+<span class="k">def</span> <span class="nf">is_valid_date</span><span class="p">(</span><span class="n">date_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates if the given string is a valid date in the format &#39;YYYY-MM-DD&#39;.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        date_string (str): The date string to be validated.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        datetime.datetime: A datetime object representing the parsed date.</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the date string is not in the correct format or is an invalid date.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date_string</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid date format, expected &#39;YYYY-MM-DD&#39;&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="is_valid_datetime">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.is_valid_datetime">[docs]</a>
+<span class="k">def</span> <span class="nf">is_valid_datetime</span><span class="p">(</span><span class="n">datetime_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates if the given string is a valid datetime in the format &#39;YYYY-MM-DD HH:MM:SS&#39;.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        datetime_string (str): The datetime string to be validated.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        datetime.datetime: A datetime object representing the parsed datetime.</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the datetime string is not in the correct format or is an invalid datetime.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">datetime_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetime_string</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">datetime_obj</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span></div>
+
+
+
+<div class="viewcode-block" id="integer_field_range">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.integer_field_range">[docs]</a>
+<span class="k">def</span> <span class="nf">integer_field_range</span><span class="p">(</span><span class="nb">type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function for mocking integer range from a database</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">2147483648</span><span class="p">,</span> <span class="mi">2147483647</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Field">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field">[docs]</a>
+<span class="k">class</span> <span class="nc">Field</span><span class="p">:</span>
+    <span class="n">instances_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">null</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                 <span class="n">db_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                 <span class="n">unique</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">primary_key</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">max_length</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">default</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">field_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                 <span class="n">related</span><span class="p">:</span> <span class="s1">&#39;Optional[RelationObject]&#39;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a new instance of the Field class.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            null (bool): Whether the field can be null. Defaults to False.</span>
+<span class="sd">            name (str): The name of the field in the Python class. Defaults to an empty string.</span>
+<span class="sd">            db_column (str): The name of the corresponding column in the database. Defaults to an empty string.</span>
+<span class="sd">            unique (bool): Whether the field must be unique across the table. Defaults to False.</span>
+<span class="sd">            primary_key (bool): Whether the field is a primary key. Defaults to False.</span>
+<span class="sd">            max_length (Any): The maximum length of the field&#39;s value. Defaults to None.</span>
+<span class="sd">            default (Any): The default value for the field. Defaults to None.</span>
+<span class="sd">            field_type (str): The type of the field. Defaults to an empty string.</span>
+<span class="sd">            related (Union[RelationObject, None]): The related field for foreign key relationships. Defaults to None.</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            null (bool): Whether the field can be null.</span>
+<span class="sd">            name (str): The name of the field in the Python class.</span>
+<span class="sd">            db_column (str): The name of the corresponding column in the database.</span>
+<span class="sd">            unique (bool): Whether the field must be unique across the table.</span>
+<span class="sd">            primary_key (bool): Whether the field is a primary key.</span>
+<span class="sd">            max_length (Any): The maximum length of the field&#39;s value.</span>
+<span class="sd">            default (Any): The default value for the field.</span>
+<span class="sd">            validators (List[object]): A list of validators to validate the field&#39;s value.</span>
+<span class="sd">            field_type (str): The type of the field.</span>
+<span class="sd">            remote_field (Union[RelationObject, None]): The related field for foreign key relationships.</span>
+<span class="sd">            is_relation (bool): Whether the field is a foreign key relationship.</span>
+<span class="sd">            instances_count (int): The number of Field instances created.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">null</span> <span class="o">=</span> <span class="n">null</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>                <span class="c1"># python&#39;s field name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_column</span> <span class="o">=</span> <span class="n">db_column</span>      <span class="c1"># column name in db</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unique</span> <span class="o">=</span> <span class="n">unique</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">primary_key</span> <span class="o">=</span> <span class="n">primary_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_length</span> <span class="o">=</span> <span class="n">max_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">default</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">BaseValidator</span><span class="p">,</span> <span class="n">DecimalValidator</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>    <span class="c1"># list of validators to validate a value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">field_type</span> <span class="o">=</span> <span class="n">field_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remote_field</span> <span class="o">=</span> <span class="n">related</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_relation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">instances_count</span> <span class="o">=</span> <span class="n">Field</span><span class="o">.</span><span class="n">instances_count</span>
+        <span class="n">Field</span><span class="o">.</span><span class="n">instances_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns pythonic name of the field</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+<div class="viewcode-block" id="Field.get_type">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.get_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the type of the field.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The type of the field as a string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances_count</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">instances_count</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">instances_count</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">instances_count</span>
+
+<div class="viewcode-block" id="Field.set_attr_names">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.set_attr_names">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_attr_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the attribute names for the object.</span>
+
+<span class="sd">        If `self.name` is not already set, it assigns the provided `name` to `self.name`.</span>
+<span class="sd">        Similarly, if `self.db_column` is not already set, it assigns `self.name` to `self.column`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The name to be set if `self.name` is not already defined.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_column</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="Field.contribute_to_class">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.contribute_to_class">[docs]</a>
+    <span class="k">def</span> <span class="nf">contribute_to_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">:</span> <span class="s1">&#39;Model&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Contributes this field to the given class.</span>
+
+<span class="sd">        This method sets the attribute names, assigns the model class to the field,</span>
+<span class="sd">        and adds the field to the class&#39;s metadata. If the field has a column name,</span>
+<span class="sd">        it sets an attribute on the class with the field&#39;s name.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cls (Model): The class to which this field is being added.</span>
+<span class="sd">            name (str): The name of the field.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_attr_names</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Field.to_python">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.to_python">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts input to the expected python data type.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            value: the input value to be converted</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="Field.db_type">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.db_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">db_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the database column type for this field for a given connection from a converter dictionary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            conn (dict[str, str]): A dictionary representing the connection, where the keys are the types and the values are the corresponding database column types.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            object: The database column type for this field. Returns None if the type is not found in the connection dictionary.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">column_type</span> <span class="o">=</span> <span class="n">conn</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_type</span><span class="p">()]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">column_type</span></div>
+
+
+<div class="viewcode-block" id="Field.check">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.Field.check">[docs]</a>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calls all validators that need to be checked for a field type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="IntegerField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.IntegerField">[docs]</a>
+<span class="k">class</span> <span class="nc">IntegerField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a new instance of the class.</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            validators (List[DecimalValidator]): A list of validators for the field.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_validators</span><span class="p">()</span>
+
+<div class="viewcode-block" id="IntegerField.get_type">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.IntegerField.get_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;IntegerField&quot;</span></div>
+
+
+<div class="viewcode-block" id="IntegerField.to_python">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.IntegerField.to_python">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;Value must be an integer&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IntegerField.add_validators">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.IntegerField.add_validators">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_validators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">min_value</span><span class="p">,</span> <span class="n">max_value</span> <span class="o">=</span> <span class="n">integer_field_range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_type</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MaxValueValidator</span><span class="p">(</span><span class="n">max_value</span><span class="p">))</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MinValueValidator</span><span class="p">(</span><span class="n">min_value</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BigIntegerField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.BigIntegerField">[docs]</a>
+<span class="k">class</span> <span class="nc">BigIntegerField</span><span class="p">(</span><span class="n">IntegerField</span><span class="p">):</span>
+<div class="viewcode-block" id="BigIntegerField.get_type">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.BigIntegerField.get_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;BigIntegerField&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SmallIntegerField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.SmallIntegerField">[docs]</a>
+<span class="k">class</span> <span class="nc">SmallIntegerField</span><span class="p">(</span><span class="n">IntegerField</span><span class="p">):</span>
+<div class="viewcode-block" id="SmallIntegerField.get_type">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.SmallIntegerField.get_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;SmallIntegerField&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PositiveIntegerField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveIntegerField">[docs]</a>
+<span class="k">class</span> <span class="nc">PositiveIntegerField</span><span class="p">(</span><span class="n">IntegerField</span><span class="p">):</span>
+<div class="viewcode-block" id="PositiveIntegerField.get_type">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveIntegerField.get_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;PositiveIntegerField&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PositiveBigIntegerField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveBigIntegerField">[docs]</a>
+<span class="k">class</span> <span class="nc">PositiveBigIntegerField</span><span class="p">(</span><span class="n">BigIntegerField</span><span class="p">):</span>
+<div class="viewcode-block" id="PositiveBigIntegerField.get_type">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveBigIntegerField.get_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;PositiveBigIntegerField&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PositiveSmallIntegerField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveSmallIntegerField">[docs]</a>
+<span class="k">class</span> <span class="nc">PositiveSmallIntegerField</span><span class="p">(</span><span class="n">SmallIntegerField</span><span class="p">):</span>
+<div class="viewcode-block" id="PositiveSmallIntegerField.get_type">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.PositiveSmallIntegerField.get_type">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;PositiveSmallIntegerField&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DecimalField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DecimalField">[docs]</a>
+<span class="k">class</span> <span class="nc">DecimalField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_digits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">decimal_places</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a new instance of the class.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            max_digits (int): The maximum number of digits allowed.</span>
+<span class="sd">            decimal_places (int): The number of decimal places allowed.</span>
+<span class="sd">            **kwargs: Additional keyword arguments.</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            max_digits (int): The maximum number of digits allowed.</span>
+<span class="sd">            decimal_places (int): The number of decimal places allowed.</span>
+<span class="sd">            validators (List[DecimalValidator]): A list of validators for the field.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>                                                    
+        <span class="bp">self</span><span class="o">.</span><span class="n">decimal_places</span> <span class="o">=</span> <span class="n">decimal_places</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_digits</span> <span class="o">=</span> <span class="n">max_digits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DecimalValidator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_digits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">decimal_places</span><span class="p">))</span>
+    
+<div class="viewcode-block" id="DecimalField.get_name">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DecimalField.get_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;DecimalField&quot;</span></div>
+
+
+<div class="viewcode-block" id="DecimalField.check">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DecimalField.check">[docs]</a>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_max_digits</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_decimal_places</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_max_digits_and_decimal_places</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_check_max_digits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the max_digits attribute is valid.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Error: If the max_digits attribute is not a positive integer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">max_digits</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_digits</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">max_digits</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;max_digits must be an integer greater than 0.&quot;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;DecimalField must define max_digits attribute&quot;</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_decimal_places</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the decimal_places attribute is valid.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Error: If the decimal_places attribute is not a non-negative integer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">decimal_places</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decimal_places</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">decimal_places</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;decimal_places must be an integer greater or equal to 0.&quot;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;DecimalField must define decimal_places attribute&quot;</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_max_digits_and_decimal_places</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the combination of max_digits and decimal_places is valid.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Error: If decimal_places is greater than max_digits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decimal_places</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_digits</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;decimal_places must be greater or equal to max_digits.&quot;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="DecimalField.to_python">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DecimalField.to_python">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">decimal_value</span> <span class="o">=</span> <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">decimal</span><span class="o">.</span><span class="n">InvalidOperation</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;Value must be a decimal.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">decimal_value</span><span class="o">.</span><span class="n">is_finite</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;Value must be a decimal.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">decimal_value</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="FloatField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.FloatField">[docs]</a>
+<span class="k">class</span> <span class="nc">FloatField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+<div class="viewcode-block" id="FloatField.get_name">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.FloatField.get_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;FloatField&quot;</span></div>
+
+    
+<div class="viewcode-block" id="FloatField.to_python">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.FloatField.to_python">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;Value must be a float&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CharField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.CharField">[docs]</a>
+<span class="k">class</span> <span class="nc">CharField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>   
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>   
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>     
+            <span class="bp">self</span><span class="o">.</span><span class="n">validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MaxLengthValidator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_length</span><span class="p">))</span>
+
+<div class="viewcode-block" id="CharField.get_name">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.CharField.get_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;CharField&quot;</span></div>
+
+
+<div class="viewcode-block" id="CharField.to_python">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.CharField.to_python">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="CharField.check">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.CharField.check">[docs]</a>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_max_length</span><span class="p">()</span></div>
+
+    
+    <span class="k">def</span> <span class="nf">_check_max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the max_length attribute is valid.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Error: If max_length is not None and is not a positive integer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_length</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_length</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;max_length must be an integer greater than 0&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TextField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.TextField">[docs]</a>
+<span class="k">class</span> <span class="nc">TextField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TextField.get_name">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.TextField.get_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;TextField&quot;</span></div>
+
+
+<div class="viewcode-block" id="TextField.to_python">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.TextField.to_python">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BooleanField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.BooleanField">[docs]</a>
+<span class="k">class</span> <span class="nc">BooleanField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+<div class="viewcode-block" id="BooleanField.get_name">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.BooleanField.get_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;BooleanField&quot;</span></div>
+
+    
+<div class="viewcode-block" id="BooleanField.to_python">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.BooleanField.to_python">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">null</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="p">{}):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">,</span> <span class="s1">&#39;True&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;False&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">null</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;Invalid value (must be either True, False or None)&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;Invalid value (must be either True or False)&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DateField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateField">[docs]</a>
+<span class="k">class</span> <span class="nc">DateField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+<div class="viewcode-block" id="DateField.get_name">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateField.get_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;DateField&quot;</span></div>
+
+    
+<div class="viewcode-block" id="DateField.to_python">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateField.to_python">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parsed</span> <span class="o">=</span> <span class="n">is_valid_date</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">parsed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">parsed</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;Given date is invalid.&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DateTimeField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateTimeField">[docs]</a>
+<span class="k">class</span> <span class="nc">DateTimeField</span><span class="p">(</span><span class="n">DateField</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DateTimeField.get_name">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateTimeField.get_name">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;DateTimeField&quot;</span></div>
+
+    
+<div class="viewcode-block" id="DateTimeField.to_python">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.DateTimeField.to_python">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">parsed</span> <span class="o">=</span> <span class="n">is_valid_date</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">parsed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">parsed</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">parsed</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;Given date is invalid.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">parsed</span> <span class="o">=</span> <span class="n">is_valid_datetime</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">parsed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">parsed</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">Error</span><span class="p">(</span><span class="s2">&quot;Given datetime is invalid.&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AutoField">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.field.html#skibidi_orm.query_engine.field.field.AutoField">[docs]</a>
+<span class="k">class</span> <span class="nc">AutoField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Marta Sobol, Magda Twarowska, Maria Polakowska.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

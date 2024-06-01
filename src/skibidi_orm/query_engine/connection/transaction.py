@@ -113,7 +113,7 @@ class Transaction:
         cur.execute(sql)
         if statement.returns:
             row = cur.fetchone()
-            print(row)
+            statement._obj.pk = row[0]     # type: ignore
 
     def execute_update(self, statement: Update):
         """

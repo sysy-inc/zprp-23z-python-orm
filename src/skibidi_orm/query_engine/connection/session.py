@@ -104,8 +104,9 @@ class Session:
         if obj in self._map:
             # already added
             return
-        # TODO register this session to model, model.add_session()
-        self._new.append(obj)
+        obj._add_session(self)  # type: ignore
+        if obj not in self._new:
+            self._new.append(obj)
 
     def _check_clear(self) -> bool:
         """
@@ -128,13 +129,23 @@ class Session:
         Args:
             obj (Model): The model instance that has changed.
         """
-        # o = self._map.get(obj.key(), obj) TOCHANGE
-        o = self._map.get(("test_model", 1), obj)
+        o = self._map.get(obj._get_name_and_pk(), obj)  # type: ignore
         if o in self._dirty or o is None or o in self._delete:
             return
         if o not in self._map and o not in self._new:
-            # object hasn't been add to this session
+            # object hasn't been added to this session
             return
+        # process relation
+        if obj._has_relation_obj():  # type: ignore
+            for rel in o._get_relation_obj():   # type: ignore
+                foreign_class, key_value = rel
+                foreign_class = foreign_class._meta.db_table    # type: ignore
+                if key_value is None:
+                    # user didn't give id or object for relation
+                    raise Exception("There is no id value or model object present for foreign key.")
+                if isinstance(key_value, Model):
+                    if key_value not in self._map:
+                        self.add(key_value)
         self._dirty.append(o)
 
     def delete(self, obj: Model):
@@ -148,7 +159,6 @@ class Session:
         Raises:
             ValueError: if given object isn't part of a session (hasn't been added)
         """
-        # o = self._map.get(obj.key(), None) TOCHANGE
         if obj in self._new:
             # object wasn't yet inserted so only delete from list to be inserted
             self._new.remove(obj)
@@ -157,29 +167,65 @@ class Session:
                 self._dirty.remove(obj)
             return
 
-        o = self._map.get(("test_model", 1), None)
+        o = self._map.get(obj._get_name_and_pk(), None)     # type: ignore
         if o is None:
             raise ValueError("Given object is not part of session")
         else:
             if o in self._dirty:
                 # if pending update, delete it, no need to update if it is deleted
                 self._dirty.remove(o)
-            # TODO tell model to remove session from attributes
+            o._remove_session()     # type: ignore
             self._delete.append(o)
 
     def flush(self):
         """
         Flushes any pending changes in the session to the database.
+        If object has foreign key, adjusts insert order.
         """
         if not self._check_clear():
             # there are some pending changes
             config = self._engine.config
             trans = Transaction(config.compiler, self._connection)
             # INSERT
+            processed: list[Model] = []
             for o in self._new:
-                # TODO adjust for relations, order matters
+                if o in processed:
+                    # was already processed
+                    continue
+                # process relations and adjust insert order
+                if o._has_relation_obj():    # type: ignore
+                    # object has foreign key
+                    for rel in o._get_relation_obj():   # type: ignore
+                        foreign_class, key_value = rel
+                        foreign_class = foreign_class._meta.db_table    # type: ignore
+                        if key_value is None:
+                            # user didn't give id or object for relation
+                            raise Exception("There is no id value or model object present for foreign key.")
+                        if isinstance(key_value, Model):
+                            # foreign key as model object
+                            if key_value not in self._map:
+                                # object isn't yet in map
+                                if key_value not in processed:
+                                    # object hasn't been processed
+                                    # now need to ensure to be inserted earlier
+                                    trans.register_insert(key_value)
+                                    processed.append(key_value)
+                        else:
+                            # foreign key is just id not a model object
+                            foreign_object = self._map.get((foreign_class, key_value), None)
+                            if foreign_object is None:
+                                # foreign key isn't yet in map
+                                # check if there is object with this id in new
+                                new_without_processed = [item for item in self._new if item not in processed]   # remaining from new
+                                for obj in new_without_processed:
+                                    obj_class, obj_pk = obj._get_name_and_pk()  # type: ignore
+                                    if obj_class == foreign_class and obj_pk == key_value:
+                                        # it is in new, insert earlier
+                                        trans.register_insert(obj)
+                                        processed.append(obj)
+
+                processed.append(o)
                 trans.register_insert(o)
-                self._map.add(o)
 
             # UPDATE
             for o in self._dirty:
@@ -193,6 +239,8 @@ class Session:
             self._new = []
             self._dirty = []
             self._delete = []
+            for item in processed:
+                self._map.add(item)
 
     def select(self, statement: Select):
         """
@@ -224,7 +272,7 @@ class Session:
             for row in rows:
                 model_class = statement.model
                 obj = model_class(**row)
-                obj_map = self._map.get(("test_model", 1), None)      # TOCHANGE
+                obj_map = self._map.get(obj._get_name_and_pk(), None)      # type: ignore
                 if obj_map is not None:
                     # if object in identity map return one from map to avoid duplicates
                     result.append(obj_map)
@@ -248,7 +296,7 @@ class Session:
         Returns:
             Model: The retrieved model instance from the database.
         """
-        primary_key_name = "id"     # TOCHANGE function from Model
+        primary_key_name = model._get_primary_key_column()      # type: ignore
         st = Select(model).filter(**{primary_key_name: primary_key})
         ret = self.select(st)
         return ret[0]

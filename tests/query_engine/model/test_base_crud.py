@@ -1,5 +1,5 @@
 from skibidi_orm.query_engine.field.related_field import ForeignKey
-from skibidi_orm.query_engine.field.field import IntegerField
+from skibidi_orm.query_engine.field.field import IntegerField, AutoField, CharField
 from skibidi_orm.query_engine.adapter.sqlite_adapter import SQLiteAdapter
 from skibidi_orm.query_engine.connection.session import Session
 from skibidi_orm.query_engine.connection.engine import Engine
@@ -17,7 +17,7 @@ class PersonWithId(Model):
 
 class PersonWithoutId(Model):
     age: Optional[int | IntegerField ] = IntegerField()
-    person: Optional[PersonWithId | ForeignKey] = ForeignKey(to=PersonWithId, on_delete='cos')
+    person: Optional[PersonWithId | ForeignKey] = ForeignKey(to=PersonWithId)
 
 @pytest.fixture
 def mock_get_configuration(monkeypatch):
@@ -45,7 +45,7 @@ def mock_get_configuration(monkeypatch):
 def test_create_model_foreign_key_the_same_model():
     StudentType: Optional['Student'] = ForwardRef('Student')
     class Student(Model):
-        friend: Optional[StudentType | ForeignKey] = ForeignKey(to=PersonWithoutId, on_delete='cos')
+        friend: Optional[StudentType | ForeignKey] = ForeignKey(to=PersonWithoutId)
     student1 = Student()
     student2 = Student(student1)
     assert student2.friend == student1
@@ -108,3 +108,35 @@ def test_is_pk_none_true():
 def test_get_db_pk():
     person = PersonWithId(1, 22)
     assert person._get_db_pk() == ('id', 1)
+
+def test_get_primary_key_column():
+    person = PersonWithId(1, 22)
+    assert PersonWithId._get_primary_key_column() == 'id'
+    assert person._get_primary_key_column() == 'id'
+
+def test_get_columns_names():
+    assert PersonWithId._get_columns_names() == ['id', 'age']
+
+def test_has_relation_obj_false():
+    person = PersonWithId(1, 22)
+    assert person._has_relation_obj() == False
+
+def test_has_realtion_obj_true():
+    person = PersonWithoutId(1)
+    assert person._has_relation_obj() == True
+
+def test_get_ralation_obj():
+    person = PersonWithoutId(1)
+    assert person._get_relation_obj() == [(PersonWithId, None)]
+
+
+
+def test_class_autofield():
+    class Test(Model):
+        id: Optional[int | AutoField] = AutoField(primary_key=True)
+        name : Optional[str | CharField] = CharField()
+
+    adam = Test(1, 'Adam')
+
+    assert adam.id == 1
+    assert adam.name == 'Adam'

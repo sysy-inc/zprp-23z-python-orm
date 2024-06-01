@@ -2,16 +2,18 @@
 Module handles managing database model instances with attributes and relationships.
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from pydantic._internal._model_construction import ModelMetaclass
-from typing import Any
+from typing import Any, TYPE_CHECKING
 import inspect
 from skibidi_orm.query_engine.model.meta_options import MetaOptions
 from skibidi_orm.query_engine.field.field import AutoField
-from skibidi_orm.query_engine.connection.session import Session
+
+if TYPE_CHECKING:
+    from skibidi_orm.query_engine.connection.session import Session
 
 
-def _is_field(value: Any):
+def _is_field(value: Any) -> bool:
     """Check if a value is a field in a model.
 
     This function determines if a given value is a field in model by
@@ -52,7 +54,7 @@ class MetaModel(ModelMetaclass):
         """
         super_new: Any = super().__new__ # type: ignore
 
-        field_attrs = {}
+        field_attrs: dict[str, Any] = {}
 
         # Ensure initialization is only performed for subclasses of Model
         # (excluding Model class itself).
@@ -83,13 +85,13 @@ class MetaModel(ModelMetaclass):
         new_class = super_new(cls, name, bases, new_attrs)
         new_class.add_to_class("_meta", MetaOptions(metadata))
 
-        for obj_name, obj in field_attrs.items(): # type: ignore
+        for obj_name, obj in field_attrs.items():
             new_class.add_to_class(obj_name, obj)
 
         new_class._meta._prepare(new_class)
         return new_class
 
-    def add_to_class(cls, obj_name: str, obj: Any):
+    def add_to_class(cls, obj_name: str, obj: Any) -> None:
         """Add an attribute to the class.
 
         This method adds a specified attribute to the class.
@@ -109,11 +111,9 @@ class Model(BaseModel, metaclass=MetaModel):
     setting primary keys, and managing relationships and attributes.
 
     """
-    class Config:
-        arbitrary_types_allowed = True
-        allow_population_by_field_name = True
+    model_config = ConfigDict(arbitrary_types_allowed=True, populate_by_name=True)
 
-    def __init__(self, *args: Any, **kwargs: Any):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize a new instance of the model.
 
         This method sets up the fields and attributes for the model instance,
@@ -146,8 +146,8 @@ class Model(BaseModel, metaclass=MetaModel):
         args = ()
         super().__init__(*args, **kwargs)
 
-        # if primary key is AutoField change it to None
-        if isinstance(self._meta.primary_key, AutoField):
+        # correct primary key value due to pydanmic cast
+        if kwargs[self._meta.primary_key.name] is None:
             self.pk = None
 
         # if foreign key is given by id set it correct
@@ -176,7 +176,7 @@ class Model(BaseModel, metaclass=MetaModel):
 
     pk = property(_get_pk_val, _set_pk_val)
 
-    def __eq__(self, other: object):
+    def __eq__(self, other: object) -> bool:
         """Check equality between two model instances.
 
         Args:
@@ -201,18 +201,31 @@ class Model(BaseModel, metaclass=MetaModel):
             name (str): The name of the attribute.
             value (Any): The value to set.
         """
-        if name not in self.__fields__: # type: ignore
-            self.__fields__[name] = Field(default=None) # type: ignore
+        if name not in self.model_fields: # type: ignore
+            self.model_fields[name] = Field(default=None) # type: ignore
+
+        field = self._meta.get_field_name(name)
+        if field is not None:
+            for valid in field.validators:
+                valid(value)
+
         super().__setattr__(name, value)
-        if hasattr(self, '_changes') and name != '_changes' and name != '_session':
-            self._changes[name] = value
-            if hasattr(self, '_session'):
-                self._session.changed(self) # type: ignore
+
+        # self is in the session and set value is db field
+        if hasattr(self, '_session') and self._session is not None and field is not None:
+            if field.is_relation:
+                value = object.__getattribute__(self, field.name)
+                if value is None:
+                    value = object.__getattribute__(self, field.column)
+            self._changes[field.column] = value
+            self._session.changed(self)
+
+        # if set attr is a relation obj
         if name in self._meta.relation_fields_name():
-            field = self._meta.get_relation_field(name)
             object.__setattr__(self, field.column, None)
+
+        # if set attr is a id of relation obj
         elif name in self._meta.relation_fields_column():
-            field = self._meta.get_relation_field(name)
             object.__setattr__(self, field.name, None)
 
     def __getattribute__(self, name: str) -> Any:
@@ -230,12 +243,12 @@ class Model(BaseModel, metaclass=MetaModel):
         if value is None and name in self._meta.relation_fields_name():
             field = self._meta.get_relation_field(name)
             if object.__getattribute__(self, field.column):
-                # if object.__getattribute__(self, '_session', None):
-                #     value = self._session.get(field.related_model, self.pk)
-                #     setattr(self, field.name, value)
-                # else:
-                #     raise ValueError("First add object to session!")
-                value = 5
+                if hasattr(self, '_session') and getattr(self, '_session') is not None:
+                    value = self._session.get(field.related_model, self.pk) # type: ignore
+                    object.__setattr__(self, field.name, value)
+                    object.__setattr__(self, field.column, None)
+                else:
+                    raise ValueError("First add object to session!")
             # do not change if not id
 
         # if atrr is relation and it is id
@@ -245,7 +258,7 @@ class Model(BaseModel, metaclass=MetaModel):
                 value = object.__getattribute__(self, field.name).pk
         return value
 
-    def _get_name_and_pk(self):
+    def _get_name_and_pk(self) -> tuple[str, Any]:
         """Get the table name and primary key value.
 
         Returns:
@@ -262,11 +275,11 @@ class Model(BaseModel, metaclass=MetaModel):
         atrr_values : list[Any] = []
         for field in self._meta.local_fields:
             if field.is_relation:
-                atrr_values.append((field.column, getattr(self, field.column)))
+                value = getattr(self, field.column)
             else:
                 value = getattr(self, field.name)
-                if value is not None:
-                    atrr_values.append((field.name, value))
+            if value is not None:
+                atrr_values.append((field.column, value))
         return atrr_values
 
     def _update_changes_db(self) -> dict[str, str]:
@@ -279,7 +292,7 @@ class Model(BaseModel, metaclass=MetaModel):
         self._changes = {}
         return changes
 
-    def _add_session(self, session: Session) -> None:
+    def _add_session(self, session: 'Session') -> None:
         """Add a session to the instance.
 
         Args:
@@ -299,10 +312,62 @@ class Model(BaseModel, metaclass=MetaModel):
         """
         return self.pk is None and isinstance(self._meta.primary_key, AutoField)
 
-    def _get_db_pk(self):
+    def _get_db_pk(self) -> tuple[str, Any]:
         """Get the database primary key value.
 
         Returns:
             tuple: The primary key column name and value.
         """
         return self._meta.primary_key.column, self.pk
+
+    @classmethod
+    def _get_primary_key_column(cls) -> str:
+        """
+        Retrieve the primary key column name for the class.
+
+        This method accesses the class's metadata to fetch the name of the primary key column.
+
+        Returns:
+            str: The name of the primary key column.
+        """
+        return cls._meta.primary_key.column # type: ignore
+
+    @classmethod
+    def _get_columns_names(cls) -> list[str]:
+        """
+        Retrieve the names of all columns in the class.
+
+        This method accesses the class's metadata to fetch the names of all columns defined in the local fields.
+
+        Returns:
+            list[str]: A list of column names.
+        """
+        return [field.column for field in cls._meta.local_fields] # type: ignore
+
+    def _has_relation_obj(self) -> int:
+        """
+        Determine if the instance has any related objects.
+
+        This method checks the class's metadata to see if there are any relation fields defined.
+
+        Returns:
+            bool: True if there are related objects, False otherwise.
+        """
+        return len(self._meta.relation_fields) > 0
+
+    def _get_relation_obj(self) -> list[tuple['Model', Any]]:
+        """
+        Retrieve related objects and their values.
+
+        This method accesses the class's metadata to fetch related models and their corresponding field values.
+
+        Returns:
+            list[tuple]: A list of tuples, where each tuple contains a related model and the value of the related field.
+        """
+        relation_obj: list[tuple['Model', Any]] = []
+        for field in self._meta.relation_fields:
+            value = object.__getattribute__(self, field.name)
+            if value is None:
+                value = object.__getattribute__(self, field.column)
+            relation_obj.append((field.related_model, value))
+        return relation_obj

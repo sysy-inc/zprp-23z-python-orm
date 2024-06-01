@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skibidi_orm.query_engine.connection.session &mdash; SkiBiDi-ORM 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SkiBiDi-ORM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../skibidi_orm.html">skibidi_orm package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorial.html">How to start</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SkiBiDi-ORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">skibidi_orm.query_engine.connection.session</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for skibidi_orm.query_engine.connection.session</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module provides Session class, that handels executing orm operations like inserting to database,</span>
+<span class="sd">selecting from database, etc.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.identity</span> <span class="kn">import</span> <span class="n">IdentityMap</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.model.base</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.transaction</span> <span class="kn">import</span> <span class="n">Transaction</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.select</span> <span class="kn">import</span> <span class="n">Select</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.result</span> <span class="kn">import</span> <span class="n">Result</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">TracebackType</span>
+
+
+<div class="viewcode-block" id="Session">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session">[docs]</a>
+<span class="k">class</span> <span class="nc">Session</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Session is context manager and executes CRUD operations or selects</span>
+<span class="sd">    on objects of our models</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        _engine (Engine): An object of class Engine that opens and stores connection to the database.</span>
+<span class="sd">        _connection (Connection|None): Stores opened connection to the database.</span>
+<span class="sd">        _new (list[Model]): A list of model instances to be inserted into the database.</span>
+<span class="sd">        _dirty (list[Model]): A list of model instances with pending updates in the database.</span>
+<span class="sd">        _delete (list[Model]): A list of model instances to be deleted from the database.</span>
+<span class="sd">        _map (IdentityMap): An instance of IdentityMap to keep track of model instances and prevent duplicates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="n">Engine</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a Session and binds it with a given engine.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine (Engine): An object of class Engine that distributes connection to the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span> <span class="o">=</span> <span class="n">engine</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Model</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dirty</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Model</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Model</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">:</span> <span class="n">IdentityMap</span> <span class="o">=</span> <span class="n">IdentityMap</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a database connection from the engine when entering a &#39;with&#39; block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]],</span>
+                 <span class="n">exc_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">],</span>
+                 <span class="n">traceback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TracebackType</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Releases the database connection when exiting a &#39;with&#39; block.</span>
+<span class="sd">        Rolls back any uncommitted changes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exc_type (Optional[Type[BaseException]]): The type of the exception (if any) that caused the exit.</span>
+<span class="sd">            exc_value (Optional[BaseException]): The exception instance (if any) that caused the exit.</span>
+<span class="sd">            traceback (Optional[TracebackType]): The traceback object (if any) that caused the exit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Session.commit">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.commit">[docs]</a>
+    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Commits any changes made to the database.</span>
+
+<span class="sd">        Execute any pending operations that were stored in the given session (lazy execution).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Session.rollback">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.rollback">[docs]</a>
+    <span class="k">def</span> <span class="nf">rollback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rolls back changes in current transaction in database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Session.close">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.close">[docs]</a>
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ends session. Releases database connection to engine.</span>
+<span class="sd">        Rolls back any uncommited changes, user needs to commit</span>
+<span class="sd">        changes before closing session or they will be lost.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return stored connection to database</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span>
+
+<div class="viewcode-block" id="Session.add">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.add">[docs]</a>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a model instance to the session and database.</span>
+<span class="sd">        INSERT isn&#39;t executed right away (lazy execution concept)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            obj (Model): The model instance to add.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">:</span>
+            <span class="c1"># already added</span>
+            <span class="k">return</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">_add_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_check_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if there are any pending changes in the session.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if there are no pending changes, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirty</span><span class="p">:</span>
+            <span class="c1"># not clear</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="Session.changed">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.changed">[docs]</a>
+    <span class="k">def</span> <span class="nf">changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Marks a model instance as changed in the session.</span>
+<span class="sd">        UPDATE isn&#39;t executed right away (lazy execution concept)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            obj (Model): The model instance that has changed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_get_name_and_pk</span><span class="p">(),</span> <span class="n">obj</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirty</span> <span class="ow">or</span> <span class="n">o</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span> <span class="ow">and</span> <span class="n">o</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">:</span>
+            <span class="c1"># object hasn&#39;t been added to this session</span>
+            <span class="k">return</span>
+        <span class="c1"># process relation</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">_has_relation_obj</span><span class="p">():</span>  <span class="c1"># type: ignore</span>
+            <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">_get_relation_obj</span><span class="p">():</span>   <span class="c1"># type: ignore</span>
+                <span class="n">foreign_class</span><span class="p">,</span> <span class="n">key_value</span> <span class="o">=</span> <span class="n">rel</span>
+                <span class="n">foreign_class</span> <span class="o">=</span> <span class="n">foreign_class</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">db_table</span>    <span class="c1"># type: ignore</span>
+                <span class="k">if</span> <span class="n">key_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># user didn&#39;t give id or object for relation</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;There is no id value or model object present for foreign key.&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key_value</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">key_value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key_value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dirty</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Session.delete">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.delete">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deletes a model instance from the session and database.</span>
+<span class="sd">        DELETE isn&#39;t executed right away (lazy execution concept)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            obj (Model): The model instance to delete.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: if given object isn&#39;t part of a session (hasn&#39;t been added)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">:</span>
+            <span class="c1"># object wasn&#39;t yet inserted so only delete from list to be inserted</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirty</span><span class="p">:</span>
+                <span class="c1"># remove from changed list</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dirty</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">o</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_get_name_and_pk</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span>     <span class="c1"># type: ignore</span>
+        <span class="k">if</span> <span class="n">o</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Given object is not part of session&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirty</span><span class="p">:</span>
+                <span class="c1"># if pending update, delete it, no need to update if it is deleted</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dirty</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+            <span class="n">o</span><span class="o">.</span><span class="n">_remove_session</span><span class="p">()</span>     <span class="c1"># type: ignore</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Session.flush">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.flush">[docs]</a>
+    <span class="k">def</span> <span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Flushes any pending changes in the session to the database.</span>
+<span class="sd">        If object has foreign key, adjusts insert order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_clear</span><span class="p">():</span>
+            <span class="c1"># there are some pending changes</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="o">.</span><span class="n">config</span>
+            <span class="n">trans</span> <span class="o">=</span> <span class="n">Transaction</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">compiler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="p">)</span>
+            <span class="c1"># INSERT</span>
+            <span class="n">processed</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Model</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">processed</span><span class="p">:</span>
+                    <span class="c1"># was already processed</span>
+                    <span class="k">continue</span>
+                <span class="c1"># process relations and adjust insert order</span>
+                <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">_has_relation_obj</span><span class="p">():</span>    <span class="c1"># type: ignore</span>
+                    <span class="c1"># object has foreign key</span>
+                    <span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">o</span><span class="o">.</span><span class="n">_get_relation_obj</span><span class="p">():</span>   <span class="c1"># type: ignore</span>
+                        <span class="n">foreign_class</span><span class="p">,</span> <span class="n">key_value</span> <span class="o">=</span> <span class="n">rel</span>
+                        <span class="n">foreign_class</span> <span class="o">=</span> <span class="n">foreign_class</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">db_table</span>    <span class="c1"># type: ignore</span>
+                        <span class="k">if</span> <span class="n">key_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="c1"># user didn&#39;t give id or object for relation</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;There is no id value or model object present for foreign key.&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key_value</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+                            <span class="c1"># foreign key as model object</span>
+                            <span class="k">if</span> <span class="n">key_value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">:</span>
+                                <span class="c1"># object isn&#39;t yet in map</span>
+                                <span class="k">if</span> <span class="n">key_value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">processed</span><span class="p">:</span>
+                                    <span class="c1"># object hasn&#39;t been processed</span>
+                                    <span class="c1"># now need to ensure to be inserted earlier</span>
+                                    <span class="n">trans</span><span class="o">.</span><span class="n">register_insert</span><span class="p">(</span><span class="n">key_value</span><span class="p">)</span>
+                                    <span class="n">processed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key_value</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># foreign key is just id not a model object</span>
+                            <span class="n">foreign_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">foreign_class</span><span class="p">,</span> <span class="n">key_value</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">foreign_object</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                                <span class="c1"># foreign key isn&#39;t yet in map</span>
+                                <span class="c1"># check if there is object with this id in new</span>
+                                <span class="n">new_without_processed</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">processed</span><span class="p">]</span>   <span class="c1"># remaining from new</span>
+                                <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">new_without_processed</span><span class="p">:</span>
+                                    <span class="n">obj_class</span><span class="p">,</span> <span class="n">obj_pk</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">_get_name_and_pk</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
+                                    <span class="k">if</span> <span class="n">obj_class</span> <span class="o">==</span> <span class="n">foreign_class</span> <span class="ow">and</span> <span class="n">obj_pk</span> <span class="o">==</span> <span class="n">key_value</span><span class="p">:</span>
+                                        <span class="c1"># it is in new, insert earlier</span>
+                                        <span class="n">trans</span><span class="o">.</span><span class="n">register_insert</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+                                        <span class="n">processed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+                <span class="n">processed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+                <span class="n">trans</span><span class="o">.</span><span class="n">register_insert</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+            <span class="c1"># UPDATE</span>
+            <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirty</span><span class="p">:</span>
+                <span class="n">trans</span><span class="o">.</span><span class="n">register_update</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+            <span class="c1"># DELETE</span>
+            <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span><span class="p">:</span>
+                <span class="n">trans</span><span class="o">.</span><span class="n">register_delete</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+
+            <span class="n">trans</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_new</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dirty</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">processed</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Session.select">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.select">[docs]</a>
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statement</span><span class="p">:</span> <span class="n">Select</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Executes a select query and returns the results.</span>
+<span class="sd">        Before execution flushes any pending changes to database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            statement (Select): The select query statement.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[Model | Result]: A list of model instances or result objects retrieved from the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>    <span class="c1"># flush all pending changes</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">compiler</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">statement</span><span class="p">)</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+        <span class="n">result</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Model</span> <span class="o">|</span> <span class="n">Result</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">column_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">description</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">description</span> <span class="ow">in</span> <span class="n">cur</span><span class="o">.</span><span class="n">description</span><span class="p">]</span>
+        <span class="n">rows</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+            <span class="n">row_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">column_names</span><span class="p">,</span> <span class="n">row</span><span class="p">))</span>
+            <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_dict</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">returning_model</span><span class="p">:</span>
+            <span class="c1"># select returns model</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="n">model_class</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">model</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="n">model_class</span><span class="p">(</span><span class="o">**</span><span class="n">row</span><span class="p">)</span>
+                <span class="n">obj_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_get_name_and_pk</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span>      <span class="c1"># type: ignore</span>
+                <span class="k">if</span> <span class="n">obj_map</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># if object in identity map return one from map to avoid duplicates</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj_map</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>  <span class="c1"># add object to identity map</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># return named tuple</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Result</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="Session.get">
+<a class="viewcode-back" href="../../../../skibidi_orm.query_engine.connection.html#skibidi_orm.query_engine.connection.session.Session.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Model</span><span class="p">],</span> <span class="n">primary_key</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves a model instance from the database based on the provided primary key.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model (Type[Model]): The model class representing the type of object to retrieve.</span>
+<span class="sd">            primary_key (Any): The primary key value of the object to retrieve.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Model: The retrieved model instance from the database.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">primary_key_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_get_primary_key_column</span><span class="p">()</span>      <span class="c1"># type: ignore</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">primary_key_name</span><span class="p">:</span> <span class="n">primary_key</span><span class="p">})</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Marta Sobol, Magda Twarowska, Maria Polakowska.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -28,26 +28,26 @@ def test_BaseValidator_not_equal():
 
 def test_MaxLengthValidator_less():
     max_len_valid = MaxLengthValidator(5)
-    max_len_valid(4)
+    max_len_valid('abcd')
 
 
 def test_MaxLengthValidator_more():
     max_len_valid = MaxLengthValidator(5)
     with pytest.raises(ValidationError):
-        max_len_valid(6)
+        max_len_valid('abcdef')
 
 
 # Min Length Validator
 
 def test_MinLengthValidator_more():
     min_len_valid = MinLengthValidator(5)
-    min_len_valid(6)
+    min_len_valid('abcdef')
 
 
 def test_MinLengthValidator_less():
     min_len_valid = MinLengthValidator(5)
     with pytest.raises(ValidationError):
-        min_len_valid(4)
+        min_len_valid('abcd')
 
 
 # Max Value Validator

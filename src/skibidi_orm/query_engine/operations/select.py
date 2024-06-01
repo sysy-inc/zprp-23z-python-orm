@@ -1,6 +1,7 @@
 """
 Module describing SELECT statement.
 """
+
 from skibidi_orm.query_engine.model.base import Model
 from skibidi_orm.query_engine.operations import clauses as c
 from skibidi_orm.query_engine.operations.clauses import Clause
@@ -30,14 +31,14 @@ class Select:
         Args:
             model_class (Type[Model]): The model class representing the database table.
         """
-        self._table: str = model_class._meta.db_table      # type: ignore # TODO change it to function
+        self._table: str = model_class._meta.db_table      # type: ignore
         self._model = model_class
-        self._fields: list[str | Function] = ["id", "atr1", "atr2"]     # type: ignore # TODO function in model
+        self._fields: list[str | Function] = model_class._get_columns_names()     # type: ignore
         self._where_clauses: list[Clause] = []
         self._group_by_col: list[str] = []
         self._order_by_col: list[str] = []
         self._order_by_desc: bool = False
-        self._returns_model: bool = True    # if it returns model or only specific columns
+        self._returns_model: bool = True
         self._annotations: dict[str | Function, str] = {}
 
     @property
@@ -123,14 +124,16 @@ class Select:
     def filter(self, **kwargs: Any):
         """
         Adds filter conditions to the query.
+
         Possible options for filter conditions:
-            - no option: equal
-            - __gt: greater than
-            - __gte: greater than or equal
-            - __lt: lower than
-            - __lte: lower than or equal
-            - __not: not equal
-            - __isnull: if True is Null, if False is not Null
+
+        - no option: equal
+        - __gt: greater than
+        - __gte: greater than or equal
+        - __lt: less than
+        - __lte: less than or equal
+        - __not: not equal
+        - __isnull: if True, is Null; if False, is not Null
 
         Args:
             **kwargs: Keyword arguments representing filter conditions.
