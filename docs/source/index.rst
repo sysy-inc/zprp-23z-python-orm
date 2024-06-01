@@ -10,6 +10,7 @@ Welcome to SkiBiDi-ORM's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   tutorial
    skibidi_orm
 
 
