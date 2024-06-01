@@ -56,15 +56,7 @@ def test_get_tables_names(query, expected_tables_list, expected_tables_len):  # 
         db_port=5432,
         queries=query,  # type: ignore
     )
-    def test_fn():
-        PostgresConfig(
-            db_name="postgres",
-            db_user="admin",
-            db_password="admin",
-            db_host="0.0.0.0",
-            db_port=5432,
-        )
-        inspector = PostgresInspector()
+    def test_fn(config: PostgresConfig, inspector: PostgresInspector):
         tables = inspector.get_tables_names()
         assert len(tables) == expected_tables_len
         assert sorted(expected_tables_list) == sorted(tables)  # type: ignore
@@ -81,15 +73,7 @@ def test__get_table_columns_names():
         db_port=5432,
         queries=[PostgresTablesData.SQL_TABLE_MANY_COLUMNS1],
     )
-    def test_fn():
-        PostgresConfig(
-            db_name="postgres",
-            db_user="admin",
-            db_password="admin",
-            db_host="0.0.0.0",
-            db_port=5432,
-        )
-        inspector = PostgresInspector()
+    def test_fn(config: PostgresConfig, inspector: PostgresInspector):
         columns_names = inspector._get_table_columns_names("table_many_columns1")  # type: ignore
         assert len(columns_names) == 7
         assert sorted(columns_names) == sorted(
@@ -247,15 +231,7 @@ def test__get_column_data_type(query, table_name, column_name, expected_data_typ
         db_port=5432,
         queries=query,  # type: ignore
     )
-    def test_fn():
-        PostgresConfig(
-            db_name="postgres",
-            db_user="admin",
-            db_password="admin",
-            db_host="0.0.0.0",
-            db_port=5432,
-        )
-        inspector = PostgresInspector()
+    def test_fn(config: PostgresConfig, inspector: PostgresInspector):
         data_type = inspector._get_column_data_type(table_name, column_name)  # type: ignore
         assert data_type == expected_data_type
 
@@ -318,15 +294,7 @@ def test__is_column_nullable(query, table_name, column_name, expected_nullable):
         db_port=5432,
         queries=query,  # type: ignore
     )
-    def test_fn():
-        PostgresConfig(
-            db_name="postgres",
-            db_user="admin",
-            db_password="admin",
-            db_host="0.0.0.0",
-            db_port=5432,
-        )
-        inspector = PostgresInspector()
+    def test_fn(config: PostgresConfig, inspector: PostgresInspector):
         assert inspector._is_column_nullable(table_name, column_name) is expected_nullable  # type: ignore
 
     test_fn()
@@ -571,15 +539,7 @@ def test__get_column_constraints(query, table_name, column_name, expected_constr
         db_port=5432,
         queries=query,  # type: ignore
     )
-    def test_fn():
-        PostgresConfig(
-            db_name="postgres",
-            db_user="admin",
-            db_password="admin",
-            db_host="0.0.0.0",
-            db_port=5432,
-        )
-        inspector = PostgresInspector()
+    def test_fn(config: PostgresConfig, inspector: PostgresInspector):
         constraints = inspector._get_column_constraints(table_name, column_name)  # type: ignore
         assert sorted(constraints) == sorted(expected_constraints)  # type: ignore
 
@@ -878,15 +838,7 @@ def test_get_table_columns(query, table_name, expected_columns):  # type: ignore
         db_port=5432,
         queries=query,  # type: ignore
     )
-    def test_fn():
-        PostgresConfig(
-            db_name="postgres",
-            db_user="admin",
-            db_password="admin",
-            db_host="0.0.0.0",
-            db_port=5432,
-        )
-        inspector = PostgresInspector()
+    def test_fn(config: PostgresConfig, inspector: PostgresInspector):
         columns = inspector.get_table_columns(table_name)  # type: ignore
         for column in columns:
             column.column_constraints = sorted(column.column_constraints)
@@ -953,15 +905,7 @@ def test__get_foreign_keys(query, table_name, expected_foreign_keys):  # type: i
         db_port=5432,
         queries=query,  # type: ignore
     )
-    def test_fn():
-        PostgresConfig(
-            db_name="postgres",
-            db_user="admin",
-            db_password="admin",
-            db_host="0.0.0.0",
-            db_port=5432,
-        )
-        inspector = PostgresInspector()
+    def test_fn(config: PostgresConfig, inspector: PostgresInspector):
         foreign_keys = inspector._get_foreign_keys(table_name)  # type: ignore
         assert foreign_keys == expected_foreign_keys
 

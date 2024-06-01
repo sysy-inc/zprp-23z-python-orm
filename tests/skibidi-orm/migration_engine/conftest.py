@@ -8,7 +8,10 @@ import pytest
 from skibidi_orm.migration_engine.db_config.base_config import (
     BaseDbConfig,
 )
-import py  # type: ignore
+import py
+
+from skibidi_orm.migration_engine.db_config.postgres_config import PostgresConfig
+from skibidi_orm.migration_engine.db_inspectors.postgres_inspector import PostgresInspector  # type: ignore
 
 
 @pytest.fixture(autouse=True)
@@ -109,14 +112,22 @@ def postgres_db_fixture(
     db_port: int,
     queries: list[str],
 ):
-    def decorator(func: Callable[..., Any]):
+    def decorator(func: Callable[[PostgresConfig, PostgresInspector], Any]):
         @wraps(func)
         def wrapper():
+            config = PostgresConfig(
+                db_name=db_name,
+                db_user=db_user,
+                db_password=db_password,
+                db_host=db_host,
+                db_port=db_port,
+            )
+            inspector = PostgresInspector()
             clear_postgres_database(db_name, db_user, db_password, db_host, db_port)
             create_postgres_database(
                 db_name, db_user, db_password, db_host, db_port, queries
             )
-            func()
+            func(config, inspector)
 
         return wrapper
 
