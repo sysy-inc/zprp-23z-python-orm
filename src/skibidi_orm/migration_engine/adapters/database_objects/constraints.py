@@ -34,8 +34,8 @@ class ColumnSpecificConstraint(Constraint):
 
     def __lt__(self, other: Any):
         if isinstance(other, ColumnSpecificConstraint):
-            return (self.column_name + self.__class__.__name__) < (
-                other.column_name + other.__class__.__name__
+            return (self.column_name + self.__class__.__name__ + str(self.__dict__)) < (
+                other.column_name + other.__class__.__name__ + str(other.__dict__)
             )
         return NotImplemented
 
