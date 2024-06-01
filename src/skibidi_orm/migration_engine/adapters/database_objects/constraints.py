@@ -1,3 +1,4 @@
+from __future__ import annotations
 from abc import ABC
 import enum
 from dataclasses import dataclass, field
@@ -31,7 +32,7 @@ class ColumnSpecificConstraint(Constraint):
 
     column_name: str
 
-    def __lt__(self, other: Any):
+    def __lt__(self, other: ColumnSpecificConstraint):
         if isinstance(other, ColumnSpecificConstraint):
             return (self.column_name + self.__class__.__name__) < (
                 other.column_name + other.__class__.__name__

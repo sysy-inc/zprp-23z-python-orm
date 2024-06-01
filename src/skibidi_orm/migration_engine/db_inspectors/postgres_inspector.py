@@ -247,7 +247,7 @@ class PostgresInspector(BaseDbInspector):
 
         return is_nullable[0] == "YES"
 
-    def __holds_instance(self, array: list[Any], class_type: Any) -> bool:
+    def __holds_instance(self, array: list[Any], class_type: type) -> bool:
         """
         Helper function to check if the array holds the instance of a class.
         """
