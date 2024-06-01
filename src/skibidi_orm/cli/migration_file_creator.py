@@ -6,7 +6,6 @@ from skibidi_orm.migration_engine.adapters.base_adapter import BaseColumn, BaseT
 from skibidi_orm.migration_engine.adapters.database_objects.migration_element import (
     MigrationElement,
 )
-from skibidi_orm.migration_engine.adapters.sqlite3_typing import SQLite3Typing
 from skibidi_orm.migration_engine.db_config.base_config import BaseDbConfig
 from skibidi_orm.migration_engine.db_config.sqlite3_config import SQLite3Config
 from skibidi_orm.migration_engine.operations import table_operations as TO
