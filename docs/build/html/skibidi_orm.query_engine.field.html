@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skibidi_orm.query_engine.field package &mdash; SkiBiDi-ORM 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skibidi_orm.query_engine.model package" href="skibidi_orm.query_engine.model.html" />
+    <link rel="prev" title="skibidi_orm.query_engine.connection package" href="skibidi_orm.query_engine.connection.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SkiBiDi-ORM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">How to start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="skibidi_orm.html">skibidi_orm package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skibidi_orm.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skibidi_orm.query_engine.html">skibidi_orm.query_engine package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="skibidi_orm.query_engine.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SkiBiDi-ORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="skibidi_orm.html">skibidi_orm package</a></li>
+          <li class="breadcrumb-item"><a href="skibidi_orm.query_engine.html">skibidi_orm.query_engine package</a></li>
+      <li class="breadcrumb-item active">skibidi_orm.query_engine.field package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/skibidi_orm.query_engine.field.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="skibidi-orm-query-engine-field-package">
+<h1>skibidi_orm.query_engine.field package<a class="headerlink" href="#skibidi-orm-query-engine-field-package" title="Link to this heading"></a></h1>
+<section id="module-skibidi_orm.query_engine.field.field">
+<span id="skibidi-orm-query-engine-field-field-module"></span><h2>skibidi_orm.query_engine.field.field module<a class="headerlink" href="#module-skibidi_orm.query_engine.field.field" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.AutoField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">AutoField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">null</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unique</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject" title="skibidi_orm.query_engine.field.relation_objects.RelationObject"><span class="pre">RelationObject</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#AutoField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.AutoField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.Field" title="skibidi_orm.query_engine.field.field.Field"><code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.BigIntegerField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">BigIntegerField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#BigIntegerField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.BigIntegerField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.IntegerField" title="skibidi_orm.query_engine.field.field.IntegerField"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntegerField</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.BigIntegerField.get_type">
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#BigIntegerField.get_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.BigIntegerField.get_type" title="Link to this definition"></a></dt>
+<dd><p>Gets the type of the field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type of the field as a string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.BooleanField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">BooleanField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">null</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unique</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject" title="skibidi_orm.query_engine.field.relation_objects.RelationObject"><span class="pre">RelationObject</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#BooleanField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.BooleanField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.Field" title="skibidi_orm.query_engine.field.field.Field"><code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.BooleanField.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#BooleanField.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.BooleanField.get_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.BooleanField.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#BooleanField.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.BooleanField.to_python" title="Link to this definition"></a></dt>
+<dd><p>Converts input to the expected python data type.
+:param value: the input value to be converted</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.CharField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">CharField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#CharField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.CharField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.Field" title="skibidi_orm.query_engine.field.field.Field"><code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.CharField.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#CharField.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.CharField.check" title="Link to this definition"></a></dt>
+<dd><p>Calls all validators that need to be checked for a field type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.CharField.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#CharField.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.CharField.get_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.CharField.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#CharField.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.CharField.to_python" title="Link to this definition"></a></dt>
+<dd><p>Converts input to the expected python data type.
+:param value: the input value to be converted</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.DateField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">DateField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">null</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unique</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject" title="skibidi_orm.query_engine.field.relation_objects.RelationObject"><span class="pre">RelationObject</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#DateField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.DateField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.Field" title="skibidi_orm.query_engine.field.field.Field"><code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.DateField.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#DateField.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.DateField.get_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.DateField.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#DateField.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.DateField.to_python" title="Link to this definition"></a></dt>
+<dd><p>Converts input to the expected python data type.
+:param value: the input value to be converted</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.DateTimeField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">DateTimeField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">null</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unique</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject" title="skibidi_orm.query_engine.field.relation_objects.RelationObject"><span class="pre">RelationObject</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#DateTimeField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.DateTimeField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.DateField" title="skibidi_orm.query_engine.field.field.DateField"><code class="xref py py-class docutils literal notranslate"><span class="pre">DateField</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.DateTimeField.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#DateTimeField.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.DateTimeField.get_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.DateTimeField.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#DateTimeField.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.DateTimeField.to_python" title="Link to this definition"></a></dt>
+<dd><p>Converts input to the expected python data type.
+:param value: the input value to be converted</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.DecimalField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">DecimalField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_digits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#DecimalField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.DecimalField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.Field" title="skibidi_orm.query_engine.field.field.Field"><code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.DecimalField.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#DecimalField.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.DecimalField.check" title="Link to this definition"></a></dt>
+<dd><p>Calls all validators that need to be checked for a field type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.DecimalField.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#DecimalField.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.DecimalField.get_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.DecimalField.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Decimal</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#DecimalField.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.DecimalField.to_python" title="Link to this definition"></a></dt>
+<dd><p>Converts input to the expected python data type.
+:param value: the input value to be converted</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.Error">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">Error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#Error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.Error" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Custom Error class</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.Field">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">Field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">null</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unique</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject" title="skibidi_orm.query_engine.field.relation_objects.RelationObject"><span class="pre">RelationObject</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#Field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.Field" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.Field.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#Field.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.Field.check" title="Link to this definition"></a></dt>
+<dd><p>Calls all validators that need to be checked for a field type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.Field.contribute_to_class">
+<span class="sig-name descname"><span class="pre">contribute_to_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#Field.contribute_to_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.Field.contribute_to_class" title="Link to this definition"></a></dt>
+<dd><p>Contributes this field to the given class.</p>
+<p>This method sets the attribute names, assigns the model class to the field,
+and adds the field to the class’s metadata. If the field has a column name,
+it sets an attribute on the class with the field’s name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cls</strong> (<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a>) – The class to which this field is being added.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the field.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.Field.db_type">
+<span class="sig-name descname"><span class="pre">db_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#Field.db_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.Field.db_type" title="Link to this definition"></a></dt>
+<dd><p>Returns the database column type for this field for a given connection from a converter dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – A dictionary representing the connection, where the keys are the types and the values are the corresponding database column types.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The database column type for this field. Returns None if the type is not found in the connection dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.Field.get_type">
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#Field.get_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.Field.get_type" title="Link to this definition"></a></dt>
+<dd><p>Gets the type of the field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type of the field as a string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.Field.instances_count">
+<span class="sig-name descname"><span class="pre">instances_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#skibidi_orm.query_engine.field.field.Field.instances_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.Field.set_attr_names">
+<span class="sig-name descname"><span class="pre">set_attr_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#Field.set_attr_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.Field.set_attr_names" title="Link to this definition"></a></dt>
+<dd><p>Sets the attribute names for the object.</p>
+<p>If <cite>self.name</cite> is not already set, it assigns the provided <cite>name</cite> to <cite>self.name</cite>.
+Similarly, if <cite>self.db_column</cite> is not already set, it assigns <cite>self.name</cite> to <cite>self.column</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The name to be set if <cite>self.name</cite> is not already defined.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.Field.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#Field.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.Field.to_python" title="Link to this definition"></a></dt>
+<dd><p>Converts input to the expected python data type.
+:param value: the input value to be converted</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.FloatField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">FloatField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">null</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unique</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject" title="skibidi_orm.query_engine.field.relation_objects.RelationObject"><span class="pre">RelationObject</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#FloatField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.FloatField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.Field" title="skibidi_orm.query_engine.field.field.Field"><code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.FloatField.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#FloatField.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.FloatField.get_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.FloatField.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#FloatField.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.FloatField.to_python" title="Link to this definition"></a></dt>
+<dd><p>Converts input to the expected python data type.
+:param value: the input value to be converted</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.IntegerField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">IntegerField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#IntegerField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.IntegerField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.Field" title="skibidi_orm.query_engine.field.field.Field"><code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.IntegerField.add_validators">
+<span class="sig-name descname"><span class="pre">add_validators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#IntegerField.add_validators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.IntegerField.add_validators" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.IntegerField.get_type">
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#IntegerField.get_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.IntegerField.get_type" title="Link to this definition"></a></dt>
+<dd><p>Gets the type of the field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type of the field as a string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.IntegerField.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#IntegerField.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.IntegerField.to_python" title="Link to this definition"></a></dt>
+<dd><p>Converts input to the expected python data type.
+:param value: the input value to be converted</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.PositiveBigIntegerField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">PositiveBigIntegerField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#PositiveBigIntegerField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.PositiveBigIntegerField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.BigIntegerField" title="skibidi_orm.query_engine.field.field.BigIntegerField"><code class="xref py py-class docutils literal notranslate"><span class="pre">BigIntegerField</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.PositiveBigIntegerField.get_type">
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#PositiveBigIntegerField.get_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.PositiveBigIntegerField.get_type" title="Link to this definition"></a></dt>
+<dd><p>Gets the type of the field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type of the field as a string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.PositiveIntegerField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">PositiveIntegerField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#PositiveIntegerField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.PositiveIntegerField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.IntegerField" title="skibidi_orm.query_engine.field.field.IntegerField"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntegerField</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.PositiveIntegerField.get_type">
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#PositiveIntegerField.get_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.PositiveIntegerField.get_type" title="Link to this definition"></a></dt>
+<dd><p>Gets the type of the field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type of the field as a string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.PositiveSmallIntegerField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">PositiveSmallIntegerField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#PositiveSmallIntegerField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.PositiveSmallIntegerField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.SmallIntegerField" title="skibidi_orm.query_engine.field.field.SmallIntegerField"><code class="xref py py-class docutils literal notranslate"><span class="pre">SmallIntegerField</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.PositiveSmallIntegerField.get_type">
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#PositiveSmallIntegerField.get_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.PositiveSmallIntegerField.get_type" title="Link to this definition"></a></dt>
+<dd><p>Gets the type of the field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type of the field as a string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.SmallIntegerField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">SmallIntegerField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#SmallIntegerField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.SmallIntegerField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.IntegerField" title="skibidi_orm.query_engine.field.field.IntegerField"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntegerField</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.SmallIntegerField.get_type">
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#SmallIntegerField.get_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.SmallIntegerField.get_type" title="Link to this definition"></a></dt>
+<dd><p>Gets the type of the field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type of the field as a string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.TextField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">TextField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#TextField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.TextField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.Field" title="skibidi_orm.query_engine.field.field.Field"><code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.TextField.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#TextField.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.TextField.get_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.TextField.to_python">
+<span class="sig-name descname"><span class="pre">to_python</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#TextField.to_python"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.TextField.to_python" title="Link to this definition"></a></dt>
+<dd><p>Converts input to the expected python data type.
+:param value: the input value to be converted</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.integer_field_range">
+<span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">integer_field_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#integer_field_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.integer_field_range" title="Link to this definition"></a></dt>
+<dd><p>Function for mocking integer range from a database</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.is_valid_date">
+<span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">is_valid_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#is_valid_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.is_valid_date" title="Link to this definition"></a></dt>
+<dd><p>Validates if the given string is a valid date in the format ‘YYYY-MM-DD’.
+:param date_string: The date string to be validated.
+:type date_string: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A datetime object representing the parsed date.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>datetime.datetime</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the date string is not in the correct format or is an invalid date.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.field.is_valid_datetime">
+<span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.field.</span></span><span class="sig-name descname"><span class="pre">is_valid_datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datetime_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/field.html#is_valid_datetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.field.is_valid_datetime" title="Link to this definition"></a></dt>
+<dd><p>Validates if the given string is a valid datetime in the format ‘YYYY-MM-DD HH:MM:SS’.
+:param datetime_string: The datetime string to be validated.
+:type datetime_string: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A datetime object representing the parsed datetime.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>datetime.datetime</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the datetime string is not in the correct format or is an invalid datetime.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.field.validators">
+<span id="skibidi-orm-query-engine-field-validators-module"></span><h2>skibidi_orm.query_engine.field.validators module<a class="headerlink" href="#module-skibidi_orm.query_engine.field.validators" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.BaseValidator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.validators.</span></span><span class="sig-name descname"><span class="pre">BaseValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#BaseValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.BaseValidator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.BaseValidator.compare">
+<span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#BaseValidator.compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.BaseValidator.compare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.DecimalValidator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.validators.</span></span><span class="sig-name descname"><span class="pre">DecimalValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_digits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_places</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#DecimalValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.DecimalValidator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.MaxLengthValidator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.validators.</span></span><span class="sig-name descname"><span class="pre">MaxLengthValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#MaxLengthValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.MaxLengthValidator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.validators.BaseValidator" title="skibidi_orm.query_engine.field.validators.BaseValidator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseValidator</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.MaxLengthValidator.compare">
+<span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#MaxLengthValidator.compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.MaxLengthValidator.compare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.MaxValueValidator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.validators.</span></span><span class="sig-name descname"><span class="pre">MaxValueValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#MaxValueValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.MaxValueValidator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.validators.BaseValidator" title="skibidi_orm.query_engine.field.validators.BaseValidator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseValidator</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.MaxValueValidator.compare">
+<span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#MaxValueValidator.compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.MaxValueValidator.compare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.MinLengthValidator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.validators.</span></span><span class="sig-name descname"><span class="pre">MinLengthValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#MinLengthValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.MinLengthValidator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.validators.BaseValidator" title="skibidi_orm.query_engine.field.validators.BaseValidator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseValidator</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.MinLengthValidator.compare">
+<span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#MinLengthValidator.compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.MinLengthValidator.compare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.MinValueValidator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.validators.</span></span><span class="sig-name descname"><span class="pre">MinValueValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#MinValueValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.MinValueValidator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.validators.BaseValidator" title="skibidi_orm.query_engine.field.validators.BaseValidator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseValidator</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.MinValueValidator.compare">
+<span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#MinValueValidator.compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.MinValueValidator.compare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.validators.ValidationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.validators.</span></span><span class="sig-name descname"><span class="pre">ValidationError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/validators.html#ValidationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.validators.ValidationError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.field.related_field">
+<span id="skibidi-orm-query-engine-field-related-field-module"></span><h2>skibidi_orm.query_engine.field.related_field module<a class="headerlink" href="#module-skibidi_orm.query_engine.field.related_field" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.related_field.ForeignKey">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.related_field.</span></span><span class="sig-name descname"><span class="pre">ForeignKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject" title="skibidi_orm.query_engine.field.relation_objects.RelationObject"><span class="pre">RelationObject</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">related_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/related_field.html#ForeignKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.related_field.ForeignKey" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.field.field.Field" title="skibidi_orm.query_engine.field.field.Field"><code class="xref py py-class docutils literal notranslate"><span class="pre">Field</span></code></a></p>
+<p>Represents a foreign key field.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.related_field.ForeignKey.contribute_to_class">
+<span class="sig-name descname"><span class="pre">contribute_to_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/related_field.html#ForeignKey.contribute_to_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.related_field.ForeignKey.contribute_to_class" title="Link to this definition"></a></dt>
+<dd><p>Contributes the field to the class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.related_field.ForeignKey.get_instance_by_name">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_instance_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/related_field.html#ForeignKey.get_instance_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.related_field.ForeignKey.get_instance_by_name" title="Link to this definition"></a></dt>
+<dd><p>Retrieves an instance by its name from the global namespace.
+:param name: The name of the instance to retrieve.
+:type name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The instance associated with the given name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NameError</strong> – If an instance with the specified name does not exist in the global namespace.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.related_field.ForeignKey.related_model">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">related_model</span></span><a class="headerlink" href="#skibidi_orm.query_engine.field.related_field.ForeignKey.related_model" title="Link to this definition"></a></dt>
+<dd><p>Returns the related model associated with the remote field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The related model.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.related_field.ForeignKey.set_attributes_from_rel">
+<span class="sig-name descname"><span class="pre">set_attributes_from_rel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/related_field.html#ForeignKey.set_attributes_from_rel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.related_field.ForeignKey.set_attributes_from_rel" title="Link to this definition"></a></dt>
+<dd><p>Sets attributes based on the related model.</p>
+<p>Sets the name attribute to a combination of the related model’s model name and primary key name,
+if not already set. Sets the column attribute to the name attribute appended with ‘_id’,
+if not already set.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.field.relation_objects">
+<span id="skibidi-orm-query-engine-field-relation-objects-module"></span><h2>skibidi_orm.query_engine.field.relation_objects module<a class="headerlink" href="#module-skibidi_orm.query_engine.field.relation_objects" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.relation_objects.RelationObject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.field.relation_objects.</span></span><span class="sig-name descname"><span class="pre">RelationObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#skibidi_orm.query_engine.field.related_field.ForeignKey" title="skibidi_orm.query_engine.field.related_field.ForeignKey"><span class="pre">ForeignKey</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">related_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/field/relation_objects.html#RelationObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for storing relation data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.relation_objects.RelationObject.field">
+<span class="sig-name descname"><span class="pre">field</span></span><a class="headerlink" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject.field" title="Link to this definition"></a></dt>
+<dd><p>The foreign key field associated with the relation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#skibidi_orm.query_engine.field.related_field.ForeignKey" title="skibidi_orm.query_engine.field.related_field.ForeignKey">ForeignKey</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.relation_objects.RelationObject.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject.model" title="Link to this definition"></a></dt>
+<dd><p>The name of the target model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.field.relation_objects.RelationObject.related_name">
+<span class="sig-name descname"><span class="pre">related_name</span></span><a class="headerlink" href="#skibidi_orm.query_engine.field.relation_objects.RelationObject.related_name" title="Link to this definition"></a></dt>
+<dd><p>The optional related name for the relation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="skibidi_orm.query_engine.connection.html" class="btn btn-neutral float-left" title="skibidi_orm.query_engine.connection package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="skibidi_orm.query_engine.model.html" class="btn btn-neutral float-right" title="skibidi_orm.query_engine.model package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Marta Sobol, Magda Twarowska, Maria Polakowska.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

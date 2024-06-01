@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Model &mdash; SkiBiDi-ORM 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skibidi_orm package" href="skibidi_orm.html" />
+    <link rel="prev" title="How to start" href="tutorial.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SkiBiDi-ORM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="tutorial.html">How to start</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-create-your-own-model">How to create your own model?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inheritance">Inheritance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#foreign-key">Foreign Key</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#fields">Fields</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="skibidi_orm.html">skibidi_orm package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SkiBiDi-ORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorial.html">How to start</a></li>
+      <li class="breadcrumb-item active">Model</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/model.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="model">
+<h1>Model<a class="headerlink" href="#model" title="Link to this heading"></a></h1>
+<section id="how-to-create-your-own-model">
+<h2>How to create your own model?<a class="headerlink" href="#how-to-create-your-own-model" title="Link to this heading"></a></h2>
+<p>Welcome to skibidi project! With our library, you can create a database model!</p>
+<p>Every model should inherit from the class ‘Model’.</p>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.field</span> <span class="kn">import</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">IntegerField</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.model.base</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CharField</span><span class="p">]</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;Adam&#39;</span><span class="p">)</span>
+  <span class="n">age</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="n">IntegerField</span><span class="p">]</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+  <span class="n">__db_table__</span> <span class="o">=</span> <span class="s1">&#39;person&#39;</span>
+
+<span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="s1">&#39;Ada&#39;</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>__db_table__</em> is an optional attribute, representing the name of a table in your database. The rest of the attributes are mapped to the database columns. You can add new attributes using the following pattern: <em>‘attr_name: Optional[python_type | FieldType] = FieldType()’</em>. You can define the primary key by yourself, using the <em>AutoField</em>, but skibidi can also do this for you automatically.</p>
+</section>
+<section id="inheritance">
+<h3>Inheritance<a class="headerlink" href="#inheritance" title="Link to this heading"></a></h3>
+<p>You can inherit after your own models.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.field</span> <span class="kn">import</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">IntegerField</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.model.base</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="k">class</span> <span class="nc">Item</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="n">IntegerField</span><span class="p">]</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CharField</span><span class="p">]</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">Box</span><span class="p">(</span><span class="n">Item</span><span class="p">):</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="n">IntegerField</span><span class="p">]</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">()</span>
+
+<span class="n">box</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;basket&#39;</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="foreign-key">
+<h3>Foreign Key<a class="headerlink" href="#foreign-key" title="Link to this heading"></a></h3>
+<p>You can create your foreign key.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.field</span> <span class="kn">import</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">IntegerField</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.related_field</span> <span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.model.base</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="k">class</span> <span class="nc">Owner</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="n">IntegerField</span><span class="p">]</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CharField</span><span class="p">]</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">Dog</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="n">IntegerField</span><span class="p">]</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CharField</span><span class="p">]</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="s1">&#39;Reksio&#39;</span><span class="p">)</span>
+  <span class="n">owner</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Owner</span> <span class="o">|</span> <span class="n">ForeignKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="n">Owner</span><span class="p">)</span>
+
+<span class="n">bolek</span> <span class="o">=</span> <span class="n">Owner</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Bolek&quot;</span><span class="p">)</span>
+<span class="n">lolek</span> <span class="o">=</span> <span class="n">Owner</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Lolek&quot;</span><span class="p">)</span>
+<span class="n">reksio</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Reksio&quot;</span><span class="p">,</span> <span class="n">bolek</span><span class="p">)</span>
+<span class="n">lessie</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Lessie&quot;</span><span class="p">,</span> <span class="n">owner_id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can provide foreign key by object or by object id.
+You can also create a recursive foreign key.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.field</span> <span class="kn">import</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">IntegerField</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.related_field</span> <span class="kn">import</span> <span class="n">ForeignKey</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.model.base</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">ForwardRef</span>
+
+<span class="n">DogType</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s1">&#39;Dog&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;Dog&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Dog</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="n">IntegerField</span><span class="p">]</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CharField</span><span class="p">]</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="s1">&#39;Reksio&#39;</span><span class="p">)</span>
+  <span class="n">friend</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DogType</span> <span class="o">|</span> <span class="n">ForeignKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="s1">&#39;self&#39;</span><span class="p">)</span>
+
+<span class="n">maks</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Maks&#39;</span><span class="p">)</span>
+<span class="n">reks</span> <span class="o">=</span> <span class="n">Dog</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Reks&quot;</span><span class="p">,</span> <span class="n">maks</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="fields">
+<h2>Fields<a class="headerlink" href="#fields" title="Link to this heading"></a></h2>
+<p>To możesz coś dać o atrybutach i rodzajach fieldów</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorial.html" class="btn btn-neutral float-left" title="How to start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="skibidi_orm.html" class="btn btn-neutral float-right" title="skibidi_orm package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Marta Sobol, Magda Twarowska, Maria Polakowska.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

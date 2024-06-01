@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skibidi_orm.query_engine.connection package &mdash; SkiBiDi-ORM 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skibidi_orm.query_engine.field package" href="skibidi_orm.query_engine.field.html" />
+    <link rel="prev" title="skibidi_orm.query_engine.adapter package" href="skibidi_orm.query_engine.adapter.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SkiBiDi-ORM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="skibidi_orm.html">skibidi_orm package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skibidi_orm.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skibidi_orm.query_engine.html">skibidi_orm.query_engine package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="skibidi_orm.query_engine.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">How to start</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SkiBiDi-ORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="skibidi_orm.html">skibidi_orm package</a></li>
+          <li class="breadcrumb-item"><a href="skibidi_orm.query_engine.html">skibidi_orm.query_engine package</a></li>
+      <li class="breadcrumb-item active">skibidi_orm.query_engine.connection package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/skibidi_orm.query_engine.connection.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="skibidi-orm-query-engine-connection-package">
+<h1>skibidi_orm.query_engine.connection package<a class="headerlink" href="#skibidi-orm-query-engine-connection-package" title="Link to this heading"></a></h1>
+<section id="module-skibidi_orm.query_engine.connection.engine">
+<span id="skibidi-orm-query-engine-connection-engine-module"></span><h2>skibidi_orm.query_engine.connection.engine module<a class="headerlink" href="#module-skibidi_orm.query_engine.connection.engine" title="Link to this heading"></a></h2>
+<p>This module provides the Engine class, which is responsible for managing database connections.
+The Engine class handles opening and closing connections to the database, ensuring that only
+one connection is open at any time.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.engine.Engine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.connection.engine.</span></span><span class="sig-name descname"><span class="pre">Engine</span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/engine.html#Engine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.engine.Engine" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages database connections, including opening and closing them.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.engine.Engine._config">
+<span class="sig-name descname"><span class="pre">_config</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.engine.Engine._config" title="Link to this definition"></a></dt>
+<dd><p>An object of class Config or its subclasses, representing
+the configuration of the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="skibidi_orm.query_engine.config.html#skibidi_orm.query_engine.config.Config" title="skibidi_orm.query_engine.config.Config">Config</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.engine.Engine._connection">
+<span class="sig-name descname"><span class="pre">_connection</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.engine.Engine._connection" title="Link to this definition"></a></dt>
+<dd><p>Stores the opened connection to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Connection|None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.engine.Engine._is_connected">
+<span class="sig-name descname"><span class="pre">_is_connected</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.engine.Engine._is_connected" title="Link to this definition"></a></dt>
+<dd><p>Indicates whether a connection is already open (True)
+or has not been opened yet (False).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.engine.Engine._adapter">
+<span class="sig-name descname"><span class="pre">_adapter</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.engine.Engine._adapter" title="Link to this definition"></a></dt>
+<dd><p>Adapter for the database specified in the configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_adapter.Adapter" title="skibidi_orm.query_engine.adapter.base_adapter.Adapter">Adapter</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.engine.Engine.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/engine.html#Engine.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.engine.Engine.close" title="Link to this definition"></a></dt>
+<dd><p>Closes the connection to the database if one is open.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.engine.Engine.config">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.engine.Engine.config" title="Link to this definition"></a></dt>
+<dd><p>Returns the configuration of the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The configuration object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="skibidi_orm.query_engine.config.html#skibidi_orm.query_engine.config.Config" title="skibidi_orm.query_engine.config.Config">Config</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.engine.Engine.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/engine.html#Engine.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.engine.Engine.connect" title="Link to this definition"></a></dt>
+<dd><p>Opens a connection to the database if it hasn’t been opened yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The opened connection to the database.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Connection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.engine.Engine.connected">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#skibidi_orm.query_engine.connection.engine.Engine.connected" title="Link to this definition"></a></dt>
+<dd><p>Indicates whether a connection is currently open.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if a connection is open, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.connection.session">
+<span id="skibidi-orm-query-engine-connection-session-module"></span><h2>skibidi_orm.query_engine.connection.session module<a class="headerlink" href="#module-skibidi_orm.query_engine.connection.session" title="Link to this heading"></a></h2>
+<p>Module provides Session class, that handels executing orm operations like inserting to database,
+selecting from database, etc.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.connection.session.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#skibidi_orm.query_engine.connection.engine.Engine" title="skibidi_orm.query_engine.connection.engine.Engine"><span class="pre">Engine</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/session.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Session is context manager and executes CRUD operations or selects
+on objects of our models</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session._engine">
+<span class="sig-name descname"><span class="pre">_engine</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session._engine" title="Link to this definition"></a></dt>
+<dd><p>An object of class Engine that opens and stores connection to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#skibidi_orm.query_engine.connection.engine.Engine" title="skibidi_orm.query_engine.connection.engine.Engine">Engine</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session._connection">
+<span class="sig-name descname"><span class="pre">_connection</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session._connection" title="Link to this definition"></a></dt>
+<dd><p>Stores opened connection to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Connection|None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session._new">
+<span class="sig-name descname"><span class="pre">_new</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session._new" title="Link to this definition"></a></dt>
+<dd><p>A list of model instances to be inserted into the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session._dirty">
+<span class="sig-name descname"><span class="pre">_dirty</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session._dirty" title="Link to this definition"></a></dt>
+<dd><p>A list of model instances with pending updates in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session._delete">
+<span class="sig-name descname"><span class="pre">_delete</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session._delete" title="Link to this definition"></a></dt>
+<dd><p>A list of model instances to be deleted from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session._map">
+<span class="sig-name descname"><span class="pre">_map</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session._map" title="Link to this definition"></a></dt>
+<dd><p>An instance of IdentityMap to keep track of model instances and prevent duplicates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#skibidi_orm.query_engine.connection.identity.IdentityMap" title="skibidi_orm.query_engine.connection.identity.IdentityMap">IdentityMap</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/session.html#Session.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session.add" title="Link to this definition"></a></dt>
+<dd><p>Adds a model instance to the session and database.
+INSERT isn’t executed right away (lazy execution concept)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a>) – The model instance to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session.changed">
+<span class="sig-name descname"><span class="pre">changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/session.html#Session.changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session.changed" title="Link to this definition"></a></dt>
+<dd><p>Marks a model instance as changed in the session.
+UPDATE isn’t executed right away (lazy execution concept)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a>) – The model instance that has changed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/session.html#Session.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session.close" title="Link to this definition"></a></dt>
+<dd><p>Ends session. Releases database connection to engine.
+Rolls back any uncommited changes, user needs to commit
+changes before closing session or they will be lost.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session.commit">
+<span class="sig-name descname"><span class="pre">commit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/session.html#Session.commit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session.commit" title="Link to this definition"></a></dt>
+<dd><p>Commits any changes made to the database.</p>
+<p>Execute any pending operations that were stored in the given session (lazy execution).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session.connection">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connection</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session.connection" title="Link to this definition"></a></dt>
+<dd><p>Return stored connection to database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/session.html#Session.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session.delete" title="Link to this definition"></a></dt>
+<dd><p>Deletes a model instance from the session and database.
+DELETE isn’t executed right away (lazy execution concept)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a>) – The model instance to delete.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – if given object isn’t part of a session (hasn’t been added)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/session.html#Session.flush"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session.flush" title="Link to this definition"></a></dt>
+<dd><p>Flushes any pending changes in the session to the database.
+If object has foreign key, adjusts insert order.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/session.html#Session.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session.get" title="Link to this definition"></a></dt>
+<dd><p>Retrieves a model instance from the database based on the provided primary key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>Type</em><em>[</em><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a><em>]</em>) – The model class representing the type of object to retrieve.</p></li>
+<li><p><strong>primary_key</strong> (<em>Any</em>) – The primary key value of the object to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The retrieved model instance from the database.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session.rollback">
+<span class="sig-name descname"><span class="pre">rollback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/session.html#Session.rollback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session.rollback" title="Link to this definition"></a></dt>
+<dd><p>Rolls back changes in current transaction in database</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.session.Session.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select" title="skibidi_orm.query_engine.operations.select.Select"><span class="pre">Select</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/session.html#Session.select"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.session.Session.select" title="Link to this definition"></a></dt>
+<dd><p>Executes a select query and returns the results.
+Before execution flushes any pending changes to database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>statement</strong> (<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.select.Select" title="skibidi_orm.query_engine.operations.select.Select"><em>Select</em></a>) – The select query statement.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of model instances or result objects retrieved from the database.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a> | <a class="reference internal" href="#skibidi_orm.query_engine.connection.result.Result" title="skibidi_orm.query_engine.connection.result.Result">Result</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.connection.identity">
+<span id="skibidi-orm-query-engine-connection-identity-module"></span><h2>skibidi_orm.query_engine.connection.identity module<a class="headerlink" href="#module-skibidi_orm.query_engine.connection.identity" title="Link to this heading"></a></h2>
+<p>This module provides the IdentityMap class, which is responsible for managing a collection
+of model instances to ensure that only one instance of each object exists within the application context.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.identity.IdentityMap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.connection.identity.</span></span><span class="sig-name descname"><span class="pre">IdentityMap</span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/identity.html#IdentityMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.identity.IdentityMap" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages a collection of model instances to ensure that only one instance of each
+object exists within the application context.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.identity.IdentityMap._dict">
+<span class="sig-name descname"><span class="pre">_dict</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.identity.IdentityMap._dict" title="Link to this definition"></a></dt>
+<dd><p>A dictionary storing model instances,
+keyed by a tuple of model name and primary key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[tuple[str, Any], <a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a> | None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.identity.IdentityMap.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/identity.html#IdentityMap.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.identity.IdentityMap.add" title="Link to this definition"></a></dt>
+<dd><p>Adds a model instance to the identity map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a>) – The model instance to add.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the model instance was added, False if it was already present.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If a different instance with the same key is already present.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.identity.IdentityMap.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/identity.html#IdentityMap.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.identity.IdentityMap.get" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the model instance associated with the given key, or returns the default value if not found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>tuple</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The key to retrieve the model instance.</p></li>
+<li><p><strong>default</strong> (<em>Optional</em><em>[</em><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a><em>]</em>) – The default value to return if the key is not found. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The model instance associated with the given key, or the default value if not found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.identity.IdentityMap.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/identity.html#IdentityMap.remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.identity.IdentityMap.remove" title="Link to this definition"></a></dt>
+<dd><p>Removes the given model instance from the identity map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a>) – The model instance to remove.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.connection.result">
+<span id="skibidi-orm-query-engine-connection-result-module"></span><h2>skibidi_orm.query_engine.connection.result module<a class="headerlink" href="#module-skibidi_orm.query_engine.connection.result" title="Link to this heading"></a></h2>
+<p>Representation of result from query to database</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.result.Result">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.connection.result.</span></span><span class="sig-name descname"><span class="pre">Result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/result.html#Result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.result.Result" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a result from a query to a database.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.result.Result.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.result.Result.data" title="Link to this definition"></a></dt>
+<dd><p>A dictionary containing the data retrieved from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.connection.transaction">
+<span id="skibidi-orm-query-engine-connection-transaction-module"></span><h2>skibidi_orm.query_engine.connection.transaction module<a class="headerlink" href="#module-skibidi_orm.query_engine.connection.transaction" title="Link to this heading"></a></h2>
+<p>The transaction module provides the Transaction class, which manages database transactions
+for executing multiple database operations atomically.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.connection.transaction.</span></span><span class="sig-name descname"><span class="pre">Transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compiler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler" title="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler"><span class="pre">SQLCompiler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/transaction.html#Transaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages a transaction for executing multiple database operations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction._compiler">
+<span class="sig-name descname"><span class="pre">_compiler</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction._compiler" title="Link to this definition"></a></dt>
+<dd><p>The SQL compiler used to generate SQL statements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="skibidi_orm.query_engine.adapter.html#skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler" title="skibidi_orm.query_engine.adapter.base_compiler.SQLCompiler">SQLCompiler</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction._conn">
+<span class="sig-name descname"><span class="pre">_conn</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction._conn" title="Link to this definition"></a></dt>
+<dd><p>The connection object to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction._insert">
+<span class="sig-name descname"><span class="pre">_insert</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction._insert" title="Link to this definition"></a></dt>
+<dd><p>A list of Insert statements to be executed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert" title="skibidi_orm.query_engine.operations.crud.Insert">Insert</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction._update">
+<span class="sig-name descname"><span class="pre">_update</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction._update" title="Link to this definition"></a></dt>
+<dd><p>A list of Update statements to be executed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Update" title="skibidi_orm.query_engine.operations.crud.Update">Update</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction._delete">
+<span class="sig-name descname"><span class="pre">_delete</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction._delete" title="Link to this definition"></a></dt>
+<dd><p>A list of Delete statements to be executed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Delete" title="skibidi_orm.query_engine.operations.crud.Delete">Delete</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction.delete_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_list</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction.delete_list" title="Link to this definition"></a></dt>
+<dd><p>Returns the list of Delete statements in the transaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of Delete statements.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Delete" title="skibidi_orm.query_engine.operations.crud.Delete">Delete</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/transaction.html#Transaction.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction.execute" title="Link to this definition"></a></dt>
+<dd><p>Executes all registered Insert, Update, and Delete statements in the transaction.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction.execute_delete">
+<span class="sig-name descname"><span class="pre">execute_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Delete" title="skibidi_orm.query_engine.operations.crud.Delete"><span class="pre">Delete</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/transaction.html#Transaction.execute_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction.execute_delete" title="Link to this definition"></a></dt>
+<dd><p>Executes the given Delete statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>statement</strong> (<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Delete" title="skibidi_orm.query_engine.operations.crud.Delete"><em>Delete</em></a>) – The Delete statement to execute.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction.execute_insert">
+<span class="sig-name descname"><span class="pre">execute_insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert" title="skibidi_orm.query_engine.operations.crud.Insert"><span class="pre">Insert</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/transaction.html#Transaction.execute_insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction.execute_insert" title="Link to this definition"></a></dt>
+<dd><p>Executes the given Insert statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>statement</strong> (<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert" title="skibidi_orm.query_engine.operations.crud.Insert"><em>Insert</em></a>) – The Insert statement to execute.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction.execute_update">
+<span class="sig-name descname"><span class="pre">execute_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Update" title="skibidi_orm.query_engine.operations.crud.Update"><span class="pre">Update</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/transaction.html#Transaction.execute_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction.execute_update" title="Link to this definition"></a></dt>
+<dd><p>Executes the given Update statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>statement</strong> (<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Update" title="skibidi_orm.query_engine.operations.crud.Update"><em>Update</em></a>) – The Update statement to execute.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction.insert_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">insert_list</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction.insert_list" title="Link to this definition"></a></dt>
+<dd><p>Returns the list of Insert statements in the transaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of Insert statements.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Insert" title="skibidi_orm.query_engine.operations.crud.Insert">Insert</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction.register_delete">
+<span class="sig-name descname"><span class="pre">register_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/transaction.html#Transaction.register_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction.register_delete" title="Link to this definition"></a></dt>
+<dd><p>Registers a Delete statement for the given model object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a>) – The model object for which to register a Delete statement.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction.register_insert">
+<span class="sig-name descname"><span class="pre">register_insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/transaction.html#Transaction.register_insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction.register_insert" title="Link to this definition"></a></dt>
+<dd><p>Registers an Insert statement for the given model object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a>) – The model object for which to register an Insert statement.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction.register_update">
+<span class="sig-name descname"><span class="pre">register_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/connection/transaction.html#Transaction.register_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction.register_update" title="Link to this definition"></a></dt>
+<dd><p>Registers an Update statement for the given model object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><em>Model</em></a>) – The model object for which to register an Update statement.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.connection.transaction.Transaction.update_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_list</span></span><a class="headerlink" href="#skibidi_orm.query_engine.connection.transaction.Transaction.update_list" title="Link to this definition"></a></dt>
+<dd><p>Returns the list of Update statements in the transaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of Update statements.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="skibidi_orm.query_engine.operations.html#skibidi_orm.query_engine.operations.crud.Update" title="skibidi_orm.query_engine.operations.crud.Update">Update</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="skibidi_orm.query_engine.adapter.html" class="btn btn-neutral float-left" title="skibidi_orm.query_engine.adapter package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="skibidi_orm.query_engine.field.html" class="btn btn-neutral float-right" title="skibidi_orm.query_engine.field package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Marta Sobol, Magda Twarowska, Maria Polakowska.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

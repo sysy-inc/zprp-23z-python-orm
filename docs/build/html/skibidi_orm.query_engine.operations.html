@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>skibidi_orm.query_engine.operations package &mdash; SkiBiDi-ORM 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skibidi_orm.query_engine.config module" href="skibidi_orm.query_engine.config.html" />
+    <link rel="prev" title="skibidi_orm.query_engine.model package" href="skibidi_orm.query_engine.model.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SkiBiDi-ORM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="skibidi_orm.html">skibidi_orm package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="skibidi_orm.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="skibidi_orm.query_engine.html">skibidi_orm.query_engine package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="skibidi_orm.query_engine.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="skibidi_orm.query_engine.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">How to start</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SkiBiDi-ORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="skibidi_orm.html">skibidi_orm package</a></li>
+          <li class="breadcrumb-item"><a href="skibidi_orm.query_engine.html">skibidi_orm.query_engine package</a></li>
+      <li class="breadcrumb-item active">skibidi_orm.query_engine.operations package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/skibidi_orm.query_engine.operations.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="skibidi-orm-query-engine-operations-package">
+<h1>skibidi_orm.query_engine.operations package<a class="headerlink" href="#skibidi-orm-query-engine-operations-package" title="Link to this heading"></a></h1>
+<section id="module-skibidi_orm.query_engine.operations.clauses">
+<span id="skibidi-orm-query-engine-operations-clauses-module"></span><h2>skibidi_orm.query_engine.operations.clauses module<a class="headerlink" href="#module-skibidi_orm.query_engine.operations.clauses" title="Link to this heading"></a></h2>
+<p>Module representing differnet types of clauses present in where statement
+for example equal, greater than, …</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.Clause">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.clauses.</span></span><span class="sig-name descname"><span class="pre">Clause</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/clauses.html#Clause"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class representing a generic clause.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.Clause.col">
+<span class="sig-name descname"><span class="pre">col</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.Clause.col" title="Link to this definition"></a></dt>
+<dd><p>The column name involved in the clause.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.Clause.val">
+<span class="sig-name descname"><span class="pre">val</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.Clause.val" title="Link to this definition"></a></dt>
+<dd><p>The value involved in the clause.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.Clause.type">
+<span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.Clause.type" title="Link to this definition"></a></dt>
+<dd><p>The type of the clause.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">col</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p>The column name involved in the clause.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd><p>The type of the clause.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">val</span></span><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd><p>The value involved in the clause.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.Eq">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.clauses.</span></span><span class="sig-name descname"><span class="pre">Eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/clauses.html#Eq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.Eq" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clause</span></code></a></p>
+<p>Represents an equality clause (==).</p>
+<dl class="simple">
+<dt>Inherits:</dt><dd><p>Clause: Abstract base class representing a generic clause.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.Gt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.clauses.</span></span><span class="sig-name descname"><span class="pre">Gt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/clauses.html#Gt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.Gt" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clause</span></code></a></p>
+<p>Represents a greater-than clause (&gt;).</p>
+<dl class="simple">
+<dt>Inherits:</dt><dd><p>Clause: Abstract base class representing a generic clause.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.GtEq">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.clauses.</span></span><span class="sig-name descname"><span class="pre">GtEq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/clauses.html#GtEq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.GtEq" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clause</span></code></a></p>
+<p>Represents a greater-than-or-equal clause (&gt;=).</p>
+<dl class="simple">
+<dt>Inherits:</dt><dd><p>Clause: Abstract base class representing a generic clause.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.Lt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.clauses.</span></span><span class="sig-name descname"><span class="pre">Lt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/clauses.html#Lt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.Lt" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clause</span></code></a></p>
+<p>Represents a less-than clause (&lt;).</p>
+<dl class="simple">
+<dt>Inherits:</dt><dd><p>Clause: Abstract base class representing a generic clause.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.LtEq">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.clauses.</span></span><span class="sig-name descname"><span class="pre">LtEq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/clauses.html#LtEq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.LtEq" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clause</span></code></a></p>
+<p>Represents a less-than-or-equal clause (&lt;=).</p>
+<dl class="simple">
+<dt>Inherits:</dt><dd><p>Clause: Abstract base class representing a generic clause.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.NotEq">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.clauses.</span></span><span class="sig-name descname"><span class="pre">NotEq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/clauses.html#NotEq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.NotEq" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clause</span></code></a></p>
+<p>Represents a not-equal clause (!=).</p>
+<dl class="simple">
+<dt>Inherits:</dt><dd><p>Clause: Abstract base class representing a generic clause.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.NotNull">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.clauses.</span></span><span class="sig-name descname"><span class="pre">NotNull</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/clauses.html#NotNull"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.NotNull" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clause</span></code></a></p>
+<p>Represents an is-not-null clause (is not Null).</p>
+<dl class="simple">
+<dt>Inherits:</dt><dd><p>Clause: Abstract base class representing a generic clause.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.clauses.Null">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.clauses.</span></span><span class="sig-name descname"><span class="pre">Null</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/clauses.html#Null"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.clauses.Null" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clause</span></code></a></p>
+<p>Represents an is-null clause (is Null).</p>
+<dl class="simple">
+<dt>Inherits:</dt><dd><p>Clause: Abstract base class representing a generic clause.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.operations.crud">
+<span id="skibidi-orm-query-engine-operations-crud-module"></span><h2>skibidi_orm.query_engine.operations.crud module<a class="headerlink" href="#module-skibidi_orm.query_engine.operations.crud" title="Link to this heading"></a></h2>
+<p>The CRUD module provides classes for generating SQL statements
+for CRUD (Insert, Update, Delete) operations on database tables.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.CRUDBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.crud.</span></span><span class="sig-name descname"><span class="pre">CRUDBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#CRUDBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.CRUDBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for generating SQL statements for INSERT, UPDATE, and DELETE operations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.CRUDBase._obj">
+<span class="sig-name descname"><span class="pre">_obj</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.CRUDBase._obj" title="Link to this definition"></a></dt>
+<dd><p>The model object associated with the CRUD operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.CRUDBase.table">
+<span class="sig-name descname"><span class="pre">table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#CRUDBase.table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.CRUDBase.table" title="Link to this definition"></a></dt>
+<dd><p>Returns the table name from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The table name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.Delete">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.crud.</span></span><span class="sig-name descname"><span class="pre">Delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#Delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.Delete" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.crud.CRUDBase" title="skibidi_orm.query_engine.operations.crud.CRUDBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CRUDBase</span></code></a></p>
+<p>Represents a Delete statement.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.Delete.where_clause">
+<span class="sig-name descname"><span class="pre">where_clause</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Eq" title="skibidi_orm.query_engine.operations.clauses.Eq"><span class="pre">Eq</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#Delete.where_clause"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.Delete.where_clause" title="Link to this definition"></a></dt>
+<dd><p>Returns the WHERE clause for the Delete statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The tuple containing the WHERE clause.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[<a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Eq" title="skibidi_orm.query_engine.operations.clauses.Eq">Eq</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.Insert">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.crud.</span></span><span class="sig-name descname"><span class="pre">Insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#Insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.Insert" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.crud.ValueBase" title="skibidi_orm.query_engine.operations.crud.ValueBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueBase</span></code></a></p>
+<p>Represents an Insert statement.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.Insert._returns">
+<span class="sig-name descname"><span class="pre">_returns</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.Insert._returns" title="Link to this definition"></a></dt>
+<dd><p>Indicates if the statement returns values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.Insert._returning_col">
+<span class="sig-name descname"><span class="pre">_returning_col</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.Insert._returning_col" title="Link to this definition"></a></dt>
+<dd><p>List of column names to return.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.Insert.returning_col">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">returning_col</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.Insert.returning_col" title="Link to this definition"></a></dt>
+<dd><p>Returns the list of column names to return.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of column names.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.Insert.returns">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">returns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.Insert.returns" title="Link to this definition"></a></dt>
+<dd><p>Returns whether the statement returns values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if values are returned, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.Update">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.crud.</span></span><span class="sig-name descname"><span class="pre">Update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#Update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.Update" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.crud.ValueBase" title="skibidi_orm.query_engine.operations.crud.ValueBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueBase</span></code></a></p>
+<p>Represents an Update statement.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.Update.where_clause">
+<span class="sig-name descname"><span class="pre">where_clause</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Eq" title="skibidi_orm.query_engine.operations.clauses.Eq"><span class="pre">Eq</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#Update.where_clause"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.Update.where_clause" title="Link to this definition"></a></dt>
+<dd><p>Returns the WHERE clause for the Update statement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The tuple containing the WHERE clause.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[<a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Eq" title="skibidi_orm.query_engine.operations.clauses.Eq">Eq</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.ValueBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.crud.</span></span><span class="sig-name descname"><span class="pre">ValueBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#ValueBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.ValueBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.crud.CRUDBase" title="skibidi_orm.query_engine.operations.crud.CRUDBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">CRUDBase</span></code></a></p>
+<p>Base class for operations involving values (INSERT, UPDATE).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.ValueBase._attributes">
+<span class="sig-name descname"><span class="pre">_attributes</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.ValueBase._attributes" title="Link to this definition"></a></dt>
+<dd><p>List of attribute-value pairs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[tuple[str, Any]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.ValueBase.attributes">
+<span class="sig-name descname"><span class="pre">attributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#ValueBase.attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.ValueBase.attributes" title="Link to this definition"></a></dt>
+<dd><p>Returns the list of attribute-value pairs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of attribute-value pairs.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[tuple[str, Any]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.ValueBase.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#ValueBase.columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.ValueBase.columns" title="Link to this definition"></a></dt>
+<dd><p>Returns the list of column names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of column names.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.crud.ValueBase.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/crud.html#ValueBase.values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.crud.ValueBase.values" title="Link to this definition"></a></dt>
+<dd><p>Returns the list of values to be inserted or updated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of values.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.operations.functions">
+<span id="skibidi-orm-query-engine-operations-functions-module"></span><h2>skibidi_orm.query_engine.operations.functions module<a class="headerlink" href="#module-skibidi_orm.query_engine.operations.functions" title="Link to this heading"></a></h2>
+<p>Module for defining aggregate functions like COUNT.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.functions.Count">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.functions.</span></span><span class="sig-name descname"><span class="pre">Count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/functions.html#Count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.functions.Count" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#skibidi_orm.query_engine.operations.functions.Function" title="skibidi_orm.query_engine.operations.functions.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a></p>
+<p>Represents the COUNT aggregate function.</p>
+<dl class="simple">
+<dt>Inherits:</dt><dd><p>Function: Abstract base class for defining aggregate functions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.functions.Function">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.functions.</span></span><span class="sig-name descname"><span class="pre">Function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/functions.html#Function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.functions.Function" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class for defining aggregate functions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.functions.Function._col">
+<span class="sig-name descname"><span class="pre">_col</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.functions.Function._col" title="Link to this definition"></a></dt>
+<dd><p>The column name on which the aggregate function operates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.functions.Function.column">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">column</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.functions.Function.column" title="Link to this definition"></a></dt>
+<dd><p>Returns the column name on which the aggregate function operates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The column name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.functions.Function.type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.functions.Function.type" title="Link to this definition"></a></dt>
+<dd><p>Returns the type of the aggregate function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The type of the aggregate function.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Type[<a class="reference internal" href="#skibidi_orm.query_engine.operations.functions.Function" title="skibidi_orm.query_engine.operations.functions.Function">Function</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-skibidi_orm.query_engine.operations.select">
+<span id="skibidi-orm-query-engine-operations-select-module"></span><h2>skibidi_orm.query_engine.operations.select module<a class="headerlink" href="#module-skibidi_orm.query_engine.operations.select" title="Link to this heading"></a></h2>
+<p>Module describing SELECT statement.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">skibidi_orm.query_engine.operations.select.</span></span><span class="sig-name descname"><span class="pre">Select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model"><span class="pre">Model</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/select.html#Select"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a SELECT query.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select._table">
+<span class="sig-name descname"><span class="pre">_table</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select._table" title="Link to this definition"></a></dt>
+<dd><p>The name of the database table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select._model">
+<span class="sig-name descname"><span class="pre">_model</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select._model" title="Link to this definition"></a></dt>
+<dd><p>The model class representing the database table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Type[<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select._fields">
+<span class="sig-name descname"><span class="pre">_fields</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select._fields" title="Link to this definition"></a></dt>
+<dd><p>The list of fields to select.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str | <a class="reference internal" href="#skibidi_orm.query_engine.operations.functions.Function" title="skibidi_orm.query_engine.operations.functions.Function">Function</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select._where_clauses">
+<span class="sig-name descname"><span class="pre">_where_clauses</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select._where_clauses" title="Link to this definition"></a></dt>
+<dd><p>The list of WHERE clauses for filtering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause">Clause</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select._group_by_col">
+<span class="sig-name descname"><span class="pre">_group_by_col</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select._group_by_col" title="Link to this definition"></a></dt>
+<dd><p>The list of columns for grouping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select._order_by_col">
+<span class="sig-name descname"><span class="pre">_order_by_col</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select._order_by_col" title="Link to this definition"></a></dt>
+<dd><p>The list of columns for ordering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select._order_by_desc">
+<span class="sig-name descname"><span class="pre">_order_by_desc</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select._order_by_desc" title="Link to this definition"></a></dt>
+<dd><p>Indicates whether ordering is descending.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select._returns_model">
+<span class="sig-name descname"><span class="pre">_returns_model</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select._returns_model" title="Link to this definition"></a></dt>
+<dd><p>Indicates whether the query returns a model or specific columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select._annotations">
+<span class="sig-name descname"><span class="pre">_annotations</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select._annotations" title="Link to this definition"></a></dt>
+<dd><p>The annotations for query columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[str | <a class="reference internal" href="#skibidi_orm.query_engine.operations.functions.Function" title="skibidi_orm.query_engine.operations.functions.Function">Function</a>, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.annotate">
+<span class="sig-name descname"><span class="pre">annotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#skibidi_orm.query_engine.operations.functions.Function" title="skibidi_orm.query_engine.operations.functions.Function"><span class="pre">Function</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/select.html#Select.annotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.annotate" title="Link to this definition"></a></dt>
+<dd><p>Adds annotations to the query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – Keyword arguments representing annotations.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Select instance with annotations added.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#skibidi_orm.query_engine.operations.select.Select" title="skibidi_orm.query_engine.operations.select.Select">Select</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Select(User).annotate(new_name=”original_column_name”)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.annotations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">annotations</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.annotations" title="Link to this definition"></a></dt>
+<dd><p>Get the annotations for query columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The annotations for query columns.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict[str | <a class="reference internal" href="#skibidi_orm.query_engine.operations.functions.Function" title="skibidi_orm.query_engine.operations.functions.Function">Function</a>, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.fields">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fields</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.fields" title="Link to this definition"></a></dt>
+<dd><p>Get the list of fields to select.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of fields.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[str | <a class="reference internal" href="#skibidi_orm.query_engine.operations.functions.Function" title="skibidi_orm.query_engine.operations.functions.Function">Function</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/select.html#Select.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.filter" title="Link to this definition"></a></dt>
+<dd><p>Adds filter conditions to the query.</p>
+<p>Possible options for filter conditions:</p>
+<ul class="simple">
+<li><p>no option: equal</p></li>
+<li><p>__gt: greater than</p></li>
+<li><p>__gte: greater than or equal</p></li>
+<li><p>__lt: less than</p></li>
+<li><p>__lte: less than or equal</p></li>
+<li><p>__not: not equal</p></li>
+<li><p>__isnull: if True, is Null; if False, is not Null</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>**kwargs</strong> – Keyword arguments representing filter conditions.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Select instance with filter conditions added.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#skibidi_orm.query_engine.operations.select.Select" title="skibidi_orm.query_engine.operations.select.Select">Select</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Select(User).filter(name=”Thom”, id__gt=1)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.group_by">
+<span class="sig-name descname"><span class="pre">group_by</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/select.html#Select.group_by"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.group_by" title="Link to this definition"></a></dt>
+<dd><p>Adds grouping to the query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> – list of columns for grouping.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Select instance with grouping added.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#skibidi_orm.query_engine.operations.select.Select" title="skibidi_orm.query_engine.operations.select.Select">Select</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Select(User).group_by(“id”)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.group_by_col">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">group_by_col</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.group_by_col" title="Link to this definition"></a></dt>
+<dd><p>Get the list of columns for grouping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of columns for grouping.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.model">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.model" title="Link to this definition"></a></dt>
+<dd><p>Get the model class representing the database table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The model class.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Type[<a class="reference internal" href="skibidi_orm.query_engine.model.html#skibidi_orm.query_engine.model.base.Model" title="skibidi_orm.query_engine.model.base.Model">Model</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.order_by">
+<span class="sig-name descname"><span class="pre">order_by</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/skibidi_orm/query_engine/operations/select.html#Select.order_by"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.order_by" title="Link to this definition"></a></dt>
+<dd><p>Adds ordering to the query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> – list of columns for ordering.</p></li>
+<li><p><strong>desc</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicates whether ordering is descending. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Select instance with ordering added.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#skibidi_orm.query_engine.operations.select.Select" title="skibidi_orm.query_engine.operations.select.Select">Select</a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Select(User).order_by(“id”, desc=True)</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.order_by_col">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">order_by_col</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.order_by_col" title="Link to this definition"></a></dt>
+<dd><p>Get the columns for ordering and the ordering direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the columns for ordering and a boolean indicating the ordering direction.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[list[str], bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.returning_model">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">returning_model</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.returning_model" title="Link to this definition"></a></dt>
+<dd><p>Check if the query returns a model or specific columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the query returns a model, False if it returns specific columns.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.table">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">table</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.table" title="Link to this definition"></a></dt>
+<dd><p>Get the name of the database table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The table name.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="skibidi_orm.query_engine.operations.select.Select.where_clauses">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">where_clauses</span></span><a class="headerlink" href="#skibidi_orm.query_engine.operations.select.Select.where_clauses" title="Link to this definition"></a></dt>
+<dd><p>Get the list of WHERE clauses for filtering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of WHERE clauses.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[<a class="reference internal" href="#skibidi_orm.query_engine.operations.clauses.Clause" title="skibidi_orm.query_engine.operations.clauses.Clause">Clause</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="skibidi_orm.query_engine.model.html" class="btn btn-neutral float-left" title="skibidi_orm.query_engine.model package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="skibidi_orm.query_engine.config.html" class="btn btn-neutral float-right" title="skibidi_orm.query_engine.config module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Marta Sobol, Magda Twarowska, Maria Polakowska.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

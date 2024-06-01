@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ORM &mdash; SkiBiDi-ORM 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="skibidi_orm package" href="skibidi_orm.html" />
+    <link rel="prev" title="Model" href="model.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SkiBiDi-ORM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="tutorial.html">How to start</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="model.html">Model</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ORM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-connect-to-database">How to connect to database?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#step-1-create-configuration">Step 1: Create Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-2-create-engine">Step 2: Create Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-3-session">Step 3: Session</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#add-object-to-database">Add object to database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#change-of-value">Change of value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#remove-object-from-database">Remove object from database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-data-from-database">Get data from database</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#retrieve-object-by-primary-key">Retrieve object by primary key</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#order-by">Order by</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#group-by">Group by</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aggregate-function">Aggregate function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filter-results">Filter results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#select-multiple-methods">Select multiple methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="skibidi_orm.html">skibidi_orm package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SkiBiDi-ORM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorial.html">How to start</a></li>
+      <li class="breadcrumb-item active">ORM</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/orm.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="orm">
+<h1>ORM<a class="headerlink" href="#orm" title="Link to this heading"></a></h1>
+<section id="how-to-connect-to-database">
+<h2>How to connect to database?<a class="headerlink" href="#how-to-connect-to-database" title="Link to this heading"></a></h2>
+<p>Now, when we created model, it is time to connect to the database.</p>
+<section id="step-1-create-configuration">
+<h3>Step 1: Create Configuration<a class="headerlink" href="#step-1-create-configuration" title="Link to this heading"></a></h3>
+<p>In order to connect to database, you have to specify which database you want to use.
+In your working directory create file  <strong>configuration.py</strong> and in it specify variable
+<em>config_data</em> with data neede for chosen database.</p>
+<p>Example for SQLite</p>
+<p>configuration.py</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.config</span> <span class="kn">import</span> <span class="n">SQLiteConfig</span>
+
+<span class="n">config_data</span> <span class="o">=</span> <span class="n">SQLiteConfig</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;database.db&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Where <em>path</em> represents where your database file is stored.</p>
+</section>
+<section id="step-2-create-engine">
+<h3>Step 2: Create Engine<a class="headerlink" href="#step-2-create-engine" title="Link to this heading"></a></h3>
+<p>Engine handles all connections to database, it opens connection and when all is done, closes it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now when we have connection started, it is time to use it.</p>
+</section>
+<section id="step-3-session">
+<h3>Step 3: Session<a class="headerlink" href="#step-3-session" title="Link to this heading"></a></h3>
+<p>All operations to database are made in session. At the end you <strong>need to commit</strong> all the changes or they won’t be saved to database.</p>
+<p>Basic usage of session</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="c1"># perform all operations</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># commit changes</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="add-object-to-database">
+<h2>Add object to database<a class="headerlink" href="#add-object-to-database" title="Link to this heading"></a></h2>
+<p>When we have our model ready, it is time to save some objects into our database.
+It can be done by <em>session.add()</em> method.</p>
+<p>First lets create a basic model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.field.field</span> <span class="kn">import</span> <span class="n">CharField</span><span class="p">,</span> <span class="n">IntegerField</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.model.base</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="n">IntegerField</span><span class="p">]</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">CharField</span><span class="p">]</span> <span class="o">=</span> <span class="n">CharField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;Adam&#39;</span><span class="p">)</span>
+  <span class="n">age</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="n">IntegerField</span><span class="p">]</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now lets add it to our session.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Adam&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>      <span class="c1"># create instance of model</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>         <span class="c1"># add it to session</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># commit changes</span>
+</pre></div>
+</div>
+</section>
+<section id="change-of-value">
+<h2>Change of value<a class="headerlink" href="#change-of-value" title="Link to this heading"></a></h2>
+<p>If we change value of some object’s attribute (inside session) it is automatically saved in database, you don’t need to do anything.</p>
+<p>Lets go back to previous example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Adam&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>      <span class="c1"># create instance of model</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>         <span class="c1"># add it to session</span>
+  <span class="n">person</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">25</span>             <span class="c1"># change value</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># commit changes</span>
+</pre></div>
+</div>
+</section>
+<section id="remove-object-from-database">
+<h2>Remove object from database<a class="headerlink" href="#remove-object-from-database" title="Link to this heading"></a></h2>
+<p>Now we know how to add object to database and change its values, but what if we want to remove one. It can be done using <em>session.delete</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Adam&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>      <span class="c1"># create instance of model</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>         <span class="c1"># add it to session</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># commit changes</span>
+  <span class="c1"># .....</span>
+  <span class="c1"># remove previously added person</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can delete object before commiting changes or after.</p>
+</section>
+<section id="get-data-from-database">
+<h2>Get data from database<a class="headerlink" href="#get-data-from-database" title="Link to this heading"></a></h2>
+<p>To retrieve data from database, we need to execute select. It is done by using class <em>Select</em>.</p>
+<p>Lets assume that we saved to database <em>person = Person(1, ‘Adam’, 20)</em> from previous example. Now in new session we want retrieve this data.</p>
+<p>Lets create basic select, like <em>SELECT id, name, age FROM person;</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.select</span> <span class="kn">import</span> <span class="n">Select</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">st</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">Person</span><span class="p">)</span>
+  <span class="n">ret</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Id: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> Name: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> Age: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># output: Id: 1 Name: Adam Age 20</span>
+</pre></div>
+</div>
+<p>When retrieving data, our library makes sure that we don’t have duplicates present in session.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.select</span> <span class="kn">import</span> <span class="n">Select</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Adam&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>      <span class="c1"># create instance of model</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>         <span class="c1"># add it to session</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># commit changes</span>
+  <span class="c1"># .......</span>
+
+  <span class="n">st</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">Person</span><span class="p">)</span>
+  <span class="n">ret</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Id: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> Name: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> Age: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># output: Id: 1 Name: Adam Age 20</span>
+
+  <span class="n">select_person</span> <span class="o">=</span> <span class="n">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">select_person</span> <span class="o">==</span> <span class="n">person</span><span class="p">)</span>      <span class="c1"># output: True</span>
+  <span class="c1"># if we change value in one, it is changed in another</span>
+  <span class="n">person</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">25</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">select_person</span><span class="o">.</span><span class="n">age</span><span class="p">)</span>    <span class="c1"># output: 25</span>
+</pre></div>
+</div>
+<section id="retrieve-object-by-primary-key">
+<h3>Retrieve object by primary key<a class="headerlink" href="#retrieve-object-by-primary-key" title="Link to this heading"></a></h3>
+<p>If we want to retrieve object with given primary key, we use <em>session.get()</em>.</p>
+<p>Lets say that in our database we have saved <em>person = Person(1, ‘Adam’, 20)</em> and we want to retrieve it by the primary key <em>1</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">ret</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Person</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Id: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> Name: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> Age: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="c1"># output: Id: 1 Name: Adam Age 20</span>
+</pre></div>
+</div>
+</section>
+<section id="order-by">
+<h3>Order by<a class="headerlink" href="#order-by" title="Link to this heading"></a></h3>
+<p>We can order our select’s result by specific column. You can use ascending or descending order (by default it is set ascending). You need to specify by which column to order <em>.order_by(“chosen_column”)</em> and for descending order set desc to True <em>.order_by(“chosen_column”, desc=True)</em>.</p>
+<p>Lets add to our database couple of objects</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">person1</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Adam&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>     <span class="c1"># create instance of model</span>
+  <span class="n">person2</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Kate&#39;</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+  <span class="n">person3</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Thom&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person1</span><span class="p">)</span>                <span class="c1"># add it to session</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person2</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person3</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># commit changes</span>
+</pre></div>
+</div>
+<p>And now perform select with order by</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.select</span> <span class="kn">import</span> <span class="n">Select</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="c1"># order results by age</span>
+  <span class="n">st</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">Person</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;age&quot;</span><span class="p">)</span>
+  <span class="n">ret</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Id: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> Name: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> Age: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># output: Id: 3 Name: Kate Age 18</span>
+    <span class="c1"># output: Id: 1 Name: Adam Age 20</span>
+    <span class="c1"># output: Id: 2 Name: Thom Age 30</span>
+
+  <span class="c1"># order results by age with descending order</span>
+  <span class="n">st</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">Person</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">ret</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Id: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> Name: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> Age: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># output: Id: 2 Name: Thom Age 30</span>
+    <span class="c1"># output: Id: 1 Name: Adam Age 20</span>
+    <span class="c1"># output: Id: 3 Name: Kate Age 18</span>
+</pre></div>
+</div>
+</section>
+<section id="group-by">
+<h3>Group by<a class="headerlink" href="#group-by" title="Link to this heading"></a></h3>
+<p>We can group our select’s result by specific column. You need to specify by which column to group by <em>.group_by(“chosen_column”)</em>.</p>
+<p>Lets add some object to database</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">person1</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Adam&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>     <span class="c1"># create instance of model</span>
+  <span class="n">person2</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Kate&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+  <span class="n">person3</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Thom&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+  <span class="n">person3</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Ann&#39;</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person1</span><span class="p">)</span>                <span class="c1"># add it to session</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person2</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person3</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person4</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># commit changes</span>
+</pre></div>
+</div>
+<p>We have one person with age 30, one with 40 and two with 20.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.select</span> <span class="kn">import</span> <span class="n">Select</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="c1"># group results by age</span>
+  <span class="n">st</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">Person</span><span class="p">)</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s2">&quot;age&quot;</span><span class="p">)</span>
+  <span class="n">ret</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Age: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># output:Age 20</span>
+    <span class="c1"># output:Age 30</span>
+    <span class="c1"># output:Age 40</span>
+</pre></div>
+</div>
+</section>
+<section id="aggregate-function">
+<h3>Aggregate function<a class="headerlink" href="#aggregate-function" title="Link to this heading"></a></h3>
+<p>When we group by our result we can use function COUNT on other columns.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">person1</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Adam&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>     <span class="c1"># create instance of model</span>
+  <span class="n">person2</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Kate&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+  <span class="n">person3</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Thom&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+  <span class="n">person3</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;Ann&#39;</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person1</span><span class="p">)</span>                <span class="c1"># add it to session</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person2</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person3</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person4</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># commit changes</span>
+</pre></div>
+</div>
+<p>We have one person with age 30, one with 40 and two with 20, we can count how many is there in each group by using count on column id.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.select</span> <span class="kn">import</span> <span class="n">Select</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.functions</span> <span class="kn">import</span> <span class="n">Count</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="c1"># group results by age</span>
+  <span class="n">st</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">Person</span><span class="p">)</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s2">&quot;age&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">Count</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">))</span>
+  <span class="n">ret</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Age: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2"> Count: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># output: Age: 20 Count: 2</span>
+    <span class="c1"># output: Age: 30 Count: 1</span>
+    <span class="c1"># output: Age: 40 Count: 1</span>
+</pre></div>
+</div>
+<p><em>.annotate()</em> is used to give name to resulting column.</p>
+</section>
+<section id="filter-results">
+<h3>Filter results<a class="headerlink" href="#filter-results" title="Link to this heading"></a></h3>
+<p>We can filter our results by different conditions. We use <em>.filter(column_name=3, another_name__gte=3)</em>. We create different conditions, like greather than, by adding <strong>__</strong> to column’s name, followed by specific option we want to use.</p>
+<p>Options that can by used:</p>
+<ul class="simple">
+<li><p>column_name=2 -&gt; this is equality condition</p></li>
+<li><p>column_name__gt=2 -&gt; greater than</p></li>
+<li><p>column_name__gte=2 -&gt; greater than or equal</p></li>
+<li><p>column_name__lt=2 -&gt; less than</p></li>
+<li><p>column_name__lte=2 -&gt; less than or equal</p></li>
+<li><p>column_name__not=2 -&gt; not equal, column_name != 2</p></li>
+<li><p>column_name__isnull=True -&gt; is Null</p></li>
+<li><p>column_name__isnull=False -&gt; is not Null</p></li>
+</ul>
+<p>Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">person1</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Adam&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>     <span class="c1"># create instance of model</span>
+  <span class="n">person2</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Kate&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+  <span class="n">person3</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Thom&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+  <span class="n">person4</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;John&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+  <span class="n">person5</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;Ann&#39;</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person1</span><span class="p">)</span>                <span class="c1"># add it to session</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person2</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person3</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person4</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">person5</span><span class="p">)</span>
+  <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>    <span class="c1"># commit changes</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.select</span> <span class="kn">import</span> <span class="n">Select</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="c1"># filter results age&gt;20 and name=&#39;John&#39;</span>
+  <span class="n">st</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">Person</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">age__gt</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;John&#39;</span><span class="p">)</span>
+  <span class="n">ret</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ret</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Id: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> Name: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> Age: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># output: Id: 4 Name: John Age: 30</span>
+</pre></div>
+</div>
+</section>
+<section id="select-multiple-methods">
+<h3>Select multiple methods<a class="headerlink" href="#select-multiple-methods" title="Link to this heading"></a></h3>
+<p>We can use together all this methods, like in real select statement in sql</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.engine</span> <span class="kn">import</span> <span class="n">Engine</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.connection.session</span> <span class="kn">import</span> <span class="n">Session</span>
+<span class="kn">from</span> <span class="nn">skibidi_orm.query_engine.operations.select</span> <span class="kn">import</span> <span class="n">Select</span>
+
+<span class="n">eng</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>        <span class="c1"># create engine</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">eng</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+  <span class="n">st</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">Person</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">age__gt</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <span class="n">ret</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="model.html" class="btn btn-neutral float-left" title="Model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="skibidi_orm.html" class="btn btn-neutral float-right" title="skibidi_orm package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Marta Sobol, Magda Twarowska, Maria Polakowska.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
