@@ -70,7 +70,7 @@ class PostgresTableOperationConverter(TableOperationSQLConverter):
                 f"{PostgresConstraintConverter.convert_constraint_to_SQL(constraint)}, "
             )
 
-        for key in operation.table.foreign_keys:
+        for key in operation.table.table_constraints:
             definition_string += (
                 f"{PostgresConstraintConverter.convert_constraint_to_SQL(key)}, "
             )

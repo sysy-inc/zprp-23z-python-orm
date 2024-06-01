@@ -63,6 +63,11 @@ class PostgresColumnOperationConverter(ColumnOperationSQLConverter):
             fk_definition = f"REFERENCES {operation.related_foreign_key.referenced_table} ({referenced_column})"
             return_value += f" {fk_definition}"
 
+        if operation.related_check_constraint is not None:
+            check_definition = PostgresConstraintConverter.convert_constraint_to_SQL(
+                operation.related_check_constraint
+            )
+            return_value += f" {check_definition}"
         return f"{return_value};"
 
     @staticmethod
