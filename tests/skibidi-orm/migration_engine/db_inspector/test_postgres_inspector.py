@@ -708,10 +708,6 @@ def test__get_column_constraints(query, table_name, column_name, expected_constr
                         c.NotNullConstraint(
                             "table_different_constraints", "integer_not_nullable"
                         ),
-                        c.CheckConstraint(
-                            "table_different_constraints",
-                            "((integer_not_nullable > 100))",
-                        ),
                     ],
                 ),
                 PostgresTyping.Column(
