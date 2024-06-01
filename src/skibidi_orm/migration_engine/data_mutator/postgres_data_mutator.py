@@ -1,4 +1,6 @@
 from typing import Any
+
+from psycopg2 import ProgrammingError
 from skibidi_orm.migration_engine.data_mutator.base_data_mutator import (
     BaseDataMutator,
     DeleteRowPk,
@@ -21,7 +23,10 @@ class PostgresDataMutator(BaseDataMutator):
         config = PostgresConfig.get_instance()
         with config.connection.cursor() as cursor:
             cursor.execute(query)
-            return cursor.fetchall()
+            try:
+                return cursor.fetchall()
+            except ProgrammingError:
+                return []
 
     def get_rows(self, table_name: str, limit: int = 100, offset: int = 0) -> list[Any]:
         """Get paginated rows from the table."""
