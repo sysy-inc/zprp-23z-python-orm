@@ -58,13 +58,13 @@ def test_IntegerField_float():
 
 def test_IntegerField_validators():
     field = IntegerField()
-    has_limit_10 = any(obj.limit == 10 for obj in field.validators)     # type: ignore
+    has_limit_10 = any(obj.limit == 2147483647 for obj in field.validators)     # type: ignore
     assert has_limit_10 is True
 
 
 def test_IntegerField_MinValidator():
     field = IntegerField()
-    has_limit_1 = any(obj.limit == 1 for obj in field.validators)       # type: ignore
+    has_limit_1 = any(obj.limit == -2147483648 for obj in field.validators)       # type: ignore
     assert has_limit_1 is True
 
 

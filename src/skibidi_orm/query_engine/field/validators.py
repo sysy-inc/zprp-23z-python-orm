@@ -26,7 +26,8 @@ class MaxLengthValidator(BaseValidator):
         self.msg = f"Value is not meeting the criteria (length should be less than {self.limit})"
 
     def compare(self, a: Any, b: Any) -> bool:
-        return a < b
+        a = len(a)
+        return a <= b
 
 
 class MinLengthValidator(BaseValidator):
@@ -35,7 +36,8 @@ class MinLengthValidator(BaseValidator):
         self.msg = f"Value is not meeting the criteria (length should be more than {self.limit})"
 
     def compare(self, a: Any, b: Any) -> bool:
-        return a > b
+        a = len(a)
+        return a >= b
 
 
 class MaxValueValidator(BaseValidator):

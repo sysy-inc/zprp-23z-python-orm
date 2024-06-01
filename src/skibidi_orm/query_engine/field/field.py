@@ -61,7 +61,7 @@ def integer_field_range(type: str) -> tuple[int, int]:
     """
     Function for mocking integer range from a database
     """
-    return (1, 10)
+    return (-2147483648, 2147483647)
 
 
 class Field:
@@ -470,5 +470,4 @@ class DateTimeField(DateField):
 
 class AutoField(Field):
     pass
-
 
