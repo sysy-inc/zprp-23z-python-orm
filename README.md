@@ -83,38 +83,19 @@ $ skibidi-orm [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
-* `go`: Go back (and forward) to specific migration.
-* `list-migrations`: List all made migrations with their...
+* `log`: List all migration revisions with their...
 * `migrate`: Used to run migration for current schema...
 * `preview-migration`: Preview the migration that will be executed.
 * `studio`: Run web UI for CRUD operations on current DB.
 
-## `skibidi-orm go`
+## `skibidi-orm log`
 
-Go back (and forward) to specific migration.
-
-**Usage**:
-
-```console
-$ skibidi-orm go [OPTIONS] [MIGRATION_ID]
-```
-
-**Arguments**:
-
-* `[MIGRATION_ID]`: Migration ID
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-## `skibidi-orm list-migrations`
-
-List all made migrations with their descriptions and ID.
+List all migration revisions with their descriptions and ID.
 
 **Usage**:
 
 ```console
-$ skibidi-orm list-migrations [OPTIONS]
+$ skibidi-orm log [OPTIONS]
 ```
 
 **Options**:
